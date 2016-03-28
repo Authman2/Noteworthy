@@ -67,9 +67,9 @@ public class FindReplaceWindow2 extends JFrame {
             if(e.getSource() == find) {
                 
                 for(int i = 0; i < textarea.getText().length(); i++) {
-                    if(textarea.getText().substring(i).equals(findTF.getText())) {
+                    if(textarea.getText().substring(i,i+findTF.getText().length()).equals(findTF.getText())) {
                         try {
-                            textarea.getHighlighter().addHighlight(i, findTF.getText().length(), DefaultHighlighter.DefaultPainter);
+                            textarea.getHighlighter().addHighlight(i, i+findTF.getText().length(), DefaultHighlighter.DefaultPainter);
                         } catch(Exception err) {
                             err.printStackTrace();
                         }
