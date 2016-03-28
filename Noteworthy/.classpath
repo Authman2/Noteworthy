@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="src/dropbox-core-sdk-1.8.1.jar"/>
-	<classpathentry kind="lib" path="src/jackson-core-2.6.1.jar"/>
 	<classpathentry kind="lib" path="/Users/adeouthman/Documents/AdeolasCodingStuff/JavaPrograms/JExtras.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Users/adeouthman/Documents/AdeolasCodingStuff/JavaPrograms/JExtrasDoc/"/>

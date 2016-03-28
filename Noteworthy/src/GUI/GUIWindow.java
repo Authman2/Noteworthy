@@ -166,7 +166,7 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".txt");
+				 saver.SaveFile(noteArea.getText(), titleField.getText());
 			 }
 			 
 			 //Load a saved note
@@ -195,6 +195,11 @@ public class GUIWindow extends JFrame {
 					 titleField.setFont(new Font(titleField.getFont().getFontName(),0,15));
 					 noteArea.setFont(new Font(noteArea.getFont().getFontName(),0,15));
 				 }
+			 }
+			 
+			 if(e.getSource() == changeFont) {
+				 FontsWindow fw = new FontsWindow();
+				 fw.setVisible(true);
 			 }
 			 
 			 //Bulleted list
