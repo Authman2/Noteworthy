@@ -48,6 +48,9 @@ public class FindReplaceWindow extends JFrame {
 		Container pane = getContentPane();
 		pane.add(north, BorderLayout.NORTH);
 		pane.add(south, BorderLayout.SOUTH);
+		
+		find.addActionListener(new frActions());
+		replace.addActionListener(new frActions());
 	}
 	
 	
@@ -70,6 +73,8 @@ public class FindReplaceWindow extends JFrame {
 			
 			//Replace
 			if(e.getSource() == replace) {
+				String replacement = textarea.getText().replaceAll(findTF.getText(), replaceTF.getText());
+				textarea.setText(replacement);
 				
 			}
 			

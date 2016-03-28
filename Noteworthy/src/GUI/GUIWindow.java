@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import contents.Save;
 
@@ -105,7 +106,7 @@ public class GUIWindow extends JFrame {
 		 layeredPane.add(titlefieldPanel);
 		 
 		 //Note are panel
-		 JScrollPane scrollPane = new JScrollPane(noteArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		 JScrollPane scrollPane = new JScrollPane(noteArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		 JPanel notePanel = new JPanel();
 		 	notePanel.setBounds(10, 145, 620, 380);
 		 	notePanel.setLayout(new GridLayout(1,1,10,10));
