@@ -198,7 +198,7 @@ public class GUIWindow extends JFrame {
 			 }
 			 
 			 if(e.getSource() == changeFont) {
-				 FontsWindow fw = new FontsWindow();
+				 FontsWindow fw = new FontsWindow("Fonts");
 				 fw.setVisible(true);
 			 }
 			 
