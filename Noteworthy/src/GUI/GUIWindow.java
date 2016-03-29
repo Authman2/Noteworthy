@@ -53,8 +53,9 @@ public class GUIWindow extends JFrame {
 		 setupMenuBar();
 		 
 		 /* INITIAL SETUP */	 
-		 titleField.setFont(new Font("Comic Sans MS",0,15));
-		 noteArea.setFont(new Font("Comic Sans MS",0,15));
+		 Font defaultFont = new Font("Comic Sans MS", 0, 16);
+		 titleField.setFont(defaultFont);
+		 noteArea.setFont(defaultFont);
 		 noteArea.setLineWrap(true);
 		 noteArea.setWrapStyleWord(true);
 		 
@@ -198,7 +199,7 @@ public class GUIWindow extends JFrame {
 			 }
 			 
 			 if(e.getSource() == changeFont) {
-				 FontsWindow fw = new FontsWindow("Fonts");
+				 FontsWindow fw = new FontsWindow("Fonts", noteArea);
 				 fw.setVisible(true);
 			 }
 			 
