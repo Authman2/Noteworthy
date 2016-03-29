@@ -17,16 +17,26 @@ import javax.swing.text.DefaultHighlighter;
 public class FindReplaceWindow extends JFrame {
 	private static final long serialVersionUID = 496143735014291910L;
 
-	
+	//Labels and text fields for finding and replacing
 	JLabel findLabel = new JLabel(" Find: ");
     JTextField findTF = new JTextField();
     JLabel replaceLabel = new JLabel(" Replace: ");
     JTextField replaceTF = new JTextField();
+    
+    //Label and JPanel to display the not found exception
+    JLabel stringNotFoundLabel = new JLabel();
+    JPanel center;
+    
+    //Buttons that carry out the actions
     JButton find = new JButton("Find");
     JButton replace = new JButton("Replace");
     JButton replaceAll = new JButton("Replace All");
     
+    //Text area for getting information
     JTextArea textarea;
+    
+  
+    
     
     public FindReplaceWindow(String title, JTextArea jta) {
         super(title);
@@ -41,6 +51,9 @@ public class FindReplaceWindow extends JFrame {
             north.add(findTF);
             north.add(replaceLabel);
             north.add(replaceTF);
+            
+        center = new JPanel(new GridLayout(1,1,10,10));
+        	center.add(stringNotFoundLabel);
         
         JPanel south = new JPanel(new GridLayout(1,3,10,10));
             south.add(find);
@@ -49,6 +62,7 @@ public class FindReplaceWindow extends JFrame {
         
         Container pane = getContentPane();
         pane.add(north, BorderLayout.NORTH);
+        pane.add(center, BorderLayout.CENTER);
         pane.add(south, BorderLayout.SOUTH);
         
         find.addActionListener(new frActions());
@@ -72,6 +86,8 @@ public class FindReplaceWindow extends JFrame {
 	                        try {
 	                        	textarea.getHighlighter().addHighlight(i, i+findTF.getText().length(), DefaultHighlighter.DefaultPainter);
 	                        } catch(Exception err) {
+	                            stringNotFoundLabel.setText("String was not found");
+	                            center.repaint();
 	                            System.err.println("String was not found");
 	                        }  
 	                    }

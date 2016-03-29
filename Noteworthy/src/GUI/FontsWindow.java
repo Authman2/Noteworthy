@@ -19,18 +19,23 @@ import javax.swing.ScrollPaneConstants;
 public class FontsWindow extends JFrame {
 	private static final long serialVersionUID = -5137305296724982575L;
 
-	public Font font;
+	//The font that the user will choose.
+	Font font;
 	
+	//Text area for getting information
 	JTextArea textarea;
 	
+	//Labels for showing what each list does
 	JLabel fontsLabel = new JLabel("Fonts:");
 	JLabel styleLabel = new JLabel("Style:");
 	JLabel sizeLabel = new JLabel("Size:");
 	
+	//Lists for choosing the font, style, and size
 	JList<String> fontList = new JList<String>();
 	JList<String> styleList = new JList<String>();
 	JList<Integer> sizeList = new JList<Integer>();
 	
+	//Button for actually changing the font
 	JButton selectButton = new JButton("Select");
 	
 	

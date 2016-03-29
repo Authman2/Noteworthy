@@ -22,28 +22,34 @@ import javax.swing.ScrollPaneConstants;
 import contents.Save;
 
 public class GUIWindow extends JFrame {
-
 	private static final long serialVersionUID = 2054181992322087814L;
 	
+	//The menu bar
 	JMenuBar menubar = new JMenuBar();
 	
+	//Buttons for loading, saving, and making a new note
 	JButton newNote = new JButton("New Note");
 	JButton saveNote = new JButton("Save Note");
 	JButton loadNote = new JButton("Load Note");
 	
+	//Buttons for bolding, italicizing, and changing the font
 	JButton boldIt = new JButton("Bold");
 	JButton italicIt = new JButton("Italic");
 	JButton changeFont = new JButton("Fonts");
 	
+	//Button that opens up the find/replace window
 	JButton findReplace = new JButton("Find/Replace");
 	
+	//Creating bulleted and numbered lists, and a number to track the numbered list
 	JButton bulletedList = new JButton("•--- •---");
 	JButton numberedList = new JButton("1.) --- 2.) ---");
 	int num = 1;
 	
+	//A text field and area for writing notes
 	JTextField titleField = new JTextField("Title");
 	JTextArea noteArea = new JTextArea("Note");
 
+	
 	 
 	 public GUIWindow(String title) {
 		 super(title);
