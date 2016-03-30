@@ -6,8 +6,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
@@ -19,9 +21,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import FILE.ExtensionFilter;
+import contents.ReadFile;
 import contents.Save;
 
 public class GUIWindow extends JFrame {
+	
 	private static final long serialVersionUID = 2054181992322087814L;
 	
 	//The menu bar
@@ -49,9 +54,12 @@ public class GUIWindow extends JFrame {
 	JTextField titleField = new JTextField("Title");
 	JTextArea noteArea = new JTextArea("Note");
 
+	//The file chooser
+	final JFileChooser fileChooser = new JFileChooser();
 	
-	 
-	 public GUIWindow(String title) {
+	
+	
+	public GUIWindow(String title) {
 		 super(title);
 		 
 		 /* MENU SETUP */
@@ -64,6 +72,10 @@ public class GUIWindow extends JFrame {
 		 noteArea.setFont(defaultFont);
 		 noteArea.setLineWrap(true);
 		 noteArea.setWrapStyleWord(true);
+
+		 fileChooser.setAcceptAllFileFilterUsed(false);
+		 fileChooser.setFileFilter(new ExtensionFilter("txt"));
+		 fileChooser.addChoosableFileFilter(new ExtensionFilter("ntwy"));
 		 
 		 /* SET ACTION LISTENERS */
 		 setActionListeners();
@@ -74,7 +86,7 @@ public class GUIWindow extends JFrame {
 		 pane.add(layeredPane, BorderLayout.CENTER);
 		 setupPanels(layeredPane);
 	 }
-
+	
 	 /** Sets the action listener for each GUI element. */
 	 private void setActionListeners() {
 		newNote.addActionListener(new actions());
@@ -87,7 +99,7 @@ public class GUIWindow extends JFrame {
 		bulletedList.addActionListener(new actions());
 		numberedList.addActionListener(new actions());
 	 }
-
+	
 	/** Add all of the components to the appropriate panels. */
 	 private void setupPanels(JLayeredPane layeredPane) {
 		//Buttons panel
@@ -120,7 +132,7 @@ public class GUIWindow extends JFrame {
 		 	notePanel.add(scrollPane);
 		 layeredPane.add(notePanel);
 	}
-
+	
 	 /** Add the necessary elements to the menu bar. */
 	 private void setupMenuBar() {
 		 JMenu file = new JMenu("File");
@@ -173,12 +185,31 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-				 saver.SaveFile(noteArea.getText(), titleField.getText());
+				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
 			 }
 			 
 			 //Load a saved note
 			 if(e.getSource() == loadNote) {
-				 
+				 int val = fileChooser.showOpenDialog(GUIWindow.getWindows()[0].getParent());
+				
+				 if(val == JFileChooser.APPROVE_OPTION) {
+					 //The file to grab.
+					 File file = fileChooser.getSelectedFile();
+					
+					 //Using my "ReadFile" class.
+					 ReadFile reader = new ReadFile();
+					 String loadedNote = "";
+					
+					 //Try loading the file's text
+					 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+		            
+					 //Set the texts
+					 if(file.getName().endsWith(".ntwy"))
+					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
+					 else
+						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
+					 noteArea.setText(loadedNote);
+				 }
 			 }
 			 
 			 //Change the text to bold
