@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import FILE.ExtensionFilter;
+import MAIN.NoteArea;
 import contents.ReadFile;
 import contents.Save;
 
@@ -52,7 +53,7 @@ public class GUIWindow extends JFrame {
 	
 	//A text field and area for writing notes
 	JTextField titleField = new JTextField("Title");
-	JTextArea noteArea = new JTextArea("Note");
+	JTextArea noteArea = new NoteArea("Note");
 
 	//The file chooser
 	final JFileChooser fileChooser = new JFileChooser();
@@ -74,8 +75,8 @@ public class GUIWindow extends JFrame {
 		 noteArea.setWrapStyleWord(true);
 
 		 fileChooser.setAcceptAllFileFilterUsed(false);
-		 fileChooser.setFileFilter(new ExtensionFilter("txt"));
-		 fileChooser.addChoosableFileFilter(new ExtensionFilter("ntwy"));
+		 fileChooser.setFileFilter(new ExtensionFilter("ntwy"));
+		 fileChooser.addChoosableFileFilter(new ExtensionFilter("txt"));
 		 
 		 /* SET ACTION LISTENERS */
 		 setActionListeners();
@@ -261,12 +262,7 @@ public class GUIWindow extends JFrame {
 		 
 		 
 	 }
-	 
-	 
-	 
-	 
-	 
-	 
+
 	 
 	 
 	 
