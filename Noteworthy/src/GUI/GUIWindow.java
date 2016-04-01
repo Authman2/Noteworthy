@@ -20,6 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.UndoManager;
 
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
@@ -27,8 +31,9 @@ import contents.ReadFile;
 import contents.Save;
 
 public class GUIWindow extends JFrame {
-	
 	private static final long serialVersionUID = 2054181992322087814L;
+	
+	JFrame guiwindow;
 	
 	//The menu bar
 	JMenuBar menubar = new JMenuBar();
@@ -58,10 +63,14 @@ public class GUIWindow extends JFrame {
 	//The file chooser
 	final JFileChooser fileChooser = new JFileChooser();
 	
+	//Undo manager
+	UndoManager undoManager = new UndoManager();
+	
 	
 	
 	public GUIWindow(String title) {
 		 super(title);
+		 guiwindow = this;
 		 
 		 /* MENU SETUP */
 		 setJMenuBar(menubar);
@@ -90,6 +99,7 @@ public class GUIWindow extends JFrame {
 	
 	 /** Sets the action listener for each GUI element. */
 	 private void setActionListeners() {
+		noteArea.getDocument().addUndoableEditListener(new undolistener());
 		newNote.addActionListener(new actions());
 		saveNote.addActionListener(new actions());
 		loadNote.addActionListener(new actions());
@@ -140,18 +150,20 @@ public class GUIWindow extends JFrame {
 		 	JMenuItem NEWNOTE = new JMenuItem("New Note");
 		 	JMenuItem OPENNOTE = new JMenuItem("Open Note");
 		 	JMenuItem SAVENOTE = new JMenuItem("Save Note");
+		 	JMenuItem SAVEAS = new JMenuItem("Save As");
 		 	JMenuItem QUIT = new JMenuItem("Quit");
 		 	file.add(NEWNOTE);
 		 	file.add(OPENNOTE);
 		 	file.add(SAVENOTE);
+		 	file.add(SAVEAS);
 		 	file.add(QUIT);
 		 JMenu edit = new JMenu("Edit");
 		 	JMenuItem UNDO = new JMenuItem("Undo");
-		 	JMenuItem FIND = new JMenuItem("Find");
-		 	JMenuItem REPLACE = new JMenuItem("Replace");
+		 	JMenuItem REDO = new JMenuItem("Redo");
+		 	JMenuItem FINDREPLACE = new JMenuItem("Find/Replace");
 		 	edit.add(UNDO);
-		 	edit.add(FIND);
-		 	edit.add(REPLACE);
+		 	edit.add(REDO);
+		 	edit.add(FINDREPLACE);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
@@ -165,6 +177,113 @@ public class GUIWindow extends JFrame {
 		 menubar.add(edit);
 		 menubar.add(window);
 		 menubar.add(help);
+		 
+		 NEWNOTE.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				titleField.setText("Title");
+				noteArea.setText("Note");
+			}
+		 });
+		 OPENNOTE.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 int val = fileChooser.showOpenDialog(guiwindow);
+					
+				 if(val == JFileChooser.APPROVE_OPTION) {
+					 //The file to grab.
+					 File file = fileChooser.getSelectedFile();
+					
+					 //Using my "ReadFile" class.
+					 ReadFile reader = new ReadFile();
+					 String loadedNote = "";
+					
+					 //Try loading the file's text
+					 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+		            
+					 //Set the texts
+					 if(file.getName().endsWith(".ntwy"))
+					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
+					 else
+						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
+					 noteArea.setText(loadedNote);
+				 }	
+			}
+		 });
+		 SAVENOTE.addActionListener(new ActionListener() {
+			@Override
+				public void actionPerformed(ActionEvent e) {
+					Save saver = new Save();
+					saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
+				}
+		 });
+		 SAVEAS.addActionListener(new ActionListener() {
+			 @Override
+				public void actionPerformed(ActionEvent e) {
+					int val = fileChooser.showSaveDialog(guiwindow);
+					
+					if(val == JFileChooser.APPROVE_OPTION) {
+						Save saver = new Save();
+						if(fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
+							saver.SaveFile(noteArea.getText(), fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + titleField.getText() + ".txt");
+						else if(fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
+							saver.SaveFile(noteArea.getText(), fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + titleField.getText() + ".ntwy");
+							
+					}
+				}
+		 });
+		 QUIT.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}			 
+		 });
+		 UNDO.addActionListener(new ActionListener() {
+			@Override
+				public void actionPerformed(ActionEvent e) {
+				 	try {
+				 		undoManager.undo();
+			        } catch (Exception err) {
+			        	System.err.println("Nothing to undo!");
+			        }
+				}
+		 });
+		 REDO.addActionListener(new ActionListener() {
+			@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						undoManager.redo();
+			        } catch (CannotRedoException err) {
+			          	System.err.println("Nothing to redo!");
+			        }
+				} 
+		 });
+		 FINDREPLACE.addActionListener(new ActionListener() {
+			 @Override
+				public void actionPerformed(ActionEvent e) {
+					FindReplaceWindow frw = new FindReplaceWindow("Find/Replace",noteArea);
+					frw.setVisible(true);
+				}
+		 });
+		 MINIMIZE.addActionListener(new ActionListener() {
+			 @Override
+				public void actionPerformed(ActionEvent e) {
+					guiwindow.setState(JFrame.ICONIFIED);
+				}
+		 });
+		 MAXIMIZE.addActionListener(new ActionListener() {
+			 @Override
+				public void actionPerformed(ActionEvent e) {
+					guiwindow.setState(JFrame.NORMAL);
+				}
+		 });
+		 ABOUT.addActionListener(new ActionListener() {
+			 @Override
+				public void actionPerformed(ActionEvent e) {
+					AboutWindow aw = new AboutWindow("About");
+					aw.setVisible(true);
+				}
+		 });
 	}
 	 
 	 
@@ -191,7 +310,7 @@ public class GUIWindow extends JFrame {
 			 
 			 //Load a saved note
 			 if(e.getSource() == loadNote) {
-				 int val = fileChooser.showOpenDialog(GUIWindow.getWindows()[0].getParent());
+				 int val = fileChooser.showOpenDialog(guiwindow);
 				
 				 if(val == JFileChooser.APPROVE_OPTION) {
 					 //The file to grab.
@@ -264,14 +383,13 @@ public class GUIWindow extends JFrame {
 	 }
 
 	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+	 /** Handles the undo feature. */
+	 public class undolistener implements UndoableEditListener {
+		@Override
+		public void undoableEditHappened(UndoableEditEvent e) {
+			undoManager.addEdit(e.getEdit());
+		}
+	 }
 	 
 	 
 	 
