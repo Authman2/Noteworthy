@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 public class AboutWindow extends JFrame {
 	private static final long serialVersionUID = 3078023730240644548L;
 
-	
 	JLabel infoLabel = new JLabel();
 	
 	public AboutWindow(String title) {

@@ -19,18 +19,29 @@ public class NoteArea extends JTextArea {
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(onSameLine()) {
-				System.out.println(onSameLine());
-				setText(getText().substring(0, getSelectionStart()) + " • \n" + getText().substring(getSelectionStart()));
+				setText(getText().substring(0, getSelectionStart()-1) + "\n • " + getText().substring(getSelectionStart()));
 			}
 		}
 	}
 	
 	public boolean onSameLine() {
-		for(int i = getSelectionStart(); i > 0; i--) {
-			if(getText().substring(i-1,i).equals("•")) {
+//		//Start from where you are, and loop backwards until you find a bullet point
+//		int i = getSelectionStart();
+//		String temp = "";
+//		while(!getText().substring(i-1, i).equals("\n")) {
+//			temp += getText().substring(i-1, i);
+//			i--;
+//		}
+//		System.out.println(temp);
+		
+		for(int i = getSelectionStart(); i > getText().indexOf("\n"); i--) {
+			if(getText().substring(i-1, i).equals("•")) {
 				return true;
 			}
 		}
+		
+		
+		
 		return false;
 	}
 	

@@ -41,6 +41,7 @@ public class GUIWindow extends JFrame {
 	//Buttons for loading, saving, and making a new note
 	JButton newNote = new JButton("New Note");
 	JButton saveNote = new JButton("Save Note");
+	JButton saveAsNote = new JButton("Save As");
 	JButton loadNote = new JButton("Load Note");
 	
 	//Buttons for bolding, italicizing, and changing the font
@@ -55,6 +56,10 @@ public class GUIWindow extends JFrame {
 	JButton bulletedList = new JButton("•--- •---");
 	JButton numberedList = new JButton("1.) --- 2.) ---");
 	int num = 1;
+	
+	//Undo/Redo Buttons
+	JButton undoButton = new JButton("Undo");
+	JButton redoButton = new JButton("Redo");
 	
 	//A text field and area for writing notes
 	JTextField titleField = new JTextField("Title");
@@ -102,6 +107,7 @@ public class GUIWindow extends JFrame {
 		noteArea.getDocument().addUndoableEditListener(new undolistener());
 		newNote.addActionListener(new actions());
 		saveNote.addActionListener(new actions());
+		saveAsNote.addActionListener(new actions());
 		loadNote.addActionListener(new actions());
 		boldIt.addActionListener(new actions());
 		italicIt.addActionListener(new actions());
@@ -109,6 +115,8 @@ public class GUIWindow extends JFrame {
 		findReplace.addActionListener(new actions());
 		bulletedList.addActionListener(new actions());
 		numberedList.addActionListener(new actions());
+		undoButton.addActionListener(new actions());
+		redoButton.addActionListener(new actions());
 	 }
 	
 	/** Add all of the components to the appropriate panels. */
@@ -116,16 +124,19 @@ public class GUIWindow extends JFrame {
 		//Buttons panel
 		 JPanel buttonsPanel = new JPanel();
 		 	buttonsPanel.setBounds(5, 5, 630, 100);
-		 	buttonsPanel.setLayout(new GridLayout(3,4,10,10));
+		 	buttonsPanel.setLayout(new GridLayout(3,5,10,10));
 		 	buttonsPanel.add(newNote);
 		 	buttonsPanel.add(saveNote);
+		 	buttonsPanel.add(saveAsNote);
 		 	buttonsPanel.add(loadNote);
 		 	buttonsPanel.add(boldIt);
 		 	buttonsPanel.add(italicIt);
 		 	buttonsPanel.add(changeFont);
+		 	buttonsPanel.add(findReplace);
 		 	buttonsPanel.add(bulletedList);
 		 	buttonsPanel.add(numberedList);
-		 	buttonsPanel.add(findReplace);
+		 	buttonsPanel.add(undoButton);
+			buttonsPanel.add(redoButton);
 		 layeredPane.add(buttonsPanel);
 		 
 		 //title field panel
@@ -168,7 +179,7 @@ public class GUIWindow extends JFrame {
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
 		 	window.add(MINIMIZE);
-		 	window.add(MAXIMIZE);
+		 	window.add(MAXIMIZE);		 	
 		 JMenu help = new JMenu("Help");
 		 	JMenuItem ABOUT = new JMenuItem("About");
 		 	help.add(ABOUT);
@@ -377,6 +388,23 @@ public class GUIWindow extends JFrame {
 				 frw.setVisible(true);
 			 }
 			 
+			 //Undo
+			 if(e.getSource() == undoButton) {
+				 try {
+			 		undoManager.undo();
+				 } catch (Exception err) {
+					 System.err.println("Nothing to undo!");
+				 }
+			 }
+			 
+			 //Redo
+			 if(e.getSource() == redoButton) {
+				 try {
+					undoManager.redo();
+				 } catch (CannotRedoException err) {
+					 System.err.println("Nothing to redo!");
+				 }
+			 }
 		 }
 		 
 		 
