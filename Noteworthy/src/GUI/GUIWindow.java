@@ -373,7 +373,7 @@ public class GUIWindow extends JFrame {
 			 
 			 //Bulleted list
 			 if(e.getSource() == bulletedList) {
-				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n • " + noteArea.getText().substring(noteArea.getSelectionStart()));
+				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n • \n" + noteArea.getText().substring(noteArea.getSelectionStart()));
 			 }
 			 
 			 //Numbered list

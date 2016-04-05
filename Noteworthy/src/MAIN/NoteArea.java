@@ -19,28 +19,32 @@ public class NoteArea extends JTextArea {
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(onSameLine()) {
-				setText(getText().substring(0, getSelectionStart()-1) + "\n • " + getText().substring(getSelectionStart()));
+				setText(getText().substring(0, getSelectionStart()-1) + "\n • \n" + getText().substring(getSelectionStart()));
 			}
 		}
 	}
 	
+	/** Checks if the selection start is on the same line as a bulleted list. */
 	public boolean onSameLine() {
-//		//Start from where you are, and loop backwards until you find a bullet point
-//		int i = getSelectionStart();
-//		String temp = "";
-//		while(!getText().substring(i-1, i).equals("\n")) {
-//			temp += getText().substring(i-1, i);
-//			i--;
-//		}
-//		System.out.println(temp);
+		//Start from where you are, and loop backwards until you find a bullet point
+		int i = getSelectionStart();
+		String temp = "";
 		
-		for(int i = getSelectionStart(); i > getText().indexOf("\n"); i--) {
-			if(getText().substring(i-1, i).equals("•")) {
-				return true;
+		try {
+			//If you find a line break, then you know your not on the same line anymore
+			while(!getText().substring(i-2, i-1).equals("\n")) {
+				//Add whatever text you find to temp
+				temp += getText().substring(i-1, i);
+				i--;
 			}
+		} catch(Exception e) {
+			System.err.println("Not on a bulleted list line.");
 		}
 		
-		
+		//Check if there was a bullet point there. If so, return true. False otherwise.
+		if(temp.indexOf("•") > -1) {
+			return true;
+		}
 		
 		return false;
 	}
