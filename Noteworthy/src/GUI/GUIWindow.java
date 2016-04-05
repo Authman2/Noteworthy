@@ -55,7 +55,7 @@ public class GUIWindow extends JFrame {
 	//Creating bulleted and numbered lists, and a number to track the numbered list
 	JButton bulletedList = new JButton("•--- •---");
 	JButton numberedList = new JButton("1.) --- 2.) ---");
-	int num = 1;
+	public int num = 1;
 	
 	//Undo/Redo Buttons
 	JButton undoButton = new JButton("Undo");
@@ -63,7 +63,7 @@ public class GUIWindow extends JFrame {
 	
 	//A text field and area for writing notes
 	JTextField titleField = new JTextField("Title");
-	JTextArea noteArea = new NoteArea("Note");
+	JTextArea noteArea = new NoteArea("Note", this);
 
 	//The file chooser
 	final JFileChooser fileChooser = new JFileChooser();
@@ -378,7 +378,7 @@ public class GUIWindow extends JFrame {
 			 
 			 //Numbered list
 			 if(e.getSource() == numberedList) {
-				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n " + num + ".) " + noteArea.getText().substring(noteArea.getSelectionStart()));
+				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n " + num + ".) \n" + noteArea.getText().substring(noteArea.getSelectionStart()));
 				 num++;
 			 }
 			 
