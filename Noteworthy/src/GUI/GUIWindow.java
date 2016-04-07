@@ -65,7 +65,7 @@ public class GUIWindow extends JFrame {
 	JButton redoButton = new JButton("Redo");
 	
 	//A text field and area for writing notes
-	JTextField titleField = new JTextField("Title");
+	public JTextField titleField = new JTextField("Title");
 	JTextArea noteArea = new NoteArea("Note", this);
 
 	//The file chooser
@@ -74,6 +74,8 @@ public class GUIWindow extends JFrame {
 	//Undo manager
 	UndoManager undoManager = new UndoManager();
 	
+	//Highlighter
+	public Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
 	
 	
 	public GUIWindow(String title) {
@@ -285,7 +287,6 @@ public class GUIWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
 					noteArea.getHighlighter().addHighlight(noteArea.getSelectionStart(), noteArea.getSelectionEnd(), yellowHighlight);
 				} catch(Exception err) {
 					System.err.println("There was a problem highlighting the text.");
@@ -355,7 +356,7 @@ public class GUIWindow extends JFrame {
 					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
 					 else
 						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-					 noteArea.setText(loadedNote);
+					 noteArea.setText(loadedNote.substring(7));
 				 }
 			 }
 			 

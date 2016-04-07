@@ -4,7 +4,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JTextArea;
+import javax.swing.text.Highlighter.Highlight;
 
+import contents.Save;
 import GUI.GUIWindow;
 
 public class NoteArea extends JTextArea {
@@ -15,6 +17,7 @@ public class NoteArea extends JTextArea {
 	
 	//A boolean for when a mouse click will get rid of the highlights
 	public boolean hasHighlights;
+	boolean commandDown = false;
 	
 	
 	public NoteArea(String title, GUIWindow gw) { super(title); guiwindow = gw; }
@@ -24,7 +27,11 @@ public class NoteArea extends JTextArea {
 		super.processMouseEvent(e);
 		
 		if(e.getButton() == MouseEvent.BUTTON1 && hasHighlights) {
-			getHighlighter().removeAllHighlights();
+			for(Highlight h : getHighlighter().getHighlights()) {
+				if(!h.getPainter().equals(guiwindow.yellowHighlight)) {
+					getHighlighter().removeHighlight(h);
+				}
+			}
 			hasHighlights = false;
 		}
 	}
@@ -42,8 +49,18 @@ public class NoteArea extends JTextArea {
 				setText(getText().substring(0,getSelectionStart()-1) + "\n " + guiwindow.num + ".) \n" + getText().substring(getSelectionStart()));
 				guiwindow.num++;
 			}
-			
-			
+		}
+		
+		
+		
+		/* HOT HEYS */
+		if(e.getKeyCode() == KeyEvent.VK_META || e.getKeyCode() == KeyEvent.VK_WINDOWS) { commandDown = true; }	
+		if(e.getKeyCode() == 0) { commandDown = false; }
+		
+		if(e.getKeyCode() == KeyEvent.VK_S && commandDown == true) {
+			Save saver = new Save();
+			saver.SaveFile(getText(), guiwindow.titleField.getText() + ".ntwy");
+			commandDown = false;
 		}
 	}
 	
