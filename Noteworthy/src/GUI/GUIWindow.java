@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -22,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
@@ -172,9 +175,11 @@ public class GUIWindow extends JFrame {
 		 	JMenuItem UNDO = new JMenuItem("Undo");
 		 	JMenuItem REDO = new JMenuItem("Redo");
 		 	JMenuItem FINDREPLACE = new JMenuItem("Find/Replace");
+		 	JMenuItem HIGHLIGHT = new JMenuItem("Highlight");
 		 	edit.add(UNDO);
 		 	edit.add(REDO);
 		 	edit.add(FINDREPLACE);
+		 	edit.add(HIGHLIGHT);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
@@ -275,6 +280,17 @@ public class GUIWindow extends JFrame {
 					FindReplaceWindow frw = new FindReplaceWindow("Find/Replace",noteArea);
 					frw.setVisible(true);
 				}
+		 });
+		 HIGHLIGHT.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
+					noteArea.getHighlighter().addHighlight(noteArea.getSelectionStart(), noteArea.getSelectionEnd(), yellowHighlight);
+				} catch(Exception err) {
+					System.err.println("There was a problem highlighting the text.");
+				}
+			} 
 		 });
 		 MINIMIZE.addActionListener(new ActionListener() {
 			 @Override

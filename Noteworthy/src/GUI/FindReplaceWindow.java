@@ -14,6 +14,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultHighlighter;
 
+import MAIN.NoteArea;
+
 public class FindReplaceWindow extends JFrame {
 	private static final long serialVersionUID = 496143735014291910L;
 
@@ -33,7 +35,7 @@ public class FindReplaceWindow extends JFrame {
     JButton replaceAll = new JButton("Replace All");
     
     //Text area for getting information
-    JTextArea textarea;
+    NoteArea textarea;
     
   
     
@@ -44,7 +46,7 @@ public class FindReplaceWindow extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         
-        textarea = jta;
+        textarea = (NoteArea)jta;
         
         JPanel north = new JPanel(new GridLayout(2,2,10,10));
             north.add(findLabel);
@@ -70,7 +72,22 @@ public class FindReplaceWindow extends JFrame {
         replaceAll.addActionListener(new frActions());
     }
     
-    
+    public void highlightText() {
+    	for(int i = 0; i < textarea.getText().length() - findTF.getText().length(); i++) {
+        	//If you find the word, try highlighting it.
+            if(textarea.getText().substring(i,i+findTF.getText().length()).equals(findTF.getText())) {
+                try {
+                	textarea.getHighlighter().addHighlight(i, i+findTF.getText().length(), DefaultHighlighter.DefaultPainter);
+                	textarea.hasHighlights = true;
+                } catch(Exception err) {
+                    stringNotFoundLabel.setText("String was not found");
+                    textarea.hasHighlights = false;
+                    center.repaint();
+                    System.err.println("String was not found");
+                }  
+            }
+        }
+    }
     
     public class frActions implements ActionListener {
 
@@ -80,18 +97,7 @@ public class FindReplaceWindow extends JFrame {
             if(e.getSource() == find) {
                 //If it's not the empty string
                 if(!findTF.getText().equals("")) {
-	                for(int i = 0; i < textarea.getText().length() - findTF.getText().length(); i++) {
-	                	//If you find the word, try highlighting it.
-	                    if(textarea.getText().substring(i,i+findTF.getText().length()).equals(findTF.getText())) {
-	                        try {
-	                        	textarea.getHighlighter().addHighlight(i, i+findTF.getText().length(), DefaultHighlighter.DefaultPainter);
-	                        } catch(Exception err) {
-	                            stringNotFoundLabel.setText("String was not found");
-	                            center.repaint();
-	                            System.err.println("String was not found");
-	                        }  
-	                    }
-	                }
+	                highlightText();
                 }
                 
             }

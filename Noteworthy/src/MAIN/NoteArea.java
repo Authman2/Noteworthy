@@ -1,6 +1,7 @@
 package MAIN;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JTextArea;
 
@@ -8,10 +9,25 @@ import GUI.GUIWindow;
 
 public class NoteArea extends JTextArea {
 	private static final long serialVersionUID = 301547767165899971L;
-
+	
+	//GUIWindow for grabbing data from
 	GUIWindow guiwindow;
 	
+	//A boolean for when a mouse click will get rid of the highlights
+	public boolean hasHighlights;
+	
+	
 	public NoteArea(String title, GUIWindow gw) { super(title); guiwindow = gw; }
+	
+	@Override
+	protected void processMouseEvent(MouseEvent e) {
+		super.processMouseEvent(e);
+		
+		if(e.getButton() == MouseEvent.BUTTON1 && hasHighlights) {
+			getHighlighter().removeAllHighlights();
+			hasHighlights = false;
+		}
+	}
 	
 	@Override
 	protected void processKeyEvent(KeyEvent e) {
