@@ -69,10 +69,10 @@ public class GUIWindow extends JFrame {
 	JTextArea noteArea = new NoteArea("Note", this);
 
 	//The file chooser
-	final JFileChooser fileChooser = new JFileChooser();
+	public final JFileChooser fileChooser = new JFileChooser();
 	
 	//Undo manager
-	UndoManager undoManager = new UndoManager();
+	public UndoManager undoManager = new UndoManager();
 	
 	//Highlighter
 	public Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
@@ -189,7 +189,9 @@ public class GUIWindow extends JFrame {
 		 	window.add(MAXIMIZE);		 	
 		 JMenu help = new JMenu("Help");
 		 	JMenuItem ABOUT = new JMenuItem("About");
+		 	JMenuItem KEYHELP = new JMenuItem("Key Help");
 		 	help.add(ABOUT);
+		 	help.add(KEYHELP);
 		 	
 		 menubar.add(file);
 		 menubar.add(edit);
@@ -224,7 +226,7 @@ public class GUIWindow extends JFrame {
 					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
 					 else
 						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-					 noteArea.setText(loadedNote);
+					 noteArea.setText(loadedNote.substring(7));
 				 }	
 			}
 		 });
@@ -312,7 +314,14 @@ public class GUIWindow extends JFrame {
 					aw.setVisible(true);
 				}
 		 });
-	}
+		 KEYHELP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				KeyHelp kh = new KeyHelp("Key Help");
+				kh.setVisible(true);
+			}
+		 });
+	 }
 	 
 	 
 	 

@@ -2,12 +2,17 @@ package MAIN;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.text.Highlighter.Highlight;
 
-import contents.Save;
+import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
+import GUI.KeyHelp;
+import contents.ReadFile;
+import contents.Save;
 
 public class NoteArea extends JTextArea {
 	private static final long serialVersionUID = 301547767165899971L;
@@ -17,7 +22,7 @@ public class NoteArea extends JTextArea {
 	
 	//A boolean for when a mouse click will get rid of the highlights
 	public boolean hasHighlights;
-	boolean commandDown = false;
+	boolean commandDown = false, shiftDown = false;
 	
 	
 	public NoteArea(String title, GUIWindow gw) { super(title); guiwindow = gw; }
@@ -56,12 +61,117 @@ public class NoteArea extends JTextArea {
 		/* HOT HEYS */
 		if(e.getKeyCode() == KeyEvent.VK_META || e.getKeyCode() == KeyEvent.VK_WINDOWS) { commandDown = true; }	
 		if(e.getKeyCode() == 0) { commandDown = false; }
+		if(e.getKeyCode() == KeyEvent.VK_SHIFT) { shiftDown = true; }
+		if(e.getKeyCode() == 0) shiftDown = false;
 		
+		configureHotKeys(e);
+	}
+	
+	private void configureHotKeys(KeyEvent e) {
+		//Save
 		if(e.getKeyCode() == KeyEvent.VK_S && commandDown == true) {
 			Save saver = new Save();
 			saver.SaveFile(getText(), guiwindow.titleField.getText() + ".ntwy");
 			commandDown = false;
 		}
+		
+		//Save As
+		if(e.getKeyCode() == KeyEvent.VK_S && commandDown == true && shiftDown == true) {
+			int val = guiwindow.fileChooser.showSaveDialog(guiwindow);
+			
+			if(val == JFileChooser.APPROVE_OPTION) {
+				Save saver = new Save();
+				if(guiwindow.fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
+					saver.SaveFile(getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".txt");
+				else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
+					saver.SaveFile(getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
+					
+			}
+			
+			commandDown = false;
+			shiftDown = false;
+		}
+		
+		//New Note
+		if(e.getKeyCode() == KeyEvent.VK_N && commandDown == true) {
+			guiwindow.titleField.setText("Title");
+			setText("Note");
+			commandDown = false;
+		}
+		
+		//Open Note
+		if(e.getKeyCode() == KeyEvent.VK_O && commandDown == true) {			
+			 int val = guiwindow.fileChooser.showOpenDialog(guiwindow);
+				
+			 if(val == JFileChooser.APPROVE_OPTION) {
+				 //The file to grab.
+				 File file = guiwindow.fileChooser.getSelectedFile();
+				
+				 //Using my "ReadFile" class.
+				 ReadFile reader = new ReadFile();
+				 String loadedNote = "";
+				
+				 //Try loading the file's text
+				 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+	            
+				 //Set the texts
+				 if(file.getName().endsWith(".ntwy"))
+				 	guiwindow.titleField.setText(file.getName().substring(0, file.getName().length()-5));
+				 else
+					 guiwindow.titleField.setText(file.getName().substring(0, file.getName().length()-4));
+				 setText(loadedNote.substring(7));
+			 }
+			commandDown = false;
+		}
+		
+		
+		//Undo 
+		if(e.getKeyCode() == KeyEvent.VK_Z && commandDown == true) {
+			try {
+		 		guiwindow.undoManager.undo();
+	        } catch (Exception err) {
+	        	System.err.println("Nothing to undo!");
+	        }
+			commandDown = false;
+		}
+		
+		//Redo
+		if(e.getKeyCode() == KeyEvent.VK_Z && commandDown == true && shiftDown == true) {
+			try {
+		 		guiwindow.undoManager.redo();
+	        } catch (Exception err) {
+	        	System.err.println("Nothing to undo!");
+	        }
+			commandDown = false;
+			shiftDown = false;
+		}
+		
+		//Find/Replace
+		if(e.getKeyCode() == KeyEvent.VK_F && commandDown == true) {
+			FindReplaceWindow frw = new FindReplaceWindow("Find/Replace",this);
+			frw.setVisible(true);
+			commandDown = false;
+		}
+		
+		//Highlight
+		if(e.getKeyCode() == KeyEvent.VK_H && commandDown == true && shiftDown == true) {
+			try {
+				getHighlighter().addHighlight(getSelectionStart(), getSelectionEnd(), guiwindow.yellowHighlight);
+			} catch(Exception err) {
+				System.err.println("There was a problem highlighting the text.");
+			}
+			commandDown = false;
+			shiftDown = false;
+		}
+		
+		//Key Help
+		if(e.getKeyCode() == KeyEvent.VK_H && commandDown) {
+			KeyHelp kh = new KeyHelp("Key Help");
+			kh.setVisible(true);
+			commandDown = false;
+		}
+		
+		
 	}
 	
 	/** Checks if the selection start is on the same line as a bulleted list. */
