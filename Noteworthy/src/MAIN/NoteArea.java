@@ -165,7 +165,7 @@ public class NoteArea extends JTextArea {
 		}
 		
 		//Key Help
-		if(e.getKeyCode() == KeyEvent.VK_H && commandDown) {
+		if(e.getKeyCode() == KeyEvent.VK_K && commandDown) {
 			KeyHelp kh = new KeyHelp("Key Help");
 			kh.setVisible(true);
 			commandDown = false;

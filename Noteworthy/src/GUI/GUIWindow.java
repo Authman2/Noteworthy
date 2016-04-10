@@ -45,7 +45,7 @@ public class GUIWindow extends JFrame {
 	JButton newNote = new JButton("New Note");
 	JButton saveNote = new JButton("Save Note");
 	JButton saveAsNote = new JButton("Save As");
-	JButton loadNote = new JButton("Load Note");
+	JButton loadNote = new JButton("Open Note");
 	
 	//Buttons for bolding, italicizing, and changing the font
 	JButton boldIt = new JButton("Bold");
