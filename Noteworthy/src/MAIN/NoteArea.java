@@ -5,7 +5,9 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.Highlighter.Highlight;
 
 import GUI.FindReplaceWindow;
@@ -14,7 +16,7 @@ import GUI.KeyHelp;
 import contents.ReadFile;
 import contents.Save;
 
-public class NoteArea extends JTextArea {
+public class NoteArea extends JTextPane {
 	private static final long serialVersionUID = 301547767165899971L;
 	
 	//GUIWindow for grabbing data from
@@ -22,10 +24,16 @@ public class NoteArea extends JTextArea {
 	
 	//A boolean for when a mouse click will get rid of the highlights
 	public boolean hasHighlights;
+	
+	//Booleans for whether or not certain keys are being held down
 	boolean commandDown = false, shiftDown = false;
 	
+	//Simple Attribute Set
+	SimpleAttributeSet sas;
+		
 	
-	public NoteArea(String title, GUIWindow gw) { super(title); guiwindow = gw; }
+	
+	public NoteArea(GUIWindow gw) { guiwindow = gw; sas = new SimpleAttributeSet(); }
 	
 	@Override
 	protected void processMouseEvent(MouseEvent e) {
@@ -171,7 +179,37 @@ public class NoteArea extends JTextArea {
 			commandDown = false;
 		}
 		
+		//Bold
+		if(e.getKeyCode() == KeyEvent.VK_B && commandDown) {
+			StyleConstants.setBold(sas, !StyleConstants.isBold(sas));
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			commandDown = false;
+		}
 		
+		//Italic
+		if(e.getKeyCode() == KeyEvent.VK_I && commandDown) {
+			StyleConstants.setItalic(sas, !StyleConstants.isItalic(sas));
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			commandDown = false;
+		}
+		
+		//Underline
+		if(e.getKeyCode() == KeyEvent.VK_U && commandDown) {
+			StyleConstants.setUnderline(sas, !StyleConstants.isUnderline(sas));
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			commandDown = false;
+		}
+		
+		//Strike through
+		if(e.getKeyCode() == KeyEvent.VK_D && commandDown) { 
+			StyleConstants.setStrikeThrough(sas, !StyleConstants.isStrikeThrough(sas));
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			commandDown = false;
+		}
 	}
 	
 	/** Checks if the selection start is on the same line as a bulleted list. */

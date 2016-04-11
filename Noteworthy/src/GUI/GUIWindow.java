@@ -18,13 +18,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
@@ -36,6 +37,7 @@ import contents.Save;
 public class GUIWindow extends JFrame {
 	private static final long serialVersionUID = 2054181992322087814L;
 	
+	//This JFrame
 	JFrame guiwindow;
 	
 	//The menu bar
@@ -48,8 +50,10 @@ public class GUIWindow extends JFrame {
 	JButton loadNote = new JButton("Open Note");
 	
 	//Buttons for bolding, italicizing, and changing the font
-	JButton boldIt = new JButton("Bold");
-	JButton italicIt = new JButton("Italic");
+	JButton boldIt = new JButton("<html><b> Bold </b></html>");
+	JButton italicIt = new JButton("<html><i> Italic </i></html>");
+	JButton underlineIt = new JButton("<html><u> Underline </u><html>");
+	JButton strikethroughIt = new JButton("<html><strike> Strikethrough </strike></html>");
 	JButton changeFont = new JButton("Fonts");
 	
 	//Button that opens up the find/replace window
@@ -66,7 +70,7 @@ public class GUIWindow extends JFrame {
 	
 	//A text field and area for writing notes
 	public JTextField titleField = new JTextField("Title");
-	JTextArea noteArea = new NoteArea("Note", this);
+	NoteArea noteArea = new NoteArea(this);
 
 	//The file chooser
 	public final JFileChooser fileChooser = new JFileChooser();
@@ -74,12 +78,19 @@ public class GUIWindow extends JFrame {
 	//Undo manager
 	public UndoManager undoManager = new UndoManager();
 	
+	//Simple Attribute Set
+	SimpleAttributeSet sas;
+	
 	//Highlighter
 	public Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
 	
 	
+	
+	
 	public GUIWindow(String title) {
 		 super(title);
+		 noteArea.setText("Note");
+		 sas = new SimpleAttributeSet(); 
 		 guiwindow = this;
 		 
 		 /* MENU SETUP */
@@ -90,8 +101,6 @@ public class GUIWindow extends JFrame {
 		 Font defaultFont = new Font("Comic Sans MS", 0, 16);
 		 titleField.setFont(defaultFont);
 		 noteArea.setFont(defaultFont);
-		 noteArea.setLineWrap(true);
-		 noteArea.setWrapStyleWord(true);
 
 		 fileChooser.setAcceptAllFileFilterUsed(false);
 		 fileChooser.setFileFilter(new ExtensionFilter("ntwy"));
@@ -116,6 +125,8 @@ public class GUIWindow extends JFrame {
 		loadNote.addActionListener(new actions());
 		boldIt.addActionListener(new actions());
 		italicIt.addActionListener(new actions());
+		underlineIt.addActionListener(new actions());
+		strikethroughIt.addActionListener(new actions());
 		changeFont.addActionListener(new actions());
 		findReplace.addActionListener(new actions());
 		bulletedList.addActionListener(new actions());
@@ -136,6 +147,8 @@ public class GUIWindow extends JFrame {
 		 	buttonsPanel.add(loadNote);
 		 	buttonsPanel.add(boldIt);
 		 	buttonsPanel.add(italicIt);
+		 	buttonsPanel.add(underlineIt);
+		 	buttonsPanel.add(strikethroughIt);
 		 	buttonsPanel.add(changeFont);
 		 	buttonsPanel.add(findReplace);
 		 	buttonsPanel.add(bulletedList);
@@ -337,6 +350,10 @@ public class GUIWindow extends JFrame {
 			 if(e.getSource() == newNote) {
 				 titleField.setText("Title");
 				 noteArea.setText("Note");
+				 StyleConstants.setBold(sas, false);
+				 StyleConstants.setItalic(sas, false);
+				 StyleConstants.setUnderline(sas, false);
+				 StyleConstants.setStrikeThrough(sas, false);
 			 }
 			 
 			 //Save the note as an object
@@ -371,27 +388,33 @@ public class GUIWindow extends JFrame {
 			 
 			 //Change the text to bold
 			 if(e.getSource() == boldIt) {
-				 //If it's not already bold, then make it so.
-				 if(!noteArea.getFont().isBold()) {
-					 titleField.setFont(new Font(titleField.getFont().getFontName(),1,15));
-					 noteArea.setFont(new Font(noteArea.getFont().getFontName(),1,15));
-				 } else {
-					 titleField.setFont(new Font(titleField.getFont().getFontName(),0,15));
-					 noteArea.setFont(new Font(noteArea.getFont().getFontName(),0,15));
-				 }
+				 StyleConstants.setBold(sas, !StyleConstants.isBold(sas));
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
 			 }
 			 
 			 //Change to italics
 			 if(e.getSource() == italicIt) {
-				 if(!noteArea.getFont().isItalic()) {
-					 titleField.setFont(new Font(titleField.getFont().getFontName(),2,15));
-					 noteArea.setFont(new Font(noteArea.getFont().getFontName(),2,15));
-				 } else {
-					 titleField.setFont(new Font(titleField.getFont().getFontName(),0,15));
-					 noteArea.setFont(new Font(noteArea.getFont().getFontName(),0,15));
-				 }
+				 StyleConstants.setItalic(sas, !StyleConstants.isItalic(sas));
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
 			 }
 			 
+			 //Change to underline
+			 if(e.getSource() == underlineIt) {
+				 StyleConstants.setUnderline(sas, !StyleConstants.isUnderline(sas));
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+			 }
+			 
+			 //Strikethrough
+			 if(e.getSource() == strikethroughIt) { 
+				 StyleConstants.setStrikeThrough(sas, !StyleConstants.isStrikeThrough(sas));
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+			 }
+			 
+			 //Change fonts
 			 if(e.getSource() == changeFont) {
 				 FontsWindow fw = new FontsWindow("Fonts", noteArea);
 				 fw.setVisible(true);

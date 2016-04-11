@@ -8,13 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+
+import MAIN.NoteArea;
 
 public class FontsWindow extends JFrame {
 	private static final long serialVersionUID = -5137305296724982575L;
@@ -23,7 +25,7 @@ public class FontsWindow extends JFrame {
 	Font font;
 	
 	//Text area for getting information
-	JTextArea textarea;
+	NoteArea textarea;
 	
 	//Labels for showing what each list does
 	JLabel fontsLabel = new JLabel("Fonts:");
@@ -33,38 +35,37 @@ public class FontsWindow extends JFrame {
 	//Lists for choosing the font, style, and size
 	JList<String> fontList = new JList<String>();
 	JList<String> styleList = new JList<String>();
-	JList<Integer> sizeList = new JList<Integer>();
+	Integer[] sizeList = {2,4,6,8,10,12,14,16,18,20,22,24,26,28,29,30,32,34,36,38,40,42,44,46,48,50};
+	JComboBox<Integer> sizeBox = new JComboBox<Integer>(sizeList);
 	
 	//Button for actually changing the font
 	JButton selectButton = new JButton("Select");
 	
 	
-	public FontsWindow(String title, JTextArea jta) {
+	public FontsWindow(String title, NoteArea noteArea) {
 		super(title);
 		setSize(415,410);
         setLocationRelativeTo(null);
 		
-        textarea = jta;
+        textarea = noteArea;
         
         /* INITIAL SETUP */
         addFonts();
-        addSizes();
+        sizeBox.setEditable(true);
+        sizeBox.setSelectedIndex(7);
         fontList.setSelectedIndex(11);
         styleList.setSelectedIndex(0);
-        sizeList.setSelectedIndex(7);
         
         /* PANEL SETUP */
         JPanel north = new JPanel(new GridLayout(1,4,10,10));
         	north.add(fontsLabel);
         	north.add(styleLabel);
-        	north.add(sizeLabel);
+        	north.add(sizeBox);
         	north.add(selectButton);
         JPanel west = new JPanel(new GridLayout(1,2,10,10));
         	JScrollPane scroller = new JScrollPane(fontList,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        	JScrollPane scroller2 = new JScrollPane(sizeList,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         	west.add(scroller);
         	west.add(styleList);
-        	west.add(scroller2);
         
         Container pane = getContentPane();
         	pane.add(north, BorderLayout.NORTH);
@@ -72,11 +73,6 @@ public class FontsWindow extends JFrame {
         	
 		
         selectButton.addActionListener(new fActions());
-	}
-
-
-	private void addSizes() {
-		sizeList.setListData(new Integer[] {2,4,6,8,10,12,14,16,18,20,22,24,26,28,29,30,32,34,36,38,40,42,44,46,48,50});
 	}
 
 	private void addFonts() {
@@ -133,15 +129,15 @@ public class FontsWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == selectButton) {
 				if(styleList.getSelectedValue().toString().equals("Plain"))
-					font = new Font(fontList.getSelectedValue(),0,sizeList.getSelectedValue().intValue());
+					font = new Font(fontList.getSelectedValue(),0,(Integer)sizeBox.getSelectedItem());
 					textarea.setFont(font);
 				
 				if(styleList.getSelectedValue().toString().equals("Bold"))
-					font = new Font(fontList.getSelectedValue(),1,sizeList.getSelectedValue().intValue());
+					font = new Font(fontList.getSelectedValue(),1,(Integer)sizeBox.getSelectedItem());
 					textarea.setFont(font);
 				
 				if(styleList.getSelectedValue().toString().equals("Italic"))
-					font = new Font(fontList.getSelectedValue(),2, sizeList.getSelectedValue().intValue());
+					font = new Font(fontList.getSelectedValue(),2, (Integer)sizeBox.getSelectedItem());
 					textarea.setFont(font);
 			}
 		}

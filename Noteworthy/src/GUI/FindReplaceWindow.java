@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultHighlighter;
 
@@ -40,13 +39,13 @@ public class FindReplaceWindow extends JFrame {
   
     
     
-    public FindReplaceWindow(String title, JTextArea jta) {
+    public FindReplaceWindow(String title, NoteArea noteArea) {
         super(title);
         setSize(400,130);
         setLocationRelativeTo(null);
         setResizable(false);
         
-        textarea = (NoteArea)jta;
+        textarea = (NoteArea)noteArea;
         
         JPanel north = new JPanel(new GridLayout(2,2,10,10));
             north.add(findLabel);

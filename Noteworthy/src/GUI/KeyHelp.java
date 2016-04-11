@@ -17,6 +17,10 @@ public class KeyHelp extends JFrame {
 	JLabel undoL = new JLabel("	Undo						⌘+Z");
 	JLabel redoL = new JLabel("	Redo						⇧+⌘+Z");
 	JLabel highlightL = new JLabel("	Highlight						⇧+⌘+H");
+	JLabel boldL = new JLabel("Bold								⌘+B");
+	JLabel italicL = new JLabel("Italic								⌘+I");
+	JLabel underlineL = new JLabel("Underline								⌘+U");
+	JLabel strikeL = new JLabel("Strikethrough								⌘+D");
 	JLabel keyHelpL = new JLabel("	Key Help						⌘+K");
 	
 	
@@ -26,7 +30,7 @@ public class KeyHelp extends JFrame {
 		setLocationRelativeTo(null);
 		
 		
-		JPanel panel = new JPanel(new GridLayout(9,1,5,5));
+		JPanel panel = new JPanel(new GridLayout(13,1,5,5));
 			panel.add(newNoteL);
 			panel.add(openNoteL);
 			panel.add(saveNoteL);
@@ -34,6 +38,10 @@ public class KeyHelp extends JFrame {
 			panel.add(findReplaceL);
 			panel.add(undoL);
 			panel.add(redoL);
+			panel.add(boldL);
+			panel.add(italicL);
+			panel.add(underlineL);
+			panel.add(strikeL);
 			panel.add(highlightL);
 			panel.add(keyHelpL);
 		getContentPane().add(panel);
