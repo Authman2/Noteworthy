@@ -29,7 +29,7 @@ public class NoteArea extends JTextPane {
 	boolean commandDown = false, shiftDown = false;
 	
 	//Simple Attribute Set
-	SimpleAttributeSet sas;
+	public SimpleAttributeSet sas;
 		
 	
 	
@@ -49,17 +49,33 @@ public class NoteArea extends JTextPane {
 		}
 	}
 	
+	
+	private void ResetStyles() {
+		StyleConstants.setBold(sas, false);
+		StyleConstants.setItalic(sas, false);
+		StyleConstants.setUnderline(sas, false);
+		StyleConstants.setStrikeThrough(sas, false);
+	}
+	
 	@Override
 	protected void processKeyEvent(KeyEvent e) {
 		super.processKeyEvent(e);
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(onBulletedLine()) {
-				setText(getText().substring(0, getSelectionStart()-1) + "\n • \n" + getText().substring(getSelectionStart()));
+				try {
+					getDocument().insertString(getSelectionStart(), "\n • \n", sas);
+				 } catch(Exception err) {
+					 err.printStackTrace();
+				 }
 			}
 			
 			if(onNumberedLine()) {
-				setText(getText().substring(0,getSelectionStart()-1) + "\n " + guiwindow.num + ".) \n" + getText().substring(getSelectionStart()));
+				try {
+					getDocument().insertString(getSelectionStart(), "\n " + guiwindow.num + ".) \n", sas);
+				 } catch(Exception err) {
+					 err.printStackTrace();
+				 }
 				guiwindow.num++;
 			}
 		}
@@ -67,10 +83,20 @@ public class NoteArea extends JTextPane {
 		
 		
 		/* HOT HEYS */
-		if(e.getKeyCode() == KeyEvent.VK_META || e.getKeyCode() == KeyEvent.VK_WINDOWS) { commandDown = true; }	
-		if(e.getKeyCode() == 0) { commandDown = false; }
-		if(e.getKeyCode() == KeyEvent.VK_SHIFT) { shiftDown = true; }
-		if(e.getKeyCode() == 0) shiftDown = false;
+		if(e.getKeyCode() == KeyEvent.VK_META || e.getKeyCode() == KeyEvent.VK_WINDOWS) { 
+			commandDown = true; 
+			ResetStyles();
+		}	
+		if(e.getKeyCode() == KeyEvent.VK_SHIFT) { 
+			shiftDown = true; 
+			ResetStyles();
+		}
+		if(e.getKeyCode() == 0) { 
+			commandDown = false;
+			shiftDown = false;
+			ResetStyles();
+		}
+		
 		
 		configureHotKeys(e);
 	}

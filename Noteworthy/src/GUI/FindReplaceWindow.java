@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 
 import MAIN.NoteArea;
@@ -23,10 +24,6 @@ public class FindReplaceWindow extends JFrame {
     JTextField findTF = new JTextField();
     JLabel replaceLabel = new JLabel(" Replace: ");
     JTextField replaceTF = new JTextField();
-    
-    //Label and JPanel to display the not found exception
-    JLabel stringNotFoundLabel = new JLabel();
-    JPanel center;
     
     //Buttons that carry out the actions
     JButton find = new JButton("Find");
@@ -53,8 +50,6 @@ public class FindReplaceWindow extends JFrame {
             north.add(replaceLabel);
             north.add(replaceTF);
             
-        center = new JPanel(new GridLayout(1,1,10,10));
-        	center.add(stringNotFoundLabel);
         
         JPanel south = new JPanel(new GridLayout(1,3,10,10));
             south.add(find);
@@ -63,7 +58,6 @@ public class FindReplaceWindow extends JFrame {
         
         Container pane = getContentPane();
         pane.add(north, BorderLayout.NORTH);
-        pane.add(center, BorderLayout.CENTER);
         pane.add(south, BorderLayout.SOUTH);
         
         find.addActionListener(new frActions());
@@ -79,9 +73,6 @@ public class FindReplaceWindow extends JFrame {
                 	textarea.getHighlighter().addHighlight(i, i+findTF.getText().length(), DefaultHighlighter.DefaultPainter);
                 	textarea.hasHighlights = true;
                 } catch(Exception err) {
-                    stringNotFoundLabel.setText("String was not found");
-                    textarea.hasHighlights = false;
-                    center.repaint();
                     System.err.println("String was not found");
                 }  
             }
@@ -103,15 +94,33 @@ public class FindReplaceWindow extends JFrame {
             
             //Replace
             if(e.getSource() == replace) {
-                String replacement = textarea.getText().replaceFirst(findTF.getText(), replaceTF.getText());
-                textarea.setText(replacement);
-                
+            	//Loop through for each appearance of the find text field.
+            	for(int i = 0; i < textarea.getText().length(); i++) {
+            		try {
+						if(textarea.getText(i, findTF.getText().length()).equals(findTF.getText())) {
+							textarea.getStyledDocument().remove(i, findTF.getText().length());
+							textarea.getStyledDocument().insertString(i, replaceTF.getText(), textarea.sas);
+							break;
+						}
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+            	}
             }
             
             //Replace all
             if(e.getSource() == replaceAll) {
-                String replacement = textarea.getText().replaceAll(findTF.getText(), replaceTF.getText());
-                textarea.setText(replacement);
+            	//Loop through for each appearance of the find text field.
+            	for(int i = 0; i < textarea.getText().length(); i++) {
+            		try {
+						if(textarea.getText(i, findTF.getText().length()).equals(findTF.getText())) {
+							textarea.getStyledDocument().remove(i, findTF.getText().length());
+							textarea.getStyledDocument().insertString(i, replaceTF.getText(), textarea.sas);
+						}
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+            	}
             }
         }
         

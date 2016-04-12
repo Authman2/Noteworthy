@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
@@ -90,7 +91,7 @@ public class GUIWindow extends JFrame {
 	public GUIWindow(String title) {
 		 super(title);
 		 noteArea.setText("Note");
-		 sas = new SimpleAttributeSet(); 
+		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
 		 
 		 /* MENU SETUP */
@@ -195,6 +196,9 @@ public class GUIWindow extends JFrame {
 		 	edit.add(REDO);
 		 	edit.add(FINDREPLACE);
 		 	edit.add(HIGHLIGHT);
+		 JMenu insert = new JMenu("Insert");
+		 	JMenuItem TABLE = new JMenuItem("Table");
+		 	insert.add(TABLE);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
@@ -208,6 +212,7 @@ public class GUIWindow extends JFrame {
 		 	
 		 menubar.add(file);
 		 menubar.add(edit);
+		 menubar.add(insert);
 		 menubar.add(window);
 		 menubar.add(help);
 		 
@@ -359,7 +364,12 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
+				 try {
+					saver.SaveFile(noteArea.getStyledDocument().getText(0, noteArea.getText().length()), titleField.getText() + ".ntwy");
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			 }
 			 
 			 //Load a saved note
@@ -422,12 +432,20 @@ public class GUIWindow extends JFrame {
 			 
 			 //Bulleted list
 			 if(e.getSource() == bulletedList) {
-				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n • \n" + noteArea.getText().substring(noteArea.getSelectionStart()));
+				 try {
+				 	noteArea.getDocument().insertString(noteArea.getSelectionStart(), "\n • \n", sas);
+				 } catch(Exception err) {
+					 err.printStackTrace();
+				 }
 			 }
 			 
 			 //Numbered list
 			 if(e.getSource() == numberedList) {
-				 noteArea.setText(noteArea.getText().substring(0,noteArea.getSelectionStart()) + "\n " + num + ".) \n" + noteArea.getText().substring(noteArea.getSelectionStart()));
+				 try {
+				 	noteArea.getDocument().insertString(noteArea.getSelectionStart(), "\n " + num + ".) \n", sas);
+				 } catch(Exception err) {
+					 err.printStackTrace();
+				 }
 				 num++;
 			 }
 			 
