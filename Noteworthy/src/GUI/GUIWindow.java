@@ -30,6 +30,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
+import EXTRA.InsertTableWindow;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
 import contents.ReadFile;
@@ -313,6 +314,13 @@ public class GUIWindow extends JFrame {
 				}
 			} 
 		 });
+		 TABLE.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				InsertTableWindow itw = new InsertTableWindow(noteArea);
+				itw.setVisible(true);
+			}
+		 });
 		 MINIMIZE.addActionListener(new ActionListener() {
 			 @Override
 				public void actionPerformed(ActionEvent e) {
@@ -335,8 +343,8 @@ public class GUIWindow extends JFrame {
 		 KEYHELP.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				KeyHelp kh = new KeyHelp("Key Help");
-				kh.setVisible(true);
+				KeyHelpWindow khw = new KeyHelpWindow("Key Help");
+				khw.setVisible(true);
 			}
 		 });
 	 }

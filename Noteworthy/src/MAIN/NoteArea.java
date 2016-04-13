@@ -6,13 +6,13 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
+import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.Highlighter.Highlight;
 
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
-import GUI.KeyHelp;
+import GUI.KeyHelpWindow;
 import contents.ReadFile;
 import contents.Save;
 
@@ -50,7 +50,7 @@ public class NoteArea extends JTextPane {
 	}
 	
 	
-	private void ResetStyles() {
+	public void ResetStyles() {
 		StyleConstants.setBold(sas, false);
 		StyleConstants.setItalic(sas, false);
 		StyleConstants.setUnderline(sas, false);
@@ -200,8 +200,8 @@ public class NoteArea extends JTextPane {
 		
 		//Key Help
 		if(e.getKeyCode() == KeyEvent.VK_K && commandDown) {
-			KeyHelp kh = new KeyHelp("Key Help");
-			kh.setVisible(true);
+			KeyHelpWindow khw = new KeyHelpWindow("Key Help");
+			khw.setVisible(true);
 			commandDown = false;
 		}
 		

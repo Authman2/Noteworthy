@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class KeyHelp extends JFrame {
+public class KeyHelpWindow extends JFrame {
 	private static final long serialVersionUID = -53455332731117460L;
 
 	JLabel newNoteL = new JLabel("	New Note						⌘+N");
@@ -24,7 +24,7 @@ public class KeyHelp extends JFrame {
 	JLabel keyHelpL = new JLabel("	Key Help						⌘+K");
 	
 	
-	public KeyHelp(String title) {
+	public KeyHelpWindow(String title) {
 		super(title);
 		setSize(400,500);
 		setLocationRelativeTo(null);
