@@ -53,9 +53,7 @@ public class MenuBar {
 		 	JMenuItem TABLE = new JMenuItem("Table");
 		 	insert.add(TABLE);
 		 JMenu tools = new JMenu("Tools");
-		 	JMenuItem SPELLCHECK = new JMenuItem("Spell Check");
 		 	JMenuItem WORDCOUNT = new JMenuItem("Word Count");
-		 	tools.add(SPELLCHECK);
 		 	tools.add(WORDCOUNT);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
@@ -178,15 +176,6 @@ public class MenuBar {
 				InsertTableWindow itw = new InsertTableWindow(guiwindow.noteArea);
 				itw.setVisible(true);
 			}
-		 });
-		 SPELLCHECK.addActionListener(new ActionListener() {
-			 @Override
-			 public void actionPerformed(ActionEvent e) {
-				 MakeDictionary md = new MakeDictionary();
-				 for(int i = 0; i < md.size(); i++) {
-					 System.out.println(md.get(i));
-				 }
-			 }
 		 });
 		 WORDCOUNT.addActionListener(new ActionListener() {
 			@Override

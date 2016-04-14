@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.SimpleAttributeSet;
@@ -13,6 +14,10 @@ import javax.swing.text.StyleConstants;
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
 import GUI.KeyHelpWindow;
+
+import com.inet.jortho.PopupListener;
+import com.inet.jortho.SpellChecker;
+
 import contents.ReadFile;
 import contents.Save;
 
@@ -33,7 +38,17 @@ public class NoteArea extends JTextPane {
 		
 	
 	
-	public NoteArea(GUIWindow gw) { guiwindow = gw; sas = new SimpleAttributeSet(); }
+	public NoteArea(GUIWindow gw) { 
+		guiwindow = gw; 
+		sas = new SimpleAttributeSet(); 
+		
+		/* Spell Checking */
+		SpellChecker.register(this);
+		SpellChecker.enableAutoSpell(this, true);
+		SpellChecker.registerDictionaries( null, "de,en", null );
+		JPopupMenu popup = SpellChecker.createCheckerPopup();
+		addMouseListener( new PopupListener(popup) );
+	}
 	
 	@Override
 	protected void processMouseEvent(MouseEvent e) {

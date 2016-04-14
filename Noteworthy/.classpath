@@ -7,5 +7,10 @@
 			<attribute name="javadoc_location" value="file:/Users/adeouthman/Documents/AdeolasCodingStuff/JavaPrograms/JExtrasDoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/adeouthman/Downloads/JOrtho_1.0/jortho.jar" sourcepath="/Users/adeouthman/Downloads/JOrtho_1.0/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/adeouthman/Downloads/JOrtho_1.0/doc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
