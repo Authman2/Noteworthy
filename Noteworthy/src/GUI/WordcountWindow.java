@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,8 +14,8 @@ public class WordcountWindow extends JFrame {
 	GUIWindow guiwindow;
 	
 	
-	JLabel withoutSpaces = new JLabel("		Without Spaces: ");
-	JLabel characterCount = new JLabel("	Character Count: ");
+	JLabel withoutSpaces = new JLabel("		Word Count: ");
+	JLabel characterCount = new JLabel("	Character Count (With Spaces): ");
 	JLabel characterCountSpc = new JLabel("	Character Count (Without Spaces): ");
 	
 	
@@ -29,6 +28,8 @@ public class WordcountWindow extends JFrame {
 		setLocationRelativeTo(null);
 		
 		setWithoutLabel();
+		setCharCount();
+		setCharCountSpc();
 		
 		JPanel center = new JPanel(new GridLayout(3,1,10,10));
 			center.add(withoutSpaces);
@@ -38,61 +39,53 @@ public class WordcountWindow extends JFrame {
 		getContentPane().add(center, BorderLayout.CENTER);
 	}
 
-	/** Find the number of words without spaces */
-	private void setWithoutLabel() {
-		
-		//Loop through to find the first space
+	/** Sets the number of characters label (including spaces) */
+	private void setCharCount() {
 		int i = 0;
-		int firstSpace = -1, lastSpace = -1;
 		String guitext = guiwindow.noteArea.getText();
-		ArrayList<String> temp = new ArrayList<String>();
 		
-		//As long as you are not at the end of the text
-		while(i < guitext.length()) {
+		for(int j = 0; j < guitext.length(); j++) {
 			
-			//If it's not a space, keep going
-			if(!guitext.substring(i, i+1).equals(" ")) {
-				i++;				
-			
-			//If you do find a space	
-			} else {
-				
-				if(firstSpace == -1) {
-					firstSpace = i;
-				}
-				
-				//Loop through again...
-				for(int j = i+1; j < guitext.length(); j++) {
-					
-					//If you find another space...
-					if(guitext.substring(j, j+1).equals(" ")) {
-						
-						if(!guitext.substring(i, j).equals(" ") && !guitext.substring(i, j).equals("")) {
-							//Add it to temp
-							temp.add(guitext.substring(i+1, j));
-						}
-						
-						//Set i to j, and increment j
-						i = j;
-					}
-
-				}
+			if(!guitext.substring(j, j+1).equals("\n")) {
 				i++;
-				if(lastSpace == -1) {
-					lastSpace = i;
-				}
 			}
 			
 		}
 		
+		characterCount.setText("	Character Count (With Spaces): " + i);
+	}
+	
+	/** Sets the number of characters label (excluding spaces) */
+	private void setCharCountSpc() {
+		int i = 0;
+		String guitext = guiwindow.noteArea.getText();
 		
-		//Add the first and last words
-		temp.add(0,guitext.substring(0, firstSpace));
-		temp.add(guitext.substring(lastSpace));
-
+		for(int j = 0; j < guitext.length(); j++) {
+			
+			if(!guitext.substring(j, j+1).equals("\n") && !guitext.substring(j, j+1).equals(" ")) {
+				i++;
+			}
+			
+		}
 		
-		withoutSpaces.setText("		Without Spaces: " + temp.size());
+		characterCountSpc.setText("	Character Count (Without Spaces): " + i);
+	}
+	
+	/** Find the number of words without spaces */
+	private void setWithoutLabel() {
 		
+		//Split up the text by spaces
+		String[] temp = guiwindow.noteArea.getText().split(" ");
+		
+		int words = 0;
+		
+		//Loop through to find what's actually a word
+		for(String s : temp) {
+			if(!s.equals("") && !s.equals(" ") && !s.equals("\n") && !s.equals("•"))
+				words++;
+		}
+				
+		withoutSpaces.setText("		Word Count: " + words);
 	}
 
 }

@@ -179,6 +179,15 @@ public class MenuBar {
 				itw.setVisible(true);
 			}
 		 });
+		 SPELLCHECK.addActionListener(new ActionListener() {
+			 @Override
+			 public void actionPerformed(ActionEvent e) {
+				 MakeDictionary md = new MakeDictionary();
+				 for(int i = 0; i < md.size(); i++) {
+					 System.out.println(md.get(i));
+				 }
+			 }
+		 });
 		 WORDCOUNT.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
