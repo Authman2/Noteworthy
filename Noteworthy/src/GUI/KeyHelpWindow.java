@@ -17,10 +17,10 @@ public class KeyHelpWindow extends JFrame {
 	JLabel undoL = new JLabel("	Undo						⌘+Z");
 	JLabel redoL = new JLabel("	Redo						⇧+⌘+Z");
 	JLabel highlightL = new JLabel("	Highlight						⇧+⌘+H");
-	JLabel boldL = new JLabel("Bold								⌘+B");
-	JLabel italicL = new JLabel("Italic								⌘+I");
-	JLabel underlineL = new JLabel("Underline								⌘+U");
-	JLabel strikeL = new JLabel("Strikethrough								⌘+D");
+	JLabel boldL = new JLabel("	Bold								⌘+B");
+	JLabel italicL = new JLabel("	Italic								⌘+I");
+	JLabel underlineL = new JLabel("	Underline								⌘+U");
+	JLabel strikeL = new JLabel("	Strikethrough								⌘+D");
 	JLabel keyHelpL = new JLabel("	Key Help						⌘+K");
 	
 	

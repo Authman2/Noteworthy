@@ -13,9 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -30,7 +28,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
-import EXTRA.InsertTableWindow;
+import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
 import contents.ReadFile;
@@ -43,7 +41,7 @@ public class GUIWindow extends JFrame {
 	JFrame guiwindow;
 	
 	//The menu bar
-	JMenuBar menubar = new JMenuBar();
+	public JMenuBar menubar = new JMenuBar();
 	
 	//Buttons for loading, saving, and making a new note
 	JButton newNote = new JButton("New Note");
@@ -72,7 +70,7 @@ public class GUIWindow extends JFrame {
 	
 	//A text field and area for writing notes
 	public JTextField titleField = new JTextField("Title");
-	NoteArea noteArea = new NoteArea(this);
+	public NoteArea noteArea = new NoteArea(this);
 
 	//The file chooser
 	public final JFileChooser fileChooser = new JFileChooser();
@@ -86,6 +84,8 @@ public class GUIWindow extends JFrame {
 	//Highlighter
 	public Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
 	
+	//The menu bar setup
+	MenuBar menu;
 	
 	
 	
@@ -97,7 +97,8 @@ public class GUIWindow extends JFrame {
 		 
 		 /* MENU SETUP */
 		 setJMenuBar(menubar);
-		 setupMenuBar();
+		 menu = new MenuBar(this);
+		 menu.setup();
 		 
 		 /* INITIAL SETUP */	 
 		 Font defaultFont = new Font("Comic Sans MS", 0, 16);
@@ -173,186 +174,8 @@ public class GUIWindow extends JFrame {
 		 	notePanel.setLayout(new GridLayout(1,1,10,10));
 		 	notePanel.add(scrollPane);
 		 layeredPane.add(notePanel);
-	}
-	
-	 /** Add the necessary elements to the menu bar. */
-	 private void setupMenuBar() {
-		 JMenu file = new JMenu("File");
-		 	JMenuItem NEWNOTE = new JMenuItem("New Note");
-		 	JMenuItem OPENNOTE = new JMenuItem("Open Note");
-		 	JMenuItem SAVENOTE = new JMenuItem("Save Note");
-		 	JMenuItem SAVEAS = new JMenuItem("Save As");
-		 	JMenuItem QUIT = new JMenuItem("Quit");
-		 	file.add(NEWNOTE);
-		 	file.add(OPENNOTE);
-		 	file.add(SAVENOTE);
-		 	file.add(SAVEAS);
-		 	file.add(QUIT);
-		 JMenu edit = new JMenu("Edit");
-		 	JMenuItem UNDO = new JMenuItem("Undo");
-		 	JMenuItem REDO = new JMenuItem("Redo");
-		 	JMenuItem FINDREPLACE = new JMenuItem("Find/Replace");
-		 	JMenuItem HIGHLIGHT = new JMenuItem("Highlight");
-		 	edit.add(UNDO);
-		 	edit.add(REDO);
-		 	edit.add(FINDREPLACE);
-		 	edit.add(HIGHLIGHT);
-		 JMenu insert = new JMenu("Insert");
-		 	JMenuItem TABLE = new JMenuItem("Table");
-		 	insert.add(TABLE);
-		 JMenu window = new JMenu("Window");
-		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
-		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
-		 	window.add(MINIMIZE);
-		 	window.add(MAXIMIZE);		 	
-		 JMenu help = new JMenu("Help");
-		 	JMenuItem ABOUT = new JMenuItem("About");
-		 	JMenuItem KEYHELP = new JMenuItem("Key Help");
-		 	help.add(ABOUT);
-		 	help.add(KEYHELP);
-		 	
-		 menubar.add(file);
-		 menubar.add(edit);
-		 menubar.add(insert);
-		 menubar.add(window);
-		 menubar.add(help);
-		 
-		 NEWNOTE.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				titleField.setText("Title");
-				noteArea.setText("Note");
-			}
-		 });
-		 OPENNOTE.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				 int val = fileChooser.showOpenDialog(guiwindow);
-					
-				 if(val == JFileChooser.APPROVE_OPTION) {
-					 //The file to grab.
-					 File file = fileChooser.getSelectedFile();
-					
-					 //Using my "ReadFile" class.
-					 ReadFile reader = new ReadFile();
-					 String loadedNote = "";
-					
-					 //Try loading the file's text
-					 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
-		            
-					 //Set the texts
-					 if(file.getName().endsWith(".ntwy"))
-					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
-					 else
-						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-					 noteArea.setText(loadedNote.substring(7));
-				 }	
-			}
-		 });
-		 SAVENOTE.addActionListener(new ActionListener() {
-			@Override
-				public void actionPerformed(ActionEvent e) {
-					Save saver = new Save();
-					saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
-				}
-		 });
-		 SAVEAS.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					int val = fileChooser.showSaveDialog(guiwindow);
-					
-					if(val == JFileChooser.APPROVE_OPTION) {
-						Save saver = new Save();
-						if(fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
-							saver.SaveFile(noteArea.getText(), fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + titleField.getText() + ".txt");
-						else if(fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
-							saver.SaveFile(noteArea.getText(), fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + titleField.getText() + ".ntwy");
-							
-					}
-				}
-		 });
-		 QUIT.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}			 
-		 });
-		 UNDO.addActionListener(new ActionListener() {
-			@Override
-				public void actionPerformed(ActionEvent e) {
-				 	try {
-				 		undoManager.undo();
-			        } catch (Exception err) {
-			        	System.err.println("Nothing to undo!");
-			        }
-				}
-		 });
-		 REDO.addActionListener(new ActionListener() {
-			@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						undoManager.redo();
-			        } catch (CannotRedoException err) {
-			          	System.err.println("Nothing to redo!");
-			        }
-				} 
-		 });
-		 FINDREPLACE.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					FindReplaceWindow frw = new FindReplaceWindow("Find/Replace",noteArea);
-					frw.setVisible(true);
-				}
-		 });
-		 HIGHLIGHT.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					noteArea.getHighlighter().addHighlight(noteArea.getSelectionStart(), noteArea.getSelectionEnd(), yellowHighlight);
-				} catch(Exception err) {
-					System.err.println("There was a problem highlighting the text.");
-				}
-			} 
-		 });
-		 TABLE.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				InsertTableWindow itw = new InsertTableWindow(noteArea);
-				itw.setVisible(true);
-			}
-		 });
-		 MINIMIZE.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					guiwindow.setState(JFrame.ICONIFIED);
-				}
-		 });
-		 MAXIMIZE.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					guiwindow.setState(JFrame.NORMAL);
-				}
-		 });
-		 ABOUT.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					AboutWindow aw = new AboutWindow("About");
-					aw.setVisible(true);
-				}
-		 });
-		 KEYHELP.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				KeyHelpWindow khw = new KeyHelpWindow("Key Help");
-				khw.setVisible(true);
-			}
-		 });
 	 }
-	 
-	 
-	 
-	 
-	 
+	
 	 /** All the actions that can be performed through clicking the buttons. */
 	 public class actions implements ActionListener {
 		 

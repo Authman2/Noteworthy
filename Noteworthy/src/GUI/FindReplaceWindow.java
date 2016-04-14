@@ -66,7 +66,7 @@ public class FindReplaceWindow extends JFrame {
     }
     
     public void highlightText() {
-    	for(int i = 0; i < textarea.getText().length() - findTF.getText().length(); i++) {
+    	for(int i = 0; i < textarea.getText().length() - findTF.getText().length() + 1; i++) {
         	//If you find the word, try highlighting it.
             if(textarea.getText().substring(i,i+findTF.getText().length()).equals(findTF.getText())) {
                 try {
