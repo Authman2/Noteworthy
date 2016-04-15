@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.StyleConstants;
 
 import MAIN.NoteArea;
 
@@ -124,21 +125,37 @@ public class FontsWindow extends JFrame {
 
 
 	
-	
+	//Change the font based on what is inputed in the fonts window
 	public class fActions implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == selectButton) {
 				if(styleList.getSelectedValue().toString().equals("Plain"))
 					font = new Font(fontList.getSelectedValue(),0,(Integer)sizeBox.getSelectedItem());
-					textarea.setFont(font);
+					
+					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
+					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
+					int selectionLength = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
+					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength, textarea.sas, false);
 				
 				if(styleList.getSelectedValue().toString().equals("Bold"))
 					font = new Font(fontList.getSelectedValue(),1,(Integer)sizeBox.getSelectedItem());
-					textarea.setFont(font);
+					
+					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
+					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
+					StyleConstants.setBold(textarea.sas, true);
+					int selectionLength2 = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
+					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength2, textarea.sas, false);
+
 				
 				if(styleList.getSelectedValue().toString().equals("Italic"))
 					font = new Font(fontList.getSelectedValue(),2, (Integer)sizeBox.getSelectedItem());
-					textarea.setFont(font);
+					
+					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
+					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
+					StyleConstants.setItalic(textarea.sas, true);					
+					int selectionLength3 = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
+					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength3, textarea.sas, false);
+
 			}
 		}
 	}

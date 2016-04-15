@@ -28,6 +28,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
+import EXTRA.ColorPopup;
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
@@ -58,6 +59,9 @@ public class GUIWindow extends JFrame {
 	
 	//Button that opens up the find/replace window
 	JButton findReplace = new JButton("Find/Replace");
+	
+	//Text coloring button
+	JButton colorIt = new JButton("Color");
 	
 	//Creating bulleted and numbered lists, and a number to track the numbered list
 	JButton bulletedList = new JButton("•--- •---");
@@ -136,6 +140,7 @@ public class GUIWindow extends JFrame {
 		numberedList.addActionListener(new actions());
 		undoButton.addActionListener(new actions());
 		redoButton.addActionListener(new actions());
+		colorIt.addActionListener(new actions());
 	 }
 	
 	/** Add all of the components to the appropriate panels. */
@@ -158,6 +163,7 @@ public class GUIWindow extends JFrame {
 		 	buttonsPanel.add(numberedList);
 		 	buttonsPanel.add(undoButton);
 			buttonsPanel.add(redoButton);
+			buttonsPanel.add(colorIt);
 		 layeredPane.add(buttonsPanel);
 		 
 		 //title field panel
@@ -303,10 +309,15 @@ public class GUIWindow extends JFrame {
 					 System.err.println("Nothing to redo!");
 				 }
 			 }
-		 }
-		 
-		 
-	 }
+			 
+			 //Color
+			 if(e.getSource() == colorIt) {
+				 ColorPopup cp = new ColorPopup("Text Color");
+				 cp.setVisible(true);
+			 }
+			 
+		 } //End of method
+	 } //End of action listener class
 
 	 
 	 /** Handles the undo feature. */
