@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -20,15 +21,15 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
-import EXTRA.ColorPopup;
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
@@ -61,7 +62,7 @@ public class GUIWindow extends JFrame {
 	JButton findReplace = new JButton("Find/Replace");
 	
 	//Text coloring button
-	JButton colorIt = new JButton("Color");
+	public JButton colorIt = new JButton("Color");
 	
 	//Creating bulleted and numbered lists, and a number to track the numbered list
 	JButton bulletedList = new JButton("•--- •---");
@@ -91,13 +92,17 @@ public class GUIWindow extends JFrame {
 	//The menu bar setup
 	MenuBar menu;
 	
-	
+	//Style for coloring text
+	Style style;
 	
 	public GUIWindow(String title) {
 		 super(title);
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
+
+		 //Style for coloring
+		 style = noteArea.addStyle("Coloring", null);
 		 
 		 /* MENU SETUP */
 		 setJMenuBar(menubar);
@@ -202,8 +207,8 @@ public class GUIWindow extends JFrame {
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
 				 try {
-					saver.SaveFile(noteArea.getStyledDocument().getText(0, noteArea.getText().length()), titleField.getText() + ".ntwy");
-				} catch (BadLocationException e1) {
+					saver.SaveFile(noteArea.getStyledDocument(), titleField.getText() + ".ntwy");
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -229,7 +234,8 @@ public class GUIWindow extends JFrame {
 					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
 					 else
 						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-					 noteArea.setText(loadedNote.substring(7));
+					 //noteArea.setText(loadedNote.substring(7));
+					 noteArea.setStyledDocument((StyledDocument)file);
 				 }
 			 }
 			 
@@ -312,8 +318,12 @@ public class GUIWindow extends JFrame {
 			 
 			 //Color
 			 if(e.getSource() == colorIt) {
-				 ColorPopup cp = new ColorPopup("Text Color");
-				 cp.setVisible(true);
+				 
+				 Color c = JColorChooser.showDialog(rootPane, "Pick a color", getForeground());
+			     StyleConstants.setForeground(style, c);
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+			     noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, style, false);
+			 
 			 }
 			 
 		 } //End of method
