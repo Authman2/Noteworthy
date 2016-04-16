@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -20,18 +21,18 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
-import EXTRA.ColorPopup;
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
+import contents.Load;
 import contents.ReadFile;
 import contents.Save;
 
@@ -61,7 +62,7 @@ public class GUIWindow extends JFrame {
 	JButton findReplace = new JButton("Find/Replace");
 	
 	//Text coloring button
-	JButton colorIt = new JButton("Color");
+	public JButton colorIt = new JButton("Color");
 	
 	//Creating bulleted and numbered lists, and a number to track the numbered list
 	JButton bulletedList = new JButton("•--- •---");
@@ -74,8 +75,8 @@ public class GUIWindow extends JFrame {
 	
 	//A text field and area for writing notes
 	public JTextField titleField = new JTextField("Title");
-	public NoteArea noteArea = new NoteArea(this);
-
+	public NoteArea noteArea;
+	
 	//The file chooser
 	public final JFileChooser fileChooser = new JFileChooser();
 	
@@ -91,13 +92,18 @@ public class GUIWindow extends JFrame {
 	//The menu bar setup
 	MenuBar menu;
 	
-	
+	//Style for coloring text
+	Style style;
 	
 	public GUIWindow(String title) {
 		 super(title);
+		 noteArea = new NoteArea(this);
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
+		 
+		 //Style for coloring
+		 style = noteArea.addStyle("Coloring", null);
 		 
 		 /* MENU SETUP */
 		 setJMenuBar(menubar);
@@ -121,6 +127,7 @@ public class GUIWindow extends JFrame {
 		 JLayeredPane layeredPane = new JLayeredPane();
 		 pane.add(layeredPane, BorderLayout.CENTER);
 		 setupPanels(layeredPane);
+		 
 	 }
 	
 	 /** Sets the action listener for each GUI element. */
@@ -201,20 +208,16 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-				 try {
-					saver.SaveFile(noteArea.getStyledDocument().getText(0, noteArea.getText().length()), titleField.getText() + ".ntwy");
-				} catch (BadLocationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				 saver.SaveFile(sas, "StyleAttr");
+				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
 			 }
 			 
 			 //Load a saved note
 			 if(e.getSource() == loadNote) {
 				 int val = fileChooser.showOpenDialog(guiwindow);
-				
+					
 				 if(val == JFileChooser.APPROVE_OPTION) {
-					 //The file to grab.
+					//The file to grab.
 					 File file = fileChooser.getSelectedFile();
 					
 					 //Using my "ReadFile" class.
@@ -226,10 +229,17 @@ public class GUIWindow extends JFrame {
 		            
 					 //Set the texts
 					 if(file.getName().endsWith(".ntwy"))
-					 	titleField.setText(file.getName().substring(0, file.getName().length()-5));
+						titleField.setText(file.getName().substring(0, file.getName().length()-5));
 					 else
 						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
 					 noteArea.setText(loadedNote.substring(7));
+					 
+					 
+					 //Load all of the attributes
+					 Load loader = new Load();
+					 sas = (SimpleAttributeSet) loader.LoadFile(sas, "StyleAttr");
+					 
+					 noteArea.getStyledDocument().setCharacterAttributes(0, noteArea.getText().length(), sas, false);
 				 }
 			 }
 			 
@@ -312,8 +322,12 @@ public class GUIWindow extends JFrame {
 			 
 			 //Color
 			 if(e.getSource() == colorIt) {
-				 ColorPopup cp = new ColorPopup("Text Color");
-				 cp.setVisible(true);
+				 
+				 Color c = JColorChooser.showDialog(rootPane, "Pick a color", getForeground());
+			     StyleConstants.setForeground(style, c);
+				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
+			     noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, style, false);
+			 
 			 }
 			 
 		 } //End of method

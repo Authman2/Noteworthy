@@ -38,9 +38,9 @@ public class NoteArea extends JTextPane {
 		
 	
 	
-	public NoteArea(GUIWindow gw) { 
+	public NoteArea(GUIWindow gw) {
 		guiwindow = gw; 
-		sas = new SimpleAttributeSet(); 
+		sas = new SimpleAttributeSet();
 		
 		/* Spell Checking */
 		SpellChecker.register(this);
