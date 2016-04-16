@@ -26,6 +26,7 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
@@ -101,6 +102,9 @@ public class GUIWindow extends JFrame {
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
+
+		 //Style for coloring
+		 style = noteArea.addStyle("Coloring", null);
 		 
 		 //Style for coloring
 		 style = noteArea.addStyle("Coloring", null);
@@ -208,8 +212,17 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
+<<<<<<< HEAD
 				 saver.SaveFile(sas, "StyleAttr");
 				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
+=======
+				 try {
+					saver.SaveFile(noteArea.getStyledDocument(), titleField.getText() + ".ntwy");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+>>>>>>> origin/master
 			 }
 			 
 			 //Load a saved note
@@ -232,6 +245,7 @@ public class GUIWindow extends JFrame {
 						titleField.setText(file.getName().substring(0, file.getName().length()-5));
 					 else
 						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
+<<<<<<< HEAD
 					 noteArea.setText(loadedNote.substring(7));
 					 
 					 
@@ -240,6 +254,10 @@ public class GUIWindow extends JFrame {
 					 sas = (SimpleAttributeSet) loader.LoadFile(sas, "StyleAttr");
 					 
 					 noteArea.getStyledDocument().setCharacterAttributes(0, noteArea.getText().length(), sas, false);
+=======
+					 //noteArea.setText(loadedNote.substring(7));
+					 noteArea.setStyledDocument((StyledDocument)file);
+>>>>>>> origin/master
 				 }
 			 }
 			 
