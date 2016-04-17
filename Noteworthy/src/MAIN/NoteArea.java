@@ -64,6 +64,9 @@ public class NoteArea extends JTextPane {
 		}
 	}
 	
+	public GUIWindow getGUIWindow() {
+		return guiwindow;
+	}
 	
 	public void ResetStyles() {
 		StyleConstants.setBold(sas, false);

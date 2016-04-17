@@ -15,9 +15,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.text.StyleConstants;
 
 import MAIN.NoteArea;
+import contents.TextStyle;
 
 public class FontsWindow extends JFrame {
 	private static final long serialVersionUID = -5137305296724982575L;
@@ -129,33 +129,45 @@ public class FontsWindow extends JFrame {
 	public class fActions implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == selectButton) {
-				if(styleList.getSelectedValue().toString().equals("Plain"))
+				if(styleList.getSelectedValue().toString().equals("Plain")) {
 					font = new Font(fontList.getSelectedValue(),0,(Integer)sizeBox.getSelectedItem());
 					
-					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
-					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
 					int selectionLength = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
-					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength, textarea.sas, false);
+
+					TextStyle t = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength);
+					t.setFont(font);
+					t.addFontStyle();
 				
-				if(styleList.getSelectedValue().toString().equals("Bold"))
+					textarea.getGUIWindow().textstyles.add(t);
+				}
+					
+				if(styleList.getSelectedValue().toString().equals("Bold")) {
 					font = new Font(fontList.getSelectedValue(),1,(Integer)sizeBox.getSelectedItem());
-					
-					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
-					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
-					StyleConstants.setBold(textarea.sas, true);
+
 					int selectionLength2 = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
-					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength2, textarea.sas, false);
-
 				
-				if(styleList.getSelectedValue().toString().equals("Italic"))
-					font = new Font(fontList.getSelectedValue(),2, (Integer)sizeBox.getSelectedItem());
+					TextStyle t2 = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength2, "BOLD");
+					t2.setFont(font);
+					t2.addFontStyle();
+					t2.addStyle();
 					
-					StyleConstants.setFontFamily(textarea.sas, font.getFamily());
-					StyleConstants.setFontSize(textarea.sas, (Integer)sizeBox.getSelectedItem());
-					StyleConstants.setItalic(textarea.sas, true);					
+					textarea.getGUIWindow().textstyles.add(t2);
+				}
+					
+				if(styleList.getSelectedValue().toString().equals("Italic")) {
+					font = new Font(fontList.getSelectedValue(),2, (Integer)sizeBox.getSelectedItem());
+				
 					int selectionLength3 = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
-					textarea.getStyledDocument().setCharacterAttributes(textarea.getSelectionStart(), selectionLength3, textarea.sas, false);
-
+					
+					TextStyle t3 = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength3, "ITALIC");
+					t3.setFont(font);
+					t3.addFontStyle();
+					t3.addStyle();
+					
+					textarea.getGUIWindow().textstyles.add(t3);
+				}
+				
+				
 			}
 		}
 	}

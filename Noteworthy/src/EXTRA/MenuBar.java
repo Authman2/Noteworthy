@@ -2,7 +2,7 @@ package EXTRA;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,8 +15,9 @@ import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
 import GUI.KeyHelpWindow;
 import GUI.WordcountWindow;
-import contents.ReadFile;
+import contents.Load;
 import contents.Save;
+import contents.TextStyle;
 
 public class MenuBar {
 
@@ -81,27 +82,28 @@ public class MenuBar {
 			}
 		 });
 		 OPENNOTE.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				 int val = guiwindow.fileChooser.showOpenDialog(guiwindow);
 					
 				 if(val == JFileChooser.APPROVE_OPTION) {
-					 //The file to grab.
-					 File file = guiwindow.fileChooser.getSelectedFile();
-					
-					 //Using my "ReadFile" class.
-					 ReadFile reader = new ReadFile();
-					 String loadedNote = "";
-					
-					 //Try loading the file's text
-					 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
-		            
-					 //Set the texts
-					 if(file.getName().endsWith(".ntwy"))
-						 guiwindow.titleField.setText(file.getName().substring(0, file.getName().length()-5));
-					 else
-						 guiwindow.titleField.setText(file.getName().substring(0, file.getName().length()-4));
-					 guiwindow.noteArea.setText(loadedNote.substring(7));
+					 //Load the text in the note
+					 guiwindow.loadNoteText();
+					 
+					 //Load all of the styling attributes
+					 Load loader = new Load();
+					 guiwindow.textstyles = (ArrayList<TextStyle>) loader.LoadFile(guiwindow.textstyles, "styles");
+					 
+					 //Set the style attributes again
+					 for(TextStyle ts : guiwindow.textstyles) {
+						 ts.setTextPane(guiwindow.noteArea);
+						 ts.addStyle();
+						 if(ts.getFont() != null) {
+						 	ts.addFontStyle();
+						 }
+					 }
+					 
 				 }	
 			}
 		 });
@@ -109,6 +111,8 @@ public class MenuBar {
 			@Override
 				public void actionPerformed(ActionEvent e) {
 					Save saver = new Save();
+
+					saver.SaveFile(guiwindow.textstyles, "styles");
 					saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
 				}
 		 });
@@ -119,6 +123,8 @@ public class MenuBar {
 					
 					if(val == JFileChooser.APPROVE_OPTION) {
 						Save saver = new Save();
+						
+						saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/styles");
 						if(guiwindow.fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
 							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".txt");
 						else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))

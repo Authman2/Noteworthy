@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -24,9 +25,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
@@ -36,6 +35,7 @@ import MAIN.NoteArea;
 import contents.Load;
 import contents.ReadFile;
 import contents.Save;
+import contents.TextStyle;
 
 public class GUIWindow extends JFrame {
 	private static final long serialVersionUID = 2054181992322087814L;
@@ -93,8 +93,9 @@ public class GUIWindow extends JFrame {
 	//The menu bar setup
 	MenuBar menu;
 	
-	//Style for coloring text
-	Style style;
+	//List of styles
+	public ArrayList<TextStyle> textstyles = new ArrayList<TextStyle>();
+	
 	
 	public GUIWindow(String title) {
 		 super(title);
@@ -102,12 +103,6 @@ public class GUIWindow extends JFrame {
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
-
-		 //Style for coloring
-		 style = noteArea.addStyle("Coloring", null);
-		 
-		 //Style for coloring
-		 style = noteArea.addStyle("Coloring", null);
 		 
 		 /* MENU SETUP */
 		 setJMenuBar(menubar);
@@ -193,10 +188,32 @@ public class GUIWindow extends JFrame {
 		 layeredPane.add(notePanel);
 	 }
 	
+	 /** Loads only the text from a note. */
+	 public void loadNoteText() {
+		//The file to grab.
+		 File file = fileChooser.getSelectedFile();
+		
+		 //Using my "ReadFile" class.
+		 ReadFile reader = new ReadFile();
+		 String loadedNote = "";
+		
+		 //Try loading the file's text
+		 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+        
+		 //Set the texts
+		 if(file.getName().endsWith(".ntwy"))
+			titleField.setText(file.getName().substring(0, file.getName().length()-5));
+		 else
+			 titleField.setText(file.getName().substring(0, file.getName().length()-4));
+		 noteArea.setText(loadedNote.substring(7));
+	 }
+	 
+	 
 	 /** All the actions that can be performed through clicking the buttons. */
 	 public class actions implements ActionListener {
 		 
-		 @Override
+		 @SuppressWarnings("unchecked")
+		@Override
 		 public void actionPerformed(ActionEvent e) {
 			 
 			 //Make a new note
@@ -212,17 +229,9 @@ public class GUIWindow extends JFrame {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-<<<<<<< HEAD
-				 saver.SaveFile(sas, "StyleAttr");
+				 
+				 saver.SaveFile(textstyles, "styles");
 				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
-=======
-				 try {
-					saver.SaveFile(noteArea.getStyledDocument(), titleField.getText() + ".ntwy");
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
->>>>>>> origin/master
 			 }
 			 
 			 //Load a saved note
@@ -230,63 +239,59 @@ public class GUIWindow extends JFrame {
 				 int val = fileChooser.showOpenDialog(guiwindow);
 					
 				 if(val == JFileChooser.APPROVE_OPTION) {
-					//The file to grab.
-					 File file = fileChooser.getSelectedFile();
-					
-					 //Using my "ReadFile" class.
-					 ReadFile reader = new ReadFile();
-					 String loadedNote = "";
-					
-					 //Try loading the file's text
-					 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
-		            
-					 //Set the texts
-					 if(file.getName().endsWith(".ntwy"))
-						titleField.setText(file.getName().substring(0, file.getName().length()-5));
-					 else
-						 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-<<<<<<< HEAD
-					 noteArea.setText(loadedNote.substring(7));
+					 //Load the text in the note
+					 loadNoteText();
 					 
-					 
-					 //Load all of the attributes
+					 //Load all of the styling attributes
 					 Load loader = new Load();
-					 sas = (SimpleAttributeSet) loader.LoadFile(sas, "StyleAttr");
+					 textstyles = (ArrayList<TextStyle>) loader.LoadFile(textstyles, "styles");
 					 
-					 noteArea.getStyledDocument().setCharacterAttributes(0, noteArea.getText().length(), sas, false);
-=======
-					 //noteArea.setText(loadedNote.substring(7));
-					 noteArea.setStyledDocument((StyledDocument)file);
->>>>>>> origin/master
+					 //Set the style attributes again
+					 for(TextStyle ts : textstyles) {
+						 ts.setTextPane(noteArea);
+						 ts.addStyle();
+						 if(ts.getFont() != null) {
+						 	ts.addFontStyle();
+						 }
+					 }
+					 
 				 }
 			 }
 			 
 			 //Change the text to bold
 			 if(e.getSource() == boldIt) {
-				 StyleConstants.setBold(sas, !StyleConstants.isBold(sas));
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
-				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+
+				 TextStyle t = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength, "BOLD");
+				 t.addStyle();
+				 textstyles.add(t);
 			 }
 			 
 			 //Change to italics
 			 if(e.getSource() == italicIt) {
-				 StyleConstants.setItalic(sas, !StyleConstants.isItalic(sas));
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
-				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+
+				 TextStyle t = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength, "ITALIC");
+				 t.addStyle();
+				 textstyles.add(t);
 			 }
 			 
 			 //Change to underline
 			 if(e.getSource() == underlineIt) {
-				 StyleConstants.setUnderline(sas, !StyleConstants.isUnderline(sas));
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
-				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+
+				 TextStyle t = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength, "UNDERLINE");
+				 t.addStyle();
+				 textstyles.add(t);
 			 }
 			 
 			 //Strikethrough
-			 if(e.getSource() == strikethroughIt) { 
-				 StyleConstants.setStrikeThrough(sas, !StyleConstants.isStrikeThrough(sas));
+			 if(e.getSource() == strikethroughIt) {
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
-				 noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, sas, false);
+
+				 TextStyle t = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength, "STRIKETHROUGH");
+				 t.addStyle();
+				 textstyles.add(t);
 			 }
 			 
 			 //Change fonts
@@ -340,12 +345,16 @@ public class GUIWindow extends JFrame {
 			 
 			 //Color
 			 if(e.getSource() == colorIt) {
-				 
-				 Color c = JColorChooser.showDialog(rootPane, "Pick a color", getForeground());
-			     StyleConstants.setForeground(style, c);
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
-			     noteArea.getStyledDocument().setCharacterAttributes(noteArea.getSelectionStart(), selectionLength, style, false);
-			 
+
+				 Color c = JColorChooser.showDialog(rootPane, "Pick a color", getForeground());
+			     
+				 TextStyle coloring = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength);
+			     coloring.setTextColor(c);
+			     coloring.addColorStyle();
+			     
+			     textstyles.add(coloring);
+			     
 			 }
 			 
 		 } //End of method
