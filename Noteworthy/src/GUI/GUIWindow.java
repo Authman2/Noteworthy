@@ -25,7 +25,6 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
@@ -189,7 +188,7 @@ public class GUIWindow extends JFrame {
 	 }
 	
 	 /** Loads only the text from a note. */
-	 public void loadNoteText() {
+	 public File loadNoteText() {
 		//The file to grab.
 		 File file = fileChooser.getSelectedFile();
 		
@@ -206,6 +205,8 @@ public class GUIWindow extends JFrame {
 		 else
 			 titleField.setText(file.getName().substring(0, file.getName().length()-4));
 		 noteArea.setText(loadedNote.substring(7));
+		 
+		 return file;
 	 }
 	 
 	 
@@ -220,17 +221,19 @@ public class GUIWindow extends JFrame {
 			 if(e.getSource() == newNote) {
 				 titleField.setText("Title");
 				 noteArea.setText("Note");
-				 StyleConstants.setBold(sas, false);
-				 StyleConstants.setItalic(sas, false);
-				 StyleConstants.setUnderline(sas, false);
-				 StyleConstants.setStrikeThrough(sas, false);
+				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
+				 t.addStyle();
+//				 StyleConstants.setBold(sas, false);
+//				 StyleConstants.setItalic(sas, false);
+//				 StyleConstants.setUnderline(sas, false);
+//				 StyleConstants.setStrikeThrough(sas, false);
 			 }
 			 
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
 				 
-				 saver.SaveFile(textstyles, "styles");
+				 saver.SaveFile(textstyles, titleField.getText() + "_styles");
 				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
 			 }
 			 
@@ -240,19 +243,16 @@ public class GUIWindow extends JFrame {
 					
 				 if(val == JFileChooser.APPROVE_OPTION) {
 					 //Load the text in the note
-					 loadNoteText();
+					 File f = loadNoteText();
 					 
 					 //Load all of the styling attributes
 					 Load loader = new Load();
-					 textstyles = (ArrayList<TextStyle>) loader.LoadFile(textstyles, "styles");
+					 textstyles = (ArrayList<TextStyle>) loader.LoadFile(textstyles, fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + f.getName().substring(0, f.getName().length()-5) + "_styles");
 					 
 					 //Set the style attributes again
 					 for(TextStyle ts : textstyles) {
 						 ts.setTextPane(noteArea);
 						 ts.addStyle();
-						 if(ts.getFont() != null) {
-						 	ts.addFontStyle();
-						 }
 					 }
 					 
 				 }

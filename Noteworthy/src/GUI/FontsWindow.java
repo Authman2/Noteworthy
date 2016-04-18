@@ -134,9 +134,9 @@ public class FontsWindow extends JFrame {
 					
 					int selectionLength = textarea.getText().substring(textarea.getSelectionStart(),textarea.getSelectionEnd()).length();
 
-					TextStyle t = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength);
+					TextStyle t = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength, "PLAIN");
 					t.setFont(font);
-					t.addFontStyle();
+					t.addStyle();
 				
 					textarea.getGUIWindow().textstyles.add(t);
 				}
@@ -148,7 +148,6 @@ public class FontsWindow extends JFrame {
 				
 					TextStyle t2 = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength2, "BOLD");
 					t2.setFont(font);
-					t2.addFontStyle();
 					t2.addStyle();
 					
 					textarea.getGUIWindow().textstyles.add(t2);
@@ -161,7 +160,6 @@ public class FontsWindow extends JFrame {
 					
 					TextStyle t3 = new TextStyle(textarea, textarea.getSelectionStart(), selectionLength3, "ITALIC");
 					t3.setFont(font);
-					t3.addFontStyle();
 					t3.addStyle();
 					
 					textarea.getGUIWindow().textstyles.add(t3);

@@ -2,6 +2,7 @@ package EXTRA;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -88,20 +89,17 @@ public class MenuBar {
 				 int val = guiwindow.fileChooser.showOpenDialog(guiwindow);
 					
 				 if(val == JFileChooser.APPROVE_OPTION) {
-					 //Load the text in the note
-					 guiwindow.loadNoteText();
+					//Load the text in the note
+					 File f = guiwindow.loadNoteText();
 					 
 					 //Load all of the styling attributes
 					 Load loader = new Load();
-					 guiwindow.textstyles = (ArrayList<TextStyle>) loader.LoadFile(guiwindow.textstyles, "styles");
+					 guiwindow.textstyles = (ArrayList<TextStyle>) loader.LoadFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + f.getName().substring(0, f.getName().length()-5) + "_styles");
 					 
 					 //Set the style attributes again
 					 for(TextStyle ts : guiwindow.textstyles) {
 						 ts.setTextPane(guiwindow.noteArea);
 						 ts.addStyle();
-						 if(ts.getFont() != null) {
-						 	ts.addFontStyle();
-						 }
 					 }
 					 
 				 }	
@@ -112,7 +110,7 @@ public class MenuBar {
 				public void actionPerformed(ActionEvent e) {
 					Save saver = new Save();
 
-					saver.SaveFile(guiwindow.textstyles, "styles");
+					saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
 					saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
 				}
 		 });
@@ -124,7 +122,7 @@ public class MenuBar {
 					if(val == JFileChooser.APPROVE_OPTION) {
 						Save saver = new Save();
 						
-						saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/styles");
+						saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + "_styles");
 						if(guiwindow.fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
 							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".txt");
 						else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
