@@ -1,8 +1,6 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -14,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,11 +33,14 @@ import contents.ReadFile;
 import contents.Save;
 import contents.TextStyle;
 
-public class GUIWindow extends JFrame {
+public class GUIWindow extends JPanel {
 	private static final long serialVersionUID = 2054181992322087814L;
 	
 	//This JFrame
-	JFrame guiwindow;
+	public JPanel guiwindow;
+	
+	//The frame that holds this panel
+	public JFrame holdingframe;
 	
 	//The menu bar
 	public JMenuBar menubar = new JMenuBar();
@@ -87,7 +87,7 @@ public class GUIWindow extends JFrame {
 	SimpleAttributeSet sas;
 	
 	//Highlighter
-	public Highlighter.HighlightPainter yellowHighlight = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
+	public Highlighter.HighlightPainter highlighter = new DefaultHighlighter.DefaultHighlightPainter(Color.yellow);
 	
 	//The menu bar setup
 	MenuBar menu;
@@ -96,15 +96,17 @@ public class GUIWindow extends JFrame {
 	public ArrayList<TextStyle> textstyles = new ArrayList<TextStyle>();
 	
 	
-	public GUIWindow(String title) {
-		 super(title);
+	
+	
+	public GUIWindow(JFrame holdingFrame) {
+		 //super(title);
 		 noteArea = new NoteArea(this);
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
 		 
 		 /* MENU SETUP */
-		 setJMenuBar(menubar);
+		 holdingFrame.setJMenuBar(menubar);
 		 menu = new MenuBar(this);
 		 menu.setup();
 		 
@@ -121,12 +123,9 @@ public class GUIWindow extends JFrame {
 		 setActionListeners();
 		 
 		 /* PANEL AND BUTTON SETUP */
-		 Container pane = getContentPane();
-		 JLayeredPane layeredPane = new JLayeredPane();
-		 pane.add(layeredPane, BorderLayout.CENTER);
-		 setupPanels(layeredPane);
-		 
+		 setupPanels();
 	 }
+	
 	
 	 /** Sets the action listener for each GUI element. */
 	 private void setActionListeners() {
@@ -148,45 +147,42 @@ public class GUIWindow extends JFrame {
 		colorIt.addActionListener(new actions());
 	 }
 	
+	 
 	/** Add all of the components to the appropriate panels. */
-	 private void setupPanels(JLayeredPane layeredPane) {
-		//Buttons panel
-		 JPanel buttonsPanel = new JPanel();
-		 	buttonsPanel.setBounds(5, 5, 630, 100);
-		 	buttonsPanel.setLayout(new GridLayout(3,5,10,10));
-		 	buttonsPanel.add(newNote);
-		 	buttonsPanel.add(saveNote);
-		 	buttonsPanel.add(saveAsNote);
-		 	buttonsPanel.add(loadNote);
-		 	buttonsPanel.add(boldIt);
-		 	buttonsPanel.add(italicIt);
-		 	buttonsPanel.add(underlineIt);
-		 	buttonsPanel.add(strikethroughIt);
-		 	buttonsPanel.add(changeFont);
-		 	buttonsPanel.add(findReplace);
-		 	buttonsPanel.add(bulletedList);
-		 	buttonsPanel.add(numberedList);
-		 	buttonsPanel.add(undoButton);
-			buttonsPanel.add(redoButton);
-			buttonsPanel.add(colorIt);
-		 layeredPane.add(buttonsPanel);
-		 
-		 //title field panel
-		 JPanel titlefieldPanel = new JPanel();
-			 titlefieldPanel.setBounds(5,110,630,30);
-			 titlefieldPanel.setLayout(new GridLayout(1,1,10,10));
-			 titlefieldPanel.add(titleField);
-		 layeredPane.add(titlefieldPanel);
-		 
-		 //Note are panel
-		 JScrollPane scrollPane = new JScrollPane(noteArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		 JPanel notePanel = new JPanel();
-		 	notePanel.setBounds(10, 145, 620, 380);
-		 	notePanel.setLayout(new GridLayout(1,1,10,10));
+	 private void setupPanels() {
+		 JPanel north = new JPanel(new GridLayout(4, 5, 10, 10));
+		 	north.setBounds(5, 5, 500, 130);
+		 	north.add(newNote);
+		 	north.add(saveNote);
+		 	north.add(loadNote);
+		 	north.add(saveAsNote);
+		 	north.add(boldIt);
+		 	north.add(italicIt);
+		 	north.add(underlineIt);
+		 	north.add(strikethroughIt);
+		 	north.add(changeFont);
+		 	north.add(findReplace);
+		 	north.add(colorIt);
+		 	north.add(bulletedList);
+		 	north.add(numberedList);
+		 	north.add(undoButton);
+		 	north.add(redoButton);
+		
+		 this.add(north);
+		 	
+		 titleField.setBounds(5, 140, 530, 28);
+		 this.add(titleField);
+		 titleField.setColumns(10);
+		 	
+		 noteArea.setBounds(5, 180, 530, 290);
+		 JScrollPane scrollPane = new JScrollPane(noteArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		 JPanel notePanel = new JPanel(new GridLayout(1,1,1,1));
+		 	notePanel.setBounds(5, 180, 530, 290);
 		 	notePanel.add(scrollPane);
-		 layeredPane.add(notePanel);
+		 this.add(notePanel);
 	 }
 	
+	 
 	 /** Loads only the text from a note. */
 	 public File loadNoteText() {
 		//The file to grab.
@@ -223,10 +219,6 @@ public class GUIWindow extends JFrame {
 				 noteArea.setText("Note");
 				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
 				 t.addStyle();
-//				 StyleConstants.setBold(sas, false);
-//				 StyleConstants.setItalic(sas, false);
-//				 StyleConstants.setUnderline(sas, false);
-//				 StyleConstants.setStrikeThrough(sas, false);
 			 }
 			 
 			 //Save the note as an object
@@ -347,7 +339,7 @@ public class GUIWindow extends JFrame {
 			 if(e.getSource() == colorIt) {
 				 int selectionLength = noteArea.getText().substring(noteArea.getSelectionStart(),noteArea.getSelectionEnd()).length();
 
-				 Color c = JColorChooser.showDialog(rootPane, "Pick a color", getForeground());
+				 Color c = JColorChooser.showDialog(null, "Pick a color", getForeground());
 			     
 				 TextStyle coloring = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength);
 			     coloring.setTextColor(c);

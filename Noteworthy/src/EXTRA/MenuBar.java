@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
 import GUI.AboutWindow;
@@ -23,6 +24,9 @@ import contents.TextStyle;
 public class MenuBar {
 
 	GUIWindow guiwindow;
+	
+	//String to be copied
+	public String copy;
 	
 	
 	public MenuBar(GUIWindow g) {
@@ -45,10 +49,16 @@ public class MenuBar {
 		 JMenu edit = new JMenu("Edit");
 		 	JMenuItem UNDO = new JMenuItem("Undo");
 		 	JMenuItem REDO = new JMenuItem("Redo");
+		 	JMenuItem COPY = new JMenuItem("Copy");
+		 	JMenuItem PASTE = new JMenuItem("Paste");
 		 	JMenuItem FINDREPLACE = new JMenuItem("Find/Replace");
 		 	JMenuItem HIGHLIGHT = new JMenuItem("Highlight");
 		 	edit.add(UNDO);
 		 	edit.add(REDO);
+		 	edit.addSeparator();
+		 	edit.add(COPY);
+		 	edit.add(PASTE);
+		 	edit.addSeparator();
 		 	edit.add(FINDREPLACE);
 		 	edit.add(HIGHLIGHT);
 		 JMenu insert = new JMenu("Insert");
@@ -59,9 +69,7 @@ public class MenuBar {
 		 	tools.add(WORDCOUNT);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
-		 	JMenuItem MAXIMIZE = new JMenuItem("Maximize");
 		 	window.add(MINIMIZE);
-		 	window.add(MAXIMIZE);		 	
 		 JMenu help = new JMenu("Help");
 		 	JMenuItem ABOUT = new JMenuItem("About");
 		 	JMenuItem KEYHELP = new JMenuItem("Key Help");
@@ -157,6 +165,22 @@ public class MenuBar {
 			        }
 				} 
 		 });
+		 COPY.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				copy = guiwindow.noteArea.getText().substring(guiwindow.noteArea.getSelectionStart(), guiwindow.noteArea.getSelectionEnd());
+			}
+		 });
+		 PASTE.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					guiwindow.noteArea.getStyledDocument().insertString(guiwindow.noteArea.getSelectionStart(), copy, null);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}
+			}
+		 });
 		 FINDREPLACE.addActionListener(new ActionListener() {
 			 @Override
 				public void actionPerformed(ActionEvent e) {
@@ -166,9 +190,9 @@ public class MenuBar {
 		 });
 		 HIGHLIGHT.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {				
 				try {
-					guiwindow.noteArea.getHighlighter().addHighlight(guiwindow.noteArea.getSelectionStart(), guiwindow.noteArea.getSelectionEnd(), guiwindow.yellowHighlight);
+					guiwindow.noteArea.getHighlighter().addHighlight(guiwindow.noteArea.getSelectionStart(), guiwindow.noteArea.getSelectionEnd(), guiwindow.highlighter);
 				} catch(Exception err) {
 					System.err.println("There was a problem highlighting the text.");
 				}
@@ -191,13 +215,7 @@ public class MenuBar {
 		 MINIMIZE.addActionListener(new ActionListener() {
 			 @Override
 				public void actionPerformed(ActionEvent e) {
-					guiwindow.setState(JFrame.ICONIFIED);
-				}
-		 });
-		 MAXIMIZE.addActionListener(new ActionListener() {
-			 @Override
-				public void actionPerformed(ActionEvent e) {
-					guiwindow.setState(JFrame.NORMAL);
+					guiwindow.holdingframe.setState(JFrame.ICONIFIED);
 				}
 		 });
 		 ABOUT.addActionListener(new ActionListener() {

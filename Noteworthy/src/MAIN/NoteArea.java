@@ -20,6 +20,7 @@ import com.inet.jortho.SpellChecker;
 
 import contents.ReadFile;
 import contents.Save;
+import contents.TextStyle;
 
 public class NoteArea extends JTextPane {
 	private static final long serialVersionUID = 301547767165899971L;
@@ -56,7 +57,7 @@ public class NoteArea extends JTextPane {
 		
 		if(e.getButton() == MouseEvent.BUTTON1 && hasHighlights) {
 			for(Highlight h : getHighlighter().getHighlights()) {
-				if(!h.getPainter().equals(guiwindow.yellowHighlight)) {
+				if(!h.getPainter().equals(guiwindow.highlighter)) {
 					getHighlighter().removeHighlight(h);
 				}
 			}
@@ -208,7 +209,7 @@ public class NoteArea extends JTextPane {
 		//Highlight
 		if(e.getKeyCode() == KeyEvent.VK_H && commandDown == true && shiftDown == true) {
 			try {
-				getHighlighter().addHighlight(getSelectionStart(), getSelectionEnd(), guiwindow.yellowHighlight);
+				getHighlighter().addHighlight(getSelectionStart(), getSelectionEnd(), guiwindow.highlighter);
 			} catch(Exception err) {
 				System.err.println("There was a problem highlighting the text.");
 			}
@@ -225,33 +226,64 @@ public class NoteArea extends JTextPane {
 		
 		//Bold
 		if(e.getKeyCode() == KeyEvent.VK_B && commandDown) {
-			StyleConstants.setBold(sas, !StyleConstants.isBold(sas));
 			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
-			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "BOLD");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
 			commandDown = false;
 		}
 		
 		//Italic
 		if(e.getKeyCode() == KeyEvent.VK_I && commandDown) {
-			StyleConstants.setItalic(sas, !StyleConstants.isItalic(sas));
 			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
-			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "ITALIC");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
 			commandDown = false;
 		}
 		
 		//Underline
 		if(e.getKeyCode() == KeyEvent.VK_U && commandDown) {
-			StyleConstants.setUnderline(sas, !StyleConstants.isUnderline(sas));
 			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
-			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "UNDERLINE");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
 			commandDown = false;
 		}
 		
 		//Strike through
-		if(e.getKeyCode() == KeyEvent.VK_D && commandDown) { 
-			StyleConstants.setStrikeThrough(sas, !StyleConstants.isStrikeThrough(sas));
+		if(e.getKeyCode() == KeyEvent.VK_5 && commandDown && shiftDown) { 
 			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
-			getStyledDocument().setCharacterAttributes(getSelectionStart(), selectionLength, sas, false);
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "STRIKETHROUGH");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
+			commandDown = false;
+			shiftDown = false;
+		}
+		
+		
+		/*
+		 * 
+		 * 
+		 * DOESN'T WORK YET
+		 * 
+		 * 
+		 * */
+		//Subscript
+		if(e.getKeyCode() == KeyEvent.VK_PERIOD && commandDown) {
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "SUBSCRIPT");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
+			commandDown = false;
+		}
+		
+		//Superscript
+		if(e.getKeyCode() == KeyEvent.VK_COMMA && commandDown) {
+			int selectionLength = getText().substring(getSelectionStart(),getSelectionEnd()).length();
+			TextStyle t = new TextStyle(this, getSelectionStart(), selectionLength, "SUPERSCRIPT");
+			t.addStyle();
+			guiwindow.textstyles.add(t);
 			commandDown = false;
 		}
 	}
