@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -27,6 +28,7 @@ import javax.swing.undo.UndoManager;
 
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
+import MAIN.Assets;
 import MAIN.NoteArea;
 import contents.Load;
 import contents.ReadFile;
@@ -46,32 +48,32 @@ public class GUIWindow extends JPanel {
 	public JMenuBar menubar = new JMenuBar();
 	
 	//Buttons for loading, saving, and making a new note
-	JButton newNote = new JButton("New Note");
-	JButton saveNote = new JButton("Save Note");
-	JButton saveAsNote = new JButton("Save As");
-	JButton loadNote = new JButton("Open Note");
+	JButton newNote = new JButton();
+	JButton saveNote = new JButton();
+	JButton saveAsNote = new JButton();
+	JButton loadNote = new JButton();
 	
 	//Buttons for bolding, italicizing, and changing the font
-	JButton boldIt = new JButton("<html><b> Bold </b></html>");
-	JButton italicIt = new JButton("<html><i> Italic </i></html>");
-	JButton underlineIt = new JButton("<html><u> Underline </u><html>");
-	JButton strikethroughIt = new JButton("<html><strike> Strikethrough </strike></html>");
-	JButton changeFont = new JButton("Fonts");
+	JButton boldIt = new JButton();
+	JButton italicIt = new JButton();
+	JButton underlineIt = new JButton();
+	JButton strikethroughIt = new JButton();
+	JButton changeFont = new JButton();
 	
 	//Button that opens up the find/replace window
-	JButton findReplace = new JButton("Find/Replace");
+	JButton findReplace = new JButton();
 	
 	//Text coloring button
-	public JButton colorIt = new JButton("Color");
+	public JButton colorIt = new JButton();
 	
 	//Creating bulleted and numbered lists, and a number to track the numbered list
-	JButton bulletedList = new JButton("•--- •---");
-	JButton numberedList = new JButton("1.) --- 2.) ---");
+	JButton bulletedList = new JButton();
+	JButton numberedList = new JButton();
 	public int num = 1;
 	
 	//Undo/Redo Buttons
-	JButton undoButton = new JButton("Undo");
-	JButton redoButton = new JButton("Redo");
+	JButton undoButton = new JButton();
+	JButton redoButton = new JButton();
 	
 	//A text field and area for writing notes
 	public JTextField titleField = new JTextField("Title");
@@ -147,11 +149,56 @@ public class GUIWindow extends JPanel {
 		colorIt.addActionListener(new actions());
 	 }
 	
+	 /** Set the icons and the tool tips for each button. */
+	 private void setupIconsAndTooltips() {
+		 newNote.setIcon(new ImageIcon(Assets.NEW_NOTE));
+	 	 saveNote.setIcon(new ImageIcon(Assets.SAVE_NOTE));
+	 	 loadNote.setIcon(new ImageIcon(Assets.OPEN_NOTE));
+	 	 saveAsNote.setIcon(new ImageIcon(Assets.SAVE_AS));
+	 	 boldIt.setIcon(new ImageIcon(Assets.BOLD));
+	 	 italicIt.setIcon(new ImageIcon(Assets.ITALIC));
+	 	 underlineIt.setIcon(new ImageIcon(Assets.UNDERLINE));
+	 	 strikethroughIt.setIcon(new ImageIcon(Assets.STRIKETHROUGH));
+	 	 changeFont.setIcon(new ImageIcon(Assets.FONTS));
+	 	 findReplace.setIcon(new ImageIcon(Assets.FINDREPLACE));
+	 	 colorIt.setIcon(new ImageIcon(Assets.COLOR));
+	 	 bulletedList.setIcon(new ImageIcon(Assets.BULLETED_LIST));
+	 	 numberedList.setIcon(new ImageIcon(Assets.NUMBERED_LIST));
+	 	 undoButton.setIcon(new ImageIcon(Assets.UNDO));
+	 	 redoButton.setIcon(new ImageIcon(Assets.REDO));
+	 	 
+	 	 newNote.setToolTipText("Create a new note");
+	 	 saveNote.setToolTipText("Save this note");
+	 	 loadNote.setToolTipText("Open a saved note");
+	 	 saveAsNote.setToolTipText("Save As");
+	 	 boldIt.setToolTipText("Bold");
+	 	 italicIt.setToolTipText("Italic");
+	 	 underlineIt.setToolTipText("Underline");
+	 	 strikethroughIt.setToolTipText("Strikethrough");
+	 	 changeFont.setToolTipText("Change the font");
+	 	 findReplace.setToolTipText("Find/Replace");
+	 	 colorIt.setToolTipText("Color the text");
+	 	 bulletedList.setToolTipText("A new bulleted list");
+	 	 numberedList.setToolTipText("A new numbered list");
+	 	 undoButton.setToolTipText("Undo");
+	 	 redoButton.setToolTipText("Redo");
+	 }
 	 
 	/** Add all of the components to the appropriate panels. */
 	 private void setupPanels() {
-		 JPanel north = new JPanel(new GridLayout(4, 5, 10, 10));
-		 	north.setBounds(5, 5, 500, 130);
+		 JButton[] buttons = {newNote,saveNote,loadNote,saveAsNote,boldIt,italicIt,underlineIt,strikethroughIt,
+				 			changeFont,findReplace,colorIt,bulletedList,numberedList,undoButton,redoButton};
+		 
+		 for(JButton button : buttons) {
+			 button.setContentAreaFilled(false);
+			 button.setBorderPainted(false);
+			 button.setOpaque(false);
+			 button.setBackground(Color.WHITE);
+		 }
+		 
+		 JPanel north = new JPanel();
+		 	north.setBounds(5, 5, 550, 105);
+		 	setupIconsAndTooltips();
 		 	north.add(newNote);
 		 	north.add(saveNote);
 		 	north.add(loadNote);
@@ -170,14 +217,14 @@ public class GUIWindow extends JPanel {
 		
 		 this.add(north);
 		 	
-		 titleField.setBounds(5, 140, 530, 28);
+		 titleField.setBounds(5, 125, 530, 28);
 		 this.add(titleField);
 		 titleField.setColumns(10);
 		 	
-		 noteArea.setBounds(5, 180, 530, 290);
+		 noteArea.setBounds(5, 160, 530, 315);
 		 JScrollPane scrollPane = new JScrollPane(noteArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		 JPanel notePanel = new JPanel(new GridLayout(1,1,1,1));
-		 	notePanel.setBounds(5, 180, 530, 290);
+		 	notePanel.setBounds(5, 160, 530, 315);
 		 	notePanel.add(scrollPane);
 		 this.add(notePanel);
 	 }
@@ -201,6 +248,14 @@ public class GUIWindow extends JPanel {
 		 else
 			 titleField.setText(file.getName().substring(0, file.getName().length()-4));
 		 noteArea.setText(loadedNote.substring(7));
+		 
+		 
+		 //Add that to the recent files
+		 if(RecentNotesWindow.recents.size() < 10) {
+			 RecentNotesWindow.recents.add(0, file);
+			 RecentNotesWindow.recentsPaths.add(0,file.getAbsolutePath());
+			 RecentNotesWindow.update();
+		 }
 		 
 		 return file;
 	 }
@@ -341,12 +396,13 @@ public class GUIWindow extends JPanel {
 
 				 Color c = JColorChooser.showDialog(null, "Pick a color", getForeground());
 			     
-				 TextStyle coloring = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength);
-			     coloring.setTextColor(c);
-			     coloring.addColorStyle();
-			     
-			     textstyles.add(coloring);
-			     
+				 if(c != null) {
+					 TextStyle coloring = new TextStyle(noteArea, noteArea.getSelectionStart(), selectionLength);
+				     coloring.setTextColor(c);
+				     coloring.addColorStyle();
+				     
+				     textstyles.add(coloring);
+				 }
 			 }
 			 
 		 } //End of method
