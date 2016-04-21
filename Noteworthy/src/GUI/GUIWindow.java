@@ -273,6 +273,7 @@ public class GUIWindow extends JPanel {
 				 titleField.setText("Title");
 				 noteArea.setText("Note");
 				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
+				 t.setFont(new Font("Comic Sans MS", 0, 16));
 				 t.addStyle();
 			 }
 			 

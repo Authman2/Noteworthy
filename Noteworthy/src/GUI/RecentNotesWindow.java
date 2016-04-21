@@ -56,6 +56,7 @@ public class RecentNotesWindow extends JPanel {
 				try {
 					String s = recentNotes.getSelectedValue();
 					File f = new File(recents.get(recentNotes.getSelectedIndex()).getAbsolutePath());
+					String pathWOFileName = f.getAbsolutePath().substring(0, f.getAbsolutePath().length()-f.getName().length());
 					
 					//If the file still exists
 					if(f.exists()) {
@@ -76,13 +77,18 @@ public class RecentNotesWindow extends JPanel {
 						 
 						//Load all of the styling attributes
 						Load loader = new Load();
-						((GUIWindow)gui).textstyles = (ArrayList<TextStyle>) loader.LoadFile(((GUIWindow)gui).textstyles, ((GUIWindow)gui).fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + f.getName().substring(0, f.getName().length()-5) + "_styles");
+						((GUIWindow)gui).textstyles = (ArrayList<TextStyle>) loader.LoadFile(((GUIWindow)gui).textstyles, pathWOFileName + "/" + f.getName().substring(0, f.getName().length()-5) + "_styles");
 						 
 						//Set the style attributes again
 						for(TextStyle ts : ((GUIWindow)gui).textstyles) {
 							ts.setTextPane(((GUIWindow)gui).noteArea);
 							ts.addStyle();
 						}
+						
+						s = null;
+						f = null;
+						pathWOFileName = null;
+						
 					} else {
 						JOptionPane.showMessageDialog(gui, "The file " + "\"" + s + "\"" + " was not found.");
 					}

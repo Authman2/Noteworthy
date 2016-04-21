@@ -67,6 +67,11 @@ public class MenuBar {
 		 JMenu tools = new JMenu("Tools");
 		 	JMenuItem WORDCOUNT = new JMenuItem("Word Count");
 		 	tools.add(WORDCOUNT);
+		 JMenu share = new JMenu("Share");
+		 	JMenuItem SYNC = new JMenuItem("Sync");
+		 	JMenuItem LOGIN = new JMenuItem("Log In");
+		 	share.add(LOGIN);
+		 	share.add(SYNC);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	window.add(MINIMIZE);
@@ -80,6 +85,7 @@ public class MenuBar {
 		 guiwindow.menubar.add(edit);
 		 guiwindow.menubar.add(insert);
 		 guiwindow.menubar.add(tools);
+		 guiwindow.menubar.add(share);
 		 guiwindow.menubar.add(window);
 		 guiwindow.menubar.add(help);
 		 
