@@ -2,14 +2,24 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Users/adeouthman/Documents/AdeolasCodingStuff/JavaPrograms/JARS/JExtras.jar" sourcepath="/JExtras">
+	<classpathentry kind="lib" path="/Users/adeola.uthman/Downloads/JExtras-master/JExtras.jar" sourcepath="/JExtras">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Users/adeouthman/Documents/AdeolasCodingStuff/JavaPrograms/JExtrasDoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/adeouthman/Downloads/JOrtho_1.0/jortho.jar" sourcepath="/Users/adeouthman/Downloads/JOrtho_1.0/src">
+	<classpathentry kind="lib" path="/Users/adeola.uthman/Downloads/JOrtho_1.0/jortho.jar" sourcepath="/Users/adeouthman/Downloads/JOrtho_1.0/src">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Users/adeouthman/Downloads/JOrtho_1.0/doc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/adeola.uthman/Downloads/dropbox-java-sdk-1.8.2/lib/dropbox-core-sdk-1.8.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/adeola.uthman/Downloads/dropbox-java-sdk-1.8.2/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/adeola.uthman/Downloads/dropbox-java-sdk-1.8.2/lib/jackson-core-2.6.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/adeola.uthman/Downloads/dropbox-java-sdk-1.8.2/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

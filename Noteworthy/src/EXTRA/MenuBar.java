@@ -68,9 +68,11 @@ public class MenuBar {
 		 	JMenuItem WORDCOUNT = new JMenuItem("Word Count");
 		 	tools.add(WORDCOUNT);
 		 JMenu share = new JMenu("Share");
-		 	JMenuItem SYNC = new JMenuItem("Sync");
 		 	JMenuItem LOGIN = new JMenuItem("Log In");
+		 	JMenuItem SIGNUP = new JMenuItem("Sign Up");
+		 	JMenuItem SYNC = new JMenuItem("Sync");
 		 	share.add(LOGIN);
+		 	share.add(SIGNUP);
 		 	share.add(SYNC);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
@@ -216,6 +218,22 @@ public class MenuBar {
 			public void actionPerformed(ActionEvent e) {
 				WordcountWindow wcw = new WordcountWindow(guiwindow);
 				wcw.setVisible(true);
+			}
+		 });
+		 LOGIN.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LogInSignUpWindow lisuw = new LogInSignUpWindow("Log In");
+				lisuw.select.setText("Log In");
+				lisuw.setVisible(true);
+			}
+		 });
+		 SIGNUP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LogInSignUpWindow lisuw = new LogInSignUpWindow("Sign Up");
+				lisuw.select.setText("Sign Up");
+				lisuw.setVisible(true);
 			}
 		 });
 		 MINIMIZE.addActionListener(new ActionListener() {

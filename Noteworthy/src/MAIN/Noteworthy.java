@@ -15,7 +15,7 @@ public class Noteworthy {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		//Load all of the assets
-		Assets assets = new Assets();
+		//Assets assets = new Assets();
 		
 		//Create the frame
 		JFrame frame = new JFrame("Noteworthy");

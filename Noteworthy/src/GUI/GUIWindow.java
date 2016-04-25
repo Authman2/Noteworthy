@@ -28,7 +28,6 @@ import javax.swing.undo.UndoManager;
 
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
-import MAIN.Assets;
 import MAIN.NoteArea;
 import contents.Load;
 import contents.ReadFile;
@@ -151,21 +150,21 @@ public class GUIWindow extends JPanel {
 	
 	 /** Set the icons and the tool tips for each button. */
 	 private void setupIconsAndTooltips() {
-		 newNote.setIcon(new ImageIcon(Assets.NEW_NOTE));
-	 	 saveNote.setIcon(new ImageIcon(Assets.SAVE_NOTE));
-	 	 loadNote.setIcon(new ImageIcon(Assets.OPEN_NOTE));
-	 	 saveAsNote.setIcon(new ImageIcon(Assets.SAVE_AS));
-	 	 boldIt.setIcon(new ImageIcon(Assets.BOLD));
-	 	 italicIt.setIcon(new ImageIcon(Assets.ITALIC));
-	 	 underlineIt.setIcon(new ImageIcon(Assets.UNDERLINE));
-	 	 strikethroughIt.setIcon(new ImageIcon(Assets.STRIKETHROUGH));
-	 	 changeFont.setIcon(new ImageIcon(Assets.FONTS));
-	 	 findReplace.setIcon(new ImageIcon(Assets.FINDREPLACE));
-	 	 colorIt.setIcon(new ImageIcon(Assets.COLOR));
-	 	 bulletedList.setIcon(new ImageIcon(Assets.BULLETED_LIST));
-	 	 numberedList.setIcon(new ImageIcon(Assets.NUMBERED_LIST));
-	 	 undoButton.setIcon(new ImageIcon(Assets.UNDO));
-	 	 redoButton.setIcon(new ImageIcon(Assets.REDO));
+//		 newNote.setIcon(new ImageIcon(Assets.NEW_NOTE));
+//	 	 saveNote.setIcon(new ImageIcon(Assets.SAVE_NOTE));
+//	 	 loadNote.setIcon(new ImageIcon(Assets.OPEN_NOTE));
+//	 	 saveAsNote.setIcon(new ImageIcon(Assets.SAVE_AS));
+//	 	 boldIt.setIcon(new ImageIcon(Assets.BOLD));
+//	 	 italicIt.setIcon(new ImageIcon(Assets.ITALIC));
+//	 	 underlineIt.setIcon(new ImageIcon(Assets.UNDERLINE));
+//	 	 strikethroughIt.setIcon(new ImageIcon(Assets.STRIKETHROUGH));
+//	 	 changeFont.setIcon(new ImageIcon(Assets.FONTS));
+//	 	 findReplace.setIcon(new ImageIcon(Assets.FINDREPLACE));
+//	 	 colorIt.setIcon(new ImageIcon(Assets.COLOR));
+//	 	 bulletedList.setIcon(new ImageIcon(Assets.BULLETED_LIST));
+//	 	 numberedList.setIcon(new ImageIcon(Assets.NUMBERED_LIST));
+//	 	 undoButton.setIcon(new ImageIcon(Assets.UNDO));
+//	 	 redoButton.setIcon(new ImageIcon(Assets.REDO));
 	 	 
 	 	 newNote.setToolTipText("Create a new note");
 	 	 saveNote.setToolTipText("Save this note");
