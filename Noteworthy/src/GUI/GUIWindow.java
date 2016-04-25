@@ -190,7 +190,7 @@ public class GUIWindow extends JPanel {
 		 
 		 for(JButton button : buttons) {
 			 button.setContentAreaFilled(false);
-			 button.setBorderPainted(false);
+			 //button.setBorderPainted(false);
 			 button.setOpaque(false);
 			 button.setBackground(Color.WHITE);
 		 }

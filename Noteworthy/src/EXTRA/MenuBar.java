@@ -69,10 +69,8 @@ public class MenuBar {
 		 	tools.add(WORDCOUNT);
 		 JMenu share = new JMenu("Share");
 		 	JMenuItem LOGIN = new JMenuItem("Log In");
-		 	JMenuItem SIGNUP = new JMenuItem("Sign Up");
 		 	JMenuItem SYNC = new JMenuItem("Sync");
 		 	share.add(LOGIN);
-		 	share.add(SIGNUP);
 		 	share.add(SYNC);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
@@ -223,16 +221,8 @@ public class MenuBar {
 		 LOGIN.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LogInSignUpWindow lisuw = new LogInSignUpWindow("Log In");
+				LogInWindow lisuw = new LogInWindow("Dropbox Login");
 				lisuw.select.setText("Log In");
-				lisuw.setVisible(true);
-			}
-		 });
-		 SIGNUP.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LogInSignUpWindow lisuw = new LogInSignUpWindow("Sign Up");
-				lisuw.select.setText("Sign Up");
 				lisuw.setVisible(true);
 			}
 		 });
