@@ -231,7 +231,7 @@ public class GUIWindow extends JPanel {
 	 
 	 /** Loads only the text from a note. */
 	 public File loadNoteText() {
-		//The file to grab.
+		 //The file to grab.
 		 File file = fileChooser.getSelectedFile();
 		
 		 //Using my "ReadFile" class.

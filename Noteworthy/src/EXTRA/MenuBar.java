@@ -12,6 +12,8 @@ import javax.swing.JMenuItem;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
+import com.dropbox.core.DbxException;
+
 import GUI.AboutWindow;
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
@@ -126,6 +128,57 @@ public class MenuBar {
 
 					saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
 					saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
+					
+					if(LogInWindow.connected) {
+						//Create a new folder for the user so that they can store their notes
+						try { LogInWindow.client.createFolder(LogInWindow.client.getAccountInfo().email); }
+						catch (DbxException e1) { e1.printStackTrace(); }
+						
+						
+						Load loader = new Load();
+						String text = "";
+						loader.LoadFile(text, guiwindow.titleField.getText() + ".ntwy");
+						
+						
+						//File inputFIle = new File(loader.getFilePath());
+						
+						
+//				        File inputFile = new File("working-draft.txt");
+//				        FileInputStream inputStream = new FileInputStream(inputFile);
+//				        try {
+//				            DbxEntry.File uploadedFile = client.uploadFile("/magnum-opus.txt",
+//				                DbxWriteMode.add(), inputFile.length(), inputStream);
+//				            System.out.println("Uploaded: " + uploadedFile.toString());
+//				        } finally {
+//				            inputStream.close();
+//				        }
+						
+						
+//						//The file to grab.
+//						 File file = fileChooser.getSelectedFile();
+//						
+//						 //Using my "ReadFile" class.
+//						 ReadFile reader = new ReadFile();
+//						 String loadedNote = "";
+//						
+//						 //Try loading the file's text
+//						 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+//				        
+//						 //Set the texts
+//						 if(file.getName().endsWith(".ntwy"))
+//							titleField.setText(file.getName().substring(0, file.getName().length()-5));
+//						 else
+//							 titleField.setText(file.getName().substring(0, file.getName().length()-4));
+//						 noteArea.setText(loadedNote.substring(7));
+//						 
+//						 
+//						 //Add that to the recent files
+//						 if(RecentNotesWindow.recents.size() < 10) {
+//							 RecentNotesWindow.recents.add(0, file);
+//							 RecentNotesWindow.recentsPaths.add(0,file.getAbsolutePath());
+//							 RecentNotesWindow.update();
+//						 }
+					}
 				}
 		 });
 		 SAVEAS.addActionListener(new ActionListener() {
