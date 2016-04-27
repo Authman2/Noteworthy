@@ -3,6 +3,8 @@ package EXTRA;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -12,7 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
+import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxWriteMode;
 
 import GUI.AboutWindow;
 import GUI.FindReplaceWindow;
@@ -126,58 +130,32 @@ public class MenuBar {
 				public void actionPerformed(ActionEvent e) {
 					Save saver = new Save();
 
-					saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
-					saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
+					//Used later for uploading to dropbox...
+					File inputNote = null, inputStyle = null;
+					
+					//Save the two files
+					inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
+					inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
 					
 					if(LogInWindow.connected) {
 						//Create a new folder for the user so that they can store their notes
-						try { LogInWindow.client.createFolder(LogInWindow.client.getAccountInfo().email); }
-						catch (DbxException e1) { e1.printStackTrace(); }
+//						try { LogInWindow.client.createFolder(LogInWindow.client.getAccountInfo().email); }
+//						catch (DbxException e1) { e1.printStackTrace(); }
 						
+						FileInputStream fis1 = null, fis2 = null;
+						try { fis1 = new FileInputStream(inputNote); fis2 = new FileInputStream(inputStyle); } 
+						catch (Exception e1) { e1.printStackTrace(); }
 						
-						Load loader = new Load();
-						String text = "";
-						loader.LoadFile(text, guiwindow.titleField.getText() + ".ntwy");
+						try {
+							DbxEntry.File uploadedNote = LogInWindow.client.uploadFile(inputNote.getAbsolutePath(),
+										DbxWriteMode.add(), inputNote.length(), fis1);
+							DbxEntry.File uploadedStyle = LogInWindow.client.uploadFile(inputStyle.getAbsolutePath(),
+									DbxWriteMode.add(), inputStyle.length(), fis2);
+						} catch (Exception e2) { e2.printStackTrace(); }
 						
-						
-						//File inputFIle = new File(loader.getFilePath());
-						
-						
-//				        File inputFile = new File("working-draft.txt");
-//				        FileInputStream inputStream = new FileInputStream(inputFile);
-//				        try {
-//				            DbxEntry.File uploadedFile = client.uploadFile("/magnum-opus.txt",
-//				                DbxWriteMode.add(), inputFile.length(), inputStream);
-//				            System.out.println("Uploaded: " + uploadedFile.toString());
-//				        } finally {
-//				            inputStream.close();
-//				        }
-						
-						
-//						//The file to grab.
-//						 File file = fileChooser.getSelectedFile();
-//						
-//						 //Using my "ReadFile" class.
-//						 ReadFile reader = new ReadFile();
-//						 String loadedNote = "";
-//						
-//						 //Try loading the file's text
-//						 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
-//				        
-//						 //Set the texts
-//						 if(file.getName().endsWith(".ntwy"))
-//							titleField.setText(file.getName().substring(0, file.getName().length()-5));
-//						 else
-//							 titleField.setText(file.getName().substring(0, file.getName().length()-4));
-//						 noteArea.setText(loadedNote.substring(7));
-//						 
-//						 
-//						 //Add that to the recent files
-//						 if(RecentNotesWindow.recents.size() < 10) {
-//							 RecentNotesWindow.recents.add(0, file);
-//							 RecentNotesWindow.recentsPaths.add(0,file.getAbsolutePath());
-//							 RecentNotesWindow.update();
-//						 }
+						finally {
+							try { fis1.close(); fis2.close(); } catch (IOException e1) { e1.printStackTrace(); }
+						}
 					}
 				}
 		 });
