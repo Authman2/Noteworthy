@@ -12,7 +12,7 @@ import GUI.RecentNotesWindow;
 
 public class Noteworthy {
 
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		//Load all of the assets
 		//Assets assets = new Assets();

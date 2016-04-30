@@ -15,7 +15,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
 import com.dropbox.core.DbxEntry;
-import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWriteMode;
 
 import GUI.AboutWindow;
@@ -127,6 +126,7 @@ public class MenuBar {
 		 });
 		 SAVENOTE.addActionListener(new ActionListener() {
 			@Override
+			@SuppressWarnings("unused")
 				public void actionPerformed(ActionEvent e) {
 					Save saver = new Save();
 
@@ -137,11 +137,7 @@ public class MenuBar {
 					inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
 					inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
 					
-					if(LogInWindow.connected) {
-						//Create a new folder for the user so that they can store their notes
-//						try { LogInWindow.client.createFolder(LogInWindow.client.getAccountInfo().email); }
-//						catch (DbxException e1) { e1.printStackTrace(); }
-						
+					if(LogInWindow.connected) {						
 						FileInputStream fis1 = null, fis2 = null;
 						try { fis1 = new FileInputStream(inputNote); fis2 = new FileInputStream(inputStyle); } 
 						catch (Exception e1) { e1.printStackTrace(); }
@@ -161,18 +157,43 @@ public class MenuBar {
 		 });
 		 SAVEAS.addActionListener(new ActionListener() {
 			 @Override
+			 @SuppressWarnings("unused")
 				public void actionPerformed(ActionEvent e) {
 					int val = guiwindow.fileChooser.showSaveDialog(guiwindow);
 					
 					if(val == JFileChooser.APPROVE_OPTION) {
 						Save saver = new Save();
 						
+						//Used later for uploading to dropbox...
+						File inputNote = null, inputStyle = null;
+						
+						//Save the two files
+						inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + "_styles");
+						inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
+						
 						saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + "_styles");
 						if(guiwindow.fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
 							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".txt");
 						else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
 							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
+						
+						
+						if(LogInWindow.connected) {						
+							FileInputStream fis1 = null, fis2 = null;
+							try { fis1 = new FileInputStream(inputNote); fis2 = new FileInputStream(inputStyle); } 
+							catch (Exception e1) { e1.printStackTrace(); }
 							
+							try {
+								DbxEntry.File uploadedNote = LogInWindow.client.uploadFile(inputNote.getAbsolutePath(),
+											DbxWriteMode.add(), inputNote.length(), fis1);
+								DbxEntry.File uploadedStyle = LogInWindow.client.uploadFile(inputStyle.getAbsolutePath(),
+										DbxWriteMode.add(), inputStyle.length(), fis2);
+							} catch (Exception e2) { e2.printStackTrace(); }
+							
+							finally {
+								try { fis1.close(); fis2.close(); } catch (IOException e1) { e1.printStackTrace(); }
+							}
+						}
 					}
 				}
 		 });

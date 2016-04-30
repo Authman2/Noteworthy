@@ -3,6 +3,9 @@ package GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -14,6 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import com.dropbox.core.DbxEntry;
+
+import EXTRA.LogInWindow;
 import contents.Load;
 import contents.ReadFile;
 import contents.TextStyle;
@@ -34,18 +40,29 @@ public class RecentNotesWindow extends JPanel {
 	//Button for opening a recent file
 	JButton openRecent = new JButton("Open");
 	
+	//The list of notes from dropbox
+	public static JList<String> sharedNotes = new JList<String>();
+	
+	//Label to display it
+	JLabel sharedNotesL = new JLabel("Shared Notes");
+	
+	//Button for opening shared notes
+	JButton openShared = new JButton("Open");
 	
 	
 	public RecentNotesWindow(JPanel gui) {
 		update();
 		
-		recentNotes.setVisibleRowCount(25);		
 		JScrollPane scroller = new JScrollPane(recentNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			
+		JScrollPane scroller2 = new JScrollPane(sharedNotes, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.add(panelInfoLabel);
 		this.add(openRecent);
 		this.add(scroller);
+		this.add(sharedNotesL);
+		this.add(openShared);
+		this.add(scroller2);
 		
 		
 		openRecent.addActionListener(new ActionListener() {
@@ -100,6 +117,46 @@ public class RecentNotesWindow extends JPanel {
 				
 			}
 			
+		});
+		openShared.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(LogInWindow.connected) {
+					DbxEntry.WithChildren listing = null;
+					try {
+						listing = LogInWindow.client.getMetadataWithChildren("/");
+					} catch(Exception e1) {
+						e1.printStackTrace();
+					}
+			        System.out.println("Files in the root path:");
+			        for (DbxEntry child : listing.children) {
+			            System.out.println("	" + child.name + ": " + child.toString());
+			        }
+			
+			        FileOutputStream outputStream = null;
+					try {
+						outputStream = new FileOutputStream(sharedNotes.getSelectedValue());
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+			        try {
+			            DbxEntry.File downloadedFile = null;
+						try {
+							downloadedFile = LogInWindow.client.getFile("/magnum-opus.txt", null,
+							    outputStream);
+						} catch (Exception err) {
+							err.printStackTrace();
+						}
+			            System.out.println("Metadata: " + downloadedFile.toString());
+			        } finally {
+			            try {
+							outputStream.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+			        }
+				}
+			}
 		});
 	}
 	
