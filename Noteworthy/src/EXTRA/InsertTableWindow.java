@@ -16,7 +16,18 @@ import MAIN.NoteArea;
 import contents.ArrayConversion;
 
 
-/** Responsible for creating tables. */
+/** Responsible for creating tables.
+ * Copyright (C) 2016  Adeola Uthman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details. */
 public class InsertTableWindow extends JFrame {
 	private static final long serialVersionUID = -7520043799623134238L;
 
