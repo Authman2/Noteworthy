@@ -28,10 +28,10 @@ import javax.swing.undo.UndoManager;
 import EXTRA.MenuBar;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
-import contents.Load;
-import contents.ReadFile;
-import contents.Save;
-import contents.TextStyle;
+import filesje.Load;
+import filesje.ReadFile;
+import filesje.Save;
+import visualje.TextStyle;
 
 /**Copyright (C) 2016  Adeola Uthman
 

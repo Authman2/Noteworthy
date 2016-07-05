@@ -3,9 +3,6 @@ package EXTRA;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -15,17 +12,14 @@ import javax.swing.JMenuItem;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
-import com.dropbox.core.DbxEntry;
-import com.dropbox.core.DbxWriteMode;
-
 import GUI.AboutWindow;
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
 import GUI.KeyHelpWindow;
 import GUI.WordcountWindow;
-import contents.Load;
-import contents.Save;
-import contents.TextStyle;
+import filesje.Load;
+import filesje.Save;
+import visualje.TextStyle;
 
 /**Copyright (C) 2016  Adeola Uthman
 
@@ -151,22 +145,6 @@ public class MenuBar {
 					inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
 					inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
 					
-					if(LogInWindow.connected) {						
-						FileInputStream fis1 = null, fis2 = null;
-						try { fis1 = new FileInputStream(inputNote); fis2 = new FileInputStream(inputStyle); } 
-						catch (Exception e1) { e1.printStackTrace(); }
-						
-						try {
-							DbxEntry.File uploadedNote = LogInWindow.client.uploadFile(inputNote.getAbsolutePath(),
-										DbxWriteMode.add(), inputNote.length(), fis1);
-							DbxEntry.File uploadedStyle = LogInWindow.client.uploadFile(inputStyle.getAbsolutePath(),
-									DbxWriteMode.add(), inputStyle.length(), fis2);
-						} catch (Exception e2) { e2.printStackTrace(); }
-						
-						finally {
-							try { fis1.close(); fis2.close(); } catch (IOException e1) { e1.printStackTrace(); }
-						}
-					}
 				}
 		 });
 		 SAVEAS.addActionListener(new ActionListener() {
@@ -191,23 +169,6 @@ public class MenuBar {
 						else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
 							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
 						
-						
-						if(LogInWindow.connected) {						
-							FileInputStream fis1 = null, fis2 = null;
-							try { fis1 = new FileInputStream(inputNote); fis2 = new FileInputStream(inputStyle); } 
-							catch (Exception e1) { e1.printStackTrace(); }
-							
-							try {
-								DbxEntry.File uploadedNote = LogInWindow.client.uploadFile(inputNote.getAbsolutePath(),
-											DbxWriteMode.add(), inputNote.length(), fis1);
-								DbxEntry.File uploadedStyle = LogInWindow.client.uploadFile(inputStyle.getAbsolutePath(),
-										DbxWriteMode.add(), inputStyle.length(), fis2);
-							} catch (Exception e2) { e2.printStackTrace(); }
-							
-							finally {
-								try { fis1.close(); fis2.close(); } catch (IOException e1) { e1.printStackTrace(); }
-							}
-						}
 					}
 				}
 		 });
@@ -273,8 +234,7 @@ public class MenuBar {
 		 TABLE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				InsertTableWindow itw = new InsertTableWindow(guiwindow.noteArea);
-				itw.setVisible(true);
+				
 			}
 		 });
 		 WORDCOUNT.addActionListener(new ActionListener() {
@@ -287,37 +247,13 @@ public class MenuBar {
 		 LOGIN.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LogInWindow lisuw = new LogInWindow("Dropbox Login");
-				lisuw.select.setText("Log In");
-				lisuw.setVisible(true);
+				
 			}
 		 });
 		 OPENFROMDROPBOX.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(LogInWindow.connected) {
-					FilesFromDropboxWindow ffd = new FilesFromDropboxWindow();
-					ffd.setVisible(true);
-					
-					try {
-						DbxEntry.WithChildren listing = LogInWindow.client.getMetadataWithChildren("/");
-				        System.out.println("Files in the root path:");
-				        for (DbxEntry child : listing.children) {
-				            System.out.println("	" + child.name + ": " + child.toString());
-				        }
 				
-				        FileOutputStream outputStream = new FileOutputStream("magnum-opus.txt");
-				        try {
-				            DbxEntry.File downloadedFile = LogInWindow.client.getFile("/magnum-opus.txt", null,
-				                outputStream);
-				            System.out.println("Metadata: " + downloadedFile.toString());
-				        } finally {
-				            outputStream.close();
-				        }
-					} catch(Exception err) {
-						err.printStackTrace();
-					}
-				}
 			}
 		 });
 		 MINIMIZE.addActionListener(new ActionListener() {

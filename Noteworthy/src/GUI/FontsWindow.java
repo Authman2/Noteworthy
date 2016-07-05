@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import MAIN.NoteArea;
-import contents.TextStyle;
+import visualje.TextStyle;
 
 /** Copyright (C) 2016  Adeola Uthman
 
