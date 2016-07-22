@@ -54,7 +54,7 @@ public class FindReplaceWindow extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         
-        textarea = (NoteArea)noteArea;
+        textarea = noteArea;
         
         JPanel north = new JPanel(new GridLayout(2,2,10,10));
             north.add(findLabel);

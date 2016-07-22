@@ -5,14 +5,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.text.Highlighter.Highlight;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-
-import com.inet.jortho.PopupListener;
-import com.inet.jortho.SpellChecker;
 
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
@@ -169,7 +165,7 @@ public class NoteArea extends JTextPane {
 				 String loadedNote = "";
 				
 				 //Try loading the file's text
-				 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+				 try { loadedNote = reader.read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
 	            
 				 //Set the texts
 				 if(file.getName().endsWith(".ntwy"))

@@ -1,12 +1,12 @@
 package EXTRA;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.text.BadLocationException;
@@ -78,13 +78,6 @@ public class MenuBar {
 		 JMenu tools = new JMenu("Tools");
 		 	JMenuItem WORDCOUNT = new JMenuItem("Word Count");
 		 	tools.add(WORDCOUNT);
-		 JMenu share = new JMenu("Share");
-		 	JMenuItem LOGIN = new JMenuItem("Log In");
-		 	JMenuItem OPENFROMDROPBOX = new JMenuItem("Open from Dropbox");
-		 	JMenuItem SYNC = new JMenuItem("Sync");
-		 	share.add(LOGIN);
-		 	share.add(OPENFROMDROPBOX);
-		 	share.add(SYNC);
 		 JMenu window = new JMenu("Window");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
 		 	window.add(MINIMIZE);
@@ -98,7 +91,6 @@ public class MenuBar {
 		 guiwindow.menubar.add(edit);
 		 guiwindow.menubar.add(insert);
 		 guiwindow.menubar.add(tools);
-		 guiwindow.menubar.add(share);
 		 guiwindow.menubar.add(window);
 		 guiwindow.menubar.add(help);
 		 
@@ -244,22 +236,10 @@ public class MenuBar {
 				wcw.setVisible(true);
 			}
 		 });
-		 LOGIN.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		 });
-		 OPENFROMDROPBOX.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		 });
 		 MINIMIZE.addActionListener(new ActionListener() {
 			 @Override
 				public void actionPerformed(ActionEvent e) {
-					guiwindow.holdingframe.setState(JFrame.ICONIFIED);
+					guiwindow.holdingframe.setState(Frame.ICONIFIED);
 				}
 		 });
 		 ABOUT.addActionListener(new ActionListener() {

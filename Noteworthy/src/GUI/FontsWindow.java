@@ -138,6 +138,7 @@ public class FontsWindow extends JFrame {
 	
 	//Change the font based on what is inputed in the fonts window
 	public class fActions implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == selectButton) {
 				if(styleList.getSelectedValue().toString().equals("Plain")) {

@@ -175,6 +175,21 @@ public class GUIWindow extends JPanel {
 //	 	 numberedList.setIcon(new ImageIcon(Assets.NUMBERED_LIST));
 //	 	 undoButton.setIcon(new ImageIcon(Assets.UNDO));
 //	 	 redoButton.setIcon(new ImageIcon(Assets.REDO));
+		 newNote.setText("New Note");
+		 saveNote.setText("Save Note");
+		 loadNote.setText("Load Note");
+		 saveAsNote.setText("Save As");
+		 boldIt.setText("Bold");
+		 italicIt.setText("Italic");
+		 underlineIt.setText("Underline");
+		 strikethroughIt.setText("StrikeThrough");
+		 changeFont.setText("Fonts");
+		 findReplace.setText("Find/Replace");
+		 colorIt.setText("Color");
+		 bulletedList.setText("Bulleted List");
+		 numberedList.setText("Numbered List");
+		 undoButton.setText("Undo");
+		 redoButton.setText("Redo");
 	 	 
 	 	 newNote.setToolTipText("Create a new note");
 	 	 saveNote.setToolTipText("Save this note");
@@ -249,7 +264,7 @@ public class GUIWindow extends JPanel {
 		 String loadedNote = "";
 		
 		 //Try loading the file's text
-		 try { loadedNote = (String)reader.Read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
+		 try { loadedNote = reader.read(file.getPath()); } catch (Exception e1) { e1.printStackTrace(); }
         
 		 //Set the texts
 		 if(file.getName().endsWith(".ntwy"))
@@ -258,13 +273,6 @@ public class GUIWindow extends JPanel {
 			 titleField.setText(file.getName().substring(0, file.getName().length()-4));
 		 noteArea.setText(loadedNote.substring(7));
 		 
-		 
-		 //Add that to the recent files
-		 if(RecentNotesWindow.recents.size() < 10) {
-			 RecentNotesWindow.recents.add(0, file);
-			 RecentNotesWindow.recentsPaths.add(0,file.getAbsolutePath());
-			 RecentNotesWindow.update();
-		 }
 		 
 		 return file;
 	 }
