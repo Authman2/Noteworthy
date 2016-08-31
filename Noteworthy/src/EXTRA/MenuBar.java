@@ -79,7 +79,9 @@ public class MenuBar {
 		 	JMenuItem WORDCOUNT = new JMenuItem("Word Count");
 		 	tools.add(WORDCOUNT);
 		 JMenu window = new JMenu("Window");
+		 	JMenuItem SHOWHIDENOTEBOOKS = new JMenuItem("Show/Hide Notebooks");
 		 	JMenuItem MINIMIZE = new JMenuItem("Minimize");
+		 	window.add(SHOWHIDENOTEBOOKS);
 		 	window.add(MINIMIZE);
 		 JMenu help = new JMenu("Help");
 		 	JMenuItem ABOUT = new JMenuItem("About");
@@ -235,6 +237,15 @@ public class MenuBar {
 				WordcountWindow wcw = new WordcountWindow(guiwindow);
 				wcw.setVisible(true);
 			}
+		 });
+		 SHOWHIDENOTEBOOKS.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+				 if(!guiwindow.nbw.isVisible()) {
+					 guiwindow.nbw.setVisible(true);
+				 } else {
+					 guiwindow.nbw.setVisible(false);
+				 }
+			 }
 		 });
 		 MINIMIZE.addActionListener(new ActionListener() {
 			 @Override

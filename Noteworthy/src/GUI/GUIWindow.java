@@ -297,11 +297,13 @@ public class GUIWindow extends JPanel {
 			 
 			 //Make a new note
 			 if(e.getSource() == newNote) {
-				 titleField.setText("Title");
-				 noteArea.setText("Note");
-				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
-				 t.setFont(new Font("Comic Sans MS", 0, 16));
-				 t.addStyle();
+				 new CreateNotesWindow(nbw);
+				 
+//				 titleField.setText("Title");
+//				 noteArea.setText("Note");
+//				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
+//				 t.setFont(new Font("Comic Sans MS", 0, 16));
+//				 t.addStyle();
 			 }
 			 
 			 if(e.getSource() == newNotebook) {
