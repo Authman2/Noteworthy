@@ -53,6 +53,9 @@ public class GUIWindow extends JPanel {
 	//The frame that holds this panel
 	public JFrame holdingframe;
 	
+	// The window that shows the user's notebooks
+	public NotebooksWindow nbw;
+	
 	//The menu bar
 	public JMenuBar menubar = new JMenuBar();
 	
@@ -61,6 +64,7 @@ public class GUIWindow extends JPanel {
 	JButton saveNote = new JButton();
 	JButton saveAsNote = new JButton();
 	JButton loadNote = new JButton();
+	JButton newNotebook = new JButton();
 	
 	//Buttons for bolding, italicizing, and changing the font
 	JButton boldIt = new JButton();
@@ -115,6 +119,8 @@ public class GUIWindow extends JPanel {
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
+		 nbw = new NotebooksWindow(holdingFrame);
+		 
 		 
 		 /* MENU SETUP */
 		 holdingFrame.setJMenuBar(menubar);
@@ -140,22 +146,24 @@ public class GUIWindow extends JPanel {
 	
 	 /** Sets the action listener for each GUI element. */
 	 private void setActionListeners() {
+		ActionListener actions = new actions();
 		noteArea.getDocument().addUndoableEditListener(new undolistener());
-		newNote.addActionListener(new actions());
-		saveNote.addActionListener(new actions());
-		saveAsNote.addActionListener(new actions());
-		loadNote.addActionListener(new actions());
-		boldIt.addActionListener(new actions());
-		italicIt.addActionListener(new actions());
-		underlineIt.addActionListener(new actions());
-		strikethroughIt.addActionListener(new actions());
-		changeFont.addActionListener(new actions());
-		findReplace.addActionListener(new actions());
-		bulletedList.addActionListener(new actions());
-		numberedList.addActionListener(new actions());
-		undoButton.addActionListener(new actions());
-		redoButton.addActionListener(new actions());
-		colorIt.addActionListener(new actions());
+		newNote.addActionListener(actions);
+		newNotebook.addActionListener(actions);
+		saveNote.addActionListener(actions);
+		saveAsNote.addActionListener(actions);
+		loadNote.addActionListener(actions);
+		boldIt.addActionListener(actions);
+		italicIt.addActionListener(actions);
+		underlineIt.addActionListener(actions);
+		strikethroughIt.addActionListener(actions);
+		changeFont.addActionListener(actions);
+		findReplace.addActionListener(actions);
+		bulletedList.addActionListener(actions);
+		numberedList.addActionListener(actions);
+		undoButton.addActionListener(actions);
+		redoButton.addActionListener(actions);
+		colorIt.addActionListener(actions);
 	 }
 	
 	 /** Set the icons and the tool tips for each button. */
@@ -176,6 +184,7 @@ public class GUIWindow extends JPanel {
 //	 	 undoButton.setIcon(new ImageIcon(Assets.UNDO));
 //	 	 redoButton.setIcon(new ImageIcon(Assets.REDO));
 		 newNote.setText("New Note");
+		 newNotebook.setText("New Notebook");
 		 saveNote.setText("Save Note");
 		 loadNote.setText("Load Note");
 		 saveAsNote.setText("Save As");
@@ -224,6 +233,7 @@ public class GUIWindow extends JPanel {
 		 	north.setBounds(5, 5, 550, 105);
 		 	setupIconsAndTooltips();
 		 	north.add(newNote);
+		 	north.add(newNotebook);
 		 	north.add(saveNote);
 		 	north.add(loadNote);
 		 	north.add(saveAsNote);
@@ -292,6 +302,10 @@ public class GUIWindow extends JPanel {
 				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
 				 t.setFont(new Font("Comic Sans MS", 0, 16));
 				 t.addStyle();
+			 }
+			 
+			 if(e.getSource() == newNotebook) {
+				 nbw.addNotebook();
 			 }
 			 
 			 //Save the note as an object

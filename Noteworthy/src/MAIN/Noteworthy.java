@@ -29,11 +29,12 @@ public class Noteworthy {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//The two panels that the split pane will hold
+		//The panel
 		JPanel gui = new GUIWindow(frame);
 		gui.setLayout(null);
 		
 		frame.add(gui);
+		
 		
 		//Set frame to visible
 		frame.setVisible(true);
