@@ -13,6 +13,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -26,8 +27,10 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
 import EXTRA.MenuBar;
+import EXTRA.Note;
 import FILE.ExtensionFilter;
 import MAIN.NoteArea;
+import MAIN.Noteworthy;
 import filesje.Load;
 import filesje.ReadFile;
 import filesje.Save;
@@ -55,6 +58,9 @@ public class GUIWindow extends JPanel {
 	
 	// The window that shows the user's notebooks
 	public NotebooksWindow nbw;
+	
+	// Temporary note
+	public Note tempNote;
 	
 	//The menu bar
 	public JMenuBar menubar = new JMenuBar();
@@ -119,7 +125,7 @@ public class GUIWindow extends JPanel {
 		 noteArea.setText("Note");
 		 sas = new SimpleAttributeSet();
 		 guiwindow = this;
-		 nbw = new NotebooksWindow(holdingFrame);
+		 nbw = new NotebooksWindow(this);
 		 
 		 
 		 /* MENU SETUP */
@@ -297,25 +303,31 @@ public class GUIWindow extends JPanel {
 			 
 			 //Make a new note
 			 if(e.getSource() == newNote) {
-				 new CreateNotesWindow(nbw);
-				 
-//				 titleField.setText("Title");
-//				 noteArea.setText("Note");
-//				 TextStyle t = new TextStyle(noteArea, 0, noteArea.getText().length(), "PLAIN");
-//				 t.setFont(new Font("Comic Sans MS", 0, 16));
-//				 t.addStyle();
+				new CreateNotesWindow(nbw);
 			 }
 			 
+			 // Make a new notebook
 			 if(e.getSource() == newNotebook) {
-				 nbw.addNotebook();
+				nbw.addNotebook();
 			 }
 			 
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
+			 
+				 // Make sure that the correct information is stored, then save it.
+				 try {
+					 tempNote.noteName = titleField.getText();
+					 tempNote.noteContent = noteArea.getText();
 				 
-				 saver.SaveFile(textstyles, titleField.getText() + "_styles");
-				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
+					 saver.SaveFile(textstyles, Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + "_styles");
+					 saver.SaveFile(noteArea.getText(), Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + ".ntwy");
+				 } catch(NullPointerException err) {
+					 JOptionPane.showMessageDialog(holdingframe, "To save a note it must first belong to a notebook");
+				 }
+				 
+//				 saver.SaveFile(textstyles, titleField.getText() + "_styles");
+//				 saver.SaveFile(noteArea.getText(), titleField.getText() + ".ntwy");
 			 }
 			 
 			 //Load a saved note
@@ -335,7 +347,6 @@ public class GUIWindow extends JPanel {
 						 ts.setTextPane(noteArea);
 						 ts.addStyle();
 					 }
-					 
 				 }
 			 }
 			 

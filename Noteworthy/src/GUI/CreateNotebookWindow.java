@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,11 +16,17 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import EXTRA.Note;
+import MAIN.Noteworthy;
+
 public class CreateNotebookWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	// The jtree from the notebook list.
 	JTree tree;
+	
+	// The notebooks window
+	NotebooksWindow nbw;
 	
 	
 	public CreateNotebookWindow(NotebooksWindow nbw) {
@@ -27,6 +34,7 @@ public class CreateNotebookWindow extends JFrame {
 		setSize(500, 100);
 		setLocationRelativeTo(null);
 		JFrame frame = this;
+		this.nbw = nbw;
 		tree = nbw.getNotebookTree();
 		
 		JTextField notebookNameField = new JTextField();
@@ -74,7 +82,18 @@ public class CreateNotebookWindow extends JFrame {
 	    DefaultMutableTreeNode child = new DefaultMutableTreeNode(notebook);
 	    model.insertNodeInto(child, root, root.getChildCount());
 	    tree.scrollPathToVisible(new TreePath(child.getPath()));
-	    f.dispose();
+	    
+	    String path = Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "NOTEBOOK_" + name;
+	    File folder = new File(path);
+	    
+	    if(!folder.mkdir()) {
+	    	System.out.println("Failed to create folder");
+	    } else {
+	    	System.out.println("Success");
+	    }
+	    
+	    // Change the temporary note in the GUIWindow
+	    nbw.getGUIWindow().tempNote = new Note(notebook.toString(), "Title", "Note");
+	    
 	}
-	
 }

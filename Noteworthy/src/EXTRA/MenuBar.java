@@ -13,6 +13,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
 
 import GUI.AboutWindow;
+import GUI.CreateNotesWindow;
 import GUI.FindReplaceWindow;
 import GUI.GUIWindow;
 import GUI.KeyHelpWindow;
@@ -48,14 +49,14 @@ public class MenuBar {
 	public void setup() {
 		JMenu file = new JMenu("File");
 		 	JMenuItem NEWNOTE = new JMenuItem("New Note");
+		 	JMenuItem NEWNOTEBOOK = new JMenuItem("New Notebook");
 		 	JMenuItem OPENNOTE = new JMenuItem("Open Note");
 		 	JMenuItem SAVENOTE = new JMenuItem("Save Note");
-		 	JMenuItem SAVEAS = new JMenuItem("Save As");
 		 	JMenuItem QUIT = new JMenuItem("Quit");
 		 	file.add(NEWNOTE);
+		 	file.add(NEWNOTEBOOK);
 		 	file.add(OPENNOTE);
 		 	file.add(SAVENOTE);
-		 	file.add(SAVEAS);
 		 	file.add(QUIT);
 		 JMenu edit = new JMenu("Edit");
 		 	JMenuItem UNDO = new JMenuItem("Undo");
@@ -99,9 +100,13 @@ public class MenuBar {
 		 NEWNOTE.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				guiwindow.titleField.setText("Title");
-				guiwindow.noteArea.setText("Note");
+				new CreateNotesWindow(guiwindow.nbw);
 			}
+		 });
+		 NEWNOTEBOOK.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+				 guiwindow.nbw.addNotebook();
+			 }
 		 });
 		 OPENNOTE.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
@@ -128,43 +133,16 @@ public class MenuBar {
 		 });
 		 SAVENOTE.addActionListener(new ActionListener() {
 			@Override
-			@SuppressWarnings("unused")
-				public void actionPerformed(ActionEvent e) {
-					Save saver = new Save();
+			public void actionPerformed(ActionEvent e) {
+				Save saver = new Save();
 
-					//Used later for uploading to dropbox...
-					File inputNote = null, inputStyle = null;
-					
-					//Save the two files
-					inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.titleField.getText() + "_styles");
-					inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.titleField.getText() + ".ntwy");
-					
-				}
-		 });
-		 SAVEAS.addActionListener(new ActionListener() {
-			 @Override
-			 @SuppressWarnings("unused")
-				public void actionPerformed(ActionEvent e) {
-					int val = guiwindow.fileChooser.showSaveDialog(guiwindow);
-					
-					if(val == JFileChooser.APPROVE_OPTION) {
-						Save saver = new Save();
-						
-						//Used later for uploading to dropbox...
-						File inputNote = null, inputStyle = null;
-						
-						//Save the two files
-						inputStyle = saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + "_styles");
-						inputNote = saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
-						
-						saver.SaveFile(guiwindow.textstyles, guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + "_styles");
-						if(guiwindow.fileChooser.getFileFilter().getDescription().equals("txt -- A plain text file."))
-							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".txt");
-						else if(guiwindow.fileChooser.getFileFilter().getDescription().equals("ntwy -- A Noteworthy text file."))
-							saver.SaveFile(guiwindow.noteArea.getText(), guiwindow.fileChooser.getCurrentDirectory().getAbsolutePath() + "/" + guiwindow.titleField.getText() + ".ntwy");
-						
-					}
-				}
+				// Make sure that the correct information is stored, then save it.
+				guiwindow.tempNote.noteName = guiwindow.titleField.getText();
+				guiwindow.tempNote.noteContent = guiwindow.noteArea.getText();
+			 
+				saver.SaveFile(guiwindow.textstyles, guiwindow.tempNote.notebookToAddTo + "/" + guiwindow.tempNote.noteName + "_styles");
+				saver.SaveFile(guiwindow.textstyles, guiwindow.tempNote.notebookToAddTo + "/" + guiwindow.tempNote.noteContent + ".ntwy");
+			}
 		 });
 		 QUIT.addActionListener(new ActionListener() {
 			@Override
