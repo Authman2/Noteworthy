@@ -90,7 +90,6 @@ public class CreateNotesWindow extends JFrame {
 		    nbw.getGUIWindow().tempNote = new Note(notebook.toString(), noteName, "Note");
 		    
 		    nbw.getGUIWindow().titleField.setText(noteName);
-		    nbw.getGUIWindow().titleField.setText("Title");
 		    nbw.getGUIWindow().noteArea.setText("Note");
 		    
 			TextStyle t = new TextStyle(nbw.getGUIWindow().noteArea, 0, nbw.getGUIWindow().noteArea.getText().length(), "PLAIN");

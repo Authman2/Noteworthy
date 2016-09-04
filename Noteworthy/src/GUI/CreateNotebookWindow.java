@@ -84,6 +84,10 @@ public class CreateNotebookWindow extends JFrame {
 	    tree.scrollPathToVisible(new TreePath(child.getPath()));
 	    
 	    String path = Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "NOTEBOOK_" + name;
+	    
+	    // Print out the path
+	    System.out.println(path);
+	    
 	    File folder = new File(path);
 	    
 	    if(!folder.mkdir()) {

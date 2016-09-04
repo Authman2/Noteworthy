@@ -1,7 +1,6 @@
 package GUI;
 
 import java.io.File;
-import java.net.URISyntaxException;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -102,10 +101,17 @@ public class NotebooksWindow extends JFrame {
 	/** Loads all of the notebooks that are in the application's bin. */
 	private void loadNotebooks() {
 		File file = null;
+		String path = "";
 		try {
-			file = new File(Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "/");
-		} catch (URISyntaxException e) { e.printStackTrace(); }
+			path = Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "/";
+			
+			// Print out the path
+			System.out.println(path);
+			
+			file = new File(path);
+		} catch (Exception e) { e.printStackTrace(); }
 	    
+		// BELOW: assumes that "file" is a directory, so "file2" is a file inside of that directory
 	    for(File file2 : file.listFiles()) {
 	    	if(file2.getAbsolutePath().contains("NOTEBOOK_")) {
 	    		// Add the folder
@@ -115,9 +121,10 @@ public class NotebooksWindow extends JFrame {
 	    	    DefaultMutableTreeNode child = new DefaultMutableTreeNode(notebook);
 	    	    model.insertNodeInto(child, root, root.getChildCount());
 	    	    
-	    	    // Add any notes
+	    	    // Add any notes from that notebook
 	    	    for(File file3 : file2.listFiles()) {
-	    	    	if(!file3.getName().endsWith("_styles")) {
+	    	    	// Make sure it's not the styles file.
+	    	    	if(file3.getName().endsWith(".ntwy")) {
 		    	    	DefaultTreeModel model2 = (DefaultTreeModel) tree.getModel();
 		    			DefaultMutableTreeNode notebook2 = (DefaultMutableTreeNode) tree.getModel().getChild(tree.getModel().getRoot(), findNotebookIndex(file2.getName()));
 		    		    DefaultMutableTreeNode child2 = new DefaultMutableTreeNode(file3.getName());

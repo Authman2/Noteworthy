@@ -314,14 +314,19 @@ public class GUIWindow extends JPanel {
 			 //Save the note as an object
 			 if(e.getSource() == saveNote) {
 				 Save saver = new Save();
-			 
+				 
 				 // Make sure that the correct information is stored, then save it.
 				 try {
 					 tempNote.noteName = titleField.getText();
 					 tempNote.noteContent = noteArea.getText();
 				 
-					 saver.SaveFile(textstyles, Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + "_styles");
-					 saver.SaveFile(noteArea.getText(), Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + ".ntwy");
+					 String mainPath = Noteworthy.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+					 
+					 // Print out the main path
+					 System.out.println(mainPath);
+					 
+					 saver.SaveFile(textstyles, mainPath + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + "_styles");
+					 saver.SaveFile(noteArea.getText(), mainPath + "/NOTEBOOK_" + tempNote.notebookToAddTo + "/" + tempNote.noteName + ".ntwy");
 				 } catch(NullPointerException err) {
 					 JOptionPane.showMessageDialog(holdingframe, "To save a note it must first belong to a notebook");
 				 }
