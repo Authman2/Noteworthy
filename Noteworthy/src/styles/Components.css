@@ -1,0 +1,30 @@
+.Document {
+    -fx-text-box-border: transparent;
+    -fx-focus-color: transparent;
+    -fx-background-color: -fx-control-inner-background;
+}
+
+.TitleArea {
+    -fx-font-size: 17px;
+}
+
+.OpenNotesBtn {
+    -fx-background-color: transparent;
+}
+
+.LoginTitle {
+    -fx-font-size: 30px;
+}
+
+.PillButton {
+    -fx-background-radius: 25px;
+    -fx-background-insets: 0, 1, 2;
+    -fx-text-fill:  black;
+}
+
+#loginBtn, #cancelBtn {
+    -fx-background-color: rgb(73, 209, 255);
+}
+#loginBtn: hover, #cancelBtn: hover {
+    -fx-background-color: cornflowerblue;
+}
