@@ -1,21 +1,20 @@
 {
-  "name": "electron-quick-start",
+  "name": "Noteworthy",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A simple note-taking application.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/Authman2/Noteworthy",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+      "Noteworthy",
+      "Notes",
+      "School",
+      "Classes"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Adeola Uthman",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.6.2"
   },

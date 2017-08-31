@@ -1,17 +1,101 @@
 const electron = require('electron')
-// Module to control application life.
+const fs = require('fs');
 const app = electron.app
-// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const Menu = electron.Menu
+const ipc = require('electron').ipcMain;
 
 const path = require('path')
 const url = require('url')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let signUpWindow
+var windows = [];
 
-function createWindow () {
+// The different pages and components in the app.
+const homeFile = fs.readFileSync(__dirname + '/src/pages/home.html', 'utf8');
+const signupFile = fs.readFileSync(__dirname + '/src/pages/signup.html', 'utf8');
+const mpbFile = fs.readFileSync(__dirname + '/src/components/MPB.html', 'utf8');
+const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
+
+
+
+
+// Get a reference to the event so that you can send stuff later.
+// This method just takes whatever the renderer sends it (which should be the home page) and sends it right back
+var eve;
+ipc.on('changeCurrentPage-send', (event, args) => {
+    eve = event;
+    event.sender.send('changeCurrentPage-reply', args, 'home');
+});
+
+
+// Create the application menu.
+let template = [{
+    label: 'Noteworthy',
+    submenu: [{
+        label: 'Quit',
+        accelerator: 'CmdOrCtrl+Q',
+        click: () => { app.quit(); }
+    }]
+},{
+    label: 'Account',
+    submenu: [{
+        label: 'Login', 
+        click: () => { 
+            // Go to login page.
+        }
+    }, {
+        label: 'Sign Up',
+        click: () => { 
+            if(eve !== null && eve !== undefined) {
+                eve.sender.send('changeCurrentPage-reply', signupFile, 'signup');
+            }
+        }
+    }, {
+        label: 'Account',
+        click: () => { 
+            // Go to account page.
+        }
+    }]
+},{
+    label: 'Window',
+    submenu: [{
+        label: 'Reload',
+        accelerator: 'CmdOrCtrl+R',
+        click: (item, focusedWindow) => {
+            if (focusedWindow) {
+                if (focusedWindow.id === 1) {
+                    BrowserWindow.getAllWindows().forEach(function (win) {
+                        if (win.id > 1) { win.close() }
+                    })
+                }
+                focusedWindow.reload()
+            }
+        }
+    },{
+        label: 'Open Developer Tools',
+        accelerator: 'CmdOrCtrl+T',
+        click: () => { mainWindow.webContents.openDevTools(); }
+    }]
+},{
+    label: 'Settings',
+    submenu: [{
+        label: 'Color Scheme',
+        click: () => { 
+            // Go to page to change color scheme.
+        }
+    }]
+}];
+
+
+
+
+
+/**
+    Creates the main application window.
+*/
+function createMainWindow () {
   	// Create the browser window.
   	mainWindow = new BrowserWindow({width: 800, height: 600})
 
@@ -20,41 +104,56 @@ function createWindow () {
 		pathname: path.join(__dirname, 'index.html'),
 		protocol: 'file:',
 		slashes: true
-	}))
+	}));
+    
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools()
+    
+    // Create application menu.
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 
-	// Emitted when the window is closed.
-	mainWindow.on('closed', function () {
-		// Dereference the window object, usually you would store windows
-		// in an array if your app supports multi windows, this is the time
-		// when you should delete the corresponding element.
-		mainWindow = null
-	})
+	
+    // Add the window to the array and create the other windows later on.
+    windows.push(mainWindow);    
+	mainWindow.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-	// On OS X it is common for applications and their menu bar
-	// to stay active until the user quits explicitly with Cmd + Q
-	if (process.platform !== 'darwin') {
-		app.quit()
-	}
-})
 
-app.on('activate', function () {
-	// On OS X it's common to re-create a window in the app when the
-	// dock icon is clicked and there are no other windows open.
-	if (mainWindow === null) {
-		createWindow()
-	}
-})
+
+app.on('ready', createMainWindow)
+app.on('window-all-closed', function () { if (process.platform !== 'darwin') app.quit() })
+app.on('activate', function () { if (mainWindow === null) createWindow() })
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// These two methods are for switching between pages in the app. Try not to touch these. You really shouldn't
+// have to unless there is a problem when trying to switch to another page.
+const reloadContent_Signature = (page, styles) => {
+    var body = styles + '<div>' + page + '</div>';
+    return body;
+}
+const defineVariables_Signature = (page, completion) => {
+    completion(page);
+}
+
+
+/**
+Handles creating all of the html, css, and javascript code necessary for each page.
+*/
+global.sharedObject = {
+    homePage: '' + homeFile + mpbFile + notebooksliderFile,
+    signupPage: '' + signupFile,
+    MPB: mpbFile,
+    NotebooksSlider: notebooksliderFile,
+        
+    currentPage: '<div></div>',
+    
+    reloadContent: reloadContent_Signature,
+    defineVariables: defineVariables_Signature
+}

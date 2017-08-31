@@ -7,3 +7,7 @@
     background-color: forestgreen;
     -webkit-transition-duration: 0.3s;
 }
+
+ul#sliderList li {
+    display: inline;
+}
