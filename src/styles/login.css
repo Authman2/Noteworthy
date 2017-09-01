@@ -1,4 +1,4 @@
-#signupPage {
+#loginPage {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -8,13 +8,13 @@
     background-color: white;
 }
 
-#signUpHeader {
+#loginHeader {
     font-size: 20;
     font-weight: 200;
     font-family: 'Avenir';
 }
 
-#closeSignupButton {
+#closeLoginButton {
     position: absolute;
     right: 30px;
     top: 15px;
@@ -46,7 +46,7 @@ hr {
     width: 50%;
 }
 
-#createAccountButton {
+#loginButton {
     width: 100px;
     height: 35px;
     border: none;
@@ -60,9 +60,10 @@ hr {
     background-color: lightgreen;
     box-shadow: 2px 2px 2px #888888;
 }
-#createAccountButton:hover {
+
+#loginButton:hover {
     background-color: mediumseagreen;
 }
-#createAccountButton:active {
+#loginButton:active {
     box-shadow: 1px 1px 1px #888888;
 }

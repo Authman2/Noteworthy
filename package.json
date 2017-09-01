@@ -8,10 +8,10 @@
   },
   "repository": "https://github.com/Authman2/Noteworthy",
   "keywords": [
-      "Noteworthy",
-      "Notes",
-      "School",
-      "Classes"
+    "Noteworthy",
+    "Notes",
+    "School",
+    "Classes"
   ],
   "author": "Adeola Uthman",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "electron": "~1.6.2"
   },
   "dependencies": {
+    "firebase": "^4.3.0",
     "jquery": "^3.2.1"
   }
 }

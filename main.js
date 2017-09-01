@@ -15,7 +15,9 @@ var windows = [];
 // The different pages and components in the app.
 const homeFile = fs.readFileSync(__dirname + '/src/pages/home.html', 'utf8');
 const signupFile = fs.readFileSync(__dirname + '/src/pages/signup.html', 'utf8');
-const mpbFile = fs.readFileSync(__dirname + '/src/components/MPB.html', 'utf8');
+const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
+
+const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
 
 
@@ -43,7 +45,9 @@ let template = [{
     submenu: [{
         label: 'Login', 
         click: () => { 
-            // Go to login page.
+            if(eve !== null && eve !== undefined) {
+                eve.sender.send('changeCurrentPage-reply', loginFile, 'login');
+            }
         }
     }, {
         label: 'Sign Up',
@@ -147,13 +151,21 @@ const defineVariables_Signature = (page, completion) => {
 Handles creating all of the html, css, and javascript code necessary for each page.
 */
 global.sharedObject = {
-    homePage: '' + homeFile + mpbFile + notebooksliderFile,
+    homePage: '' + homeFile + notebooksButtonFile + notebooksliderFile,
     signupPage: '' + signupFile,
-    MPB: mpbFile,
+    loginPage: '' + loginFile,
+    notebooksButton: notebooksButtonFile,
     NotebooksSlider: notebooksliderFile,
         
     currentPage: '<div></div>',
     
     reloadContent: reloadContent_Signature,
-    defineVariables: defineVariables_Signature
+    defineVariables: defineVariables_Signature,
+
+    currentUser: {
+        firstName: '',
+        lastName: '',
+        uid: '',
+        notes: []
+    }
 }
