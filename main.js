@@ -1,5 +1,6 @@
 const electron = require('electron')
 const fs = require('fs');
+
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const Menu = electron.Menu
@@ -16,6 +17,7 @@ var windows = [];
 const homeFile = fs.readFileSync(__dirname + '/src/pages/home.html', 'utf8');
 const signupFile = fs.readFileSync(__dirname + '/src/pages/signup.html', 'utf8');
 const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
+const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html', 'utf8');
 
 const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
@@ -90,14 +92,6 @@ let template = [{
         accelerator: 'CmdOrCtrl+T',
         click: () => { mainWindow.webContents.openDevTools(); }
     }]
-},{
-    label: 'Settings',
-    submenu: [{
-        label: 'Color Scheme',
-        click: () => { 
-            // Go to page to change color scheme.
-        }
-    }]
 }];
 
 
@@ -136,6 +130,13 @@ function createMainWindow () {
             submenu: [{
                 label: `About ${name}`,
                 role: 'about'
+            },{
+                label: 'Settings',
+                accelerator: 'CmdOrCtrl+,',
+                click: () => { 
+                    if(eve !== null && eve !== undefined)
+                        eve.sender.send('changeCurrentPage-reply', appSettingsFile, 'appsettings');
+                }
             },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
@@ -183,6 +184,7 @@ global.sharedObject = {
     homePage: '' + homeFile + notebooksButtonFile + notebooksliderFile,
     signupPage: '' + signupFile,
     loginPage: '' + loginFile,
+    appSettingsPage: '' + appSettingsFile,
     notebooksButton: notebooksButtonFile,
     NotebooksSlider: notebooksliderFile,
         

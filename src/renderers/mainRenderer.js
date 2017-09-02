@@ -1,5 +1,6 @@
 const fs = require('fs');
 const alertify = require('alertify.js');
+var jsonUpdater = require('jsonfile-updater');
 const ipc = require('electron').ipcRenderer;
 const global = require('electron').remote.getGlobal('sharedObject');
 
@@ -33,6 +34,21 @@ var notebooks = [{
 // The id of the note that you are currently looking at. If it is a new note, this should be
 // null. Otherwise, it will be a string.
 var currentNoteID = null;
+
+// The settings for the app.
+var appSettings = {};
+const loadSettings = () => {
+    var lineReader = require('readline').createInterface({
+        input: fs.createReadStream(__dirname + '/../../appSettings.txt')
+    });
+    lineReader.on('line', function (line) {
+        const splt = line.split(' : ');
+        const key = splt[0];
+        const val = splt[1];
+        appSettings[key] = val;
+    });
+}
+loadSettings();
 
 
 
@@ -223,7 +239,6 @@ const saveNote = (title, content) => {
     alertify.success('Saved!');
 }
 
-
 /** Checks if the user forgot to save before moving on to something else, like clicking 
 * another note or switching pages.
 */
@@ -286,6 +301,7 @@ const stylesComponent = () => {
     + '<link rel="stylesheet" type="text/css" href="src/styles/home.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/signup.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/appSettings.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/NotebooksSlider.css">';
 }
 
@@ -315,6 +331,21 @@ const defineHomeScript = () => {
     currentNoteID = null;
     global.currentTitle = '';
     global.currentContent = '';
+    
+    // Set the colors based on the app settings
+    if(appSettings.colorScheme === 'forestGreen') {
+        notebooksButton.style.backgroundColor = 'forestgreen';
+        notebookSlider.style.backgroundColor = 'forestgreen';
+    } else if(appSettings.colorScheme === 'lightGreen') {
+        notebooksButton.style.backgroundColor = 'lightgreen';
+        notebookSlider.style.backgroundColor = 'lightgreen';
+    } else if(appSettings.colorScheme === 'seaBlue') {
+        notebooksButton.style.backgroundColor = 'blue';
+        notebookSlider.style.backgroundColor = 'blue';
+    } else if(appSettings.colorScheme === 'skyBlue') {
+        notebooksButton.style.backgroundColor = 'skyblue';
+        notebookSlider.style.backgroundColor = 'skyblue';
+    }
 
     // Update the global variables every time the text changes.
     titleField.onkeyup = () => {
@@ -343,7 +374,6 @@ const defineHomeScript = () => {
     // Load all of the user's notebooks.
     if(global.currentUser !== null)
         loadNotes(global.currentUser.uid);
-
 
 
     // Toggle the notebook slider.
@@ -484,6 +514,56 @@ const defineLoginScript = () => {
     }
 }
 
+/**********************
+*                     *
+*   SETTINGS SCRIPT   *
+*                     *
+***********************/
+
+const defineAppSettingsScript = () => {
+    const closeButton = document.getElementById('closeSettingsButton');
+    const colorSchemeSelector = document.getElementById('changeColorSchemeSelect');
+    const saveButton = document.getElementById('saveSettingsButton');
+
+    
+    // Load the current settings.
+    colorSchemeSelector.value = appSettings.colorScheme;
+    var tempSettings = Object.assign({}, appSettings);
+
+
+
+    closeButton.onclick = () => {
+        for(var i in tempSettings) {
+            if(tempSettings[i] !== appSettings[i]) {
+                showPromptDialog('You haven\'t saved the modified settings. Do you still want to close this page?',
+                'Continue', 'Cancel', () => {
+                    changePage(global.homePage, 'home', () => { defineHomeScript() });
+                });
+                return;
+            }
+        }
+        changePage(global.homePage, 'home', () => { defineHomeScript() });
+    }
+    saveButton.onclick = () => {
+        appSettings = Object.assign({}, tempSettings);
+        
+        // Save the new settings, then reload them again to make sure you have the newest one.
+        var saveString = '';
+        for(var i in appSettings) {
+            saveString += i + ' : ' + appSettings[i] + '\n';
+        }
+        fs.writeFileSync(__dirname + '/../../appSettings.txt', saveString, 'utf8');
+        loadSettings();
+
+        changePage(global.homePage, 'home', () => { defineHomeScript() });
+        alertify.success('Updated settings!');
+    }
+
+    colorSchemeSelector.onchange = () => {
+        tempSettings['colorScheme'] = colorSchemeSelector.value;
+    }
+}
+
 
 
 
@@ -511,5 +591,6 @@ ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
         case 'home': global.defineVariables('home', (page) => { defineHomeScript(); }); break;
         case 'signup': global.defineVariables('signup', (page) => { defineSignupScript(); }); break;
         case 'login': global.defineVariables('login', (page) => { defineLoginScript(); }); break;
+        case 'appsettings': global.defineVariables('appsettings', (page) => { defineAppSettingsScript() }); break;
     }
 });
