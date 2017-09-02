@@ -1,4 +1,5 @@
 const fs = require('fs');
+const alertify = require('alertify.js');
 const ipc = require('electron').ipcRenderer;
 const global = require('electron').remote.getGlobal('sharedObject');
 
@@ -22,10 +23,16 @@ var sliderOpen = false;
 
 // The notebooks (and add notebook button) that are dislayed on the notebook slider.
 var notebooks = [{
-    title: 'New',
     id: '',
-    content: ''
+    title: 'New',
+    content: '',
+    creator: '',
+    timestamp: 0
 }];
+
+// The id of the note that you are currently looking at. If it is a new note, this should be
+// null. Otherwise, it will be a string.
+var currentNoteID = null;
 
 
 
@@ -35,11 +42,26 @@ var notebooks = [{
 *                     *
 ***********************/
 
+/** Loads all of the notes for a given user. Loads them asyncronously. */
+const loadNotes = (uid) => {
+    fireRef.child('notes').orderByChild('creator').equalTo(uid).on('child_added', (snap) => {
+        notebooks.push(snap.val());
+        notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
+
+        configureNotbookSlider(document.getElementById('notebookSlider'),
+                        document.getElementById('titleArea'),
+                        document.getElementById('noteArea'));                  
+    });
+}
+
 /** Sets up the data in the notebook slider. */
 const configureNotbookSlider = (list, titleField, noteField) => {
+    // Clear the list.
+    list.innerHTML = '';
+
     for(var i = 0; i < notebooks.length; i++) {
         const notebook = notebooks[i];
-        
+
         // Create two elements that make up each notebook on the slider.
         const imagePart = document.createElement('div');
         const titlePart = document.createElement('h3');
@@ -52,27 +74,31 @@ const configureNotbookSlider = (list, titleField, noteField) => {
         imagePart.style.cursor = 'pointer';
         imagePart.style.textAlign = 'center';
 
-        // The first one is always the 'add note' button.
-        if(i === 0) {
+        titlePart.style.textAlign = 'center';
+        titlePart.style.fontSize = 20;
+        titlePart.style.fontWeight = 100;
+        titlePart.style.color = 'rgba(0,0,0,0.5)';
+        titlePart.style.cursor = 'pointer';
+        titlePart.style.fontFamily = 'Avenir';
+        titlePart.innerHTML = notebook.title;
+
+        if(notebook.title === 'New') {
             imagePart.innerHTML = '<img src=\'src/res/addNoteButton.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
         } else {
             imagePart.innerHTML = '<img src=\'src/res/notebookPreview.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
         }
 
-        titlePart.style.textAlign = 'center';
-        titlePart.style.fontSize = 20;
-        titlePart.style.fontWeight = 100;
-        titlePart.style.cursor = 'pointer';
-        titlePart.style.fontFamily = 'Avenir';
-        titlePart.innerHTML = notebook.title;
-
         // Create the element that gets added to the list.
-        const entry = document.createElement('li');
+        const entry = document.createElement('div');
+        entry.className = 'notebookEntry';
+        entry.style.display = 'inline-block';
+        entry.style.marginRight = '25px';
+        entry.style.marginLeft = '15px';
+        entry.style.marginTop = '10px';
+
         entry.appendChild(imagePart);
         entry.appendChild(titlePart);
-
         list.appendChild(entry);
-
 
 
         // Define the click behavior for each notebook.
@@ -81,29 +107,77 @@ const configureNotbookSlider = (list, titleField, noteField) => {
             document.getElementById('notebookSlider').style.bottom = '-150px';
             sliderOpen = false;
         }
-        if(i === 0) {
+        if(notebook.title === 'New') {
             imagePart.onclick = () => {
                 titleField.value = '';
                 noteField.value = '';
+                global.currentTitle = '';
+                global.currentContent = '';
+                currentNoteID = null;
                 closeSlider();
             }
             titlePart.onclick = () => {
                 titleField.value = '';
                 noteField.value = '';
+                global.currentTitle = '';
+                global.currentContent = '';
+                currentNoteID = null;
                 closeSlider();
             }
         } else {
             imagePart.onclick = () => {
                 titleField.value = notebook.title;
                 noteField.value = notebook.content;
+                global.currentTitle = notebook.title;
+                global.currentContent = notebook.content;
+                currentNoteID = notebook.id;
             }
             titlePart.onclick = () => {
                 titleField.value = notebook.title;
                 noteField.value = notebook.content;
+                global.currentTitle = notebook.title;
+                global.currentContent = notebook.content;
+                currentNoteID = notebook.id;
             }
         }
     }
+};
+
+/** Handles saving a note to the database under a certain user. */
+const saveNote = (title, content) => {
+    // If null, save a new note. Otherwise, update the old one.
+    if(currentNoteID === null) {
+        const ref = fireRef.child('notes').push();
+        const data = {
+            id: ref.key,
+            title: title,
+            content: content,
+            creator: global.currentUser.uid, // Assumes that a user is already logged in.
+            timestamp: Date.now()
+        }
+        currentNoteID = ref.key;
+        ref.set(data);
+    } else {
+        const data = {
+            id: currentNoteID,
+            title: title,
+            content: content,
+        }
+        fireRef.child('notes').child(currentNoteID).update(data);
+    }
+
+    for(var i = 0; i < notebooks.length; i++) {
+        if(notebooks[i].id === currentNoteID) {
+            notebooks[i].title = title;
+            notebooks[i].content = content;
+            break;
+        }
+    }
+    
+    alertify.success('Saved!');
 }
+
+
 
 
 /** Checks if a value exists for a given element. */
@@ -148,17 +222,54 @@ const defineHomeScript = () => {
 
     const notebooksButton = document.getElementById('mpb');
     const notebookSlider = document.getElementById('notebookSlider');
-    const sliderList = document.getElementById('sliderList');
 
-    // Configure the look of the notebook slider.
-    configureNotbookSlider(sliderList, titleField, noteField);
-    
-    
+    // Reset some variables.
+    notebooks = [{
+        id: '',
+        title: 'New',
+        content: '',
+        creator: '',
+        timestamp: 0
+    }];
+    currentNoteID = null;
+    global.currentTitle = '';
+    global.currentContent = '';
+
+    // Update the global variables every time the text changes.
+    titleField.onkeyup = () => {
+        global.currentTitle = titleField.value;
+    }
+    noteField.onkeyup = () => {
+        global.currentContent = noteField.value;
+    }
+
+
+    // Send a save message initially. This is for saving a note later on.
+    ipc.send('saveNote-send', titleField.value, noteField.value);
+    ipc.on('saveNote-reply', (event, title, content) => {
+        // Save the note.
+        if(title !== '' && content !== '') {
+            if(global.currentUser === null) {
+                alert('You must be logged in to save notes.');
+                return;
+            } else {
+                saveNote(title, content);
+            }
+        } else {}
+    });
+
+
+    // Load all of the user's notebooks.
+    if(global.currentUser !== null)
+        loadNotes(global.currentUser.uid);
+
+
+
     // Toggle the notebook slider.
     notebooksButton.onclick = function() {
         if(sliderOpen) {
             notebooksButton.style.bottom = '30px';
-            notebookSlider.style.bottom = '-150px';
+            notebookSlider.style.bottom = '-160px';
             sliderOpen = false;
         } else {
             notebooksButton.style.bottom = '180px';

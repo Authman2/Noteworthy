@@ -30,6 +30,11 @@ ipc.on('changeCurrentPage-send', (event, args) => {
     eve = event;
     event.sender.send('changeCurrentPage-reply', args, 'home');
 });
+ipc.on('saveNote-send', (event, title, content) => {
+    eve = event;
+    event.sender.send('saveNote-reply', title, content);
+});
+
 
 
 // Create the application menu.
@@ -39,6 +44,16 @@ let template = [{
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
         click: () => { app.quit(); }
+    }]
+},{
+    label: 'File',
+    submenu: [{
+        label: 'Save',
+        accelerator: 'CmdOrCtrl+S',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('saveNote-reply', global.sharedObject.currentTitle, global.sharedObject.currentContent);
+        }
     }]
 },{
     label: 'Account',
@@ -162,10 +177,7 @@ global.sharedObject = {
     reloadContent: reloadContent_Signature,
     defineVariables: defineVariables_Signature,
 
-    currentUser: {
-        firstName: '',
-        lastName: '',
-        uid: '',
-        notes: []
-    }
+    currentUser: null,
+    currentTitle: '',
+    currentContent: ''
 }
