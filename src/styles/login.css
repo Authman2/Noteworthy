@@ -42,7 +42,7 @@
     font-family: 'Avenir';
 }
 
-hr {
+hr.loginSeparator {
     width: 50%;
 }
 

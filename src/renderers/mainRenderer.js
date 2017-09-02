@@ -104,40 +104,86 @@ const configureNotbookSlider = (list, titleField, noteField) => {
         // Define the click behavior for each notebook.
         const closeSlider = () => {
             document.getElementById('mpb').style.bottom = '30px';
-            document.getElementById('notebookSlider').style.bottom = '-150px';
+            document.getElementById('notebookSlider').style.bottom = '-160px';
             sliderOpen = false;
         }
         if(notebook.title === 'New') {
             imagePart.onclick = () => {
-                titleField.value = '';
-                noteField.value = '';
-                global.currentTitle = '';
-                global.currentContent = '';
-                currentNoteID = null;
-                closeSlider();
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = '';
+                        noteField.value = '';
+                        global.currentTitle = '';
+                        global.currentContent = '';
+                        currentNoteID = null;
+                        closeSlider();
+                    });
+                } else {
+                    titleField.value = '';
+                    noteField.value = '';
+                    global.currentTitle = '';
+                    global.currentContent = '';
+                    currentNoteID = null;
+                    closeSlider();
+                }
             }
             titlePart.onclick = () => {
-                titleField.value = '';
-                noteField.value = '';
-                global.currentTitle = '';
-                global.currentContent = '';
-                currentNoteID = null;
-                closeSlider();
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = '';
+                        noteField.value = '';
+                        global.currentTitle = '';
+                        global.currentContent = '';
+                        currentNoteID = null;
+                        closeSlider();
+                    });
+                } else {
+                    titleField.value = '';
+                    noteField.value = '';
+                    global.currentTitle = '';
+                    global.currentContent = '';
+                    currentNoteID = null;
+                    closeSlider();
+                }
             }
         } else {
             imagePart.onclick = () => {
-                titleField.value = notebook.title;
-                noteField.value = notebook.content;
-                global.currentTitle = notebook.title;
-                global.currentContent = notebook.content;
-                currentNoteID = notebook.id;
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = notebook.title;
+                        noteField.value = notebook.content;
+                        global.currentTitle = notebook.title;
+                        global.currentContent = notebook.content;
+                        currentNoteID = notebook.id;
+                    });
+                } else {
+                    titleField.value = notebook.title;
+                    noteField.value = notebook.content;
+                    global.currentTitle = notebook.title;
+                    global.currentContent = notebook.content;
+                    currentNoteID = notebook.id;
+                }
             }
             titlePart.onclick = () => {
-                titleField.value = notebook.title;
-                noteField.value = notebook.content;
-                global.currentTitle = notebook.title;
-                global.currentContent = notebook.content;
-                currentNoteID = notebook.id;
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = notebook.title;
+                        noteField.value = notebook.content;
+                        global.currentTitle = notebook.title;
+                        global.currentContent = notebook.content;
+                        currentNoteID = notebook.id;
+                    });
+                } else {
+                    titleField.value = notebook.title;
+                    noteField.value = notebook.content;
+                    global.currentTitle = notebook.title;
+                    global.currentContent = notebook.content;
+                    currentNoteID = notebook.id;
+                }
             }
         }
     }
@@ -178,7 +224,35 @@ const saveNote = (title, content) => {
 }
 
 
+/** Checks if the user forgot to save before moving on to something else, like clicking 
+* another note or switching pages.
+*/
+const forgotToSave = (titleField, noteField) => {
+    if(currentNoteID !== null) {
+        for(var i = 0; i < notebooks.length; i++) {
+            if(notebooks[i].id === currentNoteID) {
+                if(notebooks[i].title !== titleField.value 
+                    || notebooks[i].content !== noteField.value) {
+                    return true;
+                }
+                break;
+            }
+        }
+    } else {
+        if(titleField.value !== '' || noteField.value !== '') {
+            return true;
+        }
+    }
+    return false;
+}
 
+
+
+/**********************
+*                     *
+*       HELPERS       *
+*                     *
+***********************/
 
 /** Checks if a value exists for a given element. */
 const valueExists = (element) => {
@@ -187,6 +261,16 @@ const valueExists = (element) => {
     return true;
 }
 
+/** Shows the prompt dialog from alertify.js */
+const showPromptDialog = (message, acceptTitle, declineTitle, success) => {
+    alertify.okBtn(acceptTitle).cancelBtn(declineTitle)
+    .confirm(message, function (ev) {
+        ev.preventDefault();
+        success();
+    }, function(ev) {
+        ev.preventDefault();
+    });
+}
 
 
 
@@ -204,9 +288,6 @@ const stylesComponent = () => {
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/NotebooksSlider.css">';
 }
-
-
-
 
 
 
@@ -422,6 +503,7 @@ const changePage = (page, scriptName, scriptComp) => {
 // Set the current page to Home initially, then send a message to the main process to render that page, which
 // should just come right back here in the reply area to setup the data from the global attributes.
 global.currentPage = global.homePage;
+
 ipc.send('changeCurrentPage-send', global.currentPage);
 ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
     body.innerHTML = global.reloadContent(page, stylesComponent());

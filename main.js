@@ -39,13 +39,6 @@ ipc.on('saveNote-send', (event, title, content) => {
 
 // Create the application menu.
 let template = [{
-    label: 'Noteworthy',
-    submenu: [{
-        label: 'Quit',
-        accelerator: 'CmdOrCtrl+Q',
-        click: () => { app.quit(); }
-    }]
-},{
     label: 'File',
     submenu: [{
         label: 'Save',
@@ -116,7 +109,13 @@ let template = [{
 */
 function createMainWindow () {
   	// Create the browser window.
-  	mainWindow = new BrowserWindow({width: 800, height: 600})
+  	mainWindow = new BrowserWindow({
+          width: 800, 
+          height: 600,
+          show: false,
+          title: 'Noteworthy'
+    })
+    mainWindow.setTitle('Noteworthy');
 
 	// and load the index.html of the app.
 	mainWindow.loadURL(url.format({
@@ -130,12 +129,27 @@ function createMainWindow () {
 	// mainWindow.webContents.openDevTools()
     
     // Create application menu.
+    if (process.platform === 'darwin') {
+        const name = electron.app.getName();
+        template.unshift({
+            label: name,
+            submenu: [{
+                label: `About ${name}`,
+                role: 'about'
+            },{
+                label: 'Quit',
+                accelerator: 'CmdOrCtrl+Q',
+                click: () => { app.quit(); }
+            }]
+        });
+    }
     const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    Menu.setApplicationMenu(menu);   
 
 	
     // Add the window to the array and create the other windows later on.
-    windows.push(mainWindow);    
+    windows.push(mainWindow);
+    mainWindow.once('ready-to-show', () => { mainWindow.show(); });
 	mainWindow.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
 }
 
