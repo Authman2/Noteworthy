@@ -10,7 +10,6 @@ const path = require('path')
 const url = require('url')
 
 let mainWindow
-let signUpWindow
 var windows = [];
 
 // The different pages and components in the app.
@@ -39,9 +38,9 @@ ipc.on('saveNote-send', (event, title, content) => {
     eve = event;
     event.sender.send('saveNote-reply', title, content);
 });
-ipc.on('selectedText-send', (event) => {
+ipc.on('cutText-send', (event) => {
     eve = event;
-    event.sender.send('selectedText-reply');
+    event.sender.send('cutText-reply');
 });
 ipc.on('copyText-send', (event) => {
     eve = event;
@@ -50,6 +49,22 @@ ipc.on('copyText-send', (event) => {
 ipc.on('pasteText-send', (event) => {
     eve = event;
     event.sender.send('pasteText-reply');
+});
+ipc.on('selectAllText-send', (event) => {
+    eve = event;
+    event.sender.send('selectAllText-reply');
+});
+ipc.on('handlePrint-send', (event) => {
+    eve = event;
+    event.sender.send('handlePrint-reply');
+});
+ipc.on('undo-send', (event) => {
+    eve = event;
+    event.sender.send('undo-reply');
+});
+ipc.on('redo-send', (event) => {
+    eve = event;
+    event.sender.send('redo-reply');
 });
 
 
@@ -64,17 +79,30 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 eve.sender.send('saveNote-reply', global.sharedObject.currentTitle, global.sharedObject.currentContent);
         }
+    },{
+        label: 'Print',
+        accelerator: 'CmdOrCtrl+P',
+        click: () => { 
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('handlePrint-reply');
+        }
     }]
 },{
     label: 'Edit',
     submenu: [{
         label: 'Undo',
         accelerator: 'CmdOrCtrl+Z',
-        click: () => { console.log('undo') }
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('undo-reply');
+        }
     },{
         label: 'Redo',
         accelerator: 'CmdOrCtrl+Shift+Z',
-        click: () => { console.log('redo') }
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('redo-reply');
+        }
     },{
         type: 'separator'
     },{
@@ -82,7 +110,7 @@ let template = [{
         accelerator: 'CmdOrCtrl+X',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('selectedText-reply');
+                eve.sender.send('cutText-reply');
         }
     },{
         label: 'Copy',
@@ -97,6 +125,13 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('pasteText-reply');
+        }
+    },{
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('selectAllText-reply');
         }
     }]
 },{
@@ -137,9 +172,20 @@ let template = [{
             }
         }
     },{
+        label: 'Minimize',
+        accelerator: 'CmdOrCtrl+M',
+        click: () => { mainWindow.minimize(); }
+    },{
         label: 'Open Developer Tools',
         accelerator: 'CmdOrCtrl+T',
         click: () => { mainWindow.webContents.openDevTools(); }
+    }]
+},{
+    label: 'Help',
+    role: 'help',
+    submenu: [{
+        label: 'Learn More',
+        click: () => { electron.shell.openExternal('http://www.adeolauthman.com') }
     }]
 }];
 

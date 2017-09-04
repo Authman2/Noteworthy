@@ -1,1 +1,2 @@
 colorScheme : purple
+spellCheck : On

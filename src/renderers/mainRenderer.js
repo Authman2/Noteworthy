@@ -55,6 +55,25 @@ loadSettings();
 // The text that is currently copied.
 var copiedText = '';
 
+// The stack of text for undo and redo.
+var undoStack = [];
+var redoStack = [];
+
+// The current writing settings. These don't change that much necessarily.
+var writingSettings = {
+    fontSize: '16px',
+    fontWeight: 200,
+    fontFamily: 'Avenir',
+    highlighterOn: false,
+    alignment: 'left',
+    bold: false,
+    underline: false,
+    italic: false,
+    bulletedList: false,
+    numberedList: false
+}
+
+
 
 
 
@@ -364,12 +383,19 @@ const defineHomeScript = () => {
         sidebar.style.backgroundColor = 'rgb(144, 94, 201)';
     }
 
+    // Define spell check attribute based on app settings.
+    if(appSettings.spellCheck === 'Off') {
+        noteField.setAttribute('spellcheck', 'false');
+    }
+
+
     // Update the global variables every time the text changes.
     titleField.onkeyup = () => {
         global.currentTitle = titleField.value;
     }
-    noteField.onkeyup = () => {
+    noteField.onkeyup = (e) => {
         global.currentContent = noteField.value;
+        redoStack.push(e.key);
     }
 
     manageEditListeners(titleField, noteField);
@@ -557,11 +583,13 @@ const defineLoginScript = () => {
 const defineAppSettingsScript = () => {
     const closeButton = document.getElementById('closeSettingsButton');
     const colorSchemeSelector = document.getElementById('changeColorSchemeSelect');
+    const spellCheckSelector = document.getElementById('spellCheckSelect');
     const saveButton = document.getElementById('saveSettingsButton');
 
     
     // Load the current settings.
     colorSchemeSelector.value = appSettings.colorScheme;
+    spellCheckSelector.value = appSettings.spellCheck;
     var tempSettings = Object.assign({}, appSettings);
 
 
@@ -595,6 +623,9 @@ const defineAppSettingsScript = () => {
 
     colorSchemeSelector.onchange = () => {
         tempSettings['colorScheme'] = colorSchemeSelector.value;
+    }
+    spellCheckSelector.onchange = () => {
+        tempSettings['spellCheck'] = spellCheckSelector.value;
     }
 }
 
@@ -634,7 +665,7 @@ ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
 // A bunch of code for managing certain listeners
 const manageEditListeners = (titleField, noteField) => {
     // Send a save message initially. This is for saving a note later on.
-    ipc.send('saveNote-send', titleField.value, noteField.value);
+    //ipc.send('saveNote-send', titleField.value, noteField.value);
     ipc.on('saveNote-reply', (event, title, content) => {
         // Save the note.
         if(title !== '' && content !== '') {
@@ -648,25 +679,48 @@ const manageEditListeners = (titleField, noteField) => {
     });
 
     // Gets the currently selected text from the note area.
-    ipc.send('selectedText-send', noteField.value);
-    ipc.on('selectedText-reply', (event) => {
-        const sel = window.getSelection().toString();
-        if(sel.length > 0) {
-            const startIndex = noteField.value.indexOf(sel);
-            noteField.value = noteField.value.substring(0, startIndex) + noteField.value.substring(sel.length + 1);
-        }
+    //ipc.send('cutText-send', noteField.value);
+    ipc.on('cutText-reply', (event) => {
+        const sel = window.getSelection();
+        if(document.activeElement === titleField || document.activeElement === noteField)
+            document.activeElement.value = document.activeElement.value.replace(sel.toString(), "");
     });
 
     // Gets the currently selected text from the note area.
-    ipc.send('copyText-send', window.getSelection().toString());
+    //ipc.send('copyText-send', window.getSelection().toString());
     ipc.on('copyText-reply', (event) => {
         const copied = window.getSelection().toString();
         copiedText = copied;
     });
 
     // Handles pasting the copied text into the text area.
-    ipc.send('pasteText-send', window.getSelection().toString());
+    //ipc.send('pasteText-send', window.getSelection().toString());
     ipc.on('pasteText-reply', (event) => {
         noteField.value = noteField.value.substring(0, noteField.selectionEnd) + copiedText + noteField.value.substring(noteField.selectionEnd, noteField.value.length);
+    });
+    
+    // Handles selecting all the text.
+    //ipc.send('selectAllText-send', window.getSelection().toString());
+    ipc.on('selectAllText-reply', (event) => {
+        if(document.activeElement === titleField || document.activeElement === noteField) {
+            document.activeElement.select();
+        }
+    });
+
+    // Handles printing out the document.
+    //ipc.send('handlePrint-send', window.getSelection().toString());
+    ipc.on('handlePrint-reply', (event) => {
+        window.print();
+    });
+
+    // Handles undo and redo.
+    /** FIX THIS IT DOES NOT CURRENTLY WORK */
+    ipc.on('undo-reply', (event) => {
+        undoStack.push(redoStack.pop());
+        noteField.value = redoStack.join('');
+    });
+    ipc.on('redo-reply', (event) => {
+        redoStack.push(undoStack.pop());
+        noteField.value = redoStack.join('');
     });
 }
