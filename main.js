@@ -14,6 +14,8 @@ let signUpWindow
 var windows = [];
 
 // The different pages and components in the app.
+const titleBarFile = fs.readFileSync(__dirname + '/src/components/titleBar.html', 'utf8');
+
 const homeFile = fs.readFileSync(__dirname + '/src/pages/home.html', 'utf8');
 const signupFile = fs.readFileSync(__dirname + '/src/pages/signup.html', 'utf8');
 const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
@@ -21,7 +23,8 @@ const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html
 
 const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
-
+const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
+const sidebarFile = fs.readFileSync(__dirname + '/src/components/sidebar.html', 'utf8');
 
 
 
@@ -36,6 +39,18 @@ ipc.on('saveNote-send', (event, title, content) => {
     eve = event;
     event.sender.send('saveNote-reply', title, content);
 });
+ipc.on('selectedText-send', (event) => {
+    eve = event;
+    event.sender.send('selectedText-reply');
+});
+ipc.on('copyText-send', (event) => {
+    eve = event;
+    event.sender.send('copyText-reply');
+});
+ipc.on('pasteText-send', (event) => {
+    eve = event;
+    event.sender.send('pasteText-reply');
+});
 
 
 
@@ -48,6 +63,40 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('saveNote-reply', global.sharedObject.currentTitle, global.sharedObject.currentContent);
+        }
+    }]
+},{
+    label: 'Edit',
+    submenu: [{
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        click: () => { console.log('undo') }
+    },{
+        label: 'Redo',
+        accelerator: 'CmdOrCtrl+Shift+Z',
+        click: () => { console.log('redo') }
+    },{
+        type: 'separator'
+    },{
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('selectedText-reply');
+        }
+    },{
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('copyText-reply');
+        }
+    },{
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('pasteText-reply');
         }
     }]
 },{
@@ -107,7 +156,8 @@ function createMainWindow () {
           width: 800, 
           height: 600,
           show: false,
-          title: 'Noteworthy'
+          title: 'Noteworthy',
+          titleBarStyle: 'hiddenInset'
     })
     mainWindow.setTitle('Noteworthy');
 
@@ -181,12 +231,15 @@ const defineVariables_Signature = (page, completion) => {
 Handles creating all of the html, css, and javascript code necessary for each page.
 */
 global.sharedObject = {
-    homePage: '' + homeFile + notebooksButtonFile + notebooksliderFile,
-    signupPage: '' + signupFile,
-    loginPage: '' + loginFile,
-    appSettingsPage: '' + appSettingsFile,
+    homePage: '' + titleBarFile + homeFile + notebooksButtonFile + notebooksliderFile + sidebarButtonFile + sidebarFile,
+    signupPage: '' + titleBarFile  + signupFile,
+    loginPage: '' + titleBarFile  + loginFile,
+    appSettingsPage: '' + titleBarFile  + appSettingsFile,
     notebooksButton: notebooksButtonFile,
     NotebooksSlider: notebooksliderFile,
+    sidebarButton: sidebarButtonFile,
+    Sidebar: sidebarFile,
+    titleBar: titleBarFile,
         
     currentPage: '<div></div>',
     

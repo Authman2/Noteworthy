@@ -15,12 +15,14 @@ firebase.initializeApp(config);
 *                     *
 ***********************/
 
+// Important constants.
 const body = document.getElementById('root');
 const fireRef = firebase.database().ref();
 const fireAuth = firebase.auth();
 
-// Whether or not the notebook slider is open.
+// Whether or not the notebook slider is open. Whether the sidebar is open.
 var sliderOpen = false;
+var sidebarOpen = false;
 
 // The notebooks (and add notebook button) that are dislayed on the notebook slider.
 var notebooks = [{
@@ -49,6 +51,10 @@ const loadSettings = () => {
     });
 }
 loadSettings();
+
+// The text that is currently copied.
+var copiedText = '';
+
 
 
 
@@ -88,21 +94,18 @@ const configureNotbookSlider = (list, titleField, noteField) => {
         imagePart.style.height = '90%';
         imagePart.style.margin = 'auto';
         imagePart.style.cursor = 'pointer';
+        imagePart.style.userSelect = 'none';
         imagePart.style.textAlign = 'center';
+        imagePart.innerHTML = '<img src=\'src/res/notebookPreview.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
 
         titlePart.style.textAlign = 'center';
         titlePart.style.fontSize = 20;
-        titlePart.style.fontWeight = 100;
+        titlePart.style.fontWeight = 300;
         titlePart.style.color = 'rgba(0,0,0,0.5)';
         titlePart.style.cursor = 'pointer';
+        titlePart.style.userSelect = 'none';
         titlePart.style.fontFamily = 'Avenir';
         titlePart.innerHTML = notebook.title;
-
-        if(notebook.title === 'New') {
-            imagePart.innerHTML = '<img src=\'src/res/addNoteButton.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
-        } else {
-            imagePart.innerHTML = '<img src=\'src/res/notebookPreview.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
-        }
 
         // Create the element that gets added to the list.
         const entry = document.createElement('div');
@@ -302,6 +305,9 @@ const stylesComponent = () => {
     + '<link rel="stylesheet" type="text/css" href="src/styles/signup.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/appSettings.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/sidebar.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/sidebarButton.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/NotebooksSlider.css">';
 }
 
@@ -320,6 +326,10 @@ const defineHomeScript = () => {
     const notebooksButton = document.getElementById('mpb');
     const notebookSlider = document.getElementById('notebookSlider');
 
+    const sidebarButton = document.getElementById('sidebarButton');
+    const sidebar = document.getElementById('sidebar');
+
+
     // Reset some variables.
     notebooks = [{
         id: '',
@@ -332,19 +342,26 @@ const defineHomeScript = () => {
     global.currentTitle = '';
     global.currentContent = '';
     
+    // Auto login.
+    if(global.currentUser === null) autoLogin();
+    
     // Set the colors based on the app settings
     if(appSettings.colorScheme === 'forestGreen') {
-        notebooksButton.style.backgroundColor = 'forestgreen';
+        notebooksButton.style.backgroundColor = 'rgb(36, 137, 24)';
         notebookSlider.style.backgroundColor = 'forestgreen';
+        sidebar.style.backgroundColor = 'forestgreen';
     } else if(appSettings.colorScheme === 'lightGreen') {
         notebooksButton.style.backgroundColor = 'lightgreen';
         notebookSlider.style.backgroundColor = 'lightgreen';
-    } else if(appSettings.colorScheme === 'seaBlue') {
-        notebooksButton.style.backgroundColor = 'blue';
-        notebookSlider.style.backgroundColor = 'blue';
+        sidebar.style.backgroundColor = 'lightgreen';
     } else if(appSettings.colorScheme === 'skyBlue') {
         notebooksButton.style.backgroundColor = 'skyblue';
         notebookSlider.style.backgroundColor = 'skyblue';
+        sidebar.style.backgroundColor = 'skyblue';
+    } else if(appSettings.colorScheme === 'purple') {
+        notebooksButton.style.backgroundColor = 'rgb(144, 94, 201)';
+        notebookSlider.style.backgroundColor = 'rgb(144, 94, 201)';
+        sidebar.style.backgroundColor = 'rgb(144, 94, 201)';
     }
 
     // Update the global variables every time the text changes.
@@ -355,21 +372,7 @@ const defineHomeScript = () => {
         global.currentContent = noteField.value;
     }
 
-
-    // Send a save message initially. This is for saving a note later on.
-    ipc.send('saveNote-send', titleField.value, noteField.value);
-    ipc.on('saveNote-reply', (event, title, content) => {
-        // Save the note.
-        if(title !== '' && content !== '') {
-            if(global.currentUser === null) {
-                alert('You must be logged in to save notes.');
-                return;
-            } else {
-                saveNote(title, content);
-            }
-        } else {}
-    });
-
+    manageEditListeners(titleField, noteField);
 
     // Load all of the user's notebooks.
     if(global.currentUser !== null)
@@ -388,7 +391,38 @@ const defineHomeScript = () => {
             sliderOpen = true;
         }
     }
+
+    // Toggle the sidebar.
+    sidebarButton.onclick = function() {
+        if(sidebarOpen) {
+            sidebarButton.style.right = '15px';
+            sidebar.style.right = '-200px';
+            sidebarOpen = false;
+        } else {
+            sidebarButton.style.right = '215px';
+            sidebar.style.right = '0px';
+            sidebarOpen = true;
+        }
+    }
 }
+
+const autoLogin = () => {
+    fireAuth.onAuthStateChanged((user) => {
+        if (user) {
+            fireRef.child('users').child(user.uid).once('value', (snap) => {
+                const a = {
+                    firstName: snap.val().firstName,
+                    lastName: snap.val().lastName,
+                    uid: snap.val().uid,
+                    notes: snap.val().notes ? snap.val().notes : []
+                }
+                global.currentUser = a;
+                loadNotes(global.currentUser.uid);
+            })
+        } else { return; }
+    });
+}
+
 
 /**********************
 *                     *
@@ -586,7 +620,7 @@ global.currentPage = global.homePage;
 
 ipc.send('changeCurrentPage-send', global.currentPage);
 ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
-    body.innerHTML = global.reloadContent(page, stylesComponent());
+    body.innerHTML = global.reloadContent(global.titleBar + page, stylesComponent());
     switch(scriptType) {
         case 'home': global.defineVariables('home', (page) => { defineHomeScript(); }); break;
         case 'signup': global.defineVariables('signup', (page) => { defineSignupScript(); }); break;
@@ -594,3 +628,45 @@ ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
         case 'appsettings': global.defineVariables('appsettings', (page) => { defineAppSettingsScript() }); break;
     }
 });
+
+
+
+// A bunch of code for managing certain listeners
+const manageEditListeners = (titleField, noteField) => {
+    // Send a save message initially. This is for saving a note later on.
+    ipc.send('saveNote-send', titleField.value, noteField.value);
+    ipc.on('saveNote-reply', (event, title, content) => {
+        // Save the note.
+        if(title !== '' && content !== '') {
+            if(global.currentUser === null) {
+                alert('You must be logged in to save notes.');
+                return;
+            } else {
+                saveNote(title, content);
+            }
+        } else {}
+    });
+
+    // Gets the currently selected text from the note area.
+    ipc.send('selectedText-send', noteField.value);
+    ipc.on('selectedText-reply', (event) => {
+        const sel = window.getSelection().toString();
+        if(sel.length > 0) {
+            const startIndex = noteField.value.indexOf(sel);
+            noteField.value = noteField.value.substring(0, startIndex) + noteField.value.substring(sel.length + 1);
+        }
+    });
+
+    // Gets the currently selected text from the note area.
+    ipc.send('copyText-send', window.getSelection().toString());
+    ipc.on('copyText-reply', (event) => {
+        const copied = window.getSelection().toString();
+        copiedText = copied;
+    });
+
+    // Handles pasting the copied text into the text area.
+    ipc.send('pasteText-send', window.getSelection().toString());
+    ipc.on('pasteText-reply', (event) => {
+        noteField.value = noteField.value.substring(0, noteField.selectionEnd) + copiedText + noteField.value.substring(noteField.selectionEnd, noteField.value.length);
+    });
+}
