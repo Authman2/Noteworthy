@@ -45,3 +45,12 @@
     cursor: pointer;
     color: rgba(0, 0, 0, 0.6);
 }
+
+#textColorPicker {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 200px;
+    height: 100px;
+    visibility: hidden;
+}

@@ -1,2 +1,2 @@
-colorScheme : purple
+colorScheme : rgb(47, 178, 26)
 spellCheck : On

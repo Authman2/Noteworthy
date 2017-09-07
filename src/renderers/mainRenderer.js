@@ -1,6 +1,8 @@
 const fs = require('fs');
 const alertify = require('alertify.js');
-var jsonUpdater = require('jsonfile-updater');
+const $ = require('jquery');
+//var jsonUpdater = require('jsonfile-updater');
+const spectrum = require('spectrum-colorpicker');
 const ipc = require('electron').ipcRenderer;
 const global = require('electron').remote.getGlobal('sharedObject');
 
@@ -30,7 +32,8 @@ var notebooks = [{
     title: 'New',
     content: '',
     creator: '',
-    timestamp: 0
+    timestamp: 0,
+    execCommands: []
 }];
 
 // The id of the note that you are currently looking at. If it is a new note, this should be
@@ -52,20 +55,13 @@ const loadSettings = () => {
 }
 loadSettings();
 
-// The text that is currently copied.
-var copiedText = '';
-
-// The stack of text for undo and redo.
-var undoStack = [];
-var redoStack = [];
-
 // The current writing settings. These don't change that much necessarily.
 var writingSettings = {
+    color: 'black',
     fontSize: '16px',
-    fontWeight: 200,
     fontFamily: 'Avenir',
     highlighterOn: false,
-    alignment: 'left',
+    alignment: 'justfiyLeft',
     bold: false,
     underline: false,
     italic: false,
@@ -86,7 +82,9 @@ var writingSettings = {
 /** Loads all of the notes for a given user. Loads them asyncronously. */
 const loadNotes = (uid) => {
     fireRef.child('notes').orderByChild('creator').equalTo(uid).on('child_added', (snap) => {
-        notebooks.push(snap.val());
+        var a = snap.val();
+        if(!snap.val().execCommands) a['execCommands'] = [];
+        notebooks.push(a);
         notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
 
         configureNotbookSlider(document.getElementById('notebookSlider'),
@@ -145,6 +143,21 @@ const configureNotbookSlider = (list, titleField, noteField) => {
             document.getElementById('notebookSlider').style.bottom = '-160px';
             sliderOpen = false;
         }
+        // Displays the loaded text for each note.
+        const displayText = () => {
+            noteField.focus();
+            noteField.innerHTML = '';
+            document.execCommand('insertText', false, notebook.content);
+
+            // After inserting the text, run all of the exec commands that were used.
+            for(var i in notebook.execCommands) {
+                const vals = notebook.execCommands[i].split('-');
+                if(vals[2])
+                    document.execCommand(vals[0], false, vals[2]);
+                else
+                    document.execCommand(vals[0], false);
+            }
+        }
         if(notebook.title === 'New') {
             imagePart.onclick = () => {
                 if(forgotToSave(titleField, noteField)) {
@@ -196,6 +209,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                         global.currentTitle = notebook.title;
                         global.currentContent = notebook.content;
                         currentNoteID = notebook.id;
+                        displayText();
                     });
                 } else {
                     titleField.value = notebook.title;
@@ -203,6 +217,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = notebook.title;
                     global.currentContent = notebook.content;
                     currentNoteID = notebook.id;
+                    displayText();
                 }
             }
             titlePart.onclick = () => {
@@ -214,6 +229,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                         global.currentTitle = notebook.title;
                         global.currentContent = notebook.content;
                         currentNoteID = notebook.id;
+                        displayText();
                     });
                 } else {
                     titleField.value = notebook.title;
@@ -221,6 +237,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = notebook.title;
                     global.currentContent = notebook.content;
                     currentNoteID = notebook.id;
+                    displayText();
                 }
             }
         }
@@ -229,34 +246,35 @@ const configureNotbookSlider = (list, titleField, noteField) => {
 
 /** Handles saving a note to the database under a certain user. */
 const saveNote = (title, content) => {
+    // FIX THIS
     // If null, save a new note. Otherwise, update the old one.
-    if(currentNoteID === null) {
-        const ref = fireRef.child('notes').push();
-        const data = {
-            id: ref.key,
-            title: title,
-            content: content,
-            creator: global.currentUser.uid, // Assumes that a user is already logged in.
-            timestamp: Date.now()
-        }
-        currentNoteID = ref.key;
-        ref.set(data);
-    } else {
-        const data = {
-            id: currentNoteID,
-            title: title,
-            content: content,
-        }
-        fireRef.child('notes').child(currentNoteID).update(data);
-    }
+    // if(currentNoteID === null) {
+    //     const ref = fireRef.child('notes').push();
+    //     const data = {
+    //         id: ref.key,
+    //         title: title,
+    //         content: content,
+    //         creator: global.currentUser.uid, // Assumes that a user is already logged in.
+    //         timestamp: Date.now()
+    //     }
+    //     currentNoteID = ref.key;
+    //     ref.set(data);
+    // } else {
+    //     const data = {
+    //         id: currentNoteID,
+    //         title: title,
+    //         content: content,
+    //     }
+    //     fireRef.child('notes').child(currentNoteID).update(data);
+    // }
 
-    for(var i = 0; i < notebooks.length; i++) {
-        if(notebooks[i].id === currentNoteID) {
-            notebooks[i].title = title;
-            notebooks[i].content = content;
-            break;
-        }
-    }
+    // for(var i = 0; i < notebooks.length; i++) {
+    //     if(notebooks[i].id === currentNoteID) {
+    //         notebooks[i].title = title;
+    //         notebooks[i].content = content;
+    //         break;
+    //     }
+    // }
     
     alertify.success('Saved!');
 }
@@ -265,21 +283,25 @@ const saveNote = (title, content) => {
 * another note or switching pages.
 */
 const forgotToSave = (titleField, noteField) => {
-    if(currentNoteID !== null) {
-        for(var i = 0; i < notebooks.length; i++) {
-            if(notebooks[i].id === currentNoteID) {
-                if(notebooks[i].title !== titleField.value 
-                    || notebooks[i].content !== noteField.value) {
-                    return true;
-                }
-                break;
-            }
-        }
-    } else {
-        if(titleField.value !== '' || noteField.value !== '') {
-            return true;
-        }
-    }
+    // FIX THIS
+    // const title = titleField.value;
+    // const content = noteField.innerHTML || noteField.innerText;
+
+    // if(currentNoteID !== null) {
+    //     for(var i = 0; i < notebooks.length; i++) {
+    //         if(notebooks[i].id === currentNoteID) {
+    //             if(notebooks[i].title !== title || notebooks[i].content !== content) {
+    //                 return true;
+    //             }
+    //             break;
+    //         }
+    //     }
+    // } else {
+    //     if(title !== '' || content !== '') {
+    //         return true;
+    //     }
+    //     return false;
+    // }
     return false;
 }
 
@@ -309,6 +331,14 @@ const showPromptDialog = (message, acceptTitle, declineTitle, success) => {
     });
 }
 
+/** Checks if the key pressed is not a special key */
+const isSpecialKey = (element) => {
+    if(element === 'ShiftLeft' || element === 'MetaLeft' || element === 'Space' || element === 'Backspace'
+    || element === 'ShiftRight' || element === 'MetaRight') {
+        return true;
+    }
+    return false;
+}
 
 
 
@@ -339,6 +369,7 @@ const stylesComponent = () => {
 ***********************/
 
 const defineHomeScript = () => {
+    // Variables.
     const titleField = document.getElementById('titleArea');
     const noteField = document.getElementById('noteArea');
 
@@ -348,6 +379,17 @@ const defineHomeScript = () => {
     const sidebarButton = document.getElementById('sidebarButton');
     const sidebar = document.getElementById('sidebar');
 
+
+    // Start input event listener.
+    titleField.onkeyup = () => { global.currentTitle = titleField.value; }
+    noteField.onkeypress = (e) => { writeToNoteArea(e.key, noteField); }
+    noteField.onkeydown = (e) => {
+        if(e.key === 'Tab') {
+            document.execCommand('insertText', false, '        ');
+        }
+    }
+
+    handleSidebarButtons();
 
     // Reset some variables.
     notebooks = [{
@@ -365,45 +407,21 @@ const defineHomeScript = () => {
     if(global.currentUser === null) autoLogin();
     
     // Set the colors based on the app settings
-    if(appSettings.colorScheme === 'forestGreen') {
-        notebooksButton.style.backgroundColor = 'rgb(36, 137, 24)';
-        notebookSlider.style.backgroundColor = 'forestgreen';
-        sidebar.style.backgroundColor = 'forestgreen';
-    } else if(appSettings.colorScheme === 'lightGreen') {
-        notebooksButton.style.backgroundColor = 'lightgreen';
-        notebookSlider.style.backgroundColor = 'lightgreen';
-        sidebar.style.backgroundColor = 'lightgreen';
-    } else if(appSettings.colorScheme === 'skyBlue') {
-        notebooksButton.style.backgroundColor = 'skyblue';
-        notebookSlider.style.backgroundColor = 'skyblue';
-        sidebar.style.backgroundColor = 'skyblue';
-    } else if(appSettings.colorScheme === 'purple') {
-        notebooksButton.style.backgroundColor = 'rgb(144, 94, 201)';
-        notebookSlider.style.backgroundColor = 'rgb(144, 94, 201)';
-        sidebar.style.backgroundColor = 'rgb(144, 94, 201)';
-    }
+    notebooksButton.style.backgroundColor = appSettings.colorScheme;
+    notebookSlider.style.backgroundColor = appSettings.colorScheme;
+    sidebar.style.backgroundColor = appSettings.colorScheme;
 
     // Define spell check attribute based on app settings.
-    if(appSettings.spellCheck === 'Off') {
-        noteField.setAttribute('spellcheck', 'false');
-    }
+    // if(appSettings.spellCheck === 'Off') {
+    //     noteField.setAttribute('spellcheck', 'false');
+    // }
 
-
-    // Update the global variables every time the text changes.
-    titleField.onkeyup = () => {
-        global.currentTitle = titleField.value;
-    }
-    noteField.onkeyup = (e) => {
-        global.currentContent = noteField.value;
-        redoStack.push(e.key);
-    }
-
+    // Manages all the listeners like saving, copying, etc.
     manageEditListeners(titleField, noteField);
 
     // Load all of the user's notebooks.
     if(global.currentUser !== null)
         loadNotes(global.currentUser.uid);
-
 
     // Toggle the notebook slider.
     notebooksButton.onclick = function() {
@@ -448,6 +466,114 @@ const autoLogin = () => {
         } else { return; }
     });
 }
+
+// The note area is really just an editable div, and this method lets you type into it.
+// This method is deprecated now, but keep it here for a while anyway.
+const writeToNoteArea = (key, noteField) => {
+
+    // // Now, after making sure it is not a special key, create the span for that key alone.
+    // if(!isSpecialKey(key)) {
+    //     var span = document.createElement('span');
+    //     var spanText = key;
+        
+    //     // Set the inner text to span text.
+    //     span.innerHTML = spanText;
+        
+    //     // Use the current writing styles.
+    //     span.style.color = writingSettings.color;
+    //     if(writingSettings.bold) span.style.fontWeight = 'bold';
+    //     if(writingSettings.underline) span.style.textDecoration = 'underline';
+    //     if(writingSettings.italic) span.style.fontStyle = 'italic';
+    //     if(writingSettings.highlighterOn) span.style.backgroundColor = '#FFFF00';
+
+    //     noteField.appendChild(span);
+    // }
+
+    // placeCaretAtEnd(noteArea);
+};
+
+// Always makes sure the caret is at the end of the text input.
+const placeCaretAtEnd = (el) => {
+    el.focus();
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(false);
+        textRange.select();
+    }
+}
+
+// Handles button presses in the sidebar.
+const handleSidebarButtons = () => {
+    // Color
+    $('#sidebar_Color').spectrum({
+        color: writingSettings.color,
+        showInput: true,
+        change: function(color) {
+            writingSettings.color = color.toRgbString();
+            document.execCommand('foreColor', false, writingSettings.color);
+        }
+    });
+    
+    $('#sidebar_Font').click(() => {
+        
+    });
+
+    // Alignment
+    $('#sidebar_Alignment').click( () => {
+        if(writingSettings.alignment === 'justifyLeft') {
+            writingSettings.alignment = 'justifyCenter';
+        } else if(writingSettings.alignment === 'justifyCenter') {
+            writingSettings.alignment = 'justifyRight';
+        } else {
+            writingSettings.alignment = 'justifyLeft';
+        }
+        document.execCommand(writingSettings.alignment, false);
+    });
+
+    // Bold
+    $('#sidebar_Bold').click( () => {
+        writingSettings.bold = !writingSettings.bold;
+        document.execCommand('bold', false, writingSettings.bold);
+    });
+
+    // Underline
+    $('#sidebar_Underline').click( () => {
+        writingSettings.underline = !writingSettings.underline;
+        document.execCommand('underline', false, writingSettings.underline);
+    });
+
+    // Italic
+    $('#sidebar_Italic').click( () => {
+        writingSettings.italic = !writingSettings.italic;
+        document.execCommand('italic', false, writingSettings.italic);
+    });
+
+    // Highlighter
+    $('#sidebar_Highlighter').click( () => {
+        writingSettings.highlighterOn = !writingSettings.highlighterOn;
+        document.execCommand('backColor', false, '#FFE000');
+    });
+
+    // Lists
+    $('#sidebar_BulletedList').click( () => {
+        writingSettings.bulletedList = !writingSettings.bulletedList;
+        writingSettings.numberedList = false;
+    });
+    $('#sidebar_NumberedList').click( () => {
+        writingSettings.numberedList = !writingSettings.numberedList;
+        writingSettings.bulletedList = false;
+    });
+}
+
+
 
 
 /**********************
@@ -582,13 +708,11 @@ const defineLoginScript = () => {
 
 const defineAppSettingsScript = () => {
     const closeButton = document.getElementById('closeSettingsButton');
-    const colorSchemeSelector = document.getElementById('changeColorSchemeSelect');
     const spellCheckSelector = document.getElementById('spellCheckSelect');
     const saveButton = document.getElementById('saveSettingsButton');
 
     
     // Load the current settings.
-    colorSchemeSelector.value = appSettings.colorScheme;
     spellCheckSelector.value = appSettings.spellCheck;
     var tempSettings = Object.assign({}, appSettings);
 
@@ -621,9 +745,13 @@ const defineAppSettingsScript = () => {
         alertify.success('Updated settings!');
     }
 
-    colorSchemeSelector.onchange = () => {
-        tempSettings['colorScheme'] = colorSchemeSelector.value;
-    }
+    $('#chooseColorSchemeButton').spectrum({
+        color: appSettings.colorScheme,
+        showInput: true,
+        change: function(color) {
+            tempSettings['colorScheme'] = color.toRgbString();
+        }
+    });
     spellCheckSelector.onchange = () => {
         tempSettings['spellCheck'] = spellCheckSelector.value;
     }
@@ -667,44 +795,31 @@ const manageEditListeners = (titleField, noteField) => {
     // Send a save message initially. This is for saving a note later on.
     //ipc.send('saveNote-send', titleField.value, noteField.value);
     ipc.on('saveNote-reply', (event, title, content) => {
-        // Save the note.
-        if(title !== '' && content !== '') {
-            if(global.currentUser === null) {
-                alert('You must be logged in to save notes.');
-                return;
-            } else {
-                saveNote(title, content);
-            }
-        } else {}
+        // FIX THIS
     });
 
     // Gets the currently selected text from the note area.
     //ipc.send('cutText-send', noteField.value);
     ipc.on('cutText-reply', (event) => {
-        const sel = window.getSelection();
-        if(document.activeElement === titleField || document.activeElement === noteField)
-            document.activeElement.value = document.activeElement.value.replace(sel.toString(), "");
+        document.execCommand('cut', false);
     });
 
     // Gets the currently selected text from the note area.
     //ipc.send('copyText-send', window.getSelection().toString());
     ipc.on('copyText-reply', (event) => {
-        const copied = window.getSelection().toString();
-        copiedText = copied;
+        document.execCommand('copy', false);
     });
 
     // Handles pasting the copied text into the text area.
     //ipc.send('pasteText-send', window.getSelection().toString());
     ipc.on('pasteText-reply', (event) => {
-        noteField.value = noteField.value.substring(0, noteField.selectionEnd) + copiedText + noteField.value.substring(noteField.selectionEnd, noteField.value.length);
+        document.execCommand('paste', false);
     });
     
     // Handles selecting all the text.
     //ipc.send('selectAllText-send', window.getSelection().toString());
     ipc.on('selectAllText-reply', (event) => {
-        if(document.activeElement === titleField || document.activeElement === noteField) {
-            document.activeElement.select();
-        }
+        document.execCommand('selectAll', false);
     });
 
     // Handles printing out the document.
@@ -716,11 +831,9 @@ const manageEditListeners = (titleField, noteField) => {
     // Handles undo and redo.
     /** FIX THIS IT DOES NOT CURRENTLY WORK */
     ipc.on('undo-reply', (event) => {
-        undoStack.push(redoStack.pop());
-        noteField.value = redoStack.join('');
+        document.execCommand('undo', false);
     });
     ipc.on('redo-reply', (event) => {
-        redoStack.push(undoStack.pop());
-        noteField.value = redoStack.join('');
+        document.execCommand('redo', false);
     });
 }
