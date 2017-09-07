@@ -32,8 +32,7 @@ var notebooks = [{
     title: 'New',
     content: '',
     creator: '',
-    timestamp: 0,
-    execCommands: []
+    timestamp: 0
 }];
 
 // The id of the note that you are currently looking at. If it is a new note, this should be
@@ -83,7 +82,6 @@ var writingSettings = {
 const loadNotes = (uid) => {
     fireRef.child('notes').orderByChild('creator').equalTo(uid).on('child_added', (snap) => {
         var a = snap.val();
-        if(!snap.val().execCommands) a['execCommands'] = [];
         notebooks.push(a);
         notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
 
@@ -146,17 +144,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
         // Displays the loaded text for each note.
         const displayText = () => {
             noteField.focus();
-            noteField.innerHTML = '';
-            document.execCommand('insertText', false, notebook.content);
-
-            // After inserting the text, run all of the exec commands that were used.
-            for(var i in notebook.execCommands) {
-                const vals = notebook.execCommands[i].split('-');
-                if(vals[2])
-                    document.execCommand(vals[0], false, vals[2]);
-                else
-                    document.execCommand(vals[0], false);
-            }
+            noteField.innerHTML = notebook.content;
         }
         if(notebook.title === 'New') {
             imagePart.onclick = () => {
@@ -164,7 +152,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
                         titleField.value = '';
-                        noteField.value = '';
+                        noteField.innerHTML = '';
                         global.currentTitle = '';
                         global.currentContent = '';
                         currentNoteID = null;
@@ -172,7 +160,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     });
                 } else {
                     titleField.value = '';
-                    noteField.value = '';
+                    noteField.innerHTML = '';
                     global.currentTitle = '';
                     global.currentContent = '';
                     currentNoteID = null;
@@ -184,7 +172,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
                         titleField.value = '';
-                        noteField.value = '';
+                        noteField.innerHTML = '';
                         global.currentTitle = '';
                         global.currentContent = '';
                         currentNoteID = null;
@@ -192,7 +180,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     });
                 } else {
                     titleField.value = '';
-                    noteField.value = '';
+                    noteField.innerHTML = '';
                     global.currentTitle = '';
                     global.currentContent = '';
                     currentNoteID = null;
@@ -205,7 +193,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
                         titleField.value = notebook.title;
-                        noteField.value = notebook.content;
+                        noteField.innerHTML = notebook.content;
                         global.currentTitle = notebook.title;
                         global.currentContent = notebook.content;
                         currentNoteID = notebook.id;
@@ -213,7 +201,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     });
                 } else {
                     titleField.value = notebook.title;
-                    noteField.value = notebook.content;
+                    noteField.innerHTML = notebook.content;
                     global.currentTitle = notebook.title;
                     global.currentContent = notebook.content;
                     currentNoteID = notebook.id;
@@ -225,7 +213,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
                         titleField.value = notebook.title;
-                        noteField.value = notebook.content;
+                        noteField.innerHTML = notebook.content;
                         global.currentTitle = notebook.title;
                         global.currentContent = notebook.content;
                         currentNoteID = notebook.id;
@@ -233,7 +221,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     });
                 } else {
                     titleField.value = notebook.title;
-                    noteField.value = notebook.content;
+                    noteField.innerHTML = notebook.content;
                     global.currentTitle = notebook.title;
                     global.currentContent = notebook.content;
                     currentNoteID = notebook.id;
@@ -246,35 +234,35 @@ const configureNotbookSlider = (list, titleField, noteField) => {
 
 /** Handles saving a note to the database under a certain user. */
 const saveNote = (title, content) => {
-    // FIX THIS
     // If null, save a new note. Otherwise, update the old one.
-    // if(currentNoteID === null) {
-    //     const ref = fireRef.child('notes').push();
-    //     const data = {
-    //         id: ref.key,
-    //         title: title,
-    //         content: content,
-    //         creator: global.currentUser.uid, // Assumes that a user is already logged in.
-    //         timestamp: Date.now()
-    //     }
-    //     currentNoteID = ref.key;
-    //     ref.set(data);
-    // } else {
-    //     const data = {
-    //         id: currentNoteID,
-    //         title: title,
-    //         content: content,
-    //     }
-    //     fireRef.child('notes').child(currentNoteID).update(data);
-    // }
+    if(currentNoteID === null) {
+        const ref = fireRef.child('notes').push();
+        const data = {
+            id: ref.key,
+            title: title,
+            content: content,
+            creator: global.currentUser.uid, // Assumes that a user is already logged in.
+            timestamp: Date.now()
+        }
+        currentNoteID = ref.key;
+        ref.set(data);
+    } else {
+        const data = {
+            id: currentNoteID,
+            title: title,
+            content: content,
+        }
+        fireRef.child('notes').child(currentNoteID).update(data);
+    }
 
-    // for(var i = 0; i < notebooks.length; i++) {
-    //     if(notebooks[i].id === currentNoteID) {
-    //         notebooks[i].title = title;
-    //         notebooks[i].content = content;
-    //         break;
-    //     }
-    // }
+    // Make sure to update the local copy.
+    for(var i = 0; i < notebooks.length; i++) {
+        if(notebooks[i].id === currentNoteID) {
+            notebooks[i].title = title;
+            notebooks[i].content = content;
+            break;
+        }
+    }
     
     alertify.success('Saved!');
 }
@@ -283,25 +271,22 @@ const saveNote = (title, content) => {
 * another note or switching pages.
 */
 const forgotToSave = (titleField, noteField) => {
-    // FIX THIS
-    // const title = titleField.value;
-    // const content = noteField.innerHTML || noteField.innerText;
+    const title = titleField.value;
+    const content = noteField.innerHTML;
 
-    // if(currentNoteID !== null) {
-    //     for(var i = 0; i < notebooks.length; i++) {
-    //         if(notebooks[i].id === currentNoteID) {
-    //             if(notebooks[i].title !== title || notebooks[i].content !== content) {
-    //                 return true;
-    //             }
-    //             break;
-    //         }
-    //     }
-    // } else {
-    //     if(title !== '' || content !== '') {
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    if(currentNoteID !== null) {
+        for(var i = 0; i < notebooks.length; i++) {
+            if(notebooks[i].id === currentNoteID) {
+                if(notebooks[i].title !== title || notebooks[i].content !== content) {
+                    return true;
+                }
+                break;
+            }
+        }
+    } else {
+        if(title !== '' || content !== '') return true;
+        return false;
+    }
     return false;
 }
 
@@ -338,6 +323,25 @@ const isSpecialKey = (element) => {
         return true;
     }
     return false;
+}
+
+/** Returns the current note as a JSON object. */
+const getCurrentNote = () => {
+    if(currentNoteID !== null) {
+        for(var i = 0; i < notebooks.length; i++) {
+            if(notebooks[i].id === currentNoteID) {
+                return notebooks[i];
+            }
+        }
+    } else {
+        return {
+            id: '',
+            title: 'New',
+            content: '',
+            creator: '',
+            timestamp: 0
+        };
+    }
 }
 
 
@@ -419,9 +423,11 @@ const defineHomeScript = () => {
     // Manages all the listeners like saving, copying, etc.
     manageEditListeners(titleField, noteField);
 
+    
     // Load all of the user's notebooks.
     if(global.currentUser !== null)
         loadNotes(global.currentUser.uid);
+
 
     // Toggle the notebook slider.
     notebooksButton.onclick = function() {
@@ -435,7 +441,6 @@ const defineHomeScript = () => {
             sliderOpen = true;
         }
     }
-
     // Toggle the sidebar.
     sidebarButton.onclick = function() {
         if(sidebarOpen) {
@@ -794,8 +799,16 @@ ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
 const manageEditListeners = (titleField, noteField) => {
     // Send a save message initially. This is for saving a note later on.
     //ipc.send('saveNote-send', titleField.value, noteField.value);
-    ipc.on('saveNote-reply', (event, title, content) => {
-        // FIX THIS
+    ipc.on('saveNote-reply', (event, title) => {
+        const content = document.getElementById('noteArea').innerHTML;
+        if(title !== '' && content !== '') {
+            if(global.currentUser === null) {
+                alert('You must be logged in to save notes.');
+                return;
+            } else {
+                saveNote(title, content);
+            }
+        } else {}
     });
 
     // Gets the currently selected text from the note area.
