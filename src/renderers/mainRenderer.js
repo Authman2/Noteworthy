@@ -1,7 +1,8 @@
 const fs = require('fs');
 const alertify = require('alertify.js');
 const $ = require('jquery');
-//var jsonUpdater = require('jsonfile-updater');
+const path = require('path')
+const url = require('url')
 const spectrum = require('spectrum-colorpicker');
 const ipc = require('electron').ipcRenderer;
 const global = require('electron').remote.getGlobal('sharedObject');
@@ -358,6 +359,7 @@ const stylesComponent = () => {
     + '<link rel="stylesheet" type="text/css" href="src/styles/signup.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/appSettings.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/account.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/sidebar.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/sidebarButton.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">'
@@ -372,6 +374,7 @@ const stylesComponent = () => {
 *                     *
 ***********************/
 
+/** Defines all script behavior for the home page. */
 const defineHomeScript = () => {
     // Variables.
     const titleField = document.getElementById('titleArea');
@@ -393,7 +396,10 @@ const defineHomeScript = () => {
         }
     }
 
+    // Run some methods initially.
+    configureFontSelector();
     handleSidebarButtons();
+    manageEditListeners(titleField, noteField);
 
     // Reset some variables.
     notebooks = [{
@@ -415,18 +421,8 @@ const defineHomeScript = () => {
     notebookSlider.style.backgroundColor = appSettings.colorScheme;
     sidebar.style.backgroundColor = appSettings.colorScheme;
 
-    // Define spell check attribute based on app settings.
-    // if(appSettings.spellCheck === 'Off') {
-    //     noteField.setAttribute('spellcheck', 'false');
-    // }
-
-    // Manages all the listeners like saving, copying, etc.
-    manageEditListeners(titleField, noteField);
-
-    
     // Load all of the user's notebooks.
-    if(global.currentUser !== null)
-        loadNotes(global.currentUser.uid);
+    if(global.currentUser !== null) loadNotes(global.currentUser.uid);
 
 
     // Toggle the notebook slider.
@@ -447,14 +443,17 @@ const defineHomeScript = () => {
             sidebarButton.style.right = '15px';
             sidebar.style.right = '-200px';
             sidebarOpen = false;
+            notebooksButton.style.opacity = 1;
         } else {
             sidebarButton.style.right = '215px';
             sidebar.style.right = '0px';
             sidebarOpen = true;
+            notebooksButton.style.opacity = 0.3;
         }
     }
 }
 
+/** Handles automatically logging in a user that is already signed in. */
 const autoLogin = () => {
     fireAuth.onAuthStateChanged((user) => {
         if (user) {
@@ -527,8 +526,11 @@ const handleSidebarButtons = () => {
         }
     });
     
+    // Font
     $('#sidebar_Font').click(() => {
-        
+        const dialog = document.getElementById('fontDialog');
+        if(dialog.hasAttribute('open')) { dialog.removeAttribute('open'); }
+        else { dialog.setAttribute('open', true); }
     });
 
     // Alignment
@@ -571,13 +573,38 @@ const handleSidebarButtons = () => {
     $('#sidebar_BulletedList').click( () => {
         writingSettings.bulletedList = !writingSettings.bulletedList;
         writingSettings.numberedList = false;
+
+        document.execCommand('insertUnorderedList', false);
     });
     $('#sidebar_NumberedList').click( () => {
         writingSettings.numberedList = !writingSettings.numberedList;
         writingSettings.bulletedList = false;
+
+        document.execCommand('insertOrderedList', false);
     });
 }
 
+// Font selection
+const configureFontSelector = () => {
+    const dialog = document.getElementById('fontDialog');
+    
+    const selector = document.getElementById('fontSelector');
+    const sizeInput = document.getElementById('fontSizeSelector');
+
+    const saveBtn = document.getElementById('saveFontButton');
+    const cancelBtn = document.getElementById('cancelFontButton');
+
+    saveBtn.onclick = () => {
+        document.execCommand('fontName', false, selector.value);
+        document.execCommand('fontSize', false, sizeInput.value);
+        writingSettings.fontFamily = selector.value;
+        writingSettings.fontSize = sizeInput.value;
+        dialog.removeAttribute('open');
+    };
+    cancelBtn.onclick = () => {
+        dialog.removeAttribute('open');
+    };
+}
 
 
 
@@ -707,18 +734,89 @@ const defineLoginScript = () => {
 
 /**********************
 *                     *
+*    ACCOUNT SCRIPT   *
+*                     *
+***********************/
+
+const defineAccountScript = () => {
+    const emailField = document.getElementById('emailField_account');
+    const passwordField = document.getElementById('passwordField_account');
+
+    const updateAccountBtn = document.getElementById('updateAccountButton');
+    const logoutBtn = document.getElementById('logoutButton');
+    const closeBtn = document.getElementById('closeAccountButton');
+
+    // First, set the placeholder text for the email input.
+    fireAuth.onAuthStateChanged((user) => {
+        if (user) {
+            emailField.placeholder = user.email;
+        } else { 
+            changePage(global.loginPage, 'login', () => { defineLoginScript() });
+        }
+    });
+
+    // Second, configure the logout button because it is easier than the update button.
+    logoutBtn.onclick = () => {
+        fireAuth.signOut().then(() => {
+            // Go back to the home page.
+            changePage(global.homePage, 'home', () => { defineHomeScript() });
+
+            // Clear all notes.
+            notebooks = [{
+                id: '',
+                title: 'New',
+                content: '',
+                creator: '',
+                timestamp: 0
+            }];
+
+            // Remove the listener.
+            fireRef.child('notes').off();
+        });
+    }
+
+    // Third, setup the update account button.
+    updateAccountBtn.onclick = () => {
+        const email = emailField.value;
+        const password = passwordField.value;
+
+        // Check if there is a value for email.
+        if(valueExists(email)) {
+            fireAuth.currentUser.updateEmail(email).then(() => {
+                alertify.success('Updated Email!');
+            }).catch((err) => {
+                alertify.error('There was an issue updating your email: ' + err);
+            });
+        }
+
+        // Check if there is a value for password.
+        if(valueExists(password)) {
+            fireAuth.currentUser.updatePassword(password).then(() => {
+                alertify.success('Updated Password!');
+            }).catch((err) => {
+                alertify.error('There was an issue updating your password: ' + err);
+            });
+        }
+    }
+
+    // Fourth, setup the close button.
+    closeBtn.onclick = () => {
+        changePage(global.homePage, 'home', () => { defineHomeScript() });
+    }
+}
+
+/**********************
+*                     *
 *   SETTINGS SCRIPT   *
 *                     *
 ***********************/
 
 const defineAppSettingsScript = () => {
     const closeButton = document.getElementById('closeSettingsButton');
-    const spellCheckSelector = document.getElementById('spellCheckSelect');
     const saveButton = document.getElementById('saveSettingsButton');
 
     
     // Load the current settings.
-    spellCheckSelector.value = appSettings.spellCheck;
     var tempSettings = Object.assign({}, appSettings);
 
 
@@ -757,9 +855,6 @@ const defineAppSettingsScript = () => {
             tempSettings['colorScheme'] = color.toRgbString();
         }
     });
-    spellCheckSelector.onchange = () => {
-        tempSettings['spellCheck'] = spellCheckSelector.value;
-    }
 }
 
 
@@ -789,6 +884,7 @@ ipc.on('changeCurrentPage-reply', (event, page, scriptType) => {
         case 'home': global.defineVariables('home', (page) => { defineHomeScript(); }); break;
         case 'signup': global.defineVariables('signup', (page) => { defineSignupScript(); }); break;
         case 'login': global.defineVariables('login', (page) => { defineLoginScript(); }); break;
+        case 'account': global.defineVariables('account', (page) => { defineAccountScript(); }); break;
         case 'appsettings': global.defineVariables('appsettings', (page) => { defineAppSettingsScript() }); break;
     }
 });
@@ -842,11 +938,49 @@ const manageEditListeners = (titleField, noteField) => {
     });
 
     // Handles undo and redo.
-    /** FIX THIS IT DOES NOT CURRENTLY WORK */
     ipc.on('undo-reply', (event) => {
         document.execCommand('undo', false);
     });
     ipc.on('redo-reply', (event) => {
         document.execCommand('redo', false);
+    });
+
+
+
+    // Shortcuts
+    ipc.on('bold-reply', (event) => {
+        writingSettings.bold = !writingSettings.bold;
+        document.execCommand('bold', true, writingSettings.bold);
+    });
+    ipc.on('underline-reply', (event) => {
+        writingSettings.underline = !writingSettings.underline;
+        document.execCommand('underline', true, writingSettings.underline);
+    });
+    ipc.on('italic-reply', (event) => {
+        writingSettings.italic = !writingSettings.italic;
+        document.execCommand('italic', true, writingSettings.italic);
+    });
+    ipc.on('font-reply', (event) => {
+        document.getElementById('fontDialog').setAttribute('open', true);
+    });
+    ipc.on('alignLeft-reply', (event) => {
+        writingSettings.alignment = 'justifyLeft';
+        document.execCommand(writingSettings.alignment, false);
+    });
+    ipc.on('alignCenter-reply', (event) => {
+        writingSettings.alignment = 'justifyCenter';
+        document.execCommand(writingSettings.alignment, false);
+    });
+    ipc.on('alignRight-reply', (event) => {
+        writingSettings.alignment = 'justifyRight';
+        document.execCommand(writingSettings.alignment, false);
+    });
+    ipc.on('highlight-reply', (event) => {
+        writingSettings.highlighterOn = !writingSettings.highlighterOn;
+        if(writingSettings.highlighterOn === true) {
+            document.execCommand('backColor', false, '#FFE000');
+        } else {
+            document.execCommand('backColor', false, 'rgba(0,0,0,0)');
+        }
     });
 }

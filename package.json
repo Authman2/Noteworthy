@@ -4,7 +4,8 @@
   "description": "A simple note-taking application.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . Noteworthy && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns"
   },
   "repository": "https://github.com/Authman2/Noteworthy",
   "keywords": [

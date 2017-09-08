@@ -18,6 +18,7 @@ const titleBarFile = fs.readFileSync(__dirname + '/src/components/titleBar.html'
 const homeFile = fs.readFileSync(__dirname + '/src/pages/home.html', 'utf8');
 const signupFile = fs.readFileSync(__dirname + '/src/pages/signup.html', 'utf8');
 const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
+const accountFile = fs.readFileSync(__dirname + '/src/pages/account.html', 'utf8');
 const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html', 'utf8');
 
 const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
@@ -135,9 +136,60 @@ let template = [{
         }
     }]
 },{
+    label: 'Format',
+    submenu: [{
+        label: 'Bold',
+        accelerator: 'CmdOrCtrl+B',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('bold-reply');
+        }
+    },{
+        label: 'Underline',
+        accelerator: 'CmdOrCtrl+U',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('underline-reply');
+        }
+    },{
+        label: 'Italic',
+        accelerator: 'CmdOrCtrl+I',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('italic-reply');
+        }
+    },{
+        label: 'Font',
+        accelerator: 'CmdOrCtrl+F',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('font-reply');
+        }
+    },{
+        label: 'Align Left',
+        accelerator: 'CmdOrCtrl+Option+L',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('alignLeft-reply');
+        }
+    },{
+        label: 'Align Center',
+        accelerator: 'CmdOrCtrl+Option+C',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('alignCenter-reply');
+        }
+    },{
+        label: 'Align Right',
+        accelerator: 'CmdOrCtrl+Option+R',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('alignRight-reply');
+        }
+    },{
+        label: 'Highlight',
+        accelerator: 'CmdOrCtrl+H',
+        click: () => {
+            if(eve !== null && eve !== undefined) eve.sender.send('highlight-reply');
+        }
+    }]
+},{
     label: 'Account',
     submenu: [{
-        label: 'Login', 
+        label: 'Login',
         click: () => { 
             if(eve !== null && eve !== undefined) {
                 eve.sender.send('changeCurrentPage-reply', loginFile, 'login');
@@ -152,8 +204,11 @@ let template = [{
         }
     }, {
         label: 'Account',
+        accelerator: 'CmdOrCtrl+Shift+A',
         click: () => { 
-            // Go to account page.
+            if(eve !== null && eve !== undefined) {
+                eve.sender.send('changeCurrentPage-reply', accountFile, 'account');
+            }
         }
     }]
 },{
@@ -175,11 +230,13 @@ let template = [{
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
         click: () => { mainWindow.minimize(); }
-    },{
-        label: 'Open Developer Tools',
-        accelerator: 'CmdOrCtrl+T',
-        click: () => { mainWindow.webContents.openDevTools(); }
-    }]
+    },
+    // {
+    //     label: 'Open Developer Tools',
+    //     accelerator: 'CmdOrCtrl+T',
+    //     click: () => { mainWindow.webContents.openDevTools(); }
+    // }
+    ]
 },{
     label: 'Help',
     role: 'help',
@@ -203,7 +260,8 @@ function createMainWindow () {
           height: 600,
           show: false,
           title: 'Noteworthy',
-          titleBarStyle: 'hiddenInset'
+          titleBarStyle: 'hiddenInset',
+          icon: path.join(__dirname, 'NoteworthyAppIcon.icns')
     })
     mainWindow.setTitle('Noteworthy');
 
@@ -280,6 +338,7 @@ global.sharedObject = {
     homePage: '' + titleBarFile + homeFile + notebooksButtonFile + notebooksliderFile + sidebarButtonFile + sidebarFile,
     signupPage: '' + titleBarFile  + signupFile,
     loginPage: '' + titleBarFile  + loginFile,
+    accountPage: '' + titleBarFile + accountFile,
     appSettingsPage: '' + titleBarFile  + appSettingsFile,
     notebooksButton: notebooksButtonFile,
     NotebooksSlider: notebooksliderFile,

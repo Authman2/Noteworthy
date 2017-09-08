@@ -11,4 +11,23 @@
             placeholder='Start typing your note here'></textarea> -->
 
     <div id='noteArea' contenteditable='true'></div>
+
+    <!-- Font Selector Dialog -->
+    <dialog id='fontDialog'>
+        <h4 id='fontSelectorHeader'>Select A Font</h4>
+        <select id='fontSelector' name="selectFontFamily">
+            <option> Serif </option>
+            <option> Arial </option>
+            <option> Sans-Serif </option>                                  
+            <option> Tahoma </option>
+            <option> Verdana </option>
+            <option> Lucida Sans Unicode </option>                               
+        </select>
+        <br><br>
+        <input type="number" id="fontSizeSelector" min="0" max="70" value="16"/>
+        <br><br>
+        <button id='saveFontButton'>Save</button>
+        <br><br>
+        <button id='cancelFontButton'>Cancel</button>
+    </dialog>
 </div>

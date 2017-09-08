@@ -49,3 +49,61 @@ hr.homeSeparator {
     background-color: white;
     overflow-wrap: break-word;
 }
+
+
+/* Font Selector */
+#fontDialog {
+    width: 250px;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    border-radius: 25px;
+    border: 2px solid gray;
+}
+#fontSelectorHeader {
+    font-size: 24px;
+    font-weight: 200;
+    text-align: center;
+    font-family: 'Avenir';
+}
+#fontSelector {
+    border: 1px solid black;
+}
+#fontSizeSelector {
+    width: 80px;
+    height: 30px;
+}
+#saveFontButton {
+    width: 80px;
+    height: 30px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 200;
+    background: none;
+    border-radius: 25px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    background-color: lightgreen;
+}
+#saveFontButton:hover {
+    background-color: forestgreen;
+}
+#cancelFontButton {
+    width: 80px;
+    height: 30px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 200;
+    background: none;
+    border-radius: 25px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    background-color: rgba(202, 44, 44, 0.87);
+}
+#cancelFontButton:hover {
+    background-color: rgba(116, 20, 20, 0.87);
+}
