@@ -24,7 +24,7 @@ const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html
 const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
 const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
-const sidebarFile = fs.readFileSync(__dirname + '/src/components/sidebar.html', 'utf8');
+const sidebarFile = fs.readFileSync(__dirname + '/src/components/Sidebar.html', 'utf8');
 
 
 

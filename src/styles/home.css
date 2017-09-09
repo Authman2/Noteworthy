@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
 #homePage {
     position: absolute;
     top: 0px;
@@ -6,7 +12,6 @@
     height: 100%;
     margin: 0px;
     padding: 0px;
-    overflow-x: hidden;
     background-color: white;
 }
 #titleArea {
@@ -19,7 +24,6 @@
     font-size: 20px;
     font-weight: 200;
     background: none;
-    overflow-x: hidden;
     text-decoration: none;
     font-family: 'Avenir';
     background-color: white;
@@ -43,11 +47,15 @@ hr.homeSeparator {
     font-weight: 200;
     background: none;
     overflow-x: hidden;
+    overflow-y: scroll;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-family: 'Avenir';
     background-color: white;
-    overflow-wrap: break-word;
+    /* overflow-wrap: break-word; */
+}
+#noteArea::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -107,3 +115,21 @@ hr.homeSeparator {
 #cancelFontButton:hover {
     background-color: rgba(116, 20, 20, 0.87);
 }
+
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #noteArea * {
+        visibility: visible;
+    }
+
+    #noteArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+  
