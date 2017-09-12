@@ -23,7 +23,11 @@ const body = document.getElementById('root');
 const fireRef = firebase.database().ref();
 const fireAuth = firebase.auth();
 
+<<<<<<< HEAD
 // Whether or not the options slider is open. Whether the sidebar is open.
+=======
+// Whether or not the notebook slider is open. Whether the sidebar is open.
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 var sliderOpen = false;
 var sidebarOpen = false;
 
@@ -86,7 +90,11 @@ const loadNotes = (uid) => {
         notebooks.push(a);
         notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
 
+<<<<<<< HEAD
         configureNotbookSlider(document.getElementById('sidebar'),
+=======
+        configureNotbookSlider(document.getElementById('notebookSlider'),
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
                         document.getElementById('titleArea'),
                         document.getElementById('noteArea'));                  
     });
@@ -95,6 +103,7 @@ const loadNotes = (uid) => {
 /** Sets up the data in the notebook slider. */
 const configureNotbookSlider = (list, titleField, noteField) => {
     // Clear the list.
+<<<<<<< HEAD
     list.innerHTML = "<h4 id='sidebarTitle'>Notes</h4>";
 
     for(var i = 0; i < notebooks.length; i++) {
@@ -124,6 +133,61 @@ const configureNotbookSlider = (list, titleField, noteField) => {
 
         if(current.title === 'New') {
             item.onclick = () => {
+=======
+    list.innerHTML = '';
+
+    for(var i = 0; i < notebooks.length; i++) {
+        const notebook = notebooks[i];
+
+        // Create two elements that make up each notebook on the slider.
+        const imagePart = document.createElement('div');
+        const titlePart = document.createElement('h3');
+
+        // Style the notebook preview
+        imagePart.style.position = 'relative';
+        imagePart.style.width = '80px';
+        imagePart.style.height = '90%';
+        imagePart.style.margin = 'auto';
+        imagePart.style.cursor = 'pointer';
+        imagePart.style.userSelect = 'none';
+        imagePart.style.textAlign = 'center';
+        imagePart.innerHTML = '<img src=\'src/res/notebookPreview.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
+
+        titlePart.style.textAlign = 'center';
+        titlePart.style.fontSize = 20;
+        titlePart.style.fontWeight = 300;
+        titlePart.style.color = 'rgba(0,0,0,0.5)';
+        titlePart.style.cursor = 'pointer';
+        titlePart.style.userSelect = 'none';
+        titlePart.style.fontFamily = 'Avenir';
+        titlePart.innerHTML = notebook.title;
+
+        // Create the element that gets added to the list.
+        const entry = document.createElement('div');
+        entry.className = 'notebookEntry';
+        entry.style.display = 'inline-block';
+        entry.style.marginRight = '25px';
+        entry.style.marginLeft = '15px';
+        entry.style.marginTop = '10px';
+
+        entry.appendChild(imagePart);
+        entry.appendChild(titlePart);
+        list.appendChild(entry);
+
+
+        // Define the click behavior for each notebook.
+        const closeSlider = () => {
+            document.getElementById('mpb').style.bottom = '30px';
+            document.getElementById('notebookSlider').style.bottom = '-160px';
+            sliderOpen = false;
+        }
+        // Displays the loaded text for each note.
+        const displayText = () => {
+            noteField.focus();
+            noteField.innerHTML = notebook.content;
+        }
+        if(notebook.title === 'New') {
+            imagePart.onclick = () => {
                 if(forgotToSave(titleField, noteField)) {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
@@ -132,7 +196,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                         global.currentTitle = '';
                         global.currentContent = '';
                         currentNoteID = null;
-                        closeSidebar();
+                        closeSlider();
                     });
                 } else {
                     titleField.value = '';
@@ -140,6 +204,32 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = '';
                     global.currentContent = '';
                     currentNoteID = null;
+                    closeSlider();
+                }
+            }
+            titlePart.onclick = () => {
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = '';
+                        noteField.innerHTML = '';
+                        global.currentTitle = '';
+                        global.currentContent = '';
+                        currentNoteID = null;
+<<<<<<< HEAD
+                        closeSidebar();
+=======
+                        closeSlider();
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
+                    });
+                } else {
+                    titleField.value = '';
+                    noteField.innerHTML = '';
+                    global.currentTitle = '';
+                    global.currentContent = '';
+                    currentNoteID = null;
+<<<<<<< HEAD
                     closeSidebar();
                 }
             }
@@ -161,13 +251,59 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = current.title;
                     global.currentContent = current.content;
                     currentNoteID = current.id;
+=======
+                    closeSlider();
+                }
+            }
+        } else {
+            imagePart.onclick = () => {
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = notebook.title;
+                        noteField.innerHTML = notebook.content;
+                        global.currentTitle = notebook.title;
+                        global.currentContent = notebook.content;
+                        currentNoteID = notebook.id;
+                        displayText();
+                    });
+                } else {
+                    titleField.value = notebook.title;
+                    noteField.innerHTML = notebook.content;
+                    global.currentTitle = notebook.title;
+                    global.currentContent = notebook.content;
+                    currentNoteID = notebook.id;
+                    displayText();
+                }
+            }
+            titlePart.onclick = () => {
+                if(forgotToSave(titleField, noteField)) {
+                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = notebook.title;
+                        noteField.innerHTML = notebook.content;
+                        global.currentTitle = notebook.title;
+                        global.currentContent = notebook.content;
+                        currentNoteID = notebook.id;
+                        displayText();
+                    });
+                } else {
+                    titleField.value = notebook.title;
+                    noteField.innerHTML = notebook.content;
+                    global.currentTitle = notebook.title;
+                    global.currentContent = notebook.content;
+                    currentNoteID = notebook.id;
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
                     displayText();
                 }
             }
         }
+<<<<<<< HEAD
 
         // Add to the sidebar.
         list.appendChild(item);
+=======
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     }
 };
 
@@ -292,14 +428,25 @@ const getCurrentNote = () => {
 ***********************/
 
 const stylesComponent = () => { 
+<<<<<<< HEAD
     return '<link rel="stylesheet" type="text/css" href="src/styles/home.css">'
+=======
+    return '<link rel="stylesheet" type="text/css" href="src/styles/notebooksButton.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/home.css">'
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     + '<link rel="stylesheet" type="text/css" href="src/styles/signup.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/appSettings.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/account.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/sidebar.css">'
+<<<<<<< HEAD
     + '<link rel="stylesheet" type="text/css" href="src/styles/optionsSlider.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">';
+=======
+    + '<link rel="stylesheet" type="text/css" href="src/styles/sidebarButton.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/NotebooksSlider.css">';
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 }
 
 
@@ -316,11 +463,19 @@ const defineHomeScript = () => {
     const titleField = document.getElementById('titleArea');
     const noteField = document.getElementById('noteArea');
 
+<<<<<<< HEAD
     const optionsSlider = document.getElementById('optionsSlider');
     const sidebar = document.getElementById('sidebar');
 
     const optionsButton = document.getElementById('optionsButton');
     const sidebarButton = document.getElementById('sidebarButton');
+=======
+    const notebooksButton = document.getElementById('mpb');
+    const notebookSlider = document.getElementById('notebookSlider');
+
+    const sidebarButton = document.getElementById('sidebarButton');
+    const sidebar = document.getElementById('sidebar');
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 
 
     // Start input event listener.
@@ -353,8 +508,13 @@ const defineHomeScript = () => {
     if(global.currentUser === null) autoLogin();
     
     // Set the colors based on the app settings
+<<<<<<< HEAD
     optionsButton.style.backgroundColor = appSettings.colorScheme;
     optionsSlider.style.backgroundColor = appSettings.colorScheme;
+=======
+    notebooksButton.style.backgroundColor = appSettings.colorScheme;
+    notebookSlider.style.backgroundColor = appSettings.colorScheme;
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     sidebar.style.backgroundColor = appSettings.colorScheme;
 
     // Load all of the user's notebooks.
@@ -362,6 +522,7 @@ const defineHomeScript = () => {
 
 
     // Toggle the notebook slider.
+<<<<<<< HEAD
     optionsButton.onclick = function() {
         if(sliderOpen) {
             optionsButton.style.bottom = '30px';
@@ -370,6 +531,16 @@ const defineHomeScript = () => {
         } else {
             optionsButton.style.bottom = '110px';
             optionsSlider.style.bottom = '0px';
+=======
+    notebooksButton.onclick = function() {
+        if(sliderOpen) {
+            notebooksButton.style.bottom = '30px';
+            notebookSlider.style.bottom = '-160px';
+            sliderOpen = false;
+        } else {
+            notebooksButton.style.bottom = '180px';
+            notebookSlider.style.bottom = '0px';
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
             sliderOpen = true;
         }
     }
@@ -379,12 +550,20 @@ const defineHomeScript = () => {
             sidebarButton.style.right = '15px';
             sidebar.style.right = '-200px';
             sidebarOpen = false;
+<<<<<<< HEAD
             optionsButton.style.opacity = 1;
+=======
+            notebooksButton.style.opacity = 1;
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
         } else {
             sidebarButton.style.right = '215px';
             sidebar.style.right = '0px';
             sidebarOpen = true;
+<<<<<<< HEAD
             optionsButton.style.opacity = 0.3;
+=======
+            notebooksButton.style.opacity = 0.3;
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
         }
     }
 }
@@ -919,6 +1098,7 @@ const manageEditListeners = (titleField, noteField) => {
             document.execCommand('backColor', false, 'rgba(0,0,0,0)');
         }
     });
+<<<<<<< HEAD
     ipc.on('openSidebar-reply', (event) => {
         if(sidebarOpen) {
             document.getElementById('sidebarButton').style.right = '15px';
@@ -943,4 +1123,6 @@ const manageEditListeners = (titleField, noteField) => {
             sliderOpen = true;
         }
     });
+=======
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 }

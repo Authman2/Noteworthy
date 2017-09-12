@@ -36,7 +36,11 @@ hr.homeSeparator {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 #noteArea {
+<<<<<<< HEAD
     position: relative;
+=======
+    position: absolute;
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     left: 2%;
     width: 96%;
     height: 90%;
@@ -117,6 +121,7 @@ hr.homeSeparator {
 }
 
 
+<<<<<<< HEAD
 /* Sidebar and Options buttons */
 #optionsButton {
     position: fixed;
@@ -161,6 +166,8 @@ hr.homeSeparator {
 
 
 
+=======
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 @media print {
     body * {
         visibility: hidden;

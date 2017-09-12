@@ -1,6 +1,10 @@
 {
   "name": "Noteworthy",
+<<<<<<< HEAD
   "version": "1.0.5",
+=======
+  "version": "1.0.1",
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
   "description": "A simple note-taking application.",
   "main": "main.js",
   "scripts": {

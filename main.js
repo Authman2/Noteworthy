@@ -21,12 +21,20 @@ const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
 const accountFile = fs.readFileSync(__dirname + '/src/pages/account.html', 'utf8');
 const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html', 'utf8');
 
+<<<<<<< HEAD
 // const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 // const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
 // const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
 // const sidebarFile = fs.readFileSync(__dirname + '/src/components/Sidebar.html', 'utf8');
 const sidebarFile = fs.readFileSync(__dirname + '/src/components/sidebar.html', 'utf8');
 const optionsSlider = fs.readFileSync(__dirname + '/src/components/optionsSlider.html', 'utf8');
+=======
+const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
+const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
+const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
+const sidebarFile = fs.readFileSync(__dirname + '/src/components/Sidebar.html', 'utf8');
+
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 
 
 // Get a reference to the event so that you can send stuff later.
@@ -68,6 +76,7 @@ ipc.on('redo-send', (event) => {
     eve = event;
     event.sender.send('redo-reply');
 });
+<<<<<<< HEAD
 ipc.on('openSidebar-send', (event) => {
     eve = event;
     event.sender.send('openSidebar-reply');
@@ -76,6 +85,9 @@ ipc.on('viewNotes-send', (event) => {
     eve = event;
     event.sender.send('viewNotes-reply');
 });
+=======
+
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 
 
 // Create the application menu.
@@ -238,6 +250,7 @@ let template = [{
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
         click: () => { mainWindow.minimize(); }
+<<<<<<< HEAD
     },{
         label: 'Open Sidebar',
         accelerator: 'CmdOrCtrl+O',
@@ -252,6 +265,8 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 eve.sender.send('viewNotes-reply');
         }
+=======
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     },
     // {
     //     label: 'Open Developer Tools',
@@ -265,11 +280,14 @@ let template = [{
     submenu: [{
         label: 'Learn More',
         click: () => { electron.shell.openExternal('http://www.adeolauthman.com') }
+<<<<<<< HEAD
     },{
         label: 'Check for Updates',
         click: () => {
             console.log('Checking for updates');
         }
+=======
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     }]
 }];
 
@@ -362,11 +380,22 @@ const defineVariables_Signature = (page, completion) => {
 Handles creating all of the html, css, and javascript code necessary for each page.
 */
 global.sharedObject = {
+<<<<<<< HEAD
     homePage: '' + titleBarFile + homeFile + sidebarFile + optionsSlider,
+=======
+    homePage: '' + titleBarFile + homeFile + notebooksButtonFile + notebooksliderFile + sidebarButtonFile + sidebarFile,
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     signupPage: '' + titleBarFile  + signupFile,
     loginPage: '' + titleBarFile  + loginFile,
     accountPage: '' + titleBarFile + accountFile,
     appSettingsPage: '' + titleBarFile  + appSettingsFile,
+<<<<<<< HEAD
+=======
+    notebooksButton: notebooksButtonFile,
+    NotebooksSlider: notebooksliderFile,
+    sidebarButton: sidebarButtonFile,
+    Sidebar: sidebarFile,
+>>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     titleBar: titleBarFile,
         
     currentPage: '<div></div>',
