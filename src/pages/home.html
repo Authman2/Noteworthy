@@ -1,0 +1,39 @@
+<div id='homePage'>
+    
+    <!-- The title area for the note. -->
+    <input type='text' id='titleArea' placeholder='Title'/>
+    
+    <hr class='homeSeparator'>
+    
+    <!-- The space where the user will type in their notes. -->
+    <!-- <textarea id='noteArea'
+            spellcheck="true"
+            placeholder='Start typing your note here'></textarea> -->
+
+    <div id='noteArea' contenteditable='true'></div>
+
+    <!-- Buttons for the options slider and the sidebar -->
+    <button id='optionsButton'><span class='fa fa-pencil'></span></button>
+    <button id='sidebarButton'><span class='fa fa-bars'></span></button>
+
+
+    <!-- Font Selector Dialog -->
+    <dialog id='fontDialog'>
+        <h4 id='fontSelectorHeader'>Select A Font</h4>
+        <select id='fontSelector' name="selectFontFamily">
+            <option> Arial </option>
+            <option> Avenir</option>
+            <option> Sans-Serif </option>
+            <option> Serif </option>
+            <option> Tahoma </option>
+            <option> Verdana </option>
+            <option> Lucida Sans Unicode </option>                               
+        </select>
+        <br><br>
+        <input type="number" id="fontSizeSelector" min="0" max="70" value="16"/>
+        <br><br>
+        <button id='saveFontButton'>Save</button>
+        <br><br>
+        <button id='cancelFontButton'>Cancel</button>
+    </dialog>
+</div>

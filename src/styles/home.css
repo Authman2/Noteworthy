@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+#homePage {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: white;
+}
+#titleArea {
+    position: relative;
+    left: 2%;
+    width: 96%;
+    height: 10%;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    font-weight: 200;
+    background: none;
+    text-decoration: none;
+    font-family: 'Avenir';
+    background-color: white;
+}
+hr.homeSeparator {
+    width: 95%;
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+#noteArea {
+    position: relative;
+    left: 2%;
+    width: 96%;
+    height: 90%;
+    cursor: text;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 200;
+    background: none;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Avenir';
+    background-color: white;
+    /* overflow-wrap: break-word; */
+}
+#noteArea::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Font Selector */
+#fontDialog {
+    width: 250px;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    border-radius: 25px;
+    border: 2px solid gray;
+}
+#fontSelectorHeader {
+    font-size: 24px;
+    font-weight: 200;
+    text-align: center;
+    font-family: 'Avenir';
+}
+#fontSelector {
+    border: 1px solid black;
+}
+#fontSizeSelector {
+    width: 80px;
+    height: 30px;
+}
+#saveFontButton {
+    width: 80px;
+    height: 30px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 200;
+    background: none;
+    border-radius: 25px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    background-color: lightgreen;
+}
+#saveFontButton:hover {
+    background-color: forestgreen;
+}
+#cancelFontButton {
+    width: 80px;
+    height: 30px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 200;
+    background: none;
+    border-radius: 25px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    background-color: rgba(202, 44, 44, 0.87);
+}
+#cancelFontButton:hover {
+    background-color: rgba(116, 20, 20, 0.87);
+}
+
+
+/* Sidebar and Options buttons */
+#optionsButton {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    z-index: 2;
+    color: white;
+    outline: none;
+    cursor: pointer;
+    background: none;
+    font-size: 30px;
+    font-weight: 200;
+    border-radius: 100%;
+    font-family: 'Avenir';
+    text-decoration: none;
+    box-shadow: 3px 3px 3px #888888;
+    -webkit-transition-duration: 0.3s;
+    background-color: rgb(36, 137, 24);
+}
+#optionsButton:active {
+    box-shadow: 2px 2px 2px #888888;
+}
+
+#sidebarButton {
+    position: fixed;
+    top: 30px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: none; 
+    color: lightgray;
+    text-decoration: none;
+    -webkit-transition-duration: 0.3s;
+}
+
+
+
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #noteArea * {
+        visibility: visible;
+    }
+
+    #noteArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+  

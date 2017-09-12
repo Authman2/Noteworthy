@@ -1,22 +1,33 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "Noteworthy",
+  "version": "1.0.5",
+  "description": "A simple note-taking application.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
+    "clean": "rm -rf -R Noteworthy-darwin-x64"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/Authman2/Noteworthy",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Noteworthy",
+    "Notes",
+    "School",
+    "College",
+    "Work"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Adeola Uthman",
+  "license": "MIT",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~1.6.2",
+    "electron-packager": "^9.0.1"
+  },
+  "dependencies": {
+    "alertify.js": "^1.0.12",
+    "asar": "^0.13.0",
+    "firebase": "^4.3.0",
+    "jquery": "^3.2.1",
+    "jsonfile-updater": "^2.1.0",
+    "spectrum-colorpicker": "^1.8.0"
   }
 }
