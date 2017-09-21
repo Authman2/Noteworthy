@@ -36,14 +36,10 @@ hr.homeSeparator {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 #noteArea {
-<<<<<<< HEAD
     position: relative;
-=======
-    position: absolute;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     left: 2%;
     width: 96%;
-    height: 90%;
+    height: 80%;
     cursor: text;
     border: none;
     outline: none;
@@ -65,11 +61,13 @@ hr.homeSeparator {
 
 /* Font Selector */
 #fontDialog {
+    position: absolute;
+    top: 20px;
     width: 250px;
     height: 300px;
-    margin: auto;
+    user-select: none;
     text-align: center;
-    border-radius: 25px;
+    -webkit-user-drag: element;
     border: 2px solid gray;
 }
 #fontSelectorHeader {
@@ -121,7 +119,6 @@ hr.homeSeparator {
 }
 
 
-<<<<<<< HEAD
 /* Sidebar and Options buttons */
 #optionsButton {
     position: fixed;
@@ -166,8 +163,6 @@ hr.homeSeparator {
 
 
 
-=======
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 @media print {
     body * {
         visibility: hidden;

@@ -21,20 +21,12 @@ const loginFile = fs.readFileSync(__dirname + '/src/pages/login.html', 'utf8');
 const accountFile = fs.readFileSync(__dirname + '/src/pages/account.html', 'utf8');
 const appSettingsFile = fs.readFileSync(__dirname + '/src/pages/appSettings.html', 'utf8');
 
-<<<<<<< HEAD
 // const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
 // const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
 // const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
 // const sidebarFile = fs.readFileSync(__dirname + '/src/components/Sidebar.html', 'utf8');
 const sidebarFile = fs.readFileSync(__dirname + '/src/components/sidebar.html', 'utf8');
 const optionsSlider = fs.readFileSync(__dirname + '/src/components/optionsSlider.html', 'utf8');
-=======
-const notebooksButtonFile = fs.readFileSync(__dirname + '/src/components/notebooksButton.html', 'utf8');
-const notebooksliderFile = fs.readFileSync(__dirname + '/src/components/NotebooksSlider.html', 'utf8');
-const sidebarButtonFile = fs.readFileSync(__dirname + '/src/components/sidebarButton.html', 'utf8');
-const sidebarFile = fs.readFileSync(__dirname + '/src/components/Sidebar.html', 'utf8');
-
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 
 
 // Get a reference to the event so that you can send stuff later.
@@ -76,7 +68,14 @@ ipc.on('redo-send', (event) => {
     eve = event;
     event.sender.send('redo-reply');
 });
-<<<<<<< HEAD
+ipc.on('bulletedList-send', (event) => {
+    eve = event;
+    event.sender.send('bulletedList-reply');
+});
+ipc.on('numberedList-send', (event) => {
+    eve = event;
+    event.sender.send('numberedList-reply');
+});
 ipc.on('openSidebar-send', (event) => {
     eve = event;
     event.sender.send('openSidebar-reply');
@@ -85,10 +84,26 @@ ipc.on('viewNotes-send', (event) => {
     eve = event;
     event.sender.send('viewNotes-reply');
 });
-=======
-
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
-
+ipc.on('checkForUpdates-send', (event) => {
+    eve = event;
+    event.sender.send('checkForUpdates-reply');
+});
+ipc.on('insertCodeSegment-send', (event) => {
+    eve = event;
+    event.sender.send('insertCodeSegment-reply');
+});
+ipc.on('backupNotes-send', (event) => {
+    eve = event;
+    event.sender.send('backupNotes-reply');
+});
+ipc.on('subscript-send', (event) => {
+    eve = event;
+    event.sender.send('subscript-reply');
+});
+ipc.on('superscript-send', (event) => {
+    eve = event;
+    event.sender.send('superscript-reply');
+});
 
 // Create the application menu.
 let template = [{
@@ -153,6 +168,44 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('selectAllText-reply');
+        }
+    }]
+},{
+    label: 'Insert',
+    submenu: [{
+        label: 'Subscript',
+        accelerator: 'CmdOrCtrl+Option+6',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('subscript-reply');
+        }
+    },{
+        label: 'Superscript',
+        accelerator: 'CmdOrCtrl+Shift+6',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('superscript-reply');
+        }
+    },{
+        label: 'Bulleted List',
+        accelerator: 'CmdOrCtrl+Shift+B',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('bulletedList-reply');
+        }
+    },{
+        label: 'Numbered List',
+        accelerator: 'CmdOrCtrl+Shift+N',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('numberedList-reply');
+        }
+    },{
+        label: 'Code Segment',
+        accelerator: 'CmdOrCtrl+Shift+C',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('insertCodeSegment-reply');
         }
     }]
 },{
@@ -230,6 +283,12 @@ let template = [{
                 eve.sender.send('changeCurrentPage-reply', accountFile, 'account');
             }
         }
+    }, {
+        label: 'Backup Notes',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+            eve.sender.send('backupNotes-reply');
+        }
     }]
 },{
     label: 'Window',
@@ -241,7 +300,7 @@ let template = [{
                 if (focusedWindow.id === 1) {
                     BrowserWindow.getAllWindows().forEach(function (win) {
                         if (win.id > 1) { win.close() }
-                    })
+                    });
                 }
                 focusedWindow.reload()
             }
@@ -250,23 +309,20 @@ let template = [{
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
         click: () => { mainWindow.minimize(); }
-<<<<<<< HEAD
     },{
-        label: 'Open Sidebar',
+        label: 'View Notes',
         accelerator: 'CmdOrCtrl+O',
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('openSidebar-reply');
         }
     },{
-        label: 'View Notes',
+        label: 'Note Options',
         accelerator: 'CmdOrCtrl+N',
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('viewNotes-reply');
         }
-=======
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     },
     // {
     //     label: 'Open Developer Tools',
@@ -280,14 +336,12 @@ let template = [{
     submenu: [{
         label: 'Learn More',
         click: () => { electron.shell.openExternal('http://www.adeolauthman.com') }
-<<<<<<< HEAD
     },{
         label: 'Check for Updates',
         click: () => {
-            console.log('Checking for updates');
+            if(eve !== null && eve !== undefined)
+            eve.sender.send('checkForUpdates-reply');
         }
-=======
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     }]
 }];
 
@@ -306,7 +360,7 @@ function createMainWindow () {
           show: false,
           title: 'Noteworthy',
           titleBarStyle: 'hiddenInset',
-          icon: path.join(__dirname, 'NoteworthyAppIcon.icns')
+          icon: path.join(__dirname, 'NoteworthyAppIcon.icns'),
     })
     mainWindow.setTitle('Noteworthy');
 
@@ -380,22 +434,11 @@ const defineVariables_Signature = (page, completion) => {
 Handles creating all of the html, css, and javascript code necessary for each page.
 */
 global.sharedObject = {
-<<<<<<< HEAD
     homePage: '' + titleBarFile + homeFile + sidebarFile + optionsSlider,
-=======
-    homePage: '' + titleBarFile + homeFile + notebooksButtonFile + notebooksliderFile + sidebarButtonFile + sidebarFile,
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     signupPage: '' + titleBarFile  + signupFile,
     loginPage: '' + titleBarFile  + loginFile,
     accountPage: '' + titleBarFile + accountFile,
     appSettingsPage: '' + titleBarFile  + appSettingsFile,
-<<<<<<< HEAD
-=======
-    notebooksButton: notebooksButtonFile,
-    NotebooksSlider: notebooksliderFile,
-    sidebarButton: sidebarButtonFile,
-    Sidebar: sidebarFile,
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     titleBar: titleBarFile,
         
     currentPage: '<div></div>',

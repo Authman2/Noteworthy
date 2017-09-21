@@ -7,11 +7,5 @@
     z-index: 1000;
     user-select: none;
     -webkit-app-region: drag;
-<<<<<<< HEAD
     background-color: rgba(0,0,0,0);
-=======
-    background-image: -webkit-linear-gradient(top, white, rgba(0,0,0,0));
-    background-image: -moz-linear-gradient(top, white, rgba(0,0,0,0));
-    background-image: linear-gradient(to bottom, white, rgba(0,0,0,0));
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 }

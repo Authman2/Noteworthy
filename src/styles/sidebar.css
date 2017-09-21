@@ -24,31 +24,20 @@
 }
 
 .sidebarItem {
-<<<<<<< HEAD
     width: 100%;
     cursor: pointer;
     text-align: center;
     position: relative;
-=======
-    position: relative;
-    top: 30px;
-    width: 100%;
-    height: 50px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: -18px;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     -webkit-app-region: no-drag;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 .sidebarItem:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 .sidebarItemTitle {
-<<<<<<< HEAD
     cursor: pointer;
     font-size: 15px;
-    font-weight: 200;
+    font-weight: 300;
     overflow: hidden;
     line-height: 50px;
     user-select: none;
@@ -58,23 +47,5 @@
     padding-right: 10px;
     font-family: 'Avenir'; 
     text-overflow: ellipsis;
-    color: rgba(0, 0, 0, 0.6);
-=======
-    font-size: 18px;
-    font-weight: 200px;
-    line-height: 50px;
-    font-family: 'Avenir';
-    user-select: none;
-    cursor: pointer;
-    color: rgba(0, 0, 0, 0.6);
-}
-
-#textColorPicker {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 200px;
-    height: 100px;
-    visibility: hidden;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
+    color: rgba(0, 0, 0, 0.7);
 }

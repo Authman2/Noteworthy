@@ -5,7 +5,13 @@ const path = require('path')
 const url = require('url')
 const spectrum = require('spectrum-colorpicker');
 const ipc = require('electron').ipcRenderer;
+const app = require('electron').remote.app;
+const remote = require('electron').remote;
+const {Menu, MenuItem} = remote;
 const global = require('electron').remote.getGlobal('sharedObject');
+const exec = require('child_process').exec;
+const shell = require('shelljs');
+const zip = require('jszip');
 
 const firebase = require('firebase');
 const config = require('../creds/creds.json')
@@ -23,11 +29,7 @@ const body = document.getElementById('root');
 const fireRef = firebase.database().ref();
 const fireAuth = firebase.auth();
 
-<<<<<<< HEAD
 // Whether or not the options slider is open. Whether the sidebar is open.
-=======
-// Whether or not the notebook slider is open. Whether the sidebar is open.
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 var sliderOpen = false;
 var sidebarOpen = false;
 
@@ -76,7 +78,6 @@ var writingSettings = {
 
 
 
-
 /**********************
 *                     *
 *       METHODS       *
@@ -90,11 +91,7 @@ const loadNotes = (uid) => {
         notebooks.push(a);
         notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
 
-<<<<<<< HEAD
         configureNotbookSlider(document.getElementById('sidebar'),
-=======
-        configureNotbookSlider(document.getElementById('notebookSlider'),
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
                         document.getElementById('titleArea'),
                         document.getElementById('noteArea'));                  
     });
@@ -103,8 +100,7 @@ const loadNotes = (uid) => {
 /** Sets up the data in the notebook slider. */
 const configureNotbookSlider = (list, titleField, noteField) => {
     // Clear the list.
-<<<<<<< HEAD
-    list.innerHTML = "<h4 id='sidebarTitle'>Notes</h4>";
+    list.innerHTML = "<h4 id='sidebarTitle' style='color:" + appSettings.sidebarTextColor + "'>Notes</h4>";
 
     for(var i = 0; i < notebooks.length; i++) {
         const current = notebooks[i];
@@ -116,6 +112,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
         const title = document.createElement('p');
         title.className = 'sidebarItemTitle';
         title.innerHTML = current.title;
+        title.style.color = appSettings.sidebarTextColor;
 
         item.appendChild(title);
 
@@ -125,69 +122,16 @@ const configureNotbookSlider = (list, titleField, noteField) => {
             document.getElementById('sidebarButton').style.right = '15px';
             document.getElementById('sidebar').style.right = '-200px';
             sidebarOpen = false;
+            document.getElementById('optionsButton').style.opacity = 1;
         }
         const displayText = () => {
             noteField.focus();
             noteField.innerHTML = current.content;
+            currentNoteID = current.id;
         }
 
         if(current.title === 'New') {
             item.onclick = () => {
-=======
-    list.innerHTML = '';
-
-    for(var i = 0; i < notebooks.length; i++) {
-        const notebook = notebooks[i];
-
-        // Create two elements that make up each notebook on the slider.
-        const imagePart = document.createElement('div');
-        const titlePart = document.createElement('h3');
-
-        // Style the notebook preview
-        imagePart.style.position = 'relative';
-        imagePart.style.width = '80px';
-        imagePart.style.height = '90%';
-        imagePart.style.margin = 'auto';
-        imagePart.style.cursor = 'pointer';
-        imagePart.style.userSelect = 'none';
-        imagePart.style.textAlign = 'center';
-        imagePart.innerHTML = '<img src=\'src/res/notebookPreview.png\' alt=\'notebookPreview\' width=\'100%\' height=\'100%\'  />';
-
-        titlePart.style.textAlign = 'center';
-        titlePart.style.fontSize = 20;
-        titlePart.style.fontWeight = 300;
-        titlePart.style.color = 'rgba(0,0,0,0.5)';
-        titlePart.style.cursor = 'pointer';
-        titlePart.style.userSelect = 'none';
-        titlePart.style.fontFamily = 'Avenir';
-        titlePart.innerHTML = notebook.title;
-
-        // Create the element that gets added to the list.
-        const entry = document.createElement('div');
-        entry.className = 'notebookEntry';
-        entry.style.display = 'inline-block';
-        entry.style.marginRight = '25px';
-        entry.style.marginLeft = '15px';
-        entry.style.marginTop = '10px';
-
-        entry.appendChild(imagePart);
-        entry.appendChild(titlePart);
-        list.appendChild(entry);
-
-
-        // Define the click behavior for each notebook.
-        const closeSlider = () => {
-            document.getElementById('mpb').style.bottom = '30px';
-            document.getElementById('notebookSlider').style.bottom = '-160px';
-            sliderOpen = false;
-        }
-        // Displays the loaded text for each note.
-        const displayText = () => {
-            noteField.focus();
-            noteField.innerHTML = notebook.content;
-        }
-        if(notebook.title === 'New') {
-            imagePart.onclick = () => {
                 if(forgotToSave(titleField, noteField)) {
                     showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", () => {
@@ -196,32 +140,7 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                         global.currentTitle = '';
                         global.currentContent = '';
                         currentNoteID = null;
-                        closeSlider();
-                    });
-                } else {
-                    titleField.value = '';
-                    noteField.innerHTML = '';
-                    global.currentTitle = '';
-                    global.currentContent = '';
-                    currentNoteID = null;
-                    closeSlider();
-                }
-            }
-            titlePart.onclick = () => {
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
-                if(forgotToSave(titleField, noteField)) {
-                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                    "Continue", "Cancel", () => {
-                        titleField.value = '';
-                        noteField.innerHTML = '';
-                        global.currentTitle = '';
-                        global.currentContent = '';
-                        currentNoteID = null;
-<<<<<<< HEAD
                         closeSidebar();
-=======
-                        closeSlider();
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
                     });
                 } else {
                     titleField.value = '';
@@ -229,7 +148,6 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = '';
                     global.currentContent = '';
                     currentNoteID = null;
-<<<<<<< HEAD
                     closeSidebar();
                 }
             }
@@ -251,59 +169,29 @@ const configureNotbookSlider = (list, titleField, noteField) => {
                     global.currentTitle = current.title;
                     global.currentContent = current.content;
                     currentNoteID = current.id;
-=======
-                    closeSlider();
-                }
-            }
-        } else {
-            imagePart.onclick = () => {
-                if(forgotToSave(titleField, noteField)) {
-                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                    "Continue", "Cancel", () => {
-                        titleField.value = notebook.title;
-                        noteField.innerHTML = notebook.content;
-                        global.currentTitle = notebook.title;
-                        global.currentContent = notebook.content;
-                        currentNoteID = notebook.id;
-                        displayText();
-                    });
-                } else {
-                    titleField.value = notebook.title;
-                    noteField.innerHTML = notebook.content;
-                    global.currentTitle = notebook.title;
-                    global.currentContent = notebook.content;
-                    currentNoteID = notebook.id;
-                    displayText();
-                }
-            }
-            titlePart.onclick = () => {
-                if(forgotToSave(titleField, noteField)) {
-                    showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                    "Continue", "Cancel", () => {
-                        titleField.value = notebook.title;
-                        noteField.innerHTML = notebook.content;
-                        global.currentTitle = notebook.title;
-                        global.currentContent = notebook.content;
-                        currentNoteID = notebook.id;
-                        displayText();
-                    });
-                } else {
-                    titleField.value = notebook.title;
-                    noteField.innerHTML = notebook.content;
-                    global.currentTitle = notebook.title;
-                    global.currentContent = notebook.content;
-                    currentNoteID = notebook.id;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
                     displayText();
                 }
             }
         }
-<<<<<<< HEAD
+
+        // Define the mouse behavior.
+        const noteCxtMenu = new Menu();
+        noteCxtMenu.append(new MenuItem({
+            label: 'Delete',
+            click: () => {
+                showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', () => {
+                    deleteNote(current.id);
+                });
+            }
+        }));
+        item.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            noteCxtMenu.popup(remote.getCurrentWindow());
+        }, false);
+
 
         // Add to the sidebar.
         list.appendChild(item);
-=======
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     }
 };
 
@@ -419,6 +307,24 @@ const getCurrentNote = () => {
     }
 }
 
+/** Deletes a note from the database. */
+const deleteNote = (noteID) => {
+    fireRef.child('notes').child(noteID).remove();
+    document.getElementById('titleArea').value = '';
+    document.getElementById('noteArea').innerHTML = '';
+
+    // Reload notes.
+    notebooks = [{
+        id: '',
+        title: 'New',
+        content: '',
+        creator: '',
+        timestamp: 0
+    }];
+    loadNotes(global.currentUser.uid);
+}
+
+
 
 
 /**********************
@@ -428,25 +334,15 @@ const getCurrentNote = () => {
 ***********************/
 
 const stylesComponent = () => { 
-<<<<<<< HEAD
     return '<link rel="stylesheet" type="text/css" href="src/styles/home.css">'
-=======
-    return '<link rel="stylesheet" type="text/css" href="src/styles/notebooksButton.css">'
-    + '<link rel="stylesheet" type="text/css" href="src/styles/home.css">'
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     + '<link rel="stylesheet" type="text/css" href="src/styles/signup.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/login.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/appSettings.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/account.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/sidebar.css">'
-<<<<<<< HEAD
     + '<link rel="stylesheet" type="text/css" href="src/styles/optionsSlider.css">'
+    + '<link rel="stylesheet" type="text/css" href="src/styles/codeSegment.css">'
     + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">';
-=======
-    + '<link rel="stylesheet" type="text/css" href="src/styles/sidebarButton.css">'
-    + '<link rel="stylesheet" type="text/css" href="src/styles/titleBar.css">'
-    + '<link rel="stylesheet" type="text/css" href="src/styles/NotebooksSlider.css">';
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 }
 
 
@@ -463,19 +359,13 @@ const defineHomeScript = () => {
     const titleField = document.getElementById('titleArea');
     const noteField = document.getElementById('noteArea');
 
-<<<<<<< HEAD
     const optionsSlider = document.getElementById('optionsSlider');
     const sidebar = document.getElementById('sidebar');
 
     const optionsButton = document.getElementById('optionsButton');
     const sidebarButton = document.getElementById('sidebarButton');
-=======
-    const notebooksButton = document.getElementById('mpb');
-    const notebookSlider = document.getElementById('notebookSlider');
 
-    const sidebarButton = document.getElementById('sidebarButton');
-    const sidebar = document.getElementById('sidebar');
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
+    const optionsTitleLabels = document.getElementsByClassName('optionsItemTitle');
 
 
     // Start input event listener.
@@ -483,14 +373,27 @@ const defineHomeScript = () => {
     noteField.onkeypress = (e) => { writeToNoteArea(e.key, noteField); }
     noteField.onkeydown = (e) => {
         if(e.key === 'Tab') {
-            document.execCommand('insertText', false, '        ');
+            document.execCommand('insertHTML', false, '\u00a0\u00a0\u00a0\u00a0');
+            e.preventDefault();
         }
     }
 
+
     // Run some methods initially.
     configureFontSelector();
-    handleSidebarButtons();
+    handleOptionsSliderButtons();
     manageEditListeners(titleField, noteField);
+    
+    // Show the last note when coming back from another page.
+    if(currentNoteID !== null) {
+        for(var i = 0; i < notebooks.length; i++) {
+            if(notebooks[i].id === currentNoteID) {
+                titleField.value = notebooks[i].title;
+                noteField.innerHTML = notebooks[i].content;
+                break;
+            }
+        }
+    }
 
     // Reset some variables.
     notebooks = [{
@@ -500,29 +403,29 @@ const defineHomeScript = () => {
         creator: '',
         timestamp: 0
     }];
-    currentNoteID = null;
     global.currentTitle = '';
     global.currentContent = '';
+    sidebarOpen = false;
+    sliderOpen = false;
     
     // Auto login.
     if(global.currentUser === null) autoLogin();
     
     // Set the colors based on the app settings
-<<<<<<< HEAD
     optionsButton.style.backgroundColor = appSettings.colorScheme;
     optionsSlider.style.backgroundColor = appSettings.colorScheme;
-=======
-    notebooksButton.style.backgroundColor = appSettings.colorScheme;
-    notebookSlider.style.backgroundColor = appSettings.colorScheme;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
     sidebar.style.backgroundColor = appSettings.colorScheme;
+    // Cannot set sidebar titles colors here.
+    for(var i = 0; i < optionsTitleLabels.length; i++) {
+        optionsTitleLabels[i].style.color = appSettings.sidebarTextColor;
+    }
 
     // Load all of the user's notebooks.
     if(global.currentUser !== null) loadNotes(global.currentUser.uid);
 
 
+
     // Toggle the notebook slider.
-<<<<<<< HEAD
     optionsButton.onclick = function() {
         if(sliderOpen) {
             optionsButton.style.bottom = '30px';
@@ -531,17 +434,8 @@ const defineHomeScript = () => {
         } else {
             optionsButton.style.bottom = '110px';
             optionsSlider.style.bottom = '0px';
-=======
-    notebooksButton.onclick = function() {
-        if(sliderOpen) {
-            notebooksButton.style.bottom = '30px';
-            notebookSlider.style.bottom = '-160px';
-            sliderOpen = false;
-        } else {
-            notebooksButton.style.bottom = '180px';
-            notebookSlider.style.bottom = '0px';
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
             sliderOpen = true;
+            optionsSlider.focus();
         }
     }
     // Toggle the sidebar.
@@ -550,20 +444,12 @@ const defineHomeScript = () => {
             sidebarButton.style.right = '15px';
             sidebar.style.right = '-200px';
             sidebarOpen = false;
-<<<<<<< HEAD
             optionsButton.style.opacity = 1;
-=======
-            notebooksButton.style.opacity = 1;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
         } else {
             sidebarButton.style.right = '215px';
             sidebar.style.right = '0px';
             sidebarOpen = true;
-<<<<<<< HEAD
             optionsButton.style.opacity = 0.3;
-=======
-            notebooksButton.style.opacity = 0.3;
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
         }
     }
 }
@@ -588,6 +474,7 @@ const autoLogin = () => {
 
 // The note area is really just an editable div, and this method lets you type into it.
 // This method is deprecated now, but keep it here for a while anyway.
+// NOT BEING USED.
 const writeToNoteArea = (key, noteField) => {
 
     // // Now, after making sure it is not a special key, create the span for that key alone.
@@ -630,7 +517,7 @@ const placeCaretAtEnd = (el) => {
 }
 
 // Handles button presses in the sidebar.
-const handleSidebarButtons = () => {
+const handleOptionsSliderButtons = () => {
     // Color
     $('#sidebar_Color').spectrum({
         color: writingSettings.color,
@@ -645,7 +532,7 @@ const handleSidebarButtons = () => {
     $('#sidebar_Font').click(() => {
         const dialog = document.getElementById('fontDialog');
         if(dialog.hasAttribute('open')) { dialog.removeAttribute('open'); }
-        else { dialog.setAttribute('open', true); }
+        else { dialog.setAttribute('open', true); dialog.focus(); }
     });
 
     // Alignment
@@ -704,14 +591,41 @@ const configureFontSelector = () => {
     const dialog = document.getElementById('fontDialog');
     
     const selector = document.getElementById('fontSelector');
+    const options = document.getElementsByTagName('option');
     const sizeInput = document.getElementById('fontSizeSelector');
 
     const saveBtn = document.getElementById('saveFontButton');
     const cancelBtn = document.getElementById('cancelFontButton');
 
+
+    // Setup dragging on the font selector.
+    body.ondrop = (ev) => {
+        ev.preventDefault();
+    }
+    body.ondragover = (ev) => {
+        ev.preventDefault();
+        $('#fontDialog').offset({
+            top: ev.pageY - $('#fontDialog').outerHeight() / 2,
+            left: ev.pageX - $('#fontDialog').outerWidth() / 2
+        });
+    }
+    dialog.ondrop = (ev) => {
+        ev.preventDefault();
+    }
+
+
+    // Set each font to itself... basically.
+    for(var i = 0; i < options.length; i++) {
+        options[i].style.fontFamily = options[i].innerHTML;
+    }
+
     saveBtn.onclick = () => {
         document.execCommand('fontName', false, selector.value);
-        document.execCommand('fontSize', false, sizeInput.value);
+
+        // Changing the font size is a little different than other stylings.
+        const span = "<span style='font-size: " + sizeInput.value + "px'>" + document.getSelection().toString() + "</span>";
+        document.execCommand('insertHTML', false, span);
+
         writingSettings.fontFamily = selector.value;
         writingSettings.fontSize = sizeInput.value;
         dialog.removeAttribute('open');
@@ -963,6 +877,8 @@ const defineAppSettingsScript = () => {
         alertify.success('Updated settings!');
     }
 
+
+    // Choose color scheme.
     $('#chooseColorSchemeButton').spectrum({
         color: appSettings.colorScheme,
         showInput: true,
@@ -970,6 +886,15 @@ const defineAppSettingsScript = () => {
             tempSettings['colorScheme'] = color.toRgbString();
         }
     });
+
+    // Choose sidebar text color.
+    $('#chooseSidebarTextButton').spectrum({
+        color: appSettings.sidebarTextColor,
+        showInput: true,
+        change: function(color) {
+            tempSettings['sidebarTextColor'] = color.toRgbString();
+        }
+    })
 }
 
 
@@ -1061,6 +986,62 @@ const manageEditListeners = (titleField, noteField) => {
     });
 
 
+    // Insert
+    ipc.on('subscript-reply', (event) => {
+        document.execCommand('subscript', true);
+    });
+    ipc.on('superscript-reply', (event) => {
+        document.execCommand('superscript', true);
+    });
+    ipc.on('bulletedList-reply', (event) => {
+        writingSettings.bulletedList = !writingSettings.bulletedList;
+        writingSettings.numberedList = false;
+
+        document.execCommand('insertUnorderedList', false);
+    });
+    ipc.on('numberedList-reply', (event) => {
+        writingSettings.numberedList = !writingSettings.numberedList;
+        writingSettings.bulletedList = false;
+
+        document.execCommand('insertOrderedList', false);
+    });
+    ipc.on('insertCodeSegment-reply', (event) => {
+        // Create the code segment.
+        const bgColor = 'background-color: rgb(229, 229, 229);';
+        const codeSegment = '<div class="codeSegmentArea" contentEditable="true" tabindex="1" style="' + bgColor + '">Start typing code here</div>';
+
+        /* CONTEXT MENU FOR SYNTAX HIGHLIGHTING */
+        /* THIS FEATURE WILL BE IMPLEMENTED IN A LATER VERSION. */
+        // const noteCxtMenu = new Menu();
+        // noteCxtMenu.append(new MenuItem({
+        //     label: 'Syntax Highlighting',
+        //     submenu: [{
+        //         label: 'C',
+        //         click: () => {
+
+        //         }
+        //     },{
+        //         label: 'C++',
+        //         click: () => {
+                    
+        //         }
+        //     },{
+        //         label: 'Java',
+        //         click: () => {
+                    
+        //         }
+        //     }]
+        // }));
+        // item.addEventListener('contextmenu', (e) => {
+        //     e.preventDefault();
+        //     noteCxtMenu.popup(remote.getCurrentWindow());
+        // }, false);
+
+        // Insert it into the note area.
+        document.execCommand('insertHTML', true, '<br>' + codeSegment + '<br>');
+    });
+
+
 
     // Shortcuts
     ipc.on('bold-reply', (event) => {
@@ -1098,31 +1079,80 @@ const manageEditListeners = (titleField, noteField) => {
             document.execCommand('backColor', false, 'rgba(0,0,0,0)');
         }
     });
-<<<<<<< HEAD
-    ipc.on('openSidebar-reply', (event) => {
-        if(sidebarOpen) {
-            document.getElementById('sidebarButton').style.right = '15px';
-            document.getElementById('sidebar').style.right = '-200px';
-            sidebarOpen = false;
-            document.getElementById('optionsButton').style.opacity = 1;
-        } else {
-            document.getElementById('sidebarButton').style.right = '215px';
-            document.getElementById('sidebar').style.right = '0px';
-            sidebarOpen = true;
-            document.getElementById('optionsButton').style.opacity = 0.3;
-        }
-    });
-    ipc.on('viewNotes-reply', (event) => {
-        if(sliderOpen) {
-            document.getElementById('optionsButton').style.bottom = '30px';
-            document.getElementById('optionsSlider').style.bottom = '-80px';
-            sliderOpen = false;
-        } else {
-            document.getElementById('optionsButton').style.bottom = '110px';
-            document.getElementById('optionsSlider').style.bottom = '0px';
-            sliderOpen = true;
-        }
-    });
-=======
->>>>>>> e9bb07169874ef63236bc77d59dae95c3c26c2a6
 }
+
+ipc.on('openSidebar-reply', (event) => {
+    if(sidebarOpen) {
+        document.getElementById('sidebarButton').style.right = '15px';
+        document.getElementById('sidebar').style.right = '-200px';
+        sidebarOpen = false;
+        document.getElementById('optionsButton').style.opacity = 1;
+    } else {
+        document.getElementById('sidebarButton').style.right = '215px';
+        document.getElementById('sidebar').style.right = '0px';
+        sidebarOpen = true;
+        document.getElementById('optionsButton').style.opacity = 0.3;
+    }
+});
+ipc.on('viewNotes-reply', (event) => {
+    if(sliderOpen) {
+        document.getElementById('optionsButton').style.bottom = '30px';
+        document.getElementById('optionsSlider').style.bottom = '-80px';
+        sliderOpen = false;
+    } else {
+        document.getElementById('optionsButton').style.bottom = '110px';
+        document.getElementById('optionsSlider').style.bottom = '0px';
+        sliderOpen = true;
+    }
+});
+ipc.on('checkForUpdates-reply', (event) => {
+    fireRef.child('Version').once('value', (snap) => {
+        const latestVersion = snap.val();
+
+        if(app.getVersion() !== latestVersion) {
+            // Get the newest updates
+            fireRef.child('NewInThisVersion').once('value', (snap2) => {
+                const btnStyle = 'width:100px; height:35px; border:none; outline:none; cursor:pointer; background:none; border-radius:25px; background-color:lightgreen;';
+                const btnClick = "const shell = require('shelljs'); shell.config.execPath='/usr/local/bin/node'; shell.exec('open http://www.adeolauthman.com');";
+    
+                var alrt = '<div style="text-align:center">';
+                alrt += '<p style="font-size:18px;">There is a new version of Noteworthy!</p>';
+                alrt += '<h3>Version ' + latestVersion + '!</h3>';
+                alrt += '<p>1.) Head over to www.adeolauthman.com<br>2.) Go to Noteworthy under the "Projects" tab to download the latest version.';
+                alrt += '<br><br>';
+                alrt += '<p> <b>New in Version ' + latestVersion + ':</b> ' + snap2.val() + '</p>';
+                alrt += '<button onclick="' + btnClick + '" style="' + btnStyle + '">Go to Website</button>';
+                alrt += '</div>';
+                alertify.alert(alrt);
+    
+            });
+            
+        } else {
+            alert("You already have the latest version of Noteworthy!");
+        }
+    })
+});
+ipc.on('backupNotes-reply', (event) => {
+    showPromptDialog('Backing up your notes will save a local copy to your computer. Be sure to do this often to avoid losing your notes. Below, enter the location where you would like the backup to be stored.', 'Choose Backup Location', 'Cancel', () => {
+        const { dialog } = require('electron').remote;
+        dialog.showOpenDialog(null, {
+            properties: ['openDirectory']
+        }, (paths) => {
+            if(paths !== undefined) {
+                
+                // Create a folder for the notes.
+                const path = paths[0] + '/NoteworthyNotes_' + global.currentUser.firstName + global.currentUser.lastName;
+                fs.mkdir(path);
+
+                // Write files for each note to this folder.
+                for(var i = 1; i < notebooks.length; i++) {
+                    const current = notebooks[i];
+                    const fileName = path + '/' + current.title + '_' + Date.now() + '.txt';
+                    shell.touch(fileName);
+                    fs.writeFileSync(fileName, JSON.stringify(current), 'utf8');
+                }
+                alert('Your notes have been backed up successfully!');
+            }
+        });
+    });
+});
