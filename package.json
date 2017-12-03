@@ -1,11 +1,12 @@
 {
   "name": "Noteworthy",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A simple note-taking application.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
+    "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",
     "clean": "rm -rf -R Noteworthy-darwin-x64"
   },
   "repository": "https://github.com/Authman2/Noteworthy",
@@ -30,6 +31,7 @@
     "jquery": "^3.2.1",
     "jsonfile-updater": "^2.1.0",
     "jszip": "^3.1.4",
+    "nodemailer": "^4.4.0",
     "shelljs": "^0.7.8",
     "spectrum-colorpicker": "^1.8.0"
   }

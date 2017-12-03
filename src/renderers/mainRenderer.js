@@ -12,11 +12,14 @@ const global = require('electron').remote.getGlobal('sharedObject');
 const exec = require('child_process').exec;
 const shell = require('shelljs');
 const zip = require('jszip');
+const nodemailer = require('nodemailer');
 
 const firebase = require('firebase');
 const config = require('../creds/creds.json')
 firebase.initializeApp(config);
 
+// The nodemailer client.
+var t;
 
 /**********************
 *                     *
@@ -1010,33 +1013,6 @@ const manageEditListeners = (titleField, noteField) => {
         const bgColor = 'background-color: rgb(229, 229, 229);';
         const codeSegment = '<div class="codeSegmentArea" contentEditable="true" tabindex="1" style="' + bgColor + '">Start typing code here</div>';
 
-        /* CONTEXT MENU FOR SYNTAX HIGHLIGHTING */
-        /* THIS FEATURE WILL BE IMPLEMENTED IN A LATER VERSION. */
-        // const noteCxtMenu = new Menu();
-        // noteCxtMenu.append(new MenuItem({
-        //     label: 'Syntax Highlighting',
-        //     submenu: [{
-        //         label: 'C',
-        //         click: () => {
-
-        //         }
-        //     },{
-        //         label: 'C++',
-        //         click: () => {
-                    
-        //         }
-        //     },{
-        //         label: 'Java',
-        //         click: () => {
-                    
-        //         }
-        //     }]
-        // }));
-        // item.addEventListener('contextmenu', (e) => {
-        //     e.preventDefault();
-        //     noteCxtMenu.popup(remote.getCurrentWindow());
-        // }, false);
-
         // Insert it into the note area.
         document.execCommand('insertHTML', true, '<br>' + codeSegment + '<br>');
     });
@@ -1079,6 +1055,58 @@ const manageEditListeners = (titleField, noteField) => {
             document.execCommand('backColor', false, 'rgba(0,0,0,0)');
         }
     });
+    ipc.on('shareemail-reply', (event) => {
+        // Show email window.
+        const btnClick = '';
+        var alrt = '<div style="text-align:center">';
+        alrt += '<h2 style="font-size:18px;margin-top:-15px">Enter your settings for this email:</h2>';
+        alrt += '<input id="email-from-field" type="text" placeholder="sender@mail.com"/>';
+        alrt += '<br>';
+        alrt += '<input id="email-password-field" type="password" placeholder="sender password"/>';
+        alrt += '<br>';
+        alrt += '<input id="email-to-field" type="text" placeholder="receiver@mail.com"/>';
+        alrt += '<br>';
+        alrt += '</div>';
+        alertify.okBtn('Send!').confirm(alrt, () => {
+            t = nodemailer.createTransport({
+                service: 'Gmail',
+                secure: 'false',
+                auth: {
+                    user: document.getElementById('email-from-field').value,
+                    pass: document.getElementById('email-password-field').value,
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                }
+            });
+
+            t.verify(function(error, success) {
+                if (error) {
+                    alertify.okBtn('Ok').alert('You are not able to send an email from this app due to your current email security rules.'
+                                    + ' Check your email for a message on how you can change your settings to allow for sending'
+                                    + ' email from Noteworthy');
+                    return;
+                } else {
+                    t.sendMail({
+                        from: document.getElementById('email-from-field').value,
+                        to: document.getElementById('email-to-field').value,
+                        subject: getCurrentNote().title,
+                        text: noteField.innerText,
+                        html: noteField.innerHTML
+                    }, (err) => {
+                        if(err) { alertify.alert('' + err); return; }
+                        alertify.alert('Email Sent!');
+                        return;
+                    });
+                }
+            });
+            
+        }, () => {
+            // Nothing.
+        });
+        document.getElementById('email-from-field').placeholder = "sender@mail.com";
+        return;
+    })
 }
 
 ipc.on('openSidebar-reply', (event) => {
@@ -1155,4 +1183,5 @@ ipc.on('backupNotes-reply', (event) => {
             }
         });
     });
+    
 });

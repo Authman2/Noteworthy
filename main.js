@@ -104,6 +104,12 @@ ipc.on('superscript-send', (event) => {
     eve = event;
     event.sender.send('superscript-reply');
 });
+ipc.on('shareemail-send', (event) => {
+    eve = event;
+    event.sender.send('shareemail-reply');
+});
+
+
 
 // Create the application menu.
 let template = [{
@@ -112,8 +118,11 @@ let template = [{
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: () => {
-            if(eve !== null && eve !== undefined)
+            if(eve !== null && eve !== undefined) {
                 eve.sender.send('saveNote-reply', global.sharedObject.currentTitle, global.sharedObject.currentContent);
+            } else {
+                console.log('ITS NULL');
+            }
         }
     },{
         label: 'Print',
@@ -121,6 +130,20 @@ let template = [{
         click: () => { 
             if(eve !== null && eve !== undefined)
                 eve.sender.send('handlePrint-reply');
+        }
+    },{
+        label: 'Share',
+        submenu: [{
+            label: 'Email',
+            click: () => {
+                if(eve !== null && eve !== undefined)
+                    eve.sender.send('shareemail-reply');
+            }
+        }]
+    },{
+        label: 'New Window',
+        click: () => {
+            createAnotherWindow();
         }
     }]
 },{
@@ -324,11 +347,11 @@ let template = [{
                 eve.sender.send('viewNotes-reply');
         }
     },
-    // {
-    //     label: 'Open Developer Tools',
-    //     accelerator: 'CmdOrCtrl+T',
-    //     click: () => { mainWindow.webContents.openDevTools(); }
-    // }
+    {
+        label: 'Open Developer Tools',
+        accelerator: 'CmdOrCtrl+T',
+        click: () => { mainWindow.webContents.openDevTools(); }
+    }
     ]
 },{
     label: 'Help',
@@ -406,6 +429,66 @@ function createMainWindow () {
     mainWindow.once('ready-to-show', () => { mainWindow.show(); });
 	mainWindow.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
 }
+
+/**
+    Creates another application window.
+*/
+function createAnotherWindow() {
+    // Create the browser window.
+  	let wind = new BrowserWindow({
+        width: 800, 
+        height: 600,
+        show: false,
+        title: 'Noteworthy',
+        titleBarStyle: 'hiddenInset',
+        icon: path.join(__dirname, 'NoteworthyAppIcon.icns'),
+    })
+    wind.setTitle('Noteworthy');
+
+    // and load the index.html of the app.
+    wind.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+    
+
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+    
+    // // Create application menu.
+    // const temp = template;
+    // if (process.platform === 'darwin') {
+    //     const name = electron.app.getName();
+    //     temp.unshift({
+    //         label: name,
+    //         submenu: [{
+    //             label: `About ${name}`,
+    //             role: 'about'
+    //         },{
+    //             label: 'Settings',
+    //             accelerator: 'CmdOrCtrl+,',
+    //             click: () => { 
+    //                 if(eve !== null && eve !== undefined)
+    //                     eve.sender.send('changeCurrentPage-reply', appSettingsFile, 'appsettings');
+    //             }
+    //         },{
+    //             label: 'Quit',
+    //             accelerator: 'CmdOrCtrl+Q',
+    //             click: () => { app.quit(); }
+    //         }]
+    //     });
+    // }
+    // const menu = Menu.buildFromTemplate(temp);
+    // Menu.setApplicationMenu(menu);   
+
+    
+    // Add the window to the array and create the other windows later on.
+    windows.push(wind);
+    wind.once('ready-to-show', () => { wind.show(); });
+    wind.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
+}
+
 
 
 
