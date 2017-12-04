@@ -1,3 +1,0 @@
-colorScheme : rgb(47, 178, 26)
-sidebarTextColor : rgba(0, 0, 0, 0.5)
-tabSize : 4

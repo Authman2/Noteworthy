@@ -160,7 +160,18 @@ hr.homeSeparator {
     -webkit-transition-duration: 0.3s;
 }
 
-
+.codeSegmentArea {
+	position: relative;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	outline: none;
+	background: none;
+	text-decoration: none;
+	font-family: monospace;
+	/* Background color is purposely not set here. */
+}
 
 
 @media print {
@@ -178,4 +189,3 @@ hr.homeSeparator {
         top: 0;
     }
 }
-  

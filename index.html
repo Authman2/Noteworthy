@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
-	<head>
-    	<meta charset="UTF-8">
-		<title>Noteworthy</title>
-		
-		<style>
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://use.fontawesome.com/b3a11d315d.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+        <link rel="stylesheet" href="src/css/home.css">
+        <link rel="stylesheet" href="src/css/login.css">
+        <link rel="stylesheet" href="src/css/signup.css">
+        <link rel="stylesheet" href="src/css/account.css">
+        <link rel="stylesheet" href="src/css/app-settings.css">
+        <link rel="stylesheet" href="src/css/notebook-slider.css">
+        <link rel="stylesheet" href="src/css/note-options-button.css">
+        <link rel="stylesheet" href="src/css/options-slider.css">
+        <link rel="stylesheet" href="src/css/sidebar.css">
+        <link rel="stylesheet" href="src/css/sidebar-button.css">
+        <link rel="stylesheet" href="src/css/app-settings.css">
+        <link rel="stylesheet" href="src/css/title-bar.css">
+
+        <style>
 			body {
 				position: absolute;
 				width: 100%;
@@ -15,22 +28,17 @@
                 background-color: white;
 			}
 		</style>
-		<script src="https://use.fontawesome.com/b3a11d315d.js"></script>
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
-  	</head>
-	  
+    </head>
+
+    <!-- The body just contains the id 'root' because it will be dynamically filled in later. -->
+    <body id='root'></body>
 
 
-	<body id='root'>
-		<!-- The render.js file will determine what goes in the body of the page. -->
-	</body>
-	  
-
-	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
   	<script>
-		require('./src/renderers/mainRenderer.js')
+        require('./renderer.js');
     </script>
 </html>
