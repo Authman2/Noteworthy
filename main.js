@@ -37,7 +37,8 @@ global.sharedObject = {
     currentUser: null,
     currentTitle: '',
     currentContent: '',
-    currentID: ''
+    currentID: '',
+    currentScroll: 0
 }
 
 
@@ -66,6 +67,21 @@ let template = [{
                 if(eve !== null && eve !== undefined)
                     eve.sender.send('share-email');
             }
+        }]
+    },{
+        label: 'Export',
+        submenu: [{
+            label: 'PDF',
+            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-pdf'); }
+        },{
+            label: 'Plain Text',
+            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-txt'); }
+        },{
+            label: 'Markdown',
+            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-md'); }
+        },{
+            label: 'HTML',
+            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-html'); }
         }]
     },{
         label: 'New Window',
@@ -117,6 +133,13 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 eve.sender.send('select-all');
+        }
+    },{
+        label: 'Find/Replace',
+        accelerator: 'CmdOrCtrl+A',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                eve.sender.send('find-replace');
         }
     }]
 },{
@@ -212,13 +235,15 @@ let template = [{
     label: 'Login',
     submenu: [{
         label: 'Login',
-        click: () => { 
+        accelerator: 'CmdOrCtrl+Shift+L',
+        click: () => {
             if(eve !== null && eve !== undefined) {
                 eve.sender.send('goto-login');
             }
         }
     }, {
         label: 'Sign Up',
+        accelerator: 'CmdOrCtrl+Shift+S',
         click: () => { 
             if(eve !== null && eve !== undefined) {
                 eve.sender.send('goto-signup');
@@ -328,9 +353,13 @@ const createWindow = () => {
     windows.push(wind);
     const placement = windows.length - 1;
     
-    wind.once('ready-to-show', () => { wind.show(); });
+    wind.once('ready-to-show', () => { 
+        wind.show();
+    });
     wind.on('focus', () => {
         currentWindow = placement;
+        windows[currentWindow].focus();
+        console.log(`Current Window: ${currentWindow}`);
     });
 	wind.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
 }

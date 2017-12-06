@@ -401,8 +401,17 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             e.preventDefault();
         }
     }
+    noteField.onscroll = () => {
+        global.currentScroll = noteField.scrollTop;
+    }
+    noteField.onmousedown = (e) => {
+        if(e.which === 3) {
+            console.log('OPEN CONTEXT MENU');
+        }
+    }
 
     // Run some methods initially.
+    noteField.focus();
     configureFontSelector();
     handleOptionsSliderButtons();
     
@@ -430,6 +439,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         global.currentTitle = note.title;
         global.currentContent = note.content;
         currentNoteID = note.id;
+        noteField.scrollTop = global.currentScroll; // Go back to scroll location.
     }
 
     // Toggle the notebook slider.
@@ -600,6 +610,31 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             document.getElementById('email-from-field').placeholder = "sender@mail.com";
             return;
         })
+        ipc.on('find-replace', (event) => {
+            //
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        })
+        ipc.on('export-pdf', (event) => {
+            //  
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        });
+        ipc.on('export-txt', (event) => {
+            //  
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        });
+        ipc.on('export-md', (event) => {
+            //  
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        });
+        ipc.on('export-html', (event) => {
+            //  
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        });
     }
 
     // These events don't follow the eventsAgain structure...
