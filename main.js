@@ -80,7 +80,7 @@ let template = [{
         }]
     },{
         label: 'New Window',
-        accelerator: 'CmdOrCtrl+Shift+N',
+        accelerator: 'CmdOrCtrl+Option+N',
         click: () => { createWindow(); }
     }]
 },{
