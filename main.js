@@ -22,11 +22,6 @@ const Menu = electron.Menu
 *                       *
 *************************/
 
-// An array of all the application windows that are currently open.
-// Also the index of the currently open window.
-var windows = [];
-var currentWindow = 0;
-
 // The event handler.
 var eve;
 
@@ -50,14 +45,14 @@ let template = [{
         accelerator: 'CmdOrCtrl+S',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('save');
+                BrowserWindow.getFocusedWindow().emit('save');
         }
     },{
         label: 'Print',
         accelerator: 'CmdOrCtrl+P',
         click: () => { 
             if(eve !== null && eve !== undefined)
-                eve.sender.send('print');
+                BrowserWindow.getFocusedWindow().emit('print');
         }
     },{
         label: 'Share',
@@ -65,23 +60,23 @@ let template = [{
             label: 'Email',
             click: () => {
                 if(eve !== null && eve !== undefined)
-                    eve.sender.send('share-email');
+                    BrowserWindow.getFocusedWindow().emit('share-email');
             }
         }]
     },{
         label: 'Export',
         submenu: [{
             label: 'PDF',
-            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-pdf'); }
+            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-pdf'); }
         },{
             label: 'Plain Text',
-            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-txt'); }
+            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-txt'); }
         },{
             label: 'Markdown',
-            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-md'); }
+            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-md'); }
         },{
             label: 'HTML',
-            click: () => { if(eve !== null && eve !== undefined) eve.sender.send('export-html'); }
+            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-html'); }
         }]
     },{
         label: 'New Window',
@@ -95,14 +90,14 @@ let template = [{
         accelerator: 'CmdOrCtrl+Z',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('undo');
+                BrowserWindow.getFocusedWindow().emit('undo');
         }
     },{
         label: 'Redo',
         accelerator: 'CmdOrCtrl+Shift+Z',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('redo');
+                BrowserWindow.getFocusedWindow().emit('redo');
         }
     },{
         type: 'separator'
@@ -111,35 +106,35 @@ let template = [{
         accelerator: 'CmdOrCtrl+X',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('cut');
+                BrowserWindow.getFocusedWindow().emit('cut');
         }
     },{
         label: 'Copy',
         accelerator: 'CmdOrCtrl+C',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('copy');
+                BrowserWindow.getFocusedWindow().emit('copy');
         }
     },{
         label: 'Paste',
         accelerator: 'CmdOrCtrl+V',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('paste');
+                BrowserWindow.getFocusedWindow().emit('paste');
         }
     },{
         label: 'Select All',
         accelerator: 'CmdOrCtrl+A',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('select-all');
+                BrowserWindow.getFocusedWindow().emit('select-all');
         }
     },{
         label: 'Find/Replace',
         accelerator: 'CmdOrCtrl+A',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('find-replace');
+                BrowserWindow.getFocusedWindow().emit('find-replace');
         }
     }]
 },{
@@ -149,35 +144,35 @@ let template = [{
         accelerator: 'CmdOrCtrl+Option+6',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('subscript');
+                BrowserWindow.getFocusedWindow().emit('subscript');
         }
     },{
         label: 'Superscript',
         accelerator: 'CmdOrCtrl+Shift+6',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('superscript');
+                BrowserWindow.getFocusedWindow().emit('superscript');
         }
     },{
         label: 'Bulleted List',
         accelerator: 'CmdOrCtrl+Shift+B',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('bulleted-list');
+                BrowserWindow.getFocusedWindow().emit('bulleted-list');
         }
     },{
         label: 'Numbered List',
         accelerator: 'CmdOrCtrl+Shift+N',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('numbered-list');
+                BrowserWindow.getFocusedWindow().emit('numbered-list');
         }
     },{
         label: 'Code Segment',
         accelerator: 'CmdOrCtrl+Shift+C',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('code-segment');
+                BrowserWindow.getFocusedWindow().emit('code-segment');
         }
     }]
 },{
@@ -186,49 +181,49 @@ let template = [{
         label: 'Bold',
         accelerator: 'CmdOrCtrl+B',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('bold');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('bold');
         }
     },{
         label: 'Underline',
         accelerator: 'CmdOrCtrl+U',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('underline');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
         }
     },{
         label: 'Italic',
         accelerator: 'CmdOrCtrl+I',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('italic');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('italic');
         }
     },{
         label: 'Font',
         accelerator: 'CmdOrCtrl+F',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('font');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('font');
         }
     },{
         label: 'Align Left',
         accelerator: 'CmdOrCtrl+Option+L',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('align-left');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-left');
         }
     },{
         label: 'Align Center',
         accelerator: 'CmdOrCtrl+Option+C',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('align-center');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-center');
         }
     },{
         label: 'Align Right',
         accelerator: 'CmdOrCtrl+Option+R',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('align-right');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-right');
         }
     },{
         label: 'Highlight',
         accelerator: 'CmdOrCtrl+H',
         click: () => {
-            if(eve !== null && eve !== undefined) eve.sender.send('highlight');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('highlight');
         }
     }]
 },{
@@ -238,7 +233,7 @@ let template = [{
         accelerator: 'CmdOrCtrl+Shift+L',
         click: () => {
             if(eve !== null && eve !== undefined) {
-                eve.sender.send('goto-login');
+                BrowserWindow.getFocusedWindow().emit('goto-login');
             }
         }
     }, {
@@ -246,7 +241,7 @@ let template = [{
         accelerator: 'CmdOrCtrl+Shift+S',
         click: () => { 
             if(eve !== null && eve !== undefined) {
-                eve.sender.send('goto-signup');
+                BrowserWindow.getFocusedWindow().emit('goto-signup');
             }
         }
     }, {
@@ -254,14 +249,14 @@ let template = [{
         accelerator: 'CmdOrCtrl+Shift+A',
         click: () => { 
             if(eve !== null && eve !== undefined) {
-                eve.sender.send('goto-account');
+                BrowserWindow.getFocusedWindow().emit('goto-account');
             }
         }
     }, {
         label: 'Backup Notes',
         click: () => {
             if(eve !== null && eve !== undefined)
-            eve.sender.send('backup');
+            BrowserWindow.getFocusedWindow().emit('backup');
         }
     }]
 },{
@@ -282,26 +277,26 @@ let template = [{
     },{
         label: 'Minimize',
         accelerator: 'CmdOrCtrl+M',
-        click: () => { windows[currentWindow].minimize(); }
+        click: () => { BrowserWindow.getFocusedWindow().minimize(); }
     },{
         label: 'View Notes',
         accelerator: 'CmdOrCtrl+O',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('open-sidebar');
+                BrowserWindow.getFocusedWindow().emit('open-sidebar');
         }
     },{
         label: 'Note Options',
         accelerator: 'CmdOrCtrl+N',
         click: () => {
             if(eve !== null && eve !== undefined)
-                eve.sender.send('note-options');
+                BrowserWindow.getFocusedWindow().emit('note-options');
         }
     },
     {
         label: 'Open Developer Tools',
         accelerator: 'CmdOrCtrl+T',
-        click: () => { windows[currentWindow].webContents.openDevTools(); }
+        click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
     }
     ]
 },{
@@ -314,7 +309,7 @@ let template = [{
         label: 'Check for Updates',
         click: () => {
             if(eve !== null && eve !== undefined)
-            eve.sender.send('check-updates');
+            BrowserWindow.getFocusedWindow().emit('check-updates');
         }
     }]
 }];
@@ -335,7 +330,6 @@ const createWindow = () => {
     let wind = new BrowserWindow({
         width: 800,
         height: 600,
-        show: false,
         title: 'Noteworthy',
         titleBarStyle: 'hiddenInset',
         icon: path.join(__dirname, 'NoteworthyAppIcon.icns')
@@ -347,21 +341,6 @@ const createWindow = () => {
         protocol: 'file:',
         slashes: true
     }));
-
-    // Add that window that we just created to the array of them.
-    // Then, quickly calculate the placement in the array of this window.
-    windows.push(wind);
-    const placement = windows.length - 1;
-    
-    wind.once('ready-to-show', () => { 
-        wind.show();
-    });
-    wind.on('focus', () => {
-        currentWindow = placement;
-        windows[currentWindow].focus();
-        console.log(`Current Window: ${currentWindow}`);
-    });
-	wind.on('closed', function () { for(var i = 0; i < windows.length; i++) { windows[i] = null; } })
 }
 
 
@@ -379,12 +358,12 @@ const createAppMenu = () => {
                 accelerator: 'CmdOrCtrl+,',
                 click: () => { 
                     if(eve !== null && eve !== undefined)
-                        eve.sender.send('goto-app-settings');
+                        BrowserWindow.getFocusedWindow().emit('goto-app-settings');
                 }
             },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
-                click: () => { eve.sender.send('quit-app'); }
+                click: () => { BrowserWindow.getFocusedWindow().emit('quit-app'); }
             }]
         });
     }

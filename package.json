@@ -27,12 +27,14 @@
     "alertify.js": "^1.0.12",
     "asar": "^0.13.0",
     "dropbox": "^2.5.7",
+    "electron-window-manager": "^1.0.4",
     "firebase": "^4.3.0",
     "jquery": "^3.2.1",
     "jsonfile-updater": "^2.1.0",
     "jszip": "^3.1.4",
     "nodemailer": "^4.4.0",
     "shelljs": "^0.7.8",
-    "spectrum-colorpicker": "^1.8.0"
+    "spectrum-colorpicker": "^1.8.0",
+    "watchjs": "0.0.0"
   }
 }

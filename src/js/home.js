@@ -7,6 +7,7 @@ const helpers = require('./helpers.js');
 const remote = require('electron').remote;
 const app = remote.app;
 const {Menu, MenuItem} = remote;
+const BrowserWindow = remote.BrowserWindow;
 
 
 /** Everything is basically one big function that gets called by the renderer. */
@@ -480,7 +481,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     // Only run these event methods if they have not already been run (i.e. on startup).
     if(eventsAgain === true) {
-        ipc.on('save', (event) => {
+        BrowserWindow.getFocusedWindow().on('save', (event) => {
             const content = noteField.innerHTML;
             const title = titleField.value;
 
@@ -496,26 +497,26 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
                 return;
             }
         });
-        ipc.on('print', (event) => { window.print(); });
-        ipc.on('undo', (event) => { document.execCommand('undo', false); });
-        ipc.on('redo', (event) => { document.execCommand('redo', false); });
-        ipc.on('cut', (event) => { document.execCommand('cut', false); });
-        ipc.on('copy', (event) => { document.execCommand('copy', false); });
-        ipc.on('paste', (event) => { document.execCommand('paste', false); });
-        ipc.on('select-all', (event) => { document.execCommand('selectAll', false); });
-        ipc.on('subscript', (event) => { document.execCommand('subscript', true); });
-        ipc.on('superscript', (event) => { document.execCommand('superscript', true); });
-        ipc.on('bulleted-list', (event) => {
+        BrowserWindow.getFocusedWindow().on('print', (event) => { window.print(); });
+        BrowserWindow.getFocusedWindow().on('undo', (event) => { document.execCommand('undo', false); });
+        BrowserWindow.getFocusedWindow().on('redo', (event) => { document.execCommand('redo', false); });
+        BrowserWindow.getFocusedWindow().on('cut', (event) => { document.execCommand('cut', false); });
+        BrowserWindow.getFocusedWindow().on('copy', (event) => { document.execCommand('copy', false); });
+        BrowserWindow.getFocusedWindow().on('paste', (event) => { document.execCommand('paste', false); });
+        BrowserWindow.getFocusedWindow().on('select-all', (event) => { document.execCommand('selectAll', false); });
+        BrowserWindow.getFocusedWindow().on('subscript', (event) => { document.execCommand('subscript', true); });
+        BrowserWindow.getFocusedWindow().on('superscript', (event) => { document.execCommand('superscript', true); });
+        BrowserWindow.getFocusedWindow().on('bulleted-list', (event) => {
             writingSettings.bulletedList = !writingSettings.bulletedList;
             writingSettings.numberedList = false;
             document.execCommand('insertUnorderedList', false);
         });
-        ipc.on('numbered-list', (event) => {
+        BrowserWindow.getFocusedWindow().on('numbered-list', (event) => {
             writingSettings.numberedList = !writingSettings.numberedList;
             writingSettings.bulletedList = false;
             document.execCommand('insertOrderedList', false);
         });
-        ipc.on('code-segment', (event) => {
+        BrowserWindow.getFocusedWindow().on('code-segment', (event) => {
             // Create the code segment.
             const bgColor = 'background-color: rgb(229, 229, 229);';
             const codeSegment = '<div class="codeSegmentArea" contentEditable="true" tabindex="1" style="' + bgColor + '">Start typing code here</div>';
@@ -523,34 +524,34 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             // Insert it into the note area.
             document.execCommand('insertHTML', true, '<br>' + codeSegment + '<br>');
         });
-        ipc.on('bold', (event) => { 
+        BrowserWindow.getFocusedWindow().on('bold', (event) => { 
             writingSettings.bold = !writingSettings.bold;
             document.execCommand('bold', true, writingSettings.bold);
         });
-        ipc.on('underline', (event) => {  
+        BrowserWindow.getFocusedWindow().on('underline', (event) => {  
             writingSettings.underline = !writingSettings.underline;
             document.execCommand('underline', true, writingSettings.underline);
         });
-        ipc.on('italic', (event) => { 
+        BrowserWindow.getFocusedWindow().on('italic', (event) => { 
             writingSettings.italic = !writingSettings.italic;
             document.execCommand('italic', true, writingSettings.italic);
         });
-        ipc.on('font', (event) => {
+        BrowserWindow.getFocusedWindow().on('font', (event) => {
             document.getElementById('fontDialog').setAttribute('open', true);
         });
-        ipc.on('align-left', (event) => {
+        BrowserWindow.getFocusedWindow().on('align-left', (event) => {
             writingSettings.alignment = 'justifyLeft';
             document.execCommand(writingSettings.alignment, false);
         });
-        ipc.on('align-center', (event) => {
+        BrowserWindow.getFocusedWindow().on('align-center', (event) => {
             writingSettings.alignment = 'justifyCenter';
             document.execCommand(writingSettings.alignment, false);
         });
-        ipc.on('align-right', (event) => {
+        BrowserWindow.getFocusedWindow().on('align-right', (event) => {
             writingSettings.alignment = 'justifyRight';
             document.execCommand(writingSettings.alignment, false);
         });
-        ipc.on('highlight', (event) => {
+        BrowserWindow.getFocusedWindow().on('highlight', (event) => {
             writingSettings.highlighterOn = !writingSettings.highlighterOn;
             if(writingSettings.highlighterOn === true) {
                 document.execCommand('backColor', false, '#FFE000');
@@ -558,7 +559,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
                 document.execCommand('backColor', false, 'rgba(0,0,0,0)');
             }
         });
-        ipc.on('share-email', (event) => {
+        BrowserWindow.getFocusedWindow().on('share-email', (event) => {
             // Show email window.
             const btnClick = '';
             var alrt = '<div style="text-align:center">';
@@ -610,35 +611,43 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             document.getElementById('email-from-field').placeholder = "sender@mail.com";
             return;
         })
-        ipc.on('find-replace', (event) => {
+        BrowserWindow.getFocusedWindow().on('find-replace', (event) => {
             //
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         })
-        ipc.on('export-pdf', (event) => {
+        BrowserWindow.getFocusedWindow().on('export-pdf', (event) => {
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         });
-        ipc.on('export-txt', (event) => {
+        BrowserWindow.getFocusedWindow().on('export-txt', (event) => {
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         });
-        ipc.on('export-md', (event) => {
+        BrowserWindow.getFocusedWindow().on('export-md', (event) => {
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         });
-        ipc.on('export-html', (event) => {
+        BrowserWindow.getFocusedWindow().on('export-html', (event) => {
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         });
+        //
+        // CHANGE THE COLORING TOO
+        //
+        //
+        // ALSO, IF YOU TRY AND SAVE WITHOUT LOGGING IN, LOOK AT THE USER'S SETTINGS
+        // TO DECIDE WHETHER TO DISPLAY A WARNING OR TO JUST SAVE IT LOCALLY.
+        // SO YOU NEED ANOTHER USER SETTING.
+        //
     }
 
     // These events don't follow the eventsAgain structure...
-    ipc.on('open-sidebar', (event) => {
+    BrowserWindow.getFocusedWindow().on('open-sidebar', (event) => {
         if(sidebarOpen) {
             sidebarButton.style.right = '15px';
             sidebar.style.right = '-200px';
@@ -651,7 +660,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             optionsButton.style.opacity = 0.3;
         }
     });
-    ipc.on('note-options', (event) => {
+    BrowserWindow.getFocusedWindow().on('note-options', (event) => {
         if(sliderOpen) {
             optionsButton.style.bottom = '30px';
             optionsSlider.style.bottom = '-80px';
@@ -663,7 +672,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             optionsSlider.focus();
         }
     });
-    ipc.on('quit-app', (event) => {
+    BrowserWindow.getFocusedWindow().on('quit-app', (event) => {
         // Check if you for got to save.
         if(forgotToSave(titleField, noteField)) {
             helpers.showPromptDialog('You are about to quit the app, but have unsaved changes. Do you still want to quit?', 

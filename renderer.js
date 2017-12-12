@@ -13,6 +13,7 @@ const url = require('url');
 const shell = require('shelljs');
 const app = require('electron').remote.app;
 const helpers = require('./src/js/helpers.js');
+const BrowserWindow = require('electron').remote.BrowserWindow;
 
 const firebase = require('firebase');
 const config = require(__dirname + '/creds.json');
@@ -82,22 +83,22 @@ homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, true);
 *                       *
 *************************/
 
-ipc.on('goto-login', (event) => {
+BrowserWindow.getFocusedWindow().on('goto-login', (event) => {
     loginJS(root, titleBar, fireAuth, fireRef, () => {
         homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, false);
     });
 });
-ipc.on('goto-signup', (event) => {
+BrowserWindow.getFocusedWindow().on('goto-signup', (event) => {
     signupJS(root, titleBar, fireAuth, fireRef, () => {
         homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, false);
     });
 });
-ipc.on('goto-account', (event) => {
+BrowserWindow.getFocusedWindow().on('goto-account', (event) => {
     accountJS(root, titleBar, fireAuth, fireRef, () => {
         homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, false);
     });
 });
-ipc.on('goto-app-settings', (event) => {
+BrowserWindow.getFocusedWindow().on('goto-app-settings', (event) => {
     settingsJS(root, titleBar, appSettings, () => {
         // Also reload the settings.
         appSettings = JSON.parse(fs.readFileSync(__dirname + '/appSettings.json'));
@@ -106,7 +107,7 @@ ipc.on('goto-app-settings', (event) => {
     });
 });
 
-ipc.on('backup', (event) => {
+BrowserWindow.getFocusedWindow().on('backup', (event) => {
     helpers.showPromptDialog('Backing up your notes will save a local copy to your computer. Be sure to do this often to avoid losing your notes. Below, enter the location where you would like the backup to be stored.', 'Choose Backup Location', 'Cancel', () => {
         const { dialog } = require('electron').remote;
         dialog.showOpenDialog(null, {
@@ -130,7 +131,7 @@ ipc.on('backup', (event) => {
         });
     });
 });
-ipc.on('check-updates', (event) => {
+BrowserWindow.getFocusedWindow().on('check-updates', (event) => {
     fireRef.child('Version').once('value', (snap) => {
         const latestVersion = snap.val();
 
