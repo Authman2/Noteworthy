@@ -19,8 +19,6 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
     *                       *
     *************************/
 
-    const firstNameField = document.getElementById('firstNameField_signup');
-    const lastNameField = document.getElementById('lastNameField_signup');
     const emailField = document.getElementById('emailField_signup');
     const passwordField = document.getElementById('passwordField_signup');
     const passwordConfirmField = document.getElementById('passwordConfirmField_signup');
@@ -39,21 +37,15 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
     Handles creating an account on Noteworthy.
     */
     createAccountButton.onclick = function() {
-        const firstName = firstNameField.value;
-        const lastName = lastNameField.value;
         const email = emailField.value;
         const password = passwordField.value;
         const confirmPass = passwordConfirmField.value;
 
         // Make sure there is a value for each field.
-        if( helpers.valueExists(firstName) && helpers.valueExists(lastName) &&helpers. valueExists(email) 
-            && helpers.valueExists(password) && helpers.valueExists(confirmPass)) {
+        if( helpers. valueExists(email) && helpers.valueExists(password) && helpers.valueExists(confirmPass)) {
 
             // The object for the account data.
             const accountData = {
-                "firstName": firstName,
-                "lastName": lastName,
-                "notes": [],
                 "uid": ''
             };
             
@@ -65,11 +57,7 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
                     if (user) {
                         accountData['uid'] = user.uid;
                         
-                        // Save the data to the database.
-                        fireRef.child('users').child(user.uid).set(accountData);
-                        
                         alert('Welcome to Noteworthy, ' + firstName + "! Your account has been successfully created!");
-
                         backToHomeFunction();
                     } else { return; }
                 });
@@ -79,8 +67,6 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
             });
             
         } else {
-            if(!helpers.valueExists(firstName)) { firstNameField.style.border = '2px red solid'; }
-            if(!helpers.valueExists(lastName)) { lastNameField.style.border = '2px red solid'; }
             if(!helpers.valueExists(email)) { emailField.style.border = '2px red solid'; }
             if(!helpers.valueExists(password)) { passwordField.style.border = '2px red solid'; }
             if(!helpers.valueExists(confirmPass)) { passwordConfirmField.style.border = '2px red solid'; }

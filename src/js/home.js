@@ -5,9 +5,12 @@ const global = require('electron').remote.getGlobal('sharedObject');
 const alertify = require('alertify.js');
 const helpers = require('./helpers.js');
 const remote = require('electron').remote;
+const TurndownService = require('turndown');
 const app = remote.app;
 const {Menu, MenuItem} = remote;
 const BrowserWindow = remote.BrowserWindow;
+
+const turndown = new TurndownService();
 
 
 /** Everything is basically one big function that gets called by the renderer. */
@@ -85,9 +88,12 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     const loadNotes = (uid) => {
         fireRef.child('notes').orderByChild('creator').equalTo(uid).on('child_added', (snap) => {
             var a = snap.val();
+            
+            // Check for duplicates.
+            for(var i = 0; i < notebooks.length; i++) { if(notebooks[i].id === a.id) { return; } }
+
             notebooks.push(a);
             notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
-
             configureNotbookSlider(sidebar, titleField, noteField);
         });
     }
@@ -231,6 +237,10 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     /** Handles saving a note to the database under a certain user. */
     const saveNote = (title, content) => {
+        const toMarkdown = turndown.turndown(content);
+        console.log(toMarkdown);
+        return;
+
         // If null, save a new note. Otherwise, update the old one.
         if(currentNoteID === null) {
             const ref = fireRef.child('notes').push();
@@ -382,6 +392,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             dialog.removeAttribute('open');
         };
     }
+
+    
 
 
 
@@ -616,6 +628,11 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
         })
+        BrowserWindow.getFocusedWindow().on('word-count', (event) => {
+            //  
+            //  PLEASE DON'T FORGET THIS FEATURE.
+            //
+        });
         BrowserWindow.getFocusedWindow().on('export-pdf', (event) => {
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
@@ -635,7 +652,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             //  
             //  PLEASE DON'T FORGET THIS FEATURE.
             //
-        });
+        });        
         //
         // CHANGE THE COLORING TOO
         //
@@ -682,5 +699,32 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         } else {
             app.quit();
         }
+    });
+    BrowserWindow.getFocusedWindow().on('retreive-backups', (event) => {
+        helpers.showPromptDialog('Using the "Retreive from Backups" feature allows you to retreive any note that may be lost or deleted by using a Noteworthy backup file. Select the backup files below and Noteworthy will try to recreate the notes for you.', 'Select Backup Files', 'Cancel', () => {
+            const { dialog } = require('electron').remote;
+            dialog.showOpenDialog(null, {
+                properties: ['openFile', 'multiSelections'],
+            }, (paths) => {
+                if(paths !== undefined) {
+    
+                    // 1.) Loop through each selected file and parse its data as a JSON tree.
+                    // 2.) For each JSON, check if a note in the database already exists with that ID.
+                    // 2a.) If the note exists, set the values of the note in the database to the data from the parsed JSON.
+                    // 2b.) If the note DOES NOT exist, take the data from the backup file and create a new note in the database.
+                    // 3.) Reload the notes for the currently logged in user so that the changes are reflected locally.
+                    for(var i = 0; i < paths.length; i++) {
+                        const currentPath = paths[i];
+                        const data = JSON.parse(fs.readFileSync(currentPath, 'utf8'));
+    
+                        helpers.databaseContains(data.id, fireRef, () => {
+                            helpers.updateNote(data, fireRef);
+                        }, () => {
+                            const n = helpers.createNewNote(data, currentPath, fireRef);
+                        });
+                    }
+                }
+            });
+        });
     });
 };

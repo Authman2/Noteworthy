@@ -136,6 +136,11 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('find-replace');
         }
+    },{
+        label: 'Word Count',
+        click: () => {
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('word-count');
+        }
     }]
 },{
     label: 'Insert',
@@ -227,7 +232,7 @@ let template = [{
         }
     }]
 },{
-    label: 'Login',
+    label: 'Account',
     submenu: [{
         label: 'Login',
         accelerator: 'CmdOrCtrl+Shift+L',
@@ -256,7 +261,13 @@ let template = [{
         label: 'Backup Notes',
         click: () => {
             if(eve !== null && eve !== undefined)
-            BrowserWindow.getFocusedWindow().emit('backup');
+                BrowserWindow.getFocusedWindow().emit('backup');
+        }
+    }, {
+        label: 'Retrieve from Backups',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('retreive-backups');
         }
     }]
 },{
@@ -387,7 +398,7 @@ app.on('ready', () => {
     createAppMenu();
 });
 app.on('window-all-closed', function () { if (process.platform !== 'darwin') app.quit() });
-app.on('activate', function () { if (windows[0] === null) createWindow() });
+app.on('activate', function () { if (BrowserWindow.getFocusedWindow() === null) createWindow() });
 
 
 ipc.on('init', (event) => {

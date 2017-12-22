@@ -1,3 +1,4 @@
+const fs = require('fs');
 const alertify = require('alertify.js');
 const global = require('electron').remote.getGlobal('sharedObject');
 
@@ -62,15 +63,11 @@ module.exports = {
     autoLogin: (fireAuth, fireRef, loadNotesMethod) => {
         fireAuth.onAuthStateChanged((user) => {
             if (user) {
-                fireRef.child('users').child(user.uid).once('value', (snap) => {
-                    const a = {
-                        firstName: snap.val().firstName,
-                        lastName: snap.val().lastName,
-                        uid: snap.val().uid
-                    }
-                    global.currentUser = a;
-                    loadNotesMethod(global.currentUser.uid);
-                })
+                const a = {
+                    uid: user.uid
+                }
+                global.currentUser = a;
+                loadNotesMethod(global.currentUser.uid);
             } else { return; }
         });
     },
@@ -91,5 +88,36 @@ module.exports = {
             textRange.collapse(false);
             textRange.select();
         }
+    },
+
+
+    // Checks if the database already contains a note with the given id.
+    databaseContains: (id, fireRef, containsNote, doesNotContainNote) => {
+        fireRef.child('notes').once('value', (snap) => {
+            if(snap.hasChild(id)) {
+                containsNote();
+            } else {
+                doesNotContainNote();
+            }
+        })
+    },
+
+
+    // Updates an existing note in the database.
+    updateNote: (newData, fireRef) => {
+        fireRef.child('notes').child(newData.id).update(newData);
+    },
+
+
+    // Creates a new note from JSON data. Also returns the data so it can be used locally.
+    createNewNote: (data, path, fireRef) => {
+        const ref = fireRef.child('notes').push();
+        data.id = ref.key;
+        ref.set(data);
+
+        // Don't forget to change the id in the backup file so that it doesn't try to create multiple copies.
+        fs.writeFileSync(path, JSON.stringify(data), 'utf8');
+
+        return data;
     }
 };

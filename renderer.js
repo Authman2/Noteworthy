@@ -131,6 +131,7 @@ BrowserWindow.getFocusedWindow().on('backup', (event) => {
         });
     });
 });
+
 BrowserWindow.getFocusedWindow().on('check-updates', (event) => {
     fireRef.child('Version').once('value', (snap) => {
         const latestVersion = snap.val();

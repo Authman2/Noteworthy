@@ -34,7 +34,9 @@
     "jszip": "^3.1.4",
     "nodemailer": "^4.4.0",
     "shelljs": "^0.7.8",
+    "showdown": "^1.8.6",
     "spectrum-colorpicker": "^1.8.0",
+    "turndown": "^4.0.1",
     "watchjs": "0.0.0"
   }
 }

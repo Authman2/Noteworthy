@@ -45,19 +45,15 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
         if(helpers.valueExists(email) && helpers.valueExists(password)) {
 
             fireAuth.signInWithEmailAndPassword(email, password).then( (user) => {
-                fireRef.child('users').child(user.uid).once('value', (snap) => {
+                if(user) {
                     const a = {
-                        firstName: snap.val().firstName,
-                        lastName: snap.val().lastName,
-                        uid: snap.val().uid
+                        uid: user.uid
                     }
 
                     global.currentUser = a;
-                    console.log(global);
                     backToHomeFunction();
                     return;
-                });
-
+                }
             }).catch((err) => {
                 alert('There was a problem logging in. \n' + err);
             });
