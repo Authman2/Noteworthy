@@ -125,10 +125,12 @@ hr.homeSeparator {
     top: 100px;
     right: 10px;
     width: 300px;
-    height: 125px;
+    height: 200px;
     padding: 10px;
     font-size: 18px;
     font-weight: 100;
+    visibility: hidden;
+    text-align: center;
     font-family: 'Avenir';
     -webkit-user-drag: element;
     border: 2px solid lightgray;
@@ -136,19 +138,34 @@ hr.homeSeparator {
 }
 #find-field {
     position: relative;
-    width: 98%;
+    width: 95%;
     outline: none;
     background: none;
     text-decoration: none;
     border-radius: 20px;
     font-size: 15px;
     font-weight: 100;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    font-family: 'Avenir';
+    border: 2px solid lightgray;
+}
+#replace-field {
+    position: relative;
+    width: 95%;
+    outline: none;
+    background: none;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 100;
+    padding-left: 10px;
     font-family: 'Avenir';
     border: 2px solid lightgray;
 }
 .findRepButton {
     position: relative;
-    width: 40px;
+    width: 60px;
     height: 30px;
     outline: none;
     border: none;

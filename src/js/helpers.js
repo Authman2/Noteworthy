@@ -1,3 +1,4 @@
+const $ = require('jquery');
 const fs = require('fs');
 const alertify = require('alertify.js');
 const global = require('electron').remote.getGlobal('sharedObject');
@@ -119,5 +120,42 @@ module.exports = {
         fs.writeFileSync(path, JSON.stringify(data), 'utf8');
 
         return data;
+    },
+
+
+    // Finds the input text in a content editable div. Literally just an implementation of the
+    // "find" feature in many text editors.
+    findInText: (words) => {
+        const inText = $('#noteArea');
+        var html = inText.html().replace(/<\/?strong>/gi, '');
+        var text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+        var exp;
+
+        $.each(words, (i, word) => {
+            exp = new RegExp('\\b(' + word + ')\\b', 'gi');
+            html = html.replace(exp, (m) => {
+                return `<span class='find-highlight'>${m}</span>`
+            });
+        });
+        inText.html(html);
+    },
+
+
+    // Checks if a string contains at least one character.
+    containsLetter: (input) => {
+        return input.includes('a') || input.includes('b') || input.includes('c') ||
+        input.includes('d') || input.includes('e') || input.includes('f') || input.includes('g')
+        || input.includes('h') || input.includes('i') || input.includes('j') || input.includes('k')
+        || input.includes('l') || input.includes('m') || input.includes('n') || input.includes('o')
+        || input.includes('p') || input.includes('q') || input.includes('r') || input.includes('s')
+        || input.includes('t') || input.includes('u') || input.includes('v') || input.includes('w')
+        || input.includes('x') || input.includes('y') || input.includes('z')
+        || input.includes('A') || input.includes('B') || input.includes('C') ||
+        input.includes('D') || input.includes('E') || input.includes('F') || input.includes('G')
+        || input.includes('H') || input.includes('I') || input.includes('J') || input.includes('K')
+        || input.includes('L') || input.includes('M') || input.includes('N') || input.includes('O')
+        || input.includes('P') || input.includes('Q') || input.includes('R') || input.includes('S')
+        || input.includes('T') || input.includes('U') || input.includes('V') || input.includes('W')
+        || input.includes('X') || input.includes('Y') || input.includes('Z')
     }
 };

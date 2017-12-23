@@ -349,6 +349,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     const configureFontSelector = () => {
         const dialog = document.getElementById('fontDialog');
         const findRep = document.getElementById('findReplaceWindow');
+        var foundIndex = 0;
+        var found;
         
         const selector = document.getElementById('fontSelector');
         const options = document.getElementsByTagName('option');
@@ -356,7 +358,11 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
         const saveBtn = document.getElementById('saveFontButton');
         const cancelBtn = document.getElementById('cancelFontButton');
-        const nextFindBtn = document.getElementById('nextFindBtn');
+        
+        const findBtn = document.getElementById('findBtn');
+        const repBtn = document.getElementById('replaceBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
         const closeFindBtn = document.getElementById('closeFindBtn');
 
 
@@ -381,13 +387,13 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         dialog.ondrop = (ev) => {
             ev.preventDefault();
         }
-
-
         // Set each font to itself... basically.
         for(var i = 0; i < options.length; i++) {
             options[i].style.fontFamily = options[i].innerHTML;
         }
 
+       
+        // Font
         saveBtn.onclick = () => {
             document.execCommand('fontName', false, selector.value);
 
@@ -402,12 +408,70 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         cancelBtn.onclick = () => {
             dialog.removeAttribute('open');
         };
-        nextFindBtn.onclick = () => {
+
+        // Find/Replace
+        findBtn.onclick = () => {
+            // Clear last search.
+            // Remove all the highlighting on the finds.
+            found = [];
+            foundIndex = 0;
+            var finds = $('.find-highlight');
+            finds.each((i) => {
+                var sp = finds[i];
+                var cnt = sp.innerHTML;
+                sp.outerHTML = cnt;
+            });
+
+            // Find all the words. By the end of these two lines there will be a bunch of elements
+            // that are highlighted blue and have a specific id.
             const search = $('#find-field').val();
-            $(`[id=noteArea]:contains(${search})`).children().last().select();
+            if(!helpers.containsLetter(search)) return;
+            helpers.findInText([search]);
+
+            // Get all the found elements.
+            found = $('.find-highlight');
+
+            // Scroll to the first location.
+            var scroll = found[foundIndex].offsetTop - 20;
+            found[foundIndex].style.backgroundColor = 'lightblue';
+            noteField.scrollTop = scroll;
+        }
+        repBtn.onclick = () => {
+            const rep = $('#replace-field').val();
+            found[foundIndex].innerHTML = rep;
+        }
+        prevBtn.onclick = () => {
+            // Go to the last found item.
+            if(foundIndex - 1 < 0) return;
+            foundIndex -= 1;
+            
+            // Scroll to that item.
+            var scroll = found[foundIndex].offsetTop - 20;
+            found[foundIndex+1].style.backgroundColor = 'rgba(0,0,0,0)';
+            found[foundIndex].style.backgroundColor = 'lightblue';
+            noteField.scrollTop = scroll;
+        }
+        nextBtn.onclick = () => {
+            // Go to the next found item.
+            if(foundIndex + 1 >= found.length) return;
+            foundIndex += 1;
+            
+            // Scroll to that item.
+            var scroll = found[foundIndex].offsetTop - 20;
+            found[foundIndex-1].style.backgroundColor = 'rgba(0,0,0,0)';
+            found[foundIndex].style.backgroundColor = 'lightblue';
+            noteField.scrollTop = scroll;
         }
         closeFindBtn.onclick = () => {
             document.getElementById('findReplaceWindow').style.visibility = 'hidden';
+            
+            // Remove all the highlighting on the finds.
+            var finds = $('.find-highlight');
+            finds.each((i) => {
+                var sp = finds[i];
+                var cnt = sp.innerHTML;
+                sp.outerHTML = cnt;
+            })
         }
     }
 
