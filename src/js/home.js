@@ -7,12 +7,14 @@ const helpers = require('./helpers.js');
 const remote = require('electron').remote;
 const TurndownService = require('turndown');
 const showdown  = require('showdown');
+const jsPDF = require('jspdf');
 const app = remote.app;
 const {Menu, MenuItem} = remote;
 const BrowserWindow = remote.BrowserWindow;
 
 const turndown = new TurndownService();
 const mdConverter = new showdown.Converter();
+const doc = new jsPDF();
 
 
 /** Everything is basically one big function that gets called by the renderer. */
@@ -345,8 +347,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         });
     }
 
-    // Font selection
-    const configureFontSelector = () => {
+    // Font selection and the find/replace
+    const configureFontSelectorAndFindReplace = () => {
         const dialog = document.getElementById('fontDialog');
         const findRep = document.getElementById('findReplaceWindow');
         var foundIndex = 0;
@@ -507,7 +509,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     // Run some methods initially.
     noteField.focus();
-    configureFontSelector();
+    configureFontSelectorAndFindReplace();
     handleOptionsSliderButtons();
     
     // Auto login.
@@ -712,13 +714,14 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         })
         BrowserWindow.getFocusedWindow().on('word-count', (event) => {
             var text = noteField.textContent
-            wordCount = text.trim().replace(/\s+/g, ' ').split(' ').length;
-            alertify.alert(`<h3 style='font-weight:100;font-size:22px'> <b>Word Count:</b> ${wordCount}</h3>`);
+            wordCount = text.trim().replace(/\s+/g, ' ').split(' ').length - 1;
+            alertify.okBtn('Done').alert(`<h3 style='font-weight:100;font-size:22px'> <b>Word Count:</b> ${wordCount}</h3>`);
         });
         BrowserWindow.getFocusedWindow().on('export-pdf', (event) => {
-            //  
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            doc.fromHTML(noteField.innerHTML, 15, 15, {
+                'width': 170
+            });
+            doc.save('Untitled.pdf');
         });
         BrowserWindow.getFocusedWindow().on('export-txt', (event) => {
             const { dialog } = require('electron').remote;
