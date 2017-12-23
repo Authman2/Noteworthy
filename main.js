@@ -131,7 +131,7 @@ let template = [{
         }
     },{
         label: 'Find/Replace',
-        accelerator: 'CmdOrCtrl+A',
+        accelerator: 'CmdOrCtrl+F',
         click: () => {
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('find-replace');
@@ -202,7 +202,7 @@ let template = [{
         }
     },{
         label: 'Font',
-        accelerator: 'CmdOrCtrl+F',
+        accelerator: 'CmdOrCtrl+Shift+F',
         click: () => {
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('font');
         }

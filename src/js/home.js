@@ -6,11 +6,13 @@ const alertify = require('alertify.js');
 const helpers = require('./helpers.js');
 const remote = require('electron').remote;
 const TurndownService = require('turndown');
+const showdown  = require('showdown');
 const app = remote.app;
 const {Menu, MenuItem} = remote;
 const BrowserWindow = remote.BrowserWindow;
 
 const turndown = new TurndownService();
+const mdConverter = new showdown.Converter();
 
 
 /** Everything is basically one big function that gets called by the renderer. */
@@ -88,6 +90,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     const loadNotes = (uid) => {
         fireRef.child('notes').orderByChild('creator').equalTo(uid).on('child_added', (snap) => {
             var a = snap.val();
+            //a.content = mdConverter.makeHtml(a.content);
             
             // Check for duplicates.
             for(var i = 0; i < notebooks.length; i++) { if(notebooks[i].id === a.id) { return; } }
@@ -237,9 +240,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     /** Handles saving a note to the database under a certain user. */
     const saveNote = (title, content) => {
-        const toMarkdown = turndown.turndown(content);
-        console.log(toMarkdown);
-        return;
+        //const toMarkdown = turndown.turndown(content);
 
         // If null, save a new note. Otherwise, update the old one.
         if(currentNoteID === null) {
@@ -347,6 +348,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     // Font selection
     const configureFontSelector = () => {
         const dialog = document.getElementById('fontDialog');
+        const findRep = document.getElementById('findReplaceWindow');
         
         const selector = document.getElementById('fontSelector');
         const options = document.getElementsByTagName('option');
@@ -354,6 +356,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
         const saveBtn = document.getElementById('saveFontButton');
         const cancelBtn = document.getElementById('cancelFontButton');
+        const nextFindBtn = document.getElementById('nextFindBtn');
+        const closeFindBtn = document.getElementById('closeFindBtn');
 
 
         // Setup dragging on the font selector.
@@ -362,10 +366,17 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
         body.ondragover = (ev) => {
             ev.preventDefault();
-            $('#fontDialog').offset({
-                top: ev.pageY - $('#fontDialog').outerHeight() / 2,
-                left: ev.pageX - $('#fontDialog').outerWidth() / 2
-            });
+            if($('#findReplaceWindow').css('visibility') === 'visible') {
+                $('#findReplaceWindow').offset({
+                    top: ev.pageY - $('#findReplaceWindow').outerHeight() / 2,
+                    left: ev.pageX - $('#findReplaceWindow').outerWidth() / 2
+                });
+            } else if($('#fontDialog').css('visibility') === 'visible') {
+                $('#fontDialog').offset({
+                    top: ev.pageY - $('#fontDialog').outerHeight() / 2,
+                    left: ev.pageX - $('#fontDialog').outerWidth() / 2
+                });
+            }
         }
         dialog.ondrop = (ev) => {
             ev.preventDefault();
@@ -391,6 +402,13 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         cancelBtn.onclick = () => {
             dialog.removeAttribute('open');
         };
+        nextFindBtn.onclick = () => {
+            const search = $('#find-field').val();
+            $(`[id=noteArea]:contains(${search})`).children().last().select();
+        }
+        closeFindBtn.onclick = () => {
+            document.getElementById('findReplaceWindow').style.visibility = 'hidden';
+        }
     }
 
     
@@ -417,11 +435,11 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     noteField.onscroll = () => {
         global.currentScroll = noteField.scrollTop;
     }
-    noteField.onmousedown = (e) => {
-        if(e.which === 3) {
-            console.log('OPEN CONTEXT MENU');
-        }
-    }
+    // noteField.onmousedown = (e) => {
+    //     if(e.which === 3) {
+    //         console.log('OPEN CONTEXT MENU');
+    //     }
+    // }
 
     // Run some methods initially.
     noteField.focus();
@@ -550,6 +568,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         });
         BrowserWindow.getFocusedWindow().on('font', (event) => {
             document.getElementById('fontDialog').setAttribute('open', true);
+            document.getElementById('findReplaceWindow').style.visibility = 'hidden';
         });
         BrowserWindow.getFocusedWindow().on('align-left', (event) => {
             writingSettings.alignment = 'justifyLeft';
@@ -624,14 +643,13 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             return;
         })
         BrowserWindow.getFocusedWindow().on('find-replace', (event) => {
-            //
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            document.getElementById('fontDialog').removeAttribute('open');
+            document.getElementById('findReplaceWindow').style.visibility = 'visible';
         })
         BrowserWindow.getFocusedWindow().on('word-count', (event) => {
-            //  
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            var text = noteField.textContent
+            wordCount = text.trim().replace(/\s+/g, ' ').split(' ').length;
+            alertify.alert(`<h3 style='font-weight:100;font-size:22px'> <b>Word Count:</b> ${wordCount}</h3>`);
         });
         BrowserWindow.getFocusedWindow().on('export-pdf', (event) => {
             //  
@@ -639,19 +657,38 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             //
         });
         BrowserWindow.getFocusedWindow().on('export-txt', (event) => {
-            //  
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            const { dialog } = require('electron').remote;
+            dialog.showSaveDialog(null, {
+                title: 'Untitled.txt',
+                filters: [{name: 'txt', extensions: ['txt']}]
+            }, (filename) => {
+                fs.writeFileSync(filename, noteField.innerHTML, 'utf8');
+
+                alertify.success(`Exported to ${filename.substring(filename.lastIndexOf('/') + 1)}`);
+            })
         });
         BrowserWindow.getFocusedWindow().on('export-md', (event) => {
-            //  
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            const { dialog } = require('electron').remote;
+            dialog.showSaveDialog(null, {
+                title: 'Untitled.md',
+                filters: [{name: 'md', extensions: ['md']}]
+            }, (filename) => {
+                const markdown = turndown.turndown(noteField.innerHTML);
+                fs.writeFileSync(filename, markdown, 'utf8');
+
+                alertify.success(`Exported to ${filename.substring(filename.lastIndexOf('/') + 1)}`);
+            })
         });
         BrowserWindow.getFocusedWindow().on('export-html', (event) => {
-            //  
-            //  PLEASE DON'T FORGET THIS FEATURE.
-            //
+            const { dialog } = require('electron').remote;
+            dialog.showSaveDialog(null, {
+                title: 'Untitled.html',
+                filters: [{name: 'html', extensions: ['html']}]
+            }, (filename) => {
+                fs.writeFileSync(filename, noteField.innerHTML, 'utf8');
+
+                alertify.success(`Exported to ${filename.substring(filename.lastIndexOf('/') + 1)}`);
+            })
         });        
         //
         // CHANGE THE COLORING TOO
