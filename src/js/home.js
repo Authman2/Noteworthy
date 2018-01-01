@@ -17,6 +17,19 @@ const mdConverter = new showdown.Converter();
 const doc = new jsPDF();
 
 
+/** Returns the text nodes in a parent element. */
+const getText = (el) => {
+    var ret = "";
+    var length = el.childNodes.length;
+    for(var i = 0; i < length; i++) {
+        var node = el.childNodes[i];
+        if(node.nodeType != 8) {
+            ret += node.nodeType != 1 ? node.nodeValue : getText(node);
+        }
+    }
+    return ret;
+ }
+
 /** Everything is basically one big function that gets called by the renderer. */
 module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAgain) => {
 
@@ -713,8 +726,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             document.getElementById('findReplaceWindow').style.visibility = 'visible';
         })
         BrowserWindow.getFocusedWindow().on('word-count', (event) => {
-            var text = noteField.textContent
-            wordCount = text.trim().replace(/\s+/g, ' ').split(' ').length - 1;
+            var text = getText(document.getElementById('noteArea'));
+            wordCount = text.trim().replace(/\s+/g, ' ').split(' ').length;
             alertify.okBtn('Done').alert(`<h3 style='font-weight:100;font-size:22px'> <b>Word Count:</b> ${wordCount}</h3>`);
         });
         BrowserWindow.getFocusedWindow().on('export-pdf', (event) => {
