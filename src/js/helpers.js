@@ -157,5 +157,22 @@ module.exports = {
         || input.includes('P') || input.includes('Q') || input.includes('R') || input.includes('S')
         || input.includes('T') || input.includes('U') || input.includes('V') || input.includes('W')
         || input.includes('X') || input.includes('Y') || input.includes('Z')
+    },
+
+
+    // Creates a DOM object for a row of data in the notes view.
+    createNoteViewNode: () => {
+        const row = document.createElement('div');
+        row.className = 'row';
+
+        const title = document.createElement('h2');
+        const subtitle = document.createElement('p');
+
+        title.innerHTML = 'Title';
+        subtitle.innerHTML = 'Subtitle';
+
+        row.appendChild(title);
+        row.appendChild(subtitle);
+        return row;
     }
 };

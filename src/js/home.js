@@ -90,6 +90,9 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     // The actual note view.
     const notesView = document.getElementById('notes-view-modal');
 
+    // The scroll view that holds all of the notes.
+    const notesScrollView = document.getElementById('nScrollView');
+
 
 
     /************************
@@ -109,8 +112,19 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
             notebooks.push(a);
             notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
-            
+            setupNotesView();
         });
+    }
+
+    /** Sets up the notes view with all the notes. */
+    const setupNotesView = () => {
+        notesScrollView.innerHTML = '';
+        for(var i in notebooks) {
+            const notebook = notebooks[i];
+            
+            const node = helpers.createNoteViewNode();
+            notesScrollView.appendChild(node);
+        }
     }
 
     /** Checks if the user forgot to save before moving on to something else, like clicking 
