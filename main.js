@@ -294,7 +294,7 @@ let template = [{
         accelerator: 'CmdOrCtrl+O',
         click: () => {
             if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('open-sidebar');
+                BrowserWindow.getFocusedWindow().emit('open-note-view');
         }
     },{
         label: 'Note Options',
@@ -304,11 +304,11 @@ let template = [{
                 BrowserWindow.getFocusedWindow().emit('note-options');
         }
     },
-    // {
-    //     label: 'Open Developer Tools',
-    //     accelerator: 'CmdOrCtrl+T',
-    //     click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
-    // }
+    {
+        label: 'Open Developer Tools',
+        accelerator: 'CmdOrCtrl+T',
+        click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
+    }
     ]
 },{
     label: 'Help',

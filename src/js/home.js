@@ -39,9 +39,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     // whatever is currently there from the last page.
     body.innerHTML = '';
     const loadedPage = fs.readFileSync(__dirname + '/../html/home.html', 'utf8');
-    const slider = fs.readFileSync(__dirname + '/../html/note-options.html', 'utf8');
-    const sb = fs.readFileSync(__dirname + '/../html/notebooks-slider.html', 'utf8');
-    body.innerHTML = titleBar + slider + sb + loadedPage;
+    const NoteView = fs.readFileSync(__dirname + '/../html/notes-view.html', 'utf8');
+    body.innerHTML = titleBar + loadedPage + NoteView;
     
     /************************
     *                       *
@@ -49,8 +48,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     *                       *
     *************************/
 
-    var sidebarOpen = false;
-    var sliderOpen = false;
+    // Whether or not the notes dialog is open.
+    var noteViewOpen = false;
     
     // The notebooks (and add notebook button) that are dislayed on the notebook slider.
     var notebooks = [{
@@ -85,13 +84,11 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     const titleField = document.getElementById('titleArea');
     const noteField = document.getElementById('noteArea');
 
-    const optionsSlider = document.getElementById('optionsSlider');
-    const sidebar = document.getElementById('sidebar');
-
-    const optionsButton = document.getElementById('optionsButton');
-    const sidebarButton = document.getElementById('sidebarButton');
-
-    const optionsTitleLabels = document.getElementsByClassName('optionsItemTitle');
+    // The button to open the notes
+    const notesViewBtn = document.getElementById('view-notes-button');
+    
+    // The actual note view.
+    const notesView = document.getElementById('notes-view-modal');
 
 
 
@@ -112,7 +109,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
             notebooks.push(a);
             notebooks = notebooks.sort((a,b) => { return a.timestamp - b.timestamp });
-            configureNotbookSlider(sidebar, titleField, noteField);
+            
         });
     }
 
@@ -138,120 +135,6 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
         return false;
     }
-
-    /** Sets up the data in the notebook slider. */
-    const configureNotbookSlider = (list, titleField, noteField) => {
-        // Clear the list.
-        list.innerHTML = "<h4 id='sidebarTitle' style='color:" + appSettings.sidebarTextColor + "'>Notes</h4>";
-
-        for(var i = 0; i < notebooks.length; i++) {
-            const current = notebooks[i];
-
-            // Create the list item.
-            const item = document.createElement('div');
-            item.className = 'sidebarItem';
-
-            const title = document.createElement('p');
-            title.className = 'sidebarItemTitle';
-            title.innerHTML = current.title;
-            title.style.color = appSettings.sidebarTextColor;
-
-            item.appendChild(title);
-
-
-            // Define click behavior.
-            const closeSidebar = () => {
-                sidebarButton.style.right = '15px';
-                sidebar.style.right = '-200px';
-                sidebarOpen = false;
-                optionsButton.style.opacity = 1;
-            }
-            const displayText = () => {
-                noteField.focus();
-                noteField.innerHTML = current.content;
-                currentNoteID = current.id;
-                global.currentID = current.id;
-            }
-
-            // Different behaviors for New and Existing notes.
-            if(current.title === 'New') {
-                item.onclick = () => {
-                    if(forgotToSave(titleField, noteField)) {
-                        helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                        "Continue", "Cancel", () => {
-                            titleField.value = '';
-                            noteField.innerHTML = '';
-                            global.currentTitle = '';
-                            global.currentContent = '';
-                            currentNoteID = null;
-                            global.currentID = '';
-                            closeSidebar();
-                        });
-                    } else {
-                        titleField.value = '';
-                        noteField.innerHTML = '';
-                        global.currentTitle = '';
-                        global.currentContent = '';
-                        currentNoteID = null;
-                        global.currentID = '';
-                        closeSidebar();
-                    }
-                }
-            } else {
-                item.onclick = () => {
-                    if(forgotToSave(titleField, noteField)) {
-                        helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                        "Continue", "Cancel", () => {
-                            titleField.value = current.title;
-                            noteField.innerHTML = current.content;
-                            global.currentTitle = current.title;
-                            global.currentContent = current.content;
-                            currentNoteID = current.id;
-                            global.currentID = current.id;
-                            displayText();
-                        });
-                    } else {
-                        titleField.value = current.title;
-                        noteField.innerHTML = current.content;
-                        global.currentTitle = current.title;
-                        global.currentContent = current.content;
-                        currentNoteID = current.id;
-                        global.currentID = current.id;
-                        displayText();
-                    }
-                }
-            }
-
-            // Define the mouse behavior.
-            const noteCxtMenu = new Menu();
-            noteCxtMenu.append(new MenuItem({
-                label: 'Delete',
-                click: () => {
-                    helpers.showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', () => {
-                        helpers.deleteNote(current.id, fireRef, notebooks, loadNotes);
-                        
-                        // Reload the notebooks.
-                        notebooks = [{
-                            id: '',
-                            title: 'New',
-                            content: '',
-                            creator: '',
-                            timestamp: 0
-                        }];
-                        loadNotes(global.currentUser.uid);
-                    });
-                }
-            }));
-            item.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                noteCxtMenu.popup(remote.getCurrentWindow());
-            }, false);
-
-
-            // Add to the sidebar.
-            list.appendChild(item);
-        }
-    };
 
     /** Handles saving a note to the database under a certain user. */
     const saveNote = (title, content) => {
@@ -288,76 +171,6 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
         
         alertify.success('Saved!');
-    }
-
-    // Handles button presses in the sidebar.
-    const handleOptionsSliderButtons = () => {
-        // Color
-        $('#sidebar_Color').spectrum({
-            color: writingSettings.color,
-            showInput: true,
-            change: function(color) {
-                writingSettings.color = color.toRgbString();
-                document.execCommand('foreColor', false, writingSettings.color);
-            }
-        });
-        
-        // Font
-        $('#sidebar_Font').click(() => {
-            const dialog = document.getElementById('fontDialog');
-            if(dialog.hasAttribute('open')) { dialog.removeAttribute('open'); }
-            else { dialog.setAttribute('open', true); dialog.focus(); }
-        });
-
-        // Alignment
-        $('#sidebar_Alignment').click( () => {
-            if(writingSettings.alignment === 'justifyLeft') {
-                writingSettings.alignment = 'justifyCenter';
-            } else if(writingSettings.alignment === 'justifyCenter') {
-                writingSettings.alignment = 'justifyRight';
-            } else {
-                writingSettings.alignment = 'justifyLeft';
-            }
-            document.execCommand(writingSettings.alignment, false);
-        });
-
-        // Bold
-        $('#sidebar_Bold').click( () => {
-            writingSettings.bold = !writingSettings.bold;
-            document.execCommand('bold', false, writingSettings.bold);
-        });
-
-        // Underline
-        $('#sidebar_Underline').click( () => {
-            writingSettings.underline = !writingSettings.underline;
-            document.execCommand('underline', false, writingSettings.underline);
-        });
-
-        // Italic
-        $('#sidebar_Italic').click( () => {
-            writingSettings.italic = !writingSettings.italic;
-            document.execCommand('italic', false, writingSettings.italic);
-        });
-
-        // Highlighter
-        $('#sidebar_Highlighter').click( () => {
-            writingSettings.highlighterOn = !writingSettings.highlighterOn;
-            document.execCommand('backColor', false, '#FFE000');
-        });
-
-        // Lists
-        $('#sidebar_BulletedList').click( () => {
-            writingSettings.bulletedList = !writingSettings.bulletedList;
-            writingSettings.numberedList = false;
-
-            document.execCommand('insertUnorderedList', false);
-        });
-        $('#sidebar_NumberedList').click( () => {
-            writingSettings.numberedList = !writingSettings.numberedList;
-            writingSettings.bulletedList = false;
-
-            document.execCommand('insertOrderedList', false);
-        });
     }
 
     // Font selection and the find/replace
@@ -514,29 +327,16 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     noteField.onscroll = () => {
         global.currentScroll = noteField.scrollTop;
     }
-    // noteField.onmousedown = (e) => {
-    //     if(e.which === 3) {
-    //         console.log('OPEN CONTEXT MENU');
-    //     }
-    // }
 
     // Run some methods initially.
     noteField.focus();
     configureFontSelectorAndFindReplace();
-    handleOptionsSliderButtons();
     
     // Auto login.
     if(global.currentUser === null) helpers.autoLogin(fireAuth, fireRef, loadNotes);
     
     // Set the colors based on the app settings
-    optionsButton.style.backgroundColor = appSettings.colorScheme;
-    optionsSlider.style.backgroundColor = appSettings.colorScheme;
-    sidebar.style.backgroundColor = appSettings.colorScheme;
-    
-    // Cannot set sidebar titles colors here.
-    for(var i = 0; i < optionsTitleLabels.length; i++) {
-        optionsTitleLabels[i].style.color = appSettings.sidebarTextColor;
-    }
+    notesViewBtn.style.backgroundColor = appSettings.colorScheme;
 
     // Load all of the user's notebooks.
     if(global.currentUser !== null) loadNotes(global.currentUser.uid);
@@ -552,33 +352,18 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         noteField.scrollTop = global.currentScroll; // Go back to scroll location.
     }
 
-    // Toggle the notebook slider.
-    optionsButton.onclick = function() {
-        if(sliderOpen) {
-            optionsButton.style.bottom = '30px';
-            optionsSlider.style.bottom = '-80px';
-            sliderOpen = false;
-        } else {
-            optionsButton.style.bottom = '110px';
-            optionsSlider.style.bottom = '0px';
-            sliderOpen = true;
-            optionsSlider.focus();
+
+    // Open the notes view.
+    notesViewBtn.onclick = () => {
+        notesView.style.display = 'block';
+    }
+    window.onclick = (e) => {
+        if (e.target == notesView) {
+            notesView.style.display = 'none';
         }
     }
-    // Toggle the sidebar.
-    sidebarButton.onclick = function() {
-        if(sidebarOpen) {
-            sidebarButton.style.right = '15px';
-            sidebar.style.right = '-200px';
-            sidebarOpen = false;
-            optionsButton.style.opacity = 1;
-        } else {
-            sidebarButton.style.right = '215px';
-            sidebar.style.right = '0px';
-            sidebarOpen = true;
-            optionsButton.style.opacity = 0.3;
-        }
-    }
+
+    
 
 
 
@@ -781,18 +566,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     }
 
     // These events don't follow the eventsAgain structure...
-    BrowserWindow.getFocusedWindow().on('open-sidebar', (event) => {
-        if(sidebarOpen) {
-            sidebarButton.style.right = '15px';
-            sidebar.style.right = '-200px';
-            sidebarOpen = false;
-            optionsButton.style.opacity = 1;
-        } else {
-            sidebarButton.style.right = '215px';
-            sidebar.style.right = '0px';
-            sidebarOpen = true;
-            optionsButton.style.opacity = 0.3;
-        }
+    BrowserWindow.getFocusedWindow().on('open-note-view', (event) => {
+        notesView.style.display = 'block';
     });
     BrowserWindow.getFocusedWindow().on('note-options', (event) => {
         if(sliderOpen) {

@@ -182,7 +182,7 @@ hr.homeSeparator {
 
 
 /* Sidebar and Options buttons */
-#optionsButton {
+#view-notes-button {
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -203,23 +203,8 @@ hr.homeSeparator {
     -webkit-transition-duration: 0.3s;
     background-color: rgb(36, 137, 24);
 }
-#optionsButton:active {
+#view-notes-button:active {
     box-shadow: 2px 2px 2px #888888;
-}
-
-#sidebarButton {
-    position: fixed;
-    top: 30px;
-    right: 15px;
-    width: 20px;
-    height: 20px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    background: none; 
-    color: lightgray;
-    text-decoration: none;
-    -webkit-transition-duration: 0.3s;
 }
 
 .codeSegmentArea {
