@@ -9,7 +9,7 @@
     overflow: auto; /* Enable scroll if needed */
     padding-top: 80px; /* Location of the box */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
 }
 
 .nModal-content {
@@ -34,7 +34,7 @@
     height: 10%;
     color: white;
     text-align: right;
-    background-color: rgb(36, 137, 24);
+    background-color: rgb(88, 158, 106);
 }
 
 /* Add Animation */
@@ -55,22 +55,15 @@
     border: none;
     outline: none;
     margin: 0px;
+    padding: 0px;
+    color: white;
+    cursor: pointer;
     background: none;
     text-decoration: none;
+    background-color: rgb(88, 158, 106);
 }
-#delete-note-btn {
-    color: white;
-    background-color: coral;
-}
-#new-note-btn {
-    color: white;
-    background-color: rgb(45, 163, 96);
-}
-#delete-note-btn:hover {
-    background-color: rgb(138, 35, 35);
-}
-#new-note-btn:hover {
-    background-color: darkgreen;
+.rect-button:hover {
+    background-color: rgb(67, 121, 81);
 }
 
 #nScrollView {
@@ -79,13 +72,24 @@
     height: 90%;
     overflow-x: hidden;
     overflow-y: scroll;
-    background-color: rgb(36, 137, 24);
+    background-color: #83D797;
 }
 .row {
     width: 100%;
     float: left;
     clear: both;
     display: table;
+    cursor: pointer;
     padding-left: 10px;
-    background-color: rgb(57, 168, 45);
+    background-color: #77CC8B;
+    font-size: 18px;
+    font-weight: 100;
+    font-family: 'Avenir';
+    color: rgba(0, 0, 0, 0.7);
+}
+.row:hover {
+    background-color: rgb(106, 180, 123);
+}
+p {
+    font-size: 14px;
 }

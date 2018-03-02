@@ -161,18 +161,30 @@ module.exports = {
 
 
     // Creates a DOM object for a row of data in the notes view.
-    createNoteViewNode: () => {
+    createNoteViewNode: (notebook) => {
+        const highlightedColor = 'orange';
+        const normalColor = 'rgb(57, 168, 45)';
+
         const row = document.createElement('div');
         row.className = 'row';
 
-        const title = document.createElement('h2');
-        const subtitle = document.createElement('p');
+        const title = document.createElement('h4');
+        const createdLabel = document.createElement('p');
 
-        title.innerHTML = 'Title';
-        subtitle.innerHTML = 'Subtitle';
+        title.innerHTML = notebook.title;
+        createdLabel.innerHTML = 'Created ' + notebook.timestamp;
+
+        row.onclick = () => {
+            if(row.style.backgroundColor === backgroundColor) {
+                row.style.backgroundColor = highlightedColor;
+            } else {
+                row.style.backgroundColor = normalColor;
+            }
+
+        }
 
         row.appendChild(title);
-        row.appendChild(subtitle);
+        row.appendChild(createdLabel);
         return row;
     }
 };

@@ -52,13 +52,13 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     var noteViewOpen = false;
     
     // The notebooks (and add notebook button) that are dislayed on the notebook slider.
-    var notebooks = [{
-        id: '',
-        title: 'New',
-        content: '',
-        creator: '',
-        timestamp: 0
-    }];
+    // Each notebook has these properties:
+    // id: '',
+    // title: 'New',
+    // content: '',
+    // creator: '',
+    // timestamp: 0
+    var notebooks = [];
 
     // The current writing settings. These don't change that much necessarily.
     var writingSettings = {
@@ -122,7 +122,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         for(var i in notebooks) {
             const notebook = notebooks[i];
             
-            const node = helpers.createNoteViewNode();
+            const node = helpers.createNoteViewNode(notebook);
             notesScrollView.appendChild(node);
         }
     }
@@ -582,18 +582,6 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     // These events don't follow the eventsAgain structure...
     BrowserWindow.getFocusedWindow().on('open-note-view', (event) => {
         notesView.style.display = 'block';
-    });
-    BrowserWindow.getFocusedWindow().on('note-options', (event) => {
-        if(sliderOpen) {
-            optionsButton.style.bottom = '30px';
-            optionsSlider.style.bottom = '-80px';
-            sliderOpen = false;
-        } else {
-            optionsButton.style.bottom = '110px';
-            optionsSlider.style.bottom = '0px';
-            sliderOpen = true;
-            optionsSlider.focus();
-        }
     });
     BrowserWindow.getFocusedWindow().on('quit-app', (event) => {
         // Check if you for got to save.
