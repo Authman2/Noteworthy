@@ -6,7 +6,7 @@ const global = require('electron').remote.getGlobal('sharedObject');
 /** Just a module of helper functions and things that are just, in general,
 * widely used or could be used anywhere in the app. */
 module.exports = {
-
+    
     /** Checks if a value exists for a given element. */
     valueExists: (element) => {
         if(element === undefined || element === null) return false;
@@ -161,30 +161,43 @@ module.exports = {
 
 
     // Creates a DOM object for a row of data in the notes view.
-    createNoteViewNode: (notebook) => {
-        const highlightedColor = 'orange';
-        const normalColor = 'rgb(57, 168, 45)';
-
+    // Takes in a function to run when trying to open a note.
+    createNoteViewNode: (notebook, index, openFunc) => {
+        const color = '#77CC8B';
         const row = document.createElement('div');
         row.className = 'row';
 
         const title = document.createElement('h4');
         const createdLabel = document.createElement('p');
+        const editStar = document.createElement('span');
+        editStar.className = 'edit-star fa-star';
 
         title.innerHTML = notebook.title;
         createdLabel.innerHTML = 'Created ' + notebook.timestamp;
 
         row.onclick = () => {
-            if(row.style.backgroundColor === backgroundColor) {
-                row.style.backgroundColor = highlightedColor;
-            } else {
-                row.style.backgroundColor = normalColor;
+            switch(global.noteViewMode) {
+                case 0:
+                    openFunc();
+                    break;
+                case 1:
+                    global.deleteIndex = index;
+                    editStar.style.display = editStar.style.display === 'block' ? 'none' : 'block';
+                    const rows = document.getElementsByClassName('edit-star');
+                    if(rows.length > 0) {
+                        for(var i in rows) {
+                            if(i === index) continue;
+                            if(rows[i].style === undefined) continue;
+                            rows[i].style.display = 'none';
+                        }
+                    }
+                    break;
             }
-
         }
 
         row.appendChild(title);
         row.appendChild(createdLabel);
+        row.appendChild(editStar);
         return row;
     }
 };

@@ -89,9 +89,10 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     
     // The actual note view.
     const notesView = document.getElementById('notes-view-modal');
-
-    // The scroll view that holds all of the notes.
     const notesScrollView = document.getElementById('nScrollView');
+    const modeBtn = document.getElementById('switch-mode-btn');
+    const deleteBtn = document.getElementById('delete-note-btn');
+    const newNoteBtn = document.getElementById('new-note-btn');
 
 
 
@@ -119,10 +120,44 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     /** Sets up the notes view with all the notes. */
     const setupNotesView = () => {
         notesScrollView.innerHTML = '';
+
         for(var i in notebooks) {
+            // The notebook at index i.
             const notebook = notebooks[i];
+
+            /** A local method for setting the data in the note view. */
+            const displayText = () => {
+                noteField.focus();
+                noteField.innerHTML = notebook.content;
+                currentNoteID = notebook.id;
+                global.currentID = notebook.id;
+                notesView.style.display = 'none';
+            }
             
-            const node = helpers.createNoteViewNode(notebook);
+            // Create a new row for the note.
+            const node = helpers.createNoteViewNode(notebook, i, () => {
+                // Open the note.
+                if(forgotToSave(titleField, noteField)) {
+                    helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    "Continue", "Cancel", () => {
+                        titleField.value = notebook.title;
+                        noteField.innerHTML = notebook.content;
+                        global.currentTitle = notebook.title;
+                        global.currentContent = notebook.content;
+                        currentNoteID = notebook.id;
+                        global.currentID = notebook.id;
+                        displayText();
+                    });
+                } else {
+                    titleField.value = notebook.title;
+                    noteField.innerHTML = notebook.content;
+                    global.currentTitle = notebook.title;
+                    global.currentContent = notebook.content;
+                    currentNoteID = notebook.id;
+                    global.currentID = notebook.id;
+                    displayText();
+                }
+            });
             notesScrollView.appendChild(node);
         }
     }
@@ -317,6 +352,57 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
     }
 
+    /** Handles switching back and forth between select mode and edit mode on the notes view. */
+    modeBtn.onclick = () => {
+        if(global.noteViewMode == 0) {
+            global.noteViewMode = 1;
+            modeBtn.innerHTML = 'Switch to Select';
+        } else {
+            global.noteViewMode = 0;
+            modeBtn.innerHTML = 'Switch to Edit';
+            if(global.deleteIndex > -1) { 
+                document.getElementsByClassName('edit-star')[global.deleteIndex].style.display = 'none';
+            }
+            global.deleteIndex = -1;
+        }
+    }
+    newNoteBtn.onclick = () => {
+        if(forgotToSave(titleField, noteField)) {
+            helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+            "Continue", "Cancel", () => {
+                titleField.value = '';
+                noteField.innerHTML = '';
+                global.currentTitle = '';
+                global.currentContent = '';
+                currentNoteID = null;
+                global.currentID = '';
+                notesView.style.display = 'none';
+            });
+        } else {
+            titleField.value = '';
+            noteField.innerHTML = '';
+            global.currentTitle = '';
+            global.currentContent = '';
+            currentNoteID = null;
+            global.currentID = '';
+            notesView.style.display = 'none';
+        }
+    }
+    deleteBtn.onclick = () => {
+        if(global.deleteIndex < 0) return;
+        const del = notebooks[global.deleteIndex];
+        helpers.showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', () => {
+            helpers.deleteNote(del.id, fireRef, notebooks, loadNotes);
+            
+            // Reload the notebooks.
+            notebooks = [];
+            loadNotes(global.currentUser.uid);
+
+            // Reset the delete index.
+            global.deleteIndex = -1;
+        });
+    }
+
     
 
 
@@ -344,6 +430,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     // Run some methods initially.
     noteField.focus();
+    global.noteViewMode = 0;
     configureFontSelectorAndFindReplace();
     
     // Auto login.

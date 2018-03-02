@@ -33,7 +33,9 @@ global.sharedObject = {
     currentTitle: '',
     currentContent: '',
     currentID: '',
-    currentScroll: 0
+    currentScroll: 0,
+    noteViewMode: 0,     // 0 - Select Mode, 1 - Edit Mode
+    deleteIndex: -1      // If this is -1, then nothing gets deleted.
 }
 
 
