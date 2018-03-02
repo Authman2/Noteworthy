@@ -167,10 +167,13 @@ module.exports = {
         const row = document.createElement('div');
         row.className = 'row';
 
+        const titleCreatedHolder = document.createElement('div');
+        titleCreatedHolder.style.display = 'table-cell';
         const title = document.createElement('h4');
         const createdLabel = document.createElement('p');
+
         const editStar = document.createElement('span');
-        editStar.className = 'edit-star fa-star';
+        editStar.className = 'edit-star fa fa-star';
 
         title.innerHTML = notebook.title;
         createdLabel.innerHTML = 'Created ' + notebook.timestamp;
@@ -182,7 +185,7 @@ module.exports = {
                     break;
                 case 1:
                     global.deleteIndex = index;
-                    editStar.style.display = editStar.style.display === 'block' ? 'none' : 'block';
+                    editStar.style.display = editStar.style.display === 'table-cell' ? 'none' : 'table-cell';
                     const rows = document.getElementsByClassName('edit-star');
                     if(rows.length > 0) {
                         for(var i in rows) {
@@ -195,8 +198,9 @@ module.exports = {
             }
         }
 
-        row.appendChild(title);
-        row.appendChild(createdLabel);
+        titleCreatedHolder.appendChild(title);
+        titleCreatedHolder.appendChild(createdLabel);
+        row.appendChild(titleCreatedHolder);
         row.appendChild(editStar);
         return row;
     }
