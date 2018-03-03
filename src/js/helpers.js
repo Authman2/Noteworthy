@@ -39,8 +39,8 @@ module.exports = {
     /** Shades a color. */
     shade: shadeUniv,
 
-    /** Shows the prompt dialog from alertify.js */
-    showPromptDialog: (message, acceptTitle, declineTitle, appSettings, success) => {
+    /** Shows the message dialog */
+    showMessageDialog: (message, acceptTitle, declineTitle, appSettings, success) => {
         const div = document.createElement('div');
         div.id = 'promptDialog';
         div.className = 'nModal';
@@ -114,6 +114,100 @@ module.exports = {
         }
 
         holder.appendChild(messageComp);
+        if(declineTitle !== null) holder.appendChild(cancelBtn);
+        if(acceptTitle !== null) holder.appendChild(okBtn);
+        div.appendChild(holder);
+
+        document.getElementById('root').appendChild(div);
+    },
+
+    /** Shows the prompt dialog with an input box. */
+    showPromptDialog: (message, acceptTitle, declineTitle, appSettings, success) => {
+        const div = document.createElement('div');
+        div.id = 'promptDialog';
+        div.className = 'nModal';
+        div.style.display = 'block';
+        div.style.zIndex = 5;
+        div.style.position = 'fixed';
+        div.style.left = 0;
+        div.style.top = 0;
+        div.style.width = '100%';
+        div.style.height = '100%';
+        div.style.overflow = 'auto';
+        div.style.paddingTop = '200px';
+        div.style.backgroundColor = 'rgb(0,0,0)';
+        div.style.backgroundColor = 'rgba(0,0,0,0.5)';
+
+        const holder = document.createElement('div');
+        holder.style.position = 'relative';
+        holder.style.margin = 'auto';
+        holder.style.padding = 20;
+        holder.style.width = '65%';
+        holder.style.height = '20%';
+        holder.style.overflow = 'auto';
+        holder.style.textAlign = 'center';
+        holder.style.border = '1px solid #888';
+        holder.style.animationDuration = '0.4s';
+        holder.style.animationName = 'animatetop';
+        holder.style.webkitAnimationDuration = '0.4s';
+        holder.style.webkitAnimationName = 'animatetop';
+        holder.style.backgroundColor = 'white';
+        holder.style.boxShadow = '0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)';
+
+        const messageComp = document.createElement('p');
+        messageComp.id = 'ga-message';
+        messageComp.style.fontSize = '15px';
+        messageComp.style.fontWeight = 100;
+        messageComp.style.fontFamily = 'Avenir';
+
+        const inputField = document.createElement('input');
+        inputField.type = 'email';
+        inputField.style.width = '90%';
+        inputField.style.height = '20px';
+        inputField.style.outline = 'none';
+        inputField.style.background = 'none';
+        inputField.style.textDecoration = 'none';
+        inputField.style.marginBottom = '10px';
+
+        const okBtn = document.createElement('button');
+        okBtn.id = 'ga-ok-btn';
+        okBtn.className = 'rect-button';
+        okBtn.style.height = '35px';
+        okBtn.style.fontSize = '14px';
+        okBtn.style.marginBottom = '10px';
+        okBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.id = 'ga-cancel-btn';
+        cancelBtn.className = 'rect-button';
+        cancelBtn.style.height = '35px';
+        cancelBtn.style.marginRight = '20px';
+        cancelBtn.style.fontSize = '14px';
+        cancelBtn.style.marginBottom = '10px';
+        cancelBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+
+        messageComp.innerHTML = message;
+        okBtn.innerText = acceptTitle;
+        cancelBtn.innerText = declineTitle;
+
+        okBtn.onclick = () => { success(inputField.value); div.remove(); }
+        cancelBtn.onclick = () => { div.remove(); }
+
+        okBtn.onmouseenter = () => { 
+            okBtn.style.backgroundColor = shadeUniv(appSettings.noteViewFooterColor, -0.35);
+        }
+        cancelBtn.onmouseenter = () => { 
+            cancelBtn.style.backgroundColor = shadeUniv(appSettings.noteViewFooterColor, -0.35);
+        }
+        okBtn.onmouseleave = () => { 
+            okBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+        }
+        cancelBtn.onmouseleave = () => { 
+            cancelBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+        }
+
+        holder.appendChild(messageComp);
+        holder.appendChild(inputField);
         holder.appendChild(cancelBtn);
         holder.appendChild(okBtn);
         div.appendChild(holder);

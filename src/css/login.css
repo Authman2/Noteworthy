@@ -49,7 +49,7 @@ hr.loginSeparator {
     width: 50%;
 }
 
-#loginButton {
+.login-btn {
     width: 100px;
     height: 35px;
     border: none;
@@ -64,9 +64,9 @@ hr.loginSeparator {
     box-shadow: 2px 2px 2px #888888;
 }
 
-#loginButton:hover {
+.login-btn:hover {
     background-color: mediumseagreen;
 }
-#loginButton:active {
+.login-btn:active {
     box-shadow: 1px 1px 1px #888888;
 }

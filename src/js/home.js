@@ -140,7 +140,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             const node = helpers.createNoteViewNode(notebook, i, appSettings, () => {
                 // Open the note.
                 if(forgotToSave(titleField, noteField)) {
-                    helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+                    helpers.showMessageDialog('Looks like you forgot to save. Would you like to continue anyway?', 
                     "Continue", "Cancel", appSettings, () => {
                         titleField.value = notebook.title;
                         noteField.innerHTML = notebook.content;
@@ -381,7 +381,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     }
     newNoteBtn.onclick = () => {
         if(forgotToSave(titleField, noteField)) {
-            helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
+            helpers.showMessageDialog('Looks like you forgot to save. Would you like to continue anyway?', 
             "Continue", "Cancel", appSettings, () => {
                 titleField.value = '';
                 noteField.innerHTML = '';
@@ -404,7 +404,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     deleteBtn.onclick = () => {
         if(global.deleteIndex < 0) return;
         const del = notebooks[global.deleteIndex];
-        helpers.showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', appSettings, () => {
+        helpers.showMessageDialog('Are you sure you want to delete this note?', 'Yes', 'No', appSettings, () => {
             helpers.deleteNote(del.id, fireRef, notebooks, loadNotes);
             
             // Reload the notebooks.
@@ -713,7 +713,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     BrowserWindow.getFocusedWindow().on('quit-app', (event) => {
         // Check if you for got to save.
         if(forgotToSave(titleField, noteField)) {
-            helpers.showPromptDialog('You are about to quit the app, but have unsaved changes. Do you still want to quit?', 
+            helpers.showMessageDialog('You are about to quit the app, but have unsaved changes. Do you still want to quit?', 
             "Yes, Quit", "Cancel", appSettings, () => {
                 app.quit();
             });
@@ -722,7 +722,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
     });
     BrowserWindow.getFocusedWindow().on('retreive-backups', (event) => {
-        helpers.showPromptDialog('Using the "Retreive from Backups" feature allows you to retreive any note that may be lost or deleted by using a Noteworthy backup file. Select the backup files below and Noteworthy will try to recreate the notes for you.', 'Select Backup Files', 'Cancel', appSettings, () => {
+        helpers.showMessageDialog('Using the "Retreive from Backups" feature allows you to retreive any note that may be lost or deleted by using a Noteworthy backup file. Select the backup files below and Noteworthy will try to recreate the notes for you.', 'Select Backup Files', 'Cancel', appSettings, () => {
             const { dialog } = require('electron').remote;
             dialog.showOpenDialog(null, {
                 properties: ['openFile', 'multiSelections'],

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const helpers = require('./helpers.js');
+const alertify = require('alertify.js');
 
 /** Everything is basically one big function that gets called by the renderer. */
 module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
@@ -47,15 +48,6 @@ module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {
         fireAuth.signOut().then(() => {
             // Go back to the home page.
             backToHomeFunction();
-
-            // Clear all notes.
-            notebooks = [{
-                id: '',
-                title: 'New',
-                content: '',
-                creator: '',
-                timestamp: 0
-            }];
 
             // Remove the listener.
             fireRef.child('notes').off();

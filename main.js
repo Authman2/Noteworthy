@@ -306,11 +306,11 @@ let template = [{
                 BrowserWindow.getFocusedWindow().emit('note-options');
         }
     },
-    {
-        label: 'Open Developer Tools',
-        accelerator: 'CmdOrCtrl+T',
-        click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
-    }
+    // {
+    //     label: 'Open Developer Tools',
+    //     accelerator: 'CmdOrCtrl+T',
+    //     click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
+    // }
     ]
 },{
     label: 'Help',

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const helpers = require('./helpers.js');
+const alertify = require('alertify.js');
 
 /** Everything is basically one big function that gets called by the renderer. */
 module.exports = (body, titleBar, fireAuth, fireRef, backToHomeFunction) => {

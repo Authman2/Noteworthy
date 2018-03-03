@@ -84,7 +84,7 @@ homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, true);
 *************************/
 
 BrowserWindow.getFocusedWindow().on('goto-login', (event) => {
-    loginJS(root, titleBar, fireAuth, fireRef, () => {
+    loginJS(root, titleBar, fireAuth, fireRef, appSettings, () => {
         homeJS(root, titleBar, appSettings, fireAuth, fireRef, ipc, false);
     });
 });
