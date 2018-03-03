@@ -86,3 +86,11 @@ select {
     color: rgb(16, 47, 21);
     background-color: forestgreen;
 }
+#resetSettingsButton {
+    color: green;
+    background-color: lightgreen;
+}
+#resetSettingsButton:hover {
+    color: rgb(16, 47, 21);
+    background-color: forestgreen;
+}

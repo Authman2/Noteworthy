@@ -90,6 +90,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     // The actual note view.
     const notesView = document.getElementById('notes-view-modal');
     const notesScrollView = document.getElementById('nScrollView');
+    const notesContent = document.getElementById('nModal-content-view');
+    const notesFooter = document.getElementById('nModal-footer-area');
     const modeBtn = document.getElementById('switch-mode-btn');
     const deleteBtn = document.getElementById('delete-note-btn');
     const newNoteBtn = document.getElementById('new-note-btn');
@@ -131,15 +133,15 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
                 noteField.innerHTML = notebook.content;
                 currentNoteID = notebook.id;
                 global.currentID = notebook.id;
-                notesView.style.display = 'none';
+                closeNoteView();
             }
             
             // Create a new row for the note.
-            const node = helpers.createNoteViewNode(notebook, i, () => {
+            const node = helpers.createNoteViewNode(notebook, i, appSettings, () => {
                 // Open the note.
                 if(forgotToSave(titleField, noteField)) {
                     helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-                    "Continue", "Cancel", () => {
+                    "Continue", "Cancel", appSettings, () => {
                         titleField.value = notebook.title;
                         noteField.innerHTML = notebook.content;
                         global.currentTitle = notebook.title;
@@ -220,6 +222,17 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
         
         alertify.success('Saved!');
+    }
+
+    /** Closes the note view. */
+    const closeNoteView = () => {
+        global.noteViewMode = 0;
+        notesView.style.display = 'none';
+        modeBtn.innerHTML = 'Switch to Edit';
+        if(global.deleteIndex > -1) { 
+            document.getElementsByClassName('edit-star')[global.deleteIndex].style.display = 'none';
+        }
+        global.deleteIndex = -1;
     }
 
     // Font selection and the find/replace
@@ -369,14 +382,14 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     newNoteBtn.onclick = () => {
         if(forgotToSave(titleField, noteField)) {
             helpers.showPromptDialog('Looks like you forgot to save. Would you like to continue anyway?', 
-            "Continue", "Cancel", () => {
+            "Continue", "Cancel", appSettings, () => {
                 titleField.value = '';
                 noteField.innerHTML = '';
                 global.currentTitle = '';
                 global.currentContent = '';
                 currentNoteID = null;
                 global.currentID = '';
-                notesView.style.display = 'none';
+                closeNoteView();
             });
         } else {
             titleField.value = '';
@@ -385,13 +398,13 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
             global.currentContent = '';
             currentNoteID = null;
             global.currentID = '';
-            notesView.style.display = 'none';
+            closeNoteView();
         }
     }
     deleteBtn.onclick = () => {
         if(global.deleteIndex < 0) return;
         const del = notebooks[global.deleteIndex];
-        helpers.showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', () => {
+        helpers.showPromptDialog('Are you sure you want to delete this note?', 'Yes', 'No', appSettings, () => {
             helpers.deleteNote(del.id, fireRef, notebooks, loadNotes);
             
             // Reload the notebooks.
@@ -437,7 +450,31 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
     if(global.currentUser === null) helpers.autoLogin(fireAuth, fireRef, loadNotes);
     
     // Set the colors based on the app settings
-    notesViewBtn.style.backgroundColor = appSettings.colorScheme;
+    notesViewBtn.style.backgroundColor = appSettings.mainColorScheme;
+    notesScrollView.style.backgroundColor = appSettings.mainColorScheme;
+    notesContent.style.backgroundColor = appSettings.mainColorScheme;
+    notesFooter.style.backgroundColor = appSettings.noteViewFooterColor;
+    modeBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    deleteBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    newNoteBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    modeBtn.onmouseenter = () => {
+        modeBtn.style.backgroundColor = helpers.shade(appSettings.noteViewFooterColor, -0.35);
+    }
+    modeBtn.onmouseleave = () => {
+        modeBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    }
+    deleteBtn.onmouseenter = () => {
+        deleteBtn.style.backgroundColor = helpers.shade(appSettings.noteViewFooterColor, -0.35);
+    }
+    deleteBtn.onmouseleave = () => {
+        deleteBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    }
+    newNoteBtn.onmouseenter = () => {
+        newNoteBtn.style.backgroundColor = helpers.shade(appSettings.noteViewFooterColor, -0.35);
+    }
+    newNoteBtn.onmouseleave = () => {
+        newNoteBtn.style.backgroundColor = appSettings.noteViewFooterColor;
+    }
 
     // Load all of the user's notebooks.
     if(global.currentUser !== null) loadNotes(global.currentUser.uid);
@@ -459,9 +496,8 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         notesView.style.display = 'block';
     }
     window.onclick = (e) => {
-        if (e.target == notesView) {
-            notesView.style.display = 'none';
-        }
+        if(e.target == notesView) { closeNoteView(); }
+        if(e.target == document.getElementById('promptDialog')) document.getElementById('promptDialog').remove();
     }
 
     
@@ -668,13 +704,17 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
 
     // These events don't follow the eventsAgain structure...
     BrowserWindow.getFocusedWindow().on('open-note-view', (event) => {
-        notesView.style.display = 'block';
+        if(notesView.style.display == 'block') {
+            notesView.style.display = 'none';
+        } else {
+            notesView.style.display = 'block';
+        }
     });
     BrowserWindow.getFocusedWindow().on('quit-app', (event) => {
         // Check if you for got to save.
         if(forgotToSave(titleField, noteField)) {
             helpers.showPromptDialog('You are about to quit the app, but have unsaved changes. Do you still want to quit?', 
-            "Yes, Quit", "Cancel", () => {
+            "Yes, Quit", "Cancel", appSettings, () => {
                 app.quit();
             });
         } else {
@@ -682,7 +722,7 @@ module.exports = (body, titleBar, appSettings, fireAuth, fireRef, ipc, eventsAga
         }
     });
     BrowserWindow.getFocusedWindow().on('retreive-backups', (event) => {
-        helpers.showPromptDialog('Using the "Retreive from Backups" feature allows you to retreive any note that may be lost or deleted by using a Noteworthy backup file. Select the backup files below and Noteworthy will try to recreate the notes for you.', 'Select Backup Files', 'Cancel', () => {
+        helpers.showPromptDialog('Using the "Retreive from Backups" feature allows you to retreive any note that may be lost or deleted by using a Noteworthy backup file. Select the backup files below and Noteworthy will try to recreate the notes for you.', 'Select Backup Files', 'Cancel', appSettings, () => {
             const { dialog } = require('electron').remote;
             dialog.showOpenDialog(null, {
                 properties: ['openFile', 'multiSelections'],

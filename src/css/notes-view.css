@@ -60,10 +60,14 @@
     cursor: pointer;
     background: none;
     text-decoration: none;
+    font-size: 12px;
+    font-weight: 100;
+    font-family: 'Avenir';
     background-color: rgb(88, 158, 106);
 }
 .rect-button:hover {
-    background-color: rgb(67, 121, 81);
+    /* background-color: rgb(67, 121, 81); */
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #nScrollView {
