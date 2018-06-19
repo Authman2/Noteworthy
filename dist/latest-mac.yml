@@ -1,8 +1,8 @@
-version: 1.3.5
+version: 1.3.6
 files:
-  - url: Noteworthy-1.3.5.dmg
-    sha512: S7LuD4H/Sfm4ffrpNNpUnpKl9gUies+bW4ZSxNOm55o2AUfpFXcRl0qWencGTY+5n8dMiL3da/CuEtkFEVGJjA==
-    size: 72459207
-path: Noteworthy-1.3.5.dmg
-sha512: S7LuD4H/Sfm4ffrpNNpUnpKl9gUies+bW4ZSxNOm55o2AUfpFXcRl0qWencGTY+5n8dMiL3da/CuEtkFEVGJjA==
-releaseDate: '2018-03-03T03:22:32.612Z'
+  - url: Noteworthy-1.3.6.dmg
+    sha512: B8bx13nog8VCvEsO4MxoGRJz6/iHqSi8QL12gw+j7ormqox/Ifi2KiELPa2FKdl/C53+pU/IQU1x9Zcrieg0tg==
+    size: 72454432
+path: Noteworthy-1.3.6.dmg
+sha512: B8bx13nog8VCvEsO4MxoGRJz6/iHqSi8QL12gw+j7ormqox/Ifi2KiELPa2FKdl/C53+pU/IQU1x9Zcrieg0tg==
+releaseDate: '2018-03-03T17:52:17.535Z'
