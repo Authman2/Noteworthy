@@ -1,147 +1,20 @@
-<div id='homePage'>
+<div class='homePage'>
     
-    <!-- The title area for the note. -->
-    <input type='text' id='titleArea' placeholder='Title'/>
-    
-    <hr class='homeSeparator'>
-    
-    <!-- The space where the user will type in their notes. -->
-    <!-- <textarea id='noteArea'
-            spellcheck="true"
-            placeholder='Start typing your note here'></textarea> -->
+    <!-- The title label that just shows the name of the app. -->
+    <h1 id='pageTitle'>Noteworthy</h1>
 
-    <div id='noteArea' contenteditable='true'></div>
+    <!-- Email field. -->
+    <input id='emailField' class='underneathInputField' placeholder='Email'></input>
 
-    <!-- Button for opening the user's notes. -->
-    <button id='view-notes-button'><span class='fa fa-book'></span></button>
+    <!-- Password field. -->
+    <input id='passwordField' class='underneathInputField' placeholder='Password'>
+        <button id='forgotPasswordButton'>?</button>
+    </input>
 
+    <!-- The login button. -->
+    <button class='roundRectButton' id='loginButton'>Login</button>
 
-    <!-- The find/replace window. -->
-    <div id='findReplaceWindow' draggable="true">
-        <p>Find:</p>
-        <input id='find-field' type="text" width="80%" height="60%" placeholder="Find"/>
-        <input id='replace-field' type="text" width="80%" height="60%" placeholder="Replace"/>
-        <button class='findRepButton' id='findBtn'>Find</button>
-        <button class='findRepButton' id='replaceBtn'>Replace</button>
-        <button class='findRepButton' id='prevBtn'>Previous</button>
-        <button class='findRepButton' id='nextBtn'>Next</button>
-        <button class='findRepButton' id='closeFindBtn'>Close</button>
-    </div>
+    <!-- The sign up button. -->
+    <button class='roundRectButton' id='signUpButton'>Sign Up</button>
 
-
-    <!-- Font Selector Dialog -->
-    <dialog id='fontDialog' draggable="true">
-        <h4 id='fontSelectorHeader'>Select A Font</h4>
-        <select id='fontSelector' name="selectFontFamily">
-            <option>Agency FB</option>
-            <option>Akzidenz-Grotesk</option>
-            <option>Andalé Sans</option>
-            <option>Antique Olive</option>
-            <option>Arial</option>
-            <option>Arial Unicode MS</option>
-            <option>Avant Garde Gothic</option>
-            <option selected="selected">Avenir</option>
-            <option>Bank Gothic</option>
-            <option>Bauhaus</option>
-            <option>Bell Centennial</option>
-            <option>Bell Gothic</option>
-            <option>Benguiat Gothic</option>
-            <option>Berlin Sans</option>
-            <option>Brandon Grotesque</option>
-            <option>Calibri</option>
-            <option>Casey</option>
-            <option>Century Gothic</option>
-            <option>Charcoal</option>
-            <option>Chicago</option>
-            <option>Clearview</option>
-            <option>Comic Sans</option>
-            <option>Compacta</option>
-            <option>Corbel</option>
-            <option>DejaVu Sans</option>
-            <option>DIN</option>
-            <option>Dotum</option>
-            <option>Droid Sans</option>
-            <option>Ecofont</option>
-            <option>Eras</option>
-            <option>Esseltub</option>
-            <option>Espy Sans</option>
-            <option>Eurocrat</option>
-            <option>Eurostile</option>
-            <option>FF Dax</option>
-            <option>FF Meta</option>
-            <option>FF Scala Sans</option>
-            <option>Fira Sans</option>
-            <option>Folio</option>
-            <option>Franklin Gothic</option>
-            <option>FreeSans</option>
-            <option>Frutiger</option>
-            <option>Futura</option>
-            <option>Geneva</option>
-            <option>Gill Sans</option>
-            <option>Gotham</option>
-            <option>Haettenschweiler</option>
-            <option>Handel Gothic</option>
-            <option>Harabara Mais</option>
-            <option>Hei</option>
-            <option>Helvetica</option>
-            <option>Helvetica Neue</option>
-            <option>Highway Gothicv
-            <option>Hobo</option>
-            <option>Impact</option>
-            <option>Industria</option>
-            <option>Interstate</option>
-            <option>Johnston/New Johnston</option>
-            <option>Kabel</option>
-            <option>Klavika</option>
-            <option>Liberation Sans</option>
-            <option>Linux Biolinum</option>
-            <option>Lucida Sans</option>
-            <option>Lydian</option>
-            <option>Meiryo</option>
-            <option>Meta</option>
-            <option>Microgramma</option>
-            <option>Modern</option>
-            <option>Motorway</option>
-            <option>MS Sans Serif</option>
-            <option>Myriad</option>
-            <option>Neutraface</option>
-            <option>Neuzeit S</option>
-            <option>News Gothic</option>
-            <option>Nimbus Sans L</option>
-            <option>Open Sans</option>
-            <option>Optima</option>
-            <option>Parisine</option>
-            <option>Product Sans</option>
-            <option>Proxima Nova</option>
-            <option>PT Sans</option>
-            <option>Rail Alphabet</option>
-            <option>Roboto</option>
-            <option>Rotis Sans</option>
-            <option>San Francisco</option>
-            <option>Segoe UI</option>
-            <option>Skia</option>
-            <option>Source Sans Pro</option>
-            <option>Sweden Sans</option>
-            <option>Syntax</option>
-            <option>System</option>
-            <option>Tahoma</option>
-            <option>Template Gothic</option>
-            <option>Thesis Sans</option>
-            <option>Tiresias</option>
-            <option>Trade Gothic</option>
-            <option>Transport</option>
-            <option>Trebuchet MS</option>
-            <option>Twentieth Century</option>
-            <option>Ubuntu</option>
-            <option>Univers</option>
-            <option>Vera Sans</option>
-            <option>Verdana</option>                               
-        </select>
-        <br><br>
-        <input type="number" id="fontSizeSelector" min="0" max="70" value="16"/>
-        <br><br>
-        <button id='saveFontButton'>Save</button>
-        <br><br>
-        <button id='cancelFontButton'>Cancel</button>
-    </dialog>
 </div>

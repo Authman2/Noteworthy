@@ -29,13 +29,7 @@ var eve;
 Handles creating all of the html, css, and javascript code necessary for each page.
 */
 global.sharedObject = {
-    currentUser: null,
-    currentTitle: '',
-    currentContent: '',
-    currentID: '',
-    currentScroll: 0,
-    noteViewMode: 0,     // 0 - Select Mode, 1 - Edit Mode
-    deleteIndex: -1      // If this is -1, then nothing gets deleted.
+    
 }
 
 
@@ -58,13 +52,10 @@ let template = [{
         }
     },{
         label: 'Share',
-        submenu: [{
-            label: 'Email',
-            click: () => {
-                if(eve !== null && eve !== undefined)
-                    BrowserWindow.getFocusedWindow().emit('share-email');
-            }
-        }]
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('share-email');
+        }
     },{
         label: 'Export',
         submenu: [{
@@ -236,22 +227,6 @@ let template = [{
 },{
     label: 'Account',
     submenu: [{
-        label: 'Login',
-        accelerator: 'CmdOrCtrl+Shift+L',
-        click: () => {
-            if(eve !== null && eve !== undefined) {
-                BrowserWindow.getFocusedWindow().emit('goto-login');
-            }
-        }
-    }, {
-        label: 'Sign Up',
-        accelerator: 'CmdOrCtrl+Shift+S',
-        click: () => { 
-            if(eve !== null && eve !== undefined) {
-                BrowserWindow.getFocusedWindow().emit('goto-signup');
-            }
-        }
-    }, {
         label: 'Account',
         accelerator: 'CmdOrCtrl+Shift+A',
         click: () => { 
@@ -298,19 +273,12 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('open-note-view');
         }
-    },{
-        label: 'Note Options',
-        accelerator: 'CmdOrCtrl+N',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('note-options');
-        }
     },
-    // {
-    //     label: 'Open Developer Tools',
-    //     accelerator: 'CmdOrCtrl+T',
-    //     click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
-    // }
+    {
+        label: 'Open Developer Tools',
+        accelerator: 'CmdOrCtrl+T',
+        click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
+    }
     ]
 },{
     label: 'Help',
@@ -376,7 +344,10 @@ const createAppMenu = () => {
             },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
-                click: () => { BrowserWindow.getFocusedWindow().emit('quit-app'); }
+                click: () => { 
+                    BrowserWindow.getFocusedWindow().emit('quit-app');
+                    app.quit();
+                }
             }]
         });
     }

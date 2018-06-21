@@ -26,8 +26,8 @@ const Globals = require('../../Globals.js');
 
 /** Start the home page actions. */
 const init = (root) => {
-    Globals.loadHTMLInto('Home.html', root);
-    console.log('working');
+    Globals.loadHTMLInto('Work.html', root);
+    console.log('working page');
 }
 
 

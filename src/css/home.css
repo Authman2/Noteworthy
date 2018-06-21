@@ -1,238 +1,107 @@
-body {
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
-}
-
-#homePage {
-    position: absolute;
+.homePage {
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
-    margin: 0px;
-    padding: 0px;
-    background-color: white;
-}
-#titleArea {
-    position: relative;
-    left: 2%;
-    width: 96%;
-    height: 10%;
-    border: none;
-    outline: none;
-    font-size: 20px;
-    font-weight: 200;
-    background: none;
-    text-decoration: none;
-    font-family: 'Avenir';
-    background-color: white;
-}
-hr.homeSeparator {
-    width: 95%;
-    border: 0;
-    height: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-#noteArea {
-    position: relative;
-    left: 2%;
-    width: 96%;
-    height: 80%;
-    cursor: text;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    font-weight: 200;
-    background: none;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-family: 'Avenir';
-    background-color: white;
-    /* overflow-wrap: break-word; */
-}
-#noteArea::-webkit-scrollbar {
-    display: none;
-}
-
-
-/* Font Selector */
-#fontDialog {
-    position: absolute;
-    top: 20px;
-    width: 250px;
-    height: 350px;
     user-select: none;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
-    -webkit-user-drag: element;
-    border: 2px solid gray;
-}
-#fontSelectorHeader {
-    font-size: 24px;
-    font-weight: 200;
-    text-align: center;
-    font-family: 'Avenir';
-}
-#fontSelector {
-    border: 1px solid black;
-}
-#fontSizeSelector {
-    width: 80px;
-    height: 30px;
-}
-#saveFontButton {
-    width: 80px;
-    height: 30px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 200;
-    background: none;
-    border-radius: 25px;
-    font-family: 'Avenir';
-    text-decoration: none;
-    background-color: lightgreen;
-}
-#saveFontButton:hover {
-    background-color: forestgreen;
-}
-#cancelFontButton {
-    width: 80px;
-    height: 30px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 200;
-    background: none;
-    border-radius: 25px;
-    font-family: 'Avenir';
-    text-decoration: none;
-    background-color: rgba(202, 44, 44, 0.87);
-}
-#cancelFontButton:hover {
-    background-color: rgba(116, 20, 20, 0.87);
+    background: linear-gradient(to top right, #5587d2, rgba(85, 135, 210, 0.5),rgba(238, 211, 238, 0.85),#ffffff);
 }
 
-
-/* The find/replace window */
-#findReplaceWindow {
-    position: absolute;
-    top: 100px;
-    right: 10px;
-    width: 300px;
-    height: 200px;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: 100;
-    visibility: hidden;
-    text-align: center;
-    font-family: 'Avenir';
-    -webkit-user-drag: element;
-    border: 2px solid lightgray;
-    background-color: white;
-}
-#find-field {
-    position: relative;
-    width: 95%;
-    outline: none;
-    background: none;
-    text-decoration: none;
-    border-radius: 20px;
-    font-size: 15px;
-    font-weight: 100;
-    padding-left: 10px;
-    margin-bottom: 10px;
-    font-family: 'Avenir';
-    border: 2px solid lightgray;
-}
-#replace-field {
-    position: relative;
-    width: 95%;
-    outline: none;
-    background: none;
-    text-decoration: none;
-    border-radius: 20px;
-    font-size: 15px;
-    font-weight: 100;
-    padding-left: 10px;
-    font-family: 'Avenir';
-    border: 2px solid lightgray;
-}
-.findRepButton {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    background: none;
-    margin-top: 10px;
-    border-radius: 15px;
-    text-decoration: none;
-    background-color: lightgray;
-}
-.findRepButton:hover {
-    background-color: gray;
-}
-
-
-/* Sidebar and Options buttons */
-#view-notes-button {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    border: none;
-    z-index: 2;
+#pageTitle {
     color: white;
-    outline: none;
-    cursor: pointer;
-    background: none;
-    font-size: 30px;
-    font-weight: 200;
-    border-radius: 100%;
+    font-size: 35px;
+    font-weight: 100;
+    user-select: none;
+    margin-bottom: 85px;
     font-family: 'Avenir';
+    animation: fadeIn 1s ease-out;
+}
+
+#emailField {
+    width: 60%;
+    display: block;
+    font-size: 20px;
+    animation: initFields 1.5s;
+    animation-timing-function: ease-out;
+}
+#passwordField {
+    width: 60%;
+    display: block;
+    font-size: 20px;
+    margin-top: 40px;
+    animation: initFields 1.5s;
+    animation-timing-function: ease-out;
+}
+#forgotPasswordButton {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 20px;
+    background: none;
+    margin-top: -30px;
+    margin-left: auto;
+    margin-right: auto;
     text-decoration: none;
-    box-shadow: 3px 3px 3px #888888;
-    -webkit-transition-duration: 0.3s;
-    background-color: rgb(36, 137, 24);
+    transition-duration: 0.2s;
+    right: calc(22.5% - 2.5%);
+    animation: fadeIn 2s ease-out;
 }
-#view-notes-button:active {
-    box-shadow: 2px 2px 2px #888888;
+#forgotPasswordButton:hover {
+    color: #6992d6;
 }
-
-.codeSegmentArea {
-	position: relative;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	border: none;
-	outline: none;
-	background: none;
-	text-decoration: none;
-	font-family: monospace;
-	/* Background color is purposely not set here. */
-}
-
-
-@media print {
-    body * {
-        visibility: hidden;
+@keyframes initFields {
+    from {
+        width: 0px;
     }
-
-    #noteArea * {
-        visibility: visible;
+    to {
+        width: 60%;
     }
+}
 
-    #noteArea {
-        position: absolute;
-        left: 0;
-        top: 0;
+#loginButton {
+    width: 100px;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+    font-weight: 100;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    transition-duration: 0.2s;
+    animation: fadeIn 3s ease-out;
+}
+#signUpButton {
+    width: 140px;
+    padding: 15px;
+    display: block;
+    font-size: 18px;
+    font-weight: 100;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    transition-duration: 0.2s;
+    animation: fadeIn 2.2s ease-out;
+}
+#loginButton:hover, #signUpButton:hover {
+    color: white;
+    background-color: #6992d6;
+}
+#loginButton:active, #signUpButton:active {
+    color: white;
+    background-color: #436caf;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
