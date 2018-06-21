@@ -44,7 +44,7 @@ class PageManager {
 
     /** Switches to a new page, loads the html and runs the javascript. */
     goTo(page) {
-        page.init(root);
+        page.init(root, this);
     }
 
 

@@ -346,7 +346,7 @@ const createAppMenu = () => {
                 accelerator: 'CmdOrCtrl+Q',
                 click: () => { 
                     BrowserWindow.getFocusedWindow().emit('quit-app');
-                    app.quit();
+                    app.quit(); // Move this later.
                 }
             }]
         });

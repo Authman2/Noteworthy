@@ -27,6 +27,7 @@
     font-size: 20px;
     animation: initFields 1.5s;
     animation-timing-function: ease-out;
+    transition: opacity 0.2s ease-in-out;
 }
 #passwordField {
     width: 60%;
@@ -35,6 +36,7 @@
     margin-top: 40px;
     animation: initFields 1.5s;
     animation-timing-function: ease-out;
+    transition: opacity 0.2s ease-in-out;
 }
 #forgotPasswordButton {
     position: absolute;
@@ -76,6 +78,7 @@
     margin-right: auto;
     transition-duration: 0.2s;
     animation: fadeIn 3s ease-out;
+    /* transition: opacity 0.2s ease-in-out; */
 }
 #signUpButton {
     width: 140px;
@@ -88,6 +91,7 @@
     margin-right: auto;
     transition-duration: 0.2s;
     animation: fadeIn 2.2s ease-out;
+    /* transition: opacity 0.2s ease-in-out; */
 }
 #loginButton:hover, #signUpButton:hover {
     color: white;
