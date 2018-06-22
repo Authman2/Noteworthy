@@ -8,13 +8,13 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.forgotPasswordAlert {
+.signUpErrorAlert {
     position: relative;
     width: 45%;
-    height: 60%;
+    height: 40%;
     margin: auto;
     z-index: 5000;
-    margin-top: 50px;
+    margin-top: 80px;
     text-align: center;
     background-color: white;
     animation: fadeIn 0.25s ease-in-out;
@@ -57,27 +57,7 @@
     
 }
 
-#resetPasswordField {
-    position: relative;
-    top: 50px;
-    width: 82%;
-    height: 20px;
-    border: none;
-    outline: none;
-    color: black;
-    font-size: 20px;
-    background: none;
-    margin-left: auto;
-    margin-right: auto;
-    text-decoration: none;
-    transition-duration: 0.2s;
-    border-bottom: 1px solid black;
-}
-#resetPasswordField::-webkit-input-placeholder {
-    color: black;
-}
-
-#sendResetButton {
+#closeSignUpErrorButton {
     position: absolute;
     left: 0px;
     right: 0px;
@@ -98,14 +78,14 @@
     background: -webkit-linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5587d2', endColorstr='#ffffff',GradientType=1 );
 }
-#sendResetButton:hover {
+#closeSignUpErrorButton:hover {
     background: #5587d2;
     background: linear-gradient(45deg, #3d68aa 0%,#caa6ca 79%,#c7a5c7 79%,#e4dcdc 100%);
     background: -moz-linear-gradient(45deg, #3d68aa 0%,#caa6ca 79%,#c7a5c7 79%,#e4dcdc 100%);
     background: -webkit-linear-gradient(45deg, #3d68aa 0%,#caa6ca 79%,#c7a5c7 79%,#e4dcdc 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5587d2', endColorstr='#ffffff',GradientType=1 );
 }
-#sendResetButton:active {
+#closeSignUpErrorButton:active {
     background: #5587d2;
     background: linear-gradient(45deg, #2e558f 0%,#aa85aa 79%,#a885a8 79%,#cfc4c4 100%);
     background: -moz-linear-gradient(45deg, #2e558f 0%,#aa85aa 79%,#a885a8 79%,#cfc4c4 100%);

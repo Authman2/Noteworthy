@@ -30,6 +30,82 @@ const hideForgotPasswordAlert = (root) => {
     root.removeChild(overlay);
 }
 
+/** Shows the login error alert. */
+const showLoginErrorAlert = (root, error) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/LoginError.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const desc = document.getElementById('loginErrorDescription');
+    desc.innerHTML = `${error}`;
+
+    const closeBtn = document.getElementById('closeLoginErrorButton');
+    const overlay = document.getElementById('overlay');
+    closeBtn.onclick = () => {
+        hideLoginErrorAlert(root);
+    }
+    overlay.onclick = () => {
+        hideLoginErrorAlert(root);
+    }
+}
+
+/** Hides the login error alert. */
+const hideLoginErrorAlert = (root) => {
+    const alert = document.getElementById('loginErrorAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
+
+/** Shows the sign up error alert. */
+const showSignUpErrorAlert = (root, error) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/SignUpError.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const desc = document.getElementById('signUpErrorDescription');
+    desc.innerHTML = `${error}`;
+
+    const closeBtn = document.getElementById('closeSignUpErrorButton');
+    const overlay = document.getElementById('overlay');
+    closeBtn.onclick = () => {
+        hideSignUpErrorAlert(root);
+    }
+    overlay.onclick = () => {
+        hideSignUpErrorAlert(root);
+    }
+}
+
+/** Hides the sign up alert. */
+const hideSignUpErrorAlert = (root) => {
+    const alert = document.getElementById('signUpErrorAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
+
+/** Shows the created account alert. */
+const showCreatedAccountAlert = (root, then) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/CreatedAccount.html`, 'utf8');
+    $('#root').prepend(alert);
+    
+    const closeBtn = document.getElementById('getStartedButton');
+    const overlay = document.getElementById('overlay');
+    closeBtn.onclick = () => {
+        hideCreatedAccountAlert(root);
+        then();
+    }
+    overlay.onclick = () => {
+        hideCreatedAccountAlert(root);
+    }
+}
+
+/** Hides the sign up alert. */
+const hideCreatedAccountAlert = (root) => {
+    const alert = document.getElementById('createdAccountAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
+
 
 
 
@@ -49,7 +125,7 @@ module.exports = {
         firebase.auth().signInWithEmailAndPassword(email, password).then((snap) => {
             success();
         }).catch((err) => {
-            failure();
+            failure(err);
         });
     },
 
@@ -59,7 +135,7 @@ module.exports = {
         firebase.auth().createUserWithEmailAndPassword(email, password).then((snap) => {
             success();
         }).catch((err) => {
-            failure();
+            failure(err);
         });
     },
 
@@ -68,6 +144,24 @@ module.exports = {
     showForgotPasswordAlert: showForgotPasswordAlert,
 
     /** Hides the forgot password alert. */
-    hideForgotPasswordAlert: hideForgotPasswordAlert
+    hideForgotPasswordAlert: hideForgotPasswordAlert,
+
+    /** Shows the login error alert. */
+    showLoginErrorAlert: showLoginErrorAlert,
+
+    /** Hides the login error alert. */
+    hideLoginErrorAlert: hideLoginErrorAlert,
+
+    /** Shows the sign up error alert. */
+    showSignUpErrorAlert: showSignUpErrorAlert,
+
+    /** Hides the sign up error alert. */
+    hideSignUpErrorAlert: hideSignUpErrorAlert,
+
+    /** Shows the created account alert. */
+    showCreatedAccountAlert: showCreatedAccountAlert,
+
+    /** Hides the created account alert. */
+    hideCreatedAccountAlert: hideCreatedAccountAlert
 
 }

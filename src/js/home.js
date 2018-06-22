@@ -5,7 +5,9 @@
 *************************/
 
 const fs = require('fs');
+const $ = require('jquery');
 const Globals = require('../../Globals.js');
+const work = require('../js/Work.js');
 
 
 /************************
@@ -14,8 +16,9 @@ const Globals = require('../../Globals.js');
 *                       *
 *************************/
 
-// The root body.
+// The root body and the page manager.
 var body;
+var pager;
 
 // The sign up and login buttons.
 var loginButton;
@@ -43,6 +46,8 @@ var isLoginMode = true;
 /** Start the home page actions. */
 const init = (root, pageManager) => {
     body = root;
+    pager = pageManager;
+
     Globals.loadHTMLInto('Home.html', root);
     setupRefs();
 
@@ -80,17 +85,24 @@ const handleLogin = () => {
     switch(isLoginMode) {
         case true:
             Globals.login(email, pass, () => {
-                // Animate away the view, then switch to work page.
-            }, () => {
-                
+                animateAwayPage(() => {
+                    console.log('Done');
+                });
+                // pager.goTo(work);
+            }, (err) => {
+                Globals.showLoginErrorAlert(body, err);
             });
             break;
         case false:
             Globals.signUp(email, pass, () => {
                 // Alert a congratulations on creating an account.
                 // Go to the work page.
-            }, () => {
+                Globals.showCreatedAccountAlert(body, () => {
+                    pager.goTo(work);
+                });
+            }, (err) => {
                 // Alert that there was an error.
+                Globals.showSignUpErrorAlert(body, err);
             });
             break;
     }
@@ -140,6 +152,29 @@ const handleForgotPassword = () => {
     console.log('clicked');
     Globals.showForgotPasswordAlert(body);
 }
+
+
+/** Animates away this home page. */
+const animateAwayPage = (then) => {
+    $(loginButton).animate({
+        opacity: '0'
+    }, '0.2s ease-in-out');
+    $(signUpButton).animate({
+        opacity: '0'
+    }, '0.2s ease-in-out');
+
+    $(emailField).animate({
+        width: '0px',
+        opacity: '0'
+    }, '0.2s ease-in-out');
+    $(passwordField).animate({
+        width: '0px',
+        opacity: '0'
+    }, '0.2s ease-in-out', then);
+}
+
+
+
 
 
 
