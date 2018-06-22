@@ -8,7 +8,12 @@
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    background: linear-gradient(to top right, #5587d2, rgba(85, 135, 210, 0.5),rgba(238, 211, 238, 0.85),#ffffff);
+    background: #5587d2;
+    background: linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
+    background: -moz-linear-gradient(45deg, #5587d2 0%, #eed3ee 79%, #eed3ee 79%, #ffffff 100%);
+    background: -webkit-linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5587d2', endColorstr='#ffffff',GradientType=1 );
+    /* background: linear-gradient(to top right, #5587d2, rgba(85, 135, 210, 0.5),rgba(238, 211, 238, 0.85),#ffffff); */
 }
 
 #pageTitle {

@@ -14,6 +14,9 @@ const Globals = require('../../Globals.js');
 *                       *
 *************************/
 
+// The root body.
+var body;
+
 // The sign up and login buttons.
 var loginButton;
 var signUpButton;
@@ -39,6 +42,7 @@ var isLoginMode = true;
 
 /** Start the home page actions. */
 const init = (root, pageManager) => {
+    body = root;
     Globals.loadHTMLInto('Home.html', root);
     setupRefs();
 
@@ -70,7 +74,26 @@ const setupRefs = () => {
 
 /** Handles logging in and going to the work page. */
 const handleLogin = () => {
-    // Firebase login.
+    const email = emailField.value;
+    const pass = passwordField.value;
+
+    switch(isLoginMode) {
+        case true:
+            Globals.login(email, pass, () => {
+                // Animate away the view, then switch to work page.
+            }, () => {
+                
+            });
+            break;
+        case false:
+            Globals.signUp(email, pass, () => {
+                // Alert a congratulations on creating an account.
+                // Go to the work page.
+            }, () => {
+                // Alert that there was an error.
+            });
+            break;
+    }
 }
 
 /** Animates the email and password field so that they go into sign up mode. */
@@ -81,8 +104,6 @@ const handleSignUp = () => {
         case true:
             emailField.style.opacity = 0;
             passwordField.style.opacity = 0;
-            // loginButton.style.opacity = 0;
-            // signUpButton.style.opacity = 0;
             setTimeout(() => {
                 emailField.placeholder = 'Email';
                 passwordField.placeholder = 'Password';
@@ -93,16 +114,12 @@ const handleSignUp = () => {
 
                 emailField.style.opacity = 1;
                 passwordField.style.opacity = 1;
-                // loginButton.style.opacity = 1;
-                // signUpButton.style.opacity = 1;
             }, 200);
             
             break;
         case false:
             emailField.style.opacity = 0;
             passwordField.style.opacity = 0;
-            // loginButton.style.opacity = 0;
-            // signUpButton.style.opacity = 0;
                 loginButton.style.width = '180px';
                 signUpButton.style.width = '100px';
             setTimeout(() => {
@@ -113,8 +130,6 @@ const handleSignUp = () => {
 
                 emailField.style.opacity = 1;
                 passwordField.style.opacity = 1;
-                // loginButton.style.opacity = 1;
-                // signUpButton.style.opacity = 1;
             }, 200);
             break;
     }
@@ -122,7 +137,8 @@ const handleSignUp = () => {
 
 /** Brings up an alert to reset the password. */
 const handleForgotPassword = () => {
-    console.log('forgot password');
+    console.log('clicked');
+    Globals.showForgotPasswordAlert(body);
 }
 
 

@@ -40,7 +40,6 @@ body, html {
 }
 
 .roundRectButton {
-    width: 100px;
     border: none;
     outline: none;
     padding: 20px;
@@ -51,4 +50,8 @@ body, html {
     text-decoration: none;
     background-color: white;
     /* box-shadow: 2px 2px #6992d6; */
+}
+
+.alertButton {
+    
 }
