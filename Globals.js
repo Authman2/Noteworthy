@@ -1,5 +1,7 @@
-const $ = require('jquery');
 const fs = require('fs');
+const $ = require('jquery');
+const marked = require('marked');
+const turndown = require('turndown');
 const firebase = require('firebase');
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
@@ -162,6 +164,5 @@ module.exports = {
     showCreatedAccountAlert: showCreatedAccountAlert,
 
     /** Hides the created account alert. */
-    hideCreatedAccountAlert: hideCreatedAccountAlert
-
+    hideCreatedAccountAlert: hideCreatedAccountAlert,
 }

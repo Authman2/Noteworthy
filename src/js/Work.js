@@ -6,7 +6,6 @@
 
 const $ = require('jquery');
 const fs = require('fs');
-const marked = require('marked');
 const Globals = require('../../Globals.js');
 
 
@@ -20,15 +19,20 @@ const Globals = require('../../Globals.js');
 var body;
 var pager;
 
+// The view that holds the main work area.
+var workView;
+
 // The title field.
 var titleField;
 
 // The content field.
 var contentField;
 
-// Temporary test note.
-var note = '';
-var caret = 0;
+// The button to open notebooks.
+var notesButton;
+
+// Whether or not the notebooks view is open.
+var notebookViewIsOpen = false;
 
 
 
@@ -48,14 +52,15 @@ const init = (root, pageManager) => {
     Globals.loadHTMLInto('Work.html', root);
     setupRefs();
 
-    // Setup the markdown text editing action of the content view.
-    contentField.onkeypress = didEditText;
+    notesButton.onclick = toggleNotebooks;
 }
 
 /** Gets the references to all of the variables. */
 const setupRefs = () => {
     titleField = document.getElementById('titleField');
     contentField = document.getElementById('contentField');
+    notesButton = document.getElementById('notesButton');
+    workView = document.getElementById('workView');
 }
 
 
@@ -68,40 +73,28 @@ const setupRefs = () => {
 *                       *
 *************************/
 
-/** Called when the user types into the content field. */
-const didEditText = (e) => {
-    // if(e.target.id !== 'root') { return; }
+/** Toggles the notebook view when the button is clicked. */
+const toggleNotebooks  = () => {
+    notebookViewIsOpen = !notebookViewIsOpen;
 
-    const val = e.key;
-    note += val;
-
-    if(note.length == 40) {
-        note = note.substring(0, 20) + '***' + note.substring(20,30) + '***' + note.substring(30);
+    switch(notebookViewIsOpen) {
+        case true:
+            workView.style.right = '300px';
+            break;
+        case false:
+            workView.style.right = '0px';
+            break;
     }
-
-    contentField.innerHTML = '';
-    marked(note, (_, resp) => {
-        contentField.innerHTML = resp;
-    });
 }
 
-if (!String.prototype.splice) {
-    /**
-     * {JSDoc}
-     *
-     * The splice() method changes the content of a string by removing a range of
-     * characters and/or adding new characters.
-     *
-     * @this {String}
-     * @param {number} start Index at which to start changing the string.
-     * @param {number} delCount An integer indicating the number of old chars to remove.
-     * @param {string} newSubStr The String that is spliced in.
-     * @return {string} A new string with the spliced substring.
-     */
-    String.prototype.insert = function(start, delCount, newSubStr) {
-        return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
-    };
+
+/** Saves a note to the local database. Later on the notes can be synced so that
+* there is a copy on all devices. */
+const saveNote = () => {
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    console.log(json);
 }
+
 
 
 

@@ -1,10 +1,45 @@
 <div class='workPage' id='workPage'>
     
-    <!-- The title field for the note. -->
-    <input id='titleField' type="text" placeholder="Title"/>
+    <!-- The white background view. -->
+    <div class='backgroundView' id='workView'>
+        <!-- The title field for the note. -->
+        <input id='titleField' type="text" placeholder="Title"/>
 
-    <!-- The field for typing notes. -->
-    <div id='contentField' contenteditable='true'></div>
+        <!-- The field for typing notes. -->
+        <div id='contentField' contenteditable='true'></div>
 
+        <!-- The notebooks button. -->
+        <button id='notesButton'><span class='fa fa-book'></span></button>
+    </div>
+
+    
+
+    <!-- The notebooks and notes view. -->
+    <div class='notebooksView' id='notebooksView'>
+        
+        <!-- The title on the notebooks view. -->
+        <div id='notebooksTitleView'>
+            <button id='notebooksBackButton'><span class='fas fa-chevron-left'></span></button>
+            <h4 id='notebooksTitleLabel'>Notebooks</h4>
+        </div>
+
+        <!-- The search bar so you can search for notebooks/notes. -->
+        <input type='search' id='notebooksSearchField' placeholder='Search'>
+
+        <!-- The table view of notebooks/notes. -->
+        <div id='notebooksTableView'>
+            <div class='notebooksTableCell'>
+                <p id='notebooksTableCellTitleLabel'>Title</p>
+                <p id='notebooksTableCellCreateLabel'>Created</p>
+                <p id='notebooksTableCellPagesLabel'>Pages</p>
+            </div>
+            <div class='notebooksTableCell'>
+                <p id='notebooksTableCellTitleLabel'>Title</p>
+                <p id='notebooksTableCellCreateLabel'>Created</p>
+                <p id='notebooksTableCellPagesLabel'>Pages</p>
+            </div>
+        </div>
+
+    </div>
 
 </div>

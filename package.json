@@ -42,7 +42,7 @@
         "shelljs": "^0.7.8",
         "showdown": "^1.8.6",
         "spectrum-colorpicker": "^1.8.0",
-        "turndown": "^4.0.1",
+        "turndown": "^4.0.2",
         "watchjs": "0.0.0"
     },
     "build": {
