@@ -165,4 +165,9 @@ module.exports = {
 
     /** Hides the created account alert. */
     hideCreatedAccountAlert: hideCreatedAccountAlert,
+
+    /** Maps an array of notebooks to notebook table cells. */
+    mapNotebookToTableCell: () => {
+        
+    }
 }
