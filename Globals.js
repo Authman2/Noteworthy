@@ -14,7 +14,7 @@ const showForgotPasswordAlert = (root) => {
     const sendEmailBtn = document.getElementById('sendResetButton');
     const overlay = document.getElementById('overlay');
     sendEmailBtn.onclick = () => {
-        console.log(emailField);
+        firebase.auth().sendPasswordResetEmail(emailField.value);
         hideForgotPasswordAlert(root);
     }
     overlay.onclick = () => {

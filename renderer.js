@@ -4,6 +4,7 @@
 *                       *
 *************************/
 
+const firebase = require('firebase');
 const home = require(__dirname + '/src/js/Home.js');
 const work = require(__dirname + '/src/js/Work.js');
 
@@ -29,8 +30,11 @@ class PageManager {
 
     /** Setup this, the page manager, to show the home page. */
     start() {
-        this.goTo(home);
-        // this.goTo(work);
+        firebase.auth().onAuthStateChanged((user) => {
+            this.goTo(work);
+        }, (_) => {
+            this.goTo(home);
+        });
     }
 
 

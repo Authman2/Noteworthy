@@ -1,0 +1,51 @@
+.workPage {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+#titleField {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 10vh;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 22px;
+    background: none;
+    font-weight: 200;
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-bottom: 5px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    letter-spacing: 5.27px;
+}
+#titleField::-webkit-input-placeholder {
+    color: #a4a4a4;
+}
+
+#contentField {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 16px;
+    background: none;
+    font-weight: 100;
+    padding-top: 10px;
+    padding-left: 30px;
+    padding-right: 35px;
+    text-decoration: none;
+    font-family: 'Avenir';
+    top: calc(10vh + 30px);
+    letter-spacing: 3.51px;
+}

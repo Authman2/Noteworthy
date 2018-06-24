@@ -86,22 +86,20 @@ const handleLogin = () => {
         case true:
             Globals.login(email, pass, () => {
                 animateAwayPage(() => {
-                    console.log('Done');
+                    pager.goTo(work);
                 });
-                // pager.goTo(work);
             }, (err) => {
                 Globals.showLoginErrorAlert(body, err);
             });
             break;
         case false:
             Globals.signUp(email, pass, () => {
-                // Alert a congratulations on creating an account.
-                // Go to the work page.
                 Globals.showCreatedAccountAlert(body, () => {
-                    pager.goTo(work);
+                    animateAwayPage(() => {
+                        pager.goTo(work);
+                    });
                 });
             }, (err) => {
-                // Alert that there was an error.
                 Globals.showSignUpErrorAlert(body, err);
             });
             break;
@@ -162,6 +160,14 @@ const animateAwayPage = (then) => {
     $(signUpButton).animate({
         opacity: '0'
     }, '0.2s ease-in-out');
+    $(forgotPasswordButton).animate({
+        opacity: '0'
+    }, '0.2s ease-in-out');
+
+    $('#pageTitle').animate({
+        opacity: '0',
+        top: '0px'
+    }, '0.2 ease-in-out');
 
     $(emailField).animate({
         width: '0px',
@@ -170,7 +176,12 @@ const animateAwayPage = (then) => {
     $(passwordField).animate({
         width: '0px',
         opacity: '0'
-    }, '0.2s ease-in-out', then);
+    }, '0.2s ease-in-out', () => {
+        $('#homePage').animate({
+            background: 'white',
+            opacity: '0'
+        }, '0.2 ease-in-out', then);
+    });
 }
 
 
