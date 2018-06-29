@@ -12,6 +12,8 @@ body, html {
     user-select: none;
     -webkit-app-region: drag;
     background-color: rgba(0, 0, 0, 0);
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
 }
 
 .underneathInputField {

@@ -167,7 +167,7 @@ module.exports = {
     hideCreatedAccountAlert: hideCreatedAccountAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
-    mapNotebookToTableCell: (notebooks) => {
+    mapNotebookToTableCell: (notebooks, onClick) => {
         return notebooks.map((val, _, __) => {
             const cell = document.createElement('div');
             const title = document.createElement('p');
@@ -179,10 +179,33 @@ module.exports = {
             pages.className = 'notebooksTableCellPagesLabel';
             title.innerHTML = `${val.title}`;
             created.innerHTML = `${val.created}`;
-            pages.innerHTML = `Pages: ${val.pages}`;
+            pages.innerHTML = `Pages: ${val.pages.length}`;
             cell.appendChild(title);
             cell.appendChild(created);
             cell.appendChild(pages);
+            cell.onclick = () => {
+                onClick(val);   
+            };
+            return cell;
+        })
+    },
+
+    /** Maps an array of notes to note table cells. */
+    mapNoteToTableCell: (notebooks, onClick) => {
+        return notebooks.map((val, _, __) => {
+            const cell = document.createElement('div');
+            const title = document.createElement('p');
+            const preview = document.createElement('p');
+            cell.className = 'noteTableCell';
+            title.className = 'noteTableCellTitleLabel';
+            preview.className = 'noteTableCellPreviewLabel';
+            title.innerHTML = `${val.title}`;
+            preview.innerHTML = `${val.content}`;
+            cell.appendChild(title);
+            cell.appendChild(preview);
+            cell.onclick = () => {
+                onClick(val);   
+            };
             return cell;
         })
     }
