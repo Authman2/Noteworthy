@@ -167,7 +167,23 @@ module.exports = {
     hideCreatedAccountAlert: hideCreatedAccountAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
-    mapNotebookToTableCell: () => {
-        
+    mapNotebookToTableCell: (notebooks) => {
+        return notebooks.map((val, _, __) => {
+            const cell = document.createElement('div');
+            const title = document.createElement('p');
+            const created = document.createElement('p');
+            const pages = document.createElement('p');
+            cell.className = 'notebooksTableCell';
+            title.className = 'notebooksTableCellTitleLabel';
+            created.className = 'notebooksTableCellCreateLabel';
+            pages.className = 'notebooksTableCellPagesLabel';
+            title.innerHTML = `${val.title}`;
+            created.innerHTML = `${val.created}`;
+            pages.innerHTML = `Pages: ${val.pages}`;
+            cell.appendChild(title);
+            cell.appendChild(created);
+            cell.appendChild(pages);
+            return cell;
+        })
     }
 }

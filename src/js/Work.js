@@ -22,6 +22,9 @@ var pager;
 // The view that holds the main work area.
 var workView;
 
+// The notebooks table view where all of the notebooks and notes are displayed.
+var notebooksView;
+
 // The title field.
 var titleField;
 
@@ -52,7 +55,13 @@ const init = (root, pageManager) => {
     Globals.loadHTMLInto('Work.html', root);
     setupRefs();
 
+    // Button clicks.
     notesButton.onclick = toggleNotebooks;
+
+    // Load the notes.
+    const notes = Object.values(loadNotes());
+    const a = Globals.mapNotebookToTableCell(notes);
+    for(var i in a) { notebooksView.appendChild(a[i]); }
 }
 
 /** Gets the references to all of the variables. */
@@ -61,6 +70,7 @@ const setupRefs = () => {
     contentField = document.getElementById('contentField');
     notesButton = document.getElementById('notesButton');
     workView = document.getElementById('workView');
+    notebooksView = document.getElementById('notebooksTableView');
 }
 
 
@@ -76,13 +86,17 @@ const setupRefs = () => {
 /** Toggles the notebook view when the button is clicked. */
 const toggleNotebooks  = () => {
     notebookViewIsOpen = !notebookViewIsOpen;
-
+    
     switch(notebookViewIsOpen) {
         case true:
             workView.style.right = '300px';
+            titleField.style.left = '-300px';
+            contentField.style.left = '-300px';
             break;
         case false:
             workView.style.right = '0px';
+            titleField.style.left = '0px';
+            contentField.style.left = '0px';
             break;
     }
 }
@@ -93,6 +107,13 @@ const toggleNotebooks  = () => {
 const saveNote = () => {
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     console.log(json);
+}
+
+
+/** Loads the notes from the local database. */
+const loadNotes = () => {
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    return json;
 }
 
 
