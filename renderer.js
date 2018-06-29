@@ -7,6 +7,7 @@
 const firebase = require('firebase');
 const home = require(__dirname + '/src/js/Home.js');
 const work = require(__dirname + '/src/js/Work.js');
+const ipc = require('electron').ipcRenderer;
 
 /************************
 *                       *
@@ -63,5 +64,6 @@ class PageManager {
 
 
 // Start the page manager (so start the app).
+ipc.send('init');
 const pageManager = new PageManager();
 pageManager.start();

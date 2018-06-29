@@ -7,6 +7,37 @@ const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
 
+/** Shows the create new alert. */
+const showCreateNewAlert = (root, newWhat = 'Notebook', then) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/CreateNew.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const title = document.getElementById('createTitle');
+    const createBtn = document.getElementById('createNewButton');
+    const desc = document.getElementById('createNewDescription');
+    title.innerHTML = `New ${newWhat}`;
+    createBtn.innerHTML = `Create New ${newWhat}`;
+    desc.innerHTML = `Enter a name for your new ${newWhat.toLowerCase()}`;
+
+    const titleField = document.getElementById('createNewField');
+    const overlay = document.getElementById('overlay');
+    createBtn.onclick = () => {
+        then(titleField.value);
+        hideCreateNewAlert(root);
+    }
+    overlay.onclick = () => {
+        hideCreateNewAlert(root);
+    }
+}
+
+/** Hides the create new alert. */
+const hideCreateNewAlert = (root) => {
+    const alert = document.getElementById('createNewAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
+
 /** Shows the forgot password alert. */
 const showForgotPasswordAlert = (root) => {
     const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ForgotPassword.html`, 'utf8');
@@ -165,6 +196,12 @@ module.exports = {
 
     /** Hides the created account alert. */
     hideCreatedAccountAlert: hideCreatedAccountAlert,
+
+    /** Shows the create new alert. */
+    showCreateNewAlert: showCreateNewAlert,
+
+    /** Hides the create new alert. */
+    hideCreateNewAlert: hideCreateNewAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {

@@ -108,7 +108,7 @@
 #notebooksBackButton {
     position: relative;
     left: 5px;
-    top: -20px;
+    top: -18px;
     border: none;
     outline: none;
     display: none;
@@ -131,15 +131,19 @@
     top: -20px;
     left: 10px;
     height: 5px;
-    width: 100%;
+    width: 80%;
     color: white;
     font-size: 22px;
     font-weight: 200;
     user-select: none;
+    white-space: nowrap;
     padding-bottom: 30px;
     display: inline-block;
     font-family: 'Avenir';
+    word-wrap: break-word;
+    text-overflow: ellipsis;
     -webkit-app-region: drag;
+    /* background-color: goldenrod; */
 }
 #notebooksSearchField {
     position: relative;
@@ -270,4 +274,24 @@
     font-size: 14px;
     font-weight: 100;
     font-family: 'Avenir';
+}
+#addButton {
+    position: relative;
+    left: 20px;
+    bottom: 20px;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 20px;
+    font-weight: 100;
+    background: none;
+    font-family: 'Avenir';
+    display: inline-block;
+    text-decoration: none;
+}
+#addButton:hover {
+    color: lightgray;
+}
+#addButton:active {
+    color: gray;
 }

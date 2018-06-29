@@ -8,6 +8,8 @@ const $ = require('jquery');
 const fs = require('fs');
 const marked = require('marked');
 const Globals = require('../../Globals.js');
+const remote = require('electron').remote;
+const BrowserWindow = remote.BrowserWindow;
 
 
 /************************
@@ -42,6 +44,9 @@ var contentField;
 // The button to open notebooks.
 var notesButton;
 
+// The button to create a new notebook or note.
+var createNewButton;
+
 // Whether or not the notebooks view is open.
 var notebookViewIsOpen = false;
 var notesViewIsOpen = false;
@@ -70,6 +75,18 @@ const init = (root, pageManager) => {
         currentNotebook = null;
         toggleNotes();
     }
+    createNewButton.onclick = () => {
+        if(notesViewIsOpen === true) {
+            Globals.showCreateNewAlert(body, 'Note', (title) => {
+                console.log(title);
+            });
+        }
+        else if(notebookViewIsOpen === true) {
+            Globals.showCreateNewAlert(body, 'Notebook', (title) => {
+                console.log(title);
+            });
+        } 
+    }
 
     // Load the notebooks and their notes.
     loadNotes();
@@ -85,6 +102,7 @@ const setupRefs = () => {
     backButton = document.getElementById('notebooksBackButton');
     notebooksView = document.getElementById('notebooksTableView');
     notesView = document.getElementById('notesTableView');
+    createNewButton = document.getElementById('addButton');
 }
 
 
@@ -134,43 +152,18 @@ const toggleNotes  = (val) => {
     switch(notesViewIsOpen) {
         case true:
             backButton.style.display = 'inline-block';
-            nbTitleBar.style.width = '90%';
+            nbTitleBar.style.width = '70%';
             notebooksView.style.right = '300px';
             notesView.style.right = '0px';
             break;
         case false:
             backButton.style.display = 'none';
-            nbTitleBar.style.width = '100%';
+            nbTitleBar.style.width = '80%';
             notebooksView.style.right = '0px';
             notesView.style.right = '-300px';
             break;
     }
 }
-
-
-/** Saves a note to the local database. Later on the notes can be synced so that
-* there is a copy on all devices. */
-const saveNote = () => {
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    console.log(json);
-}
-
-
-/** Loads the notebooks and notes from the local database. */
-const loadNotes = () => {
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    const nbs = Object.values(json).filter((val, _, __) => val.pages);
-    notebooks = nbs;
-
-    // Go through each notebooks and get the notes.
-    for(var i in nbs) {
-        const notesI = Object.values(json).filter((val, _, __) => {
-            return val.notebook === notebooks[i].id
-        });
-        notebooks[i].pages = notesI;
-    }
-}
-
 
 /** Populates the notebooks view with new data. */
 const populateNotebooks = () => {
@@ -209,9 +202,53 @@ const popoulateNotes = () => {
 
 /************************
 *                       *
+*        HELPERS        *
+*                       *
+*************************/
+
+/** Saves a note to the local database. Later on the notes can be synced so that
+* there is a copy on all devices. */
+const saveNote = () => {
+    if(currentNote == null) {}
+
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    const note = json[currentNote.id];
+    
+}
+
+
+/** Loads the notebooks and notes from the local database. */
+const loadNotes = () => {
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    const nbs = Object.values(json).filter((val, _, __) => val.pages);
+    notebooks = nbs;
+
+    // Go through each notebooks and get the notes.
+    for(var i in nbs) {
+        const notesI = Object.values(json).filter((val, _, __) => {
+            return val.notebook === notebooks[i].id
+        });
+        notebooks[i].pages = notesI;
+    }
+}
+
+
+
+
+
+/************************
+*                       *
 *         EVENTS        *
 *                       *
 *************************/
+
+/** Save the note. */
+BrowserWindow.getFocusedWindow().on('save', (event, command) => {
+    saveNote();
+});
+
+
+
 
 module.exports = {
     init: init
