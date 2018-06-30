@@ -4,8 +4,8 @@
 *                       *
 *************************/
 
-const $ = require('jquery');
 const fs = require('fs');
+const $ = require('jquery');
 const marked = require('marked');
 const turndown = require('turndown');
 const Globals = require('../../Globals.js');
@@ -412,19 +412,22 @@ BrowserWindow.getFocusedWindow().on('word-count', (event, command) => {
     
 });
 BrowserWindow.getFocusedWindow().on('subscript', (event, command) => {
-    
+    document.execCommand('subscript');
 });
 BrowserWindow.getFocusedWindow().on('superscript', (event, command) => {
-    
+    document.execCommand('superscript');
 });
 BrowserWindow.getFocusedWindow().on('bulleted-list', (event, command) => {
-    
+    document.execCommand('insertUnorderedList');
 });
 BrowserWindow.getFocusedWindow().on('numbered-list', (event, command) => {
-    
+    document.execCommand('insertOrderedList');
 });
 BrowserWindow.getFocusedWindow().on('code-segment', (event, command) => {
-    
+    const bgColor = 'background-color: rgb(229, 229, 229);';
+    const font = 'font-family: Monospace; font-size: 15px;';
+    const codeSegment = '<div class="codeSegmentArea" contentEditable="true" tabindex="1" style="' + bgColor + font + '">Start typing code here</div>';
+    document.execCommand('insertHTML', true, '<br>' + codeSegment + '<br>');
 });
 BrowserWindow.getFocusedWindow().on('bold', (event, command) => {
     document.execCommand('bold');
@@ -448,7 +451,17 @@ BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
     
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
-    
+    Globals.showAccountAlert(body, () => {
+        if(currentNote) saveNote();
+        
+        const home = require(`${__dirname}/../js/Home.js`);
+        Globals.logout(() => {
+            pager.goTo(home);
+        }, (err) => { 
+            pager.goTo(home);
+            console.log('error: ', err);
+        });
+    });
 });
 BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
     

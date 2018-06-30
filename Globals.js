@@ -1,11 +1,48 @@
 const fs = require('fs');
 const $ = require('jquery');
-const marked = require('marked');
-const turndown = require('turndown');
 const firebase = require('firebase');
+const alertify = require('alertify.js');
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
+/** Shows the account alert. */
+const showAccountAlert = (root, logoutFunc) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/AccountAlert.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const resetBtn = document.getElementById('sendResetButton');
+    const logoutBtn = document.getElementById('logoutButton');
+
+    const emailField = document.getElementById('accountEmailField');
+    const _ = document.getElementById('accountPasswordField');
+    const overlay = document.getElementById('overlay');
+    
+    if(firebase.auth().currentUser) {
+        const user = firebase.auth().currentUser;
+        emailField.value = `${user.email}`;
+    }
+
+    resetBtn.onclick = () => {
+        firebase.auth().sendPasswordResetEmail(emailField.value);
+        hideAccountAlert(root);
+        alertify.success('Sent password reset email!');
+    }
+    logoutBtn.onclick = () => {
+        logoutFunc();
+        hideAccountAlert(root);
+    }
+    overlay.onclick = () => {
+        hideAccountAlert(root);
+    }
+}
+
+/** Hides the account alert. */
+const hideAccountAlert = (root) => {
+    const alert = document.getElementById('accountAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
 
 /** Shows the create new alert. */
 const showCreateNewAlert = (root, newWhat = 'Notebook', then) => {
@@ -49,6 +86,7 @@ const showForgotPasswordAlert = (root) => {
     sendEmailBtn.onclick = () => {
         firebase.auth().sendPasswordResetEmail(emailField.value);
         hideForgotPasswordAlert(root);
+        alertify.success('Sent password reset email!');
     }
     overlay.onclick = () => {
         hideForgotPasswordAlert(root);
@@ -179,6 +217,12 @@ module.exports = {
     },
 
 
+    /** Log out of firebase account. */
+    logout: (success, failure) => {
+        firebase.auth().signOut().then(() => success()).catch((err) => failure(err));
+    },
+
+
     /** Shows the forgot password alert. */
     showForgotPasswordAlert: showForgotPasswordAlert,
 
@@ -208,6 +252,12 @@ module.exports = {
 
     /** Hides the create new alert. */
     hideCreateNewAlert: hideCreateNewAlert,
+
+    /** Shows the account alert. */
+    showAccountAlert: showAccountAlert,
+
+    /** Hides the account alert. */
+    hideAccountAlert: hideAccountAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {

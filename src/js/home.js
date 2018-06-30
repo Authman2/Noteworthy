@@ -7,7 +7,7 @@
 const fs = require('fs');
 const $ = require('jquery');
 const Globals = require('../../Globals.js');
-const work = require('../js/Work.js');
+const work = require('./Work.js');
 
 
 /************************
@@ -55,8 +55,6 @@ const init = (root, pageManager) => {
     loginButton.onclick = handleLogin;
     signUpButton.onclick = handleSignUp;
     forgotPasswordButton.onclick = handleForgotPassword;
-
-
 }
 
 /** Gets the references to all of the variables. */
@@ -147,7 +145,6 @@ const handleSignUp = () => {
 
 /** Brings up an alert to reset the password. */
 const handleForgotPassword = () => {
-    console.log('clicked');
     Globals.showForgotPasswordAlert(body);
 }
 

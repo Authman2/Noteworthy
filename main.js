@@ -59,9 +59,6 @@ let template = [{
     },{
         label: 'Export',
         submenu: [{
-            label: 'PDF',
-            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-pdf'); }
-        },{
             label: 'Plain Text',
             click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-txt'); }
         },{
