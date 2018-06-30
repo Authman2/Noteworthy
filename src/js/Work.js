@@ -376,7 +376,11 @@ BrowserWindow.getFocusedWindow().on('print', (event, command) => {
     window.print();
 });
 BrowserWindow.getFocusedWindow().on('share-email', (event, command) => {
-    
+    if(currentNote == null) {
+        alertify.log('Try opening up a note to use the share feature');
+        return;
+    }
+    Globals.showShareAlert(body, currentNote, contentField.innerHTML);
 });
 BrowserWindow.getFocusedWindow().on('export-txt', (event, command) => {
     const toExport = tdService.turndown(contentField.innerHTML).replace(/\n/g, '<br/>');

@@ -52,6 +52,7 @@ let template = [{
         }
     },{
         label: 'Share',
+        accelerator: 'CmdOrCtrl+Option+S',
         click: () => {
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('share-email');

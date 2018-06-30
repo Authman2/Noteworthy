@@ -2,8 +2,75 @@ const fs = require('fs');
 const $ = require('jquery');
 const firebase = require('firebase');
 const alertify = require('alertify.js');
+const nodemailer = require('nodemailer');
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
+
+/** Shows the share alert. */
+const showShareAlert = (root, note, noteHTML) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ShareAlert.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const shareBtn = document.getElementById('shareButton');
+
+    const fromField = document.getElementById('shareFromField');
+    const passwordField = document.getElementById('sharePasswordField');
+    const toField = document.getElementById('shareToField');
+    const overlay = document.getElementById('overlay');
+    
+    if(firebase.auth().currentUser) {
+        const user = firebase.auth().currentUser;
+        fromField.value = `${user.email}`;
+    }
+
+    shareBtn.onclick = () => {
+        if(fromField.value === '' || passwordField.value === '' || toField.value === '') {
+            alertify.error('You must enter an email and password to share a note.');
+            return;
+        }
+
+        const transport = nodemailer.createTransport({
+            service: 'Gmail',
+            secure: 'false',
+            auth: {
+                user: fromField.value,
+                pass: passwordField.value,
+            },
+            tls: {
+                rejectUnauthorized: false,
+            }
+        });
+        transport.verify((err, success) => {
+            if(err) {
+                alertify.error('You are not able to send an email from this app due to your current email security rules');
+                return;
+            }
+
+            transport.sendMail({
+                from: fromField.value,
+                to: toField.value,
+                subject: note.title,
+                text: note.content,
+                html: noteHTML
+            }, (err2) => {
+                if(err2) { alertify.error('There was an error sharing this note'); return; }
+                alertify.success(`Shared ${note.title} with ${toField.value}!`);
+            })
+        });
+        hideShareAlert(root);
+    }
+    overlay.onclick = () => {
+        hideShareAlert(root);
+    }
+}
+
+/** Hides the share alert. */
+const hideShareAlert = (root) => {
+    const alert = document.getElementById('shareAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
 
 /** Shows the account alert. */
 const showAccountAlert = (root, logoutFunc) => {
@@ -258,6 +325,12 @@ module.exports = {
 
     /** Hides the account alert. */
     hideAccountAlert: hideAccountAlert,
+
+    /** Shows the share alert. */
+    showShareAlert: showShareAlert,
+
+    /** Hides the account alert. */
+    hideShareAlert: hideShareAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {
