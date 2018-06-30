@@ -44,6 +44,9 @@ var titleField;
 // The content field.
 var contentField;
 
+// The search bar.
+var searchBar;
+
 // The button to open notebooks.
 var notesButton;
 
@@ -74,6 +77,7 @@ const init = (root, pageManager) => {
 
     // Button clicks.
     notesButton.onclick = toggleNotebooks;
+    searchBar.oninput = handleSearch;
     backButton.onclick = () => {
         currentNotebook = null;
         toggleNotes();
@@ -102,6 +106,7 @@ const setupRefs = () => {
     notebooksView = document.getElementById('notebooksTableView');
     notesView = document.getElementById('notesTableView');
     createNewButton = document.getElementById('addButton');
+    searchBar = document.getElementById('notebooksSearchField');
 }
 
 
@@ -196,6 +201,50 @@ const popoulateNotes = () => {
 }
 
 
+/** Populate with searches. */
+const handleSearch = () => {
+    const search = searchBar.value;
+    if(search === '') {
+        populateNotebooks();
+        popoulateNotes();
+    }
+
+    if(notesViewIsOpen === true) {
+        // Populate, but with filtered results.
+        if(currentNotebook == null) return;
+
+        const notes = currentNotebook.pages.filter((val,_,__) => {
+            return val.title.includes(search);
+        });
+        const a = Globals.mapNoteToTableCell(notes, (val) => {
+            currentNote = val;
+            titleField.value = val.title;
+
+            marked(val.content, (err, resp) => {
+                if(err) { contentField.innerHTML = err; return; }
+                contentField.innerHTML = resp;
+                toggleNotebooks();
+            });
+        });
+
+        notesView.innerHTML = '';
+        for(var i in a) { notesView.appendChild(a[i]); }
+    }
+    else if(notebookViewIsOpen === true) {
+        if(notebooks === null || notebooks === undefined) return;
+
+        const nbs = notebooks.filter((val, _, __) => {
+            return val.title.includes(search);
+        });
+        const a = Globals.mapNotebookToTableCell(nbs, (val) => {
+            currentNotebook = val;
+            toggleNotes(val);
+        });
+    
+        notebooksView.innerHTML = '';
+        for(var i in a) { notebooksView.appendChild(a[i]); }
+    }
+}
 
 
 
