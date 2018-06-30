@@ -194,12 +194,6 @@ let template = [{
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('italic');
         }
     },{
-        label: 'Font',
-        accelerator: 'CmdOrCtrl+Shift+F',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('font');
-        }
-    },{
         label: 'Align Left',
         accelerator: 'CmdOrCtrl+Option+L',
         click: () => {
@@ -273,19 +267,17 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('open-note-view');
         }
-    },
-    {
+    },{
         label: 'Open Developer Tools',
         accelerator: 'CmdOrCtrl+T',
         click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
-    }
-    ]
+    }]
 },{
     label: 'Help',
     role: 'help',
     submenu: [{
         label: 'Learn More',
-        click: () => { electron.shell.openExternal('http://www.adeolauthman.com') }
+        click: () => { electron.shell.openExternal('http://www.adeolauthman.com/projects/Noteworthy') }
     },{
         label: 'Check for Updates',
         click: () => {
@@ -346,7 +338,6 @@ const createAppMenu = () => {
                 accelerator: 'CmdOrCtrl+Q',
                 click: () => { 
                     BrowserWindow.getFocusedWindow().emit('quit-app');
-                    app.quit(); // Move this later.
                 }
             }]
         });

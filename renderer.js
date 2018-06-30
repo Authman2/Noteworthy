@@ -8,6 +8,9 @@ const firebase = require('firebase');
 const home = require(__dirname + '/src/js/Home.js');
 const work = require(__dirname + '/src/js/Work.js');
 const ipc = require('electron').ipcRenderer;
+const app = require('electron').remote.app;
+const remote = require('electron').remote;
+const BrowserWindow = remote.BrowserWindow;
 
 /************************
 *                       *
@@ -52,14 +55,6 @@ class PageManager {
         page.init(root, this);
     }
 
-
-
-
-    /************************
-    *                       *
-    *         EVENTS        *
-    *                       *
-    *************************/
 }
 
 
@@ -67,3 +62,21 @@ class PageManager {
 ipc.send('init');
 const pageManager = new PageManager();
 pageManager.start();
+
+
+/************************
+*                       *
+*         EVENTS        *
+*                       *
+*************************/
+
+BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
+    if(work.forgotToSave()) {
+
+    } else {
+        app.quit();
+    }
+});
+BrowserWindow.getFocusedWindow().on('check-updates', (event, command) => {
+    
+});
