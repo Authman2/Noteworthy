@@ -130,8 +130,8 @@
     position: relative;
     top: -20px;
     left: 10px;
-    height: 5px;
     width: 80%;
+    height: 5px;
     color: white;
     font-size: 22px;
     font-weight: 200;
@@ -195,7 +195,7 @@
     overflow-x: hidden;
     white-space: nowrap;
     transition-duration: 0.25s;
-    background-color: chartreuse;
+    /* background-color: chartreuse; */
     transition-timing-function: ease-out;
 }
 .notebooksTableCell {
@@ -251,6 +251,7 @@
     overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
+    padding-right: 10px;
     font-family: 'Avenir';
     transition-duration: 0.15s;
     background-color: #4078cc;
@@ -270,10 +271,15 @@
 }
 .noteTableCellPreviewLabel {
     position: relative;
+    height: 5.7em;
     color: white;
     font-size: 14px;
     font-weight: 100;
+    overflow: hidden;
+    line-height: 1.43em;
+    white-space: pre-wrap;
     font-family: 'Avenir';
+    text-overflow: ellipsis;
 }
 #addButton {
     position: relative;

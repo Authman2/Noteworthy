@@ -7,10 +7,13 @@
 const $ = require('jquery');
 const fs = require('fs');
 const marked = require('marked');
+const firebase = require('firebase');
+const turndown = require('turndown');
 const Globals = require('../../Globals.js');
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 
+const tdService = new turndown();
 
 /************************
 *                       *
@@ -77,14 +80,10 @@ const init = (root, pageManager) => {
     }
     createNewButton.onclick = () => {
         if(notesViewIsOpen === true) {
-            Globals.showCreateNewAlert(body, 'Note', (title) => {
-                console.log(title);
-            });
+            Globals.showCreateNewAlert(body, 'Note', addNote);
         }
         else if(notebookViewIsOpen === true) {
-            Globals.showCreateNewAlert(body, 'Notebook', (title) => {
-                console.log(title);
-            });
+            Globals.showCreateNewAlert(body, 'Notebook', addNotebook);
         } 
     }
 
@@ -143,7 +142,7 @@ const toggleNotes  = (val) => {
 
     const nbTitleBar = document.getElementById('notebooksTitleLabel');
     if(val) {
-        nbTitleBar.innerHTML = `${val.title}`;
+        nbTitleBar.innerHTML = `${val.title.length > 19 ? val.title.substring(0, 19) + '...' : val.title}`;
         popoulateNotes();
     } else {
         nbTitleBar.innerHTML = 'Notebooks';
@@ -209,11 +208,18 @@ const popoulateNotes = () => {
 /** Saves a note to the local database. Later on the notes can be synced so that
 * there is a copy on all devices. */
 const saveNote = () => {
-    if(currentNote == null) {}
+    if(currentNote == null) return;
+
+    const newTitle = titleField.value;
+    const newContent = tdService.turndown(contentField.innerHTML).replace(/\n/g, '<br/>');
 
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    const note = json[currentNote.id];
+    json[currentNote.id].title = newTitle;
+    json[currentNote.id].content = newContent;
     
+    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
+    loadNotes();
+    popoulateNotes();
 }
 
 
@@ -229,7 +235,46 @@ const loadNotes = () => {
             return val.notebook === notebooks[i].id
         });
         notebooks[i].pages = notesI;
+        
+        // Reload the current notebook.
+        if(currentNotebook && notebooks[i].id === currentNotebook.id) {
+            currentNotebook.pages = notesI;
+        }
     }
+}
+
+
+/** Adds a new notebook to the database. */
+const addNotebook = (title) => {
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    const randomID = Globals.randomID();
+    json[randomID] = {
+        id: randomID,
+        title: title,
+        created: new Date(),
+        pages: []
+    };
+    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
+    loadNotes();
+    populateNotebooks();
+}
+
+
+/** Adds a new note to a specific notebook in the database. */
+const addNote = (title) => {
+    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    const randomID = Globals.randomID();
+    json[randomID] = {
+        id: randomID,
+        title: title,
+        created: new Date(),
+        notebook: currentNotebook.id,
+        content: ""
+    };
+    json[currentNotebook.id].pages.push(randomID);
+    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
+    loadNotes();
+    popoulateNotes();
 }
 
 

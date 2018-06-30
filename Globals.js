@@ -173,6 +173,12 @@ module.exports = {
     },
 
 
+    /** Creates a random ID for notebooks and notes. */
+    randomID: () => {
+        return '_' + Math.random().toString(36).substr(2, 15);
+    },
+
+
     /** Shows the forgot password alert. */
     showForgotPasswordAlert: showForgotPasswordAlert,
 
@@ -237,7 +243,7 @@ module.exports = {
             title.className = 'noteTableCellTitleLabel';
             preview.className = 'noteTableCellPreviewLabel';
             title.innerHTML = `${val.title}`;
-            preview.innerHTML = `${val.content}`;
+            preview.innerHTML = `${val.content.length === 0 ? '*No Content*' : val.content}`;
             cell.appendChild(title);
             cell.appendChild(preview);
             cell.onclick = () => {
