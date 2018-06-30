@@ -468,7 +468,9 @@ BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
     });
 });
 BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
+    if(!notebooks) { return; }
     
+    Globals.showBackupAlert(body, notebooks);
 });
 BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
     

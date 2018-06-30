@@ -6,6 +6,57 @@ const nodemailer = require('nodemailer');
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
+/** Shows the backup alert. */
+const showBackupAlert = (root, notebooks) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/BackupAlert.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const locationField = document.getElementById('backupLocationField');
+    locationField.onfocus = () => {
+        const { dialog } = require('electron').remote;
+        dialog.showOpenDialog(null, {
+            properties: ['openDirectory']
+        }, (paths) => {
+            if(paths !== undefined) {
+                locationField.value = paths[0];
+                locationField.blur();
+            }
+        });
+    }
+
+    const backupBtn = document.getElementById('backupButton');
+    const overlay = document.getElementById('overlay');
+    backupBtn.onclick = () => {
+        if(locationField.value === '') {
+            alertify.error('You must enter a valid backup location.');
+            return;
+        }
+                
+        // Create a folder for the notes.
+        const path = locationField.value + '/Noteworthy';
+        fs.mkdir(path, () => {
+            // Write files for each note to this folder.
+            const localDatabase = fs.readFileSync(`${__dirname}/Database.json`);
+            const fileName = path + '/NoteworthyBackup' + Date.now() + '.json';
+            fs.writeFileSync(fileName, JSON.stringify(localDatabase), 'utf8');
+
+            hideBackupAlert(root);
+            alertify.success('All notebooks and notes were backed up successfully!');
+        });
+    }
+    overlay.onclick = () => {
+        hideBackupAlert(root);
+    }
+}
+
+/** Hides the backup alert. */
+const hideBackupAlert = (root) => {
+    const alert = document.getElementById('backupAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
+
 /** Shows the share alert. */
 const showShareAlert = (root, note, noteHTML) => {
     const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ShareAlert.html`, 'utf8');
@@ -331,6 +382,12 @@ module.exports = {
 
     /** Hides the account alert. */
     hideShareAlert: hideShareAlert,
+
+    /** Shows the backup alert. */
+    showBackupAlert: showBackupAlert,
+
+    /** Hides the backup alert. */
+    hideBackupAlert: hideBackupAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {
