@@ -1,5 +1,6 @@
 const fs = require('fs');
 const $ = require('jquery');
+const marked = require('marked');
 const firebase = require('firebase');
 const alertify = require('alertify.js');
 const nodemailer = require('nodemailer');
@@ -7,39 +8,138 @@ const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
 // Find and Replace.
-var finds = [];
+var findIndex = 0;
 
-
+// Replace all on strings.
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 /** Shows the find replace alert. */
-const showFindReplaceAlert = (root, contentField, then) => {
+const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) => {
     const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/FindReplace.html`, 'utf8');
     $('#root').prepend(alert);
+
+    const frWindow = document.getElementById('findReplaceAlert');
+    frWindow.offsetTop = 270;
+    findIndex = 0;
 
     const closeBtn = document.getElementById('closeFindReplaceButton');
     const findField = document.getElementById('findField');
     const replaceField = document.getElementById('replaceField');
+
     const previousBtn = document.getElementById('previousButton');
     const nextBtn = document.getElementById('nextButton');
     const replaceBtn = document.getElementById('replaceButton');
     const replaceAllBtn = document.getElementById('replaceAllButton');
 
     closeBtn.onclick = () => {
+        marked(content, (err, resp) => {
+            if(!err) contentField.innerHTML = resp;
+        });
         hideFindReplaceAlert(root);
         then();
     }
     previousBtn.onclick = () => {
         const search = findField.value;
+        var copy = content;
         
+        // 1.) Get the next index of the search starting from the end
+        // of the previous search.
+        const foundIndex = content.substring(0,findIndex).lastIndexOf(search, findIndex);
+        const endIndex = foundIndex + search.length;
+        findIndex = foundIndex+1;
+        
+        // 2.) Once you have the index, edit the content field and run
+        // the callback with the edited markdown so that it can be
+        // rendered in the content area.
+        copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
+        marked(copy, (err, resp) => {
+            if(!err) {
+                contentField.innerHTML = resp;
+            }
+        });
+
+        // 3.) Scroll to that element.
+        const element = document.getElementById('findReplaceHighlight');
+        if(element) {
+            const elementTop = element.offsetTop;
+            const windowTop = Math.abs(frWindow.offsetTop - 330 - 50); // 330 := size of alert + padding bottom
+
+            if(elementTop >= windowTop) {
+                frWindow.style.opacity = '0.4';
+            } else {
+                frWindow.style.opacity = '1';
+            }
+        }
     }
     nextBtn.onclick = () => {
+        const search = findField.value;
+        var copy = content;
         
+        // 1.) Get the next index of the search starting from the end
+        // of the previous search.
+        const foundIndex = content.indexOf(search, findIndex);
+        const endIndex = foundIndex + search.length;
+        findIndex = foundIndex+1;
+        
+        // 2.) Once you have the index, edit the content field and run
+        // the callback with the edited markdown so that it can be
+        // rendered in the content area.
+        copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
+        marked(copy, (err, resp) => {
+            if(!err) {
+                contentField.innerHTML = resp;
+            }
+        });
+
+        // 3.) Scroll to that element.
+        const element = document.getElementById('findReplaceHighlight');
+        if(element) {
+            const elementTop = element.offsetTop;
+            const windowTop = Math.abs(frWindow.offsetTop - 330 - 50); // 330 := size of alert + padding bottom
+
+            if(elementTop >= windowTop) {
+                frWindow.style.opacity = '0.4';
+            } else {
+                frWindow.style.opacity = '1';
+            }
+        }
     }
     replaceBtn.onclick = () => {
+        const replace = replaceField.value;
         
+        // 1.) Get the string at the find index. Then replace it with
+        // the replace text. Only do this is there is a highlighted element.
+        const element = document.getElementById('findReplaceHighlight');
+        if(!element) return;
+
+        // 2.) Replace the content string and refresh the content field.
+        content = `${content.substring(0, findIndex-1)}${replace}${content.substring(findIndex + element.innerHTML.length)}`;
+        marked(content, (err, resp) => {
+            if(!err) {
+                contentField.innerHTML = resp;
+                replaceFunc(content);
+            }
+        });
     }
     replaceAllBtn.onclick = () => {
+        const replace = replaceField.value;
         
+        // 1.) Get the string at the find index. Then replace it with
+        // the replace text. Only do this is there is a highlighted element.
+        const element = document.getElementById('findReplaceHighlight');
+        if(!element) return;
+
+        // 2.) Replace the content string and refresh the content field.
+        content = content.replaceAll(element.innerHTML, replace);
+        marked(content, (err, resp) => {
+            if(!err) {
+                contentField.innerHTML = resp;
+                replaceFunc(content);
+            }
+        });
     }
 }
 

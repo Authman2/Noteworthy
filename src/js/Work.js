@@ -267,7 +267,8 @@ const saveNote = () => {
     }
 
     const newTitle = titleField.value;
-    const newContent = tdService.turndown(contentField.innerHTML).replace(/\n/g, '<br/>');
+    const content = contentField.innerHTML.replace('<mark>', '').replace('</mark>', '');
+    var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
 
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     json[currentNote.id].title = newTitle;
@@ -370,8 +371,16 @@ BrowserWindow.getFocusedWindow().on('select-all', (event, command) => {
     document.execCommand('selectAll');
 });
 BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
+    const cntnt = currentNote === null ? '' : currentNote.content;
+
     if(findRepOpen === false) {
-        Globals.showFindReplaceAlert(body, () => { findRepOpen = false });
+        Globals.showFindReplaceAlert(body, 
+                                    cntnt, 
+                                    contentField, 
+                                    () => { findRepOpen = false },
+                                    (cont) => {
+                                        currentNote.content = cont;
+                                    });
         findRepOpen = true;
     } else {
         $('#findReplaceAlert').animate({
@@ -379,6 +388,9 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
             opacity: '0'
         }, '0.1s ease-out', () => {
             Globals.hideFindReplaceAlert(body);
+        });
+        marked(cntnt, (err, resp) => {
+            if(!err) contentField.innerHTML = resp;
         });
         findRepOpen = false;
     }
@@ -474,7 +486,6 @@ BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
             pager.goTo(home);
         }, (err) => { 
             pager.goTo(home);
-            console.log('error: ', err);
         });
     });
 });
