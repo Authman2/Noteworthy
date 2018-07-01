@@ -14,7 +14,9 @@ const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
 
-const tdService = new turndown();
+const tdService = new turndown({
+    bulletListMarked: '-'
+});
 
 /************************
 *                       *
@@ -193,7 +195,7 @@ const popoulateNotes = () => {
         currentNote = val;
         titleField.value = val.title;
 
-        marked(val.content, (err, resp) => {
+        marked(val.content.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
             if(err) { contentField.innerHTML = err; return; }
             contentField.innerHTML = resp;
             toggleNotebooks();
@@ -224,7 +226,7 @@ const handleSearch = () => {
             currentNote = val;
             titleField.value = val.title;
 
-            marked(val.content, (err, resp) => {
+            marked(val.content.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
                 if(err) { contentField.innerHTML = err; return; }
                 contentField.innerHTML = resp;
                 toggleNotebooks();
@@ -268,7 +270,7 @@ const saveNote = () => {
 
     const newTitle = titleField.value;
     const content = contentField.innerHTML.replace('<mark>', '').replace('</mark>', '');
-    var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
+    var newContent = tdService.turndown(content);
 
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     json[currentNote.id].title = newTitle;
@@ -337,12 +339,6 @@ const addNote = (title) => {
 }
 
 
-/** Checks if the user forgot to save before performing a new action. */
-const forgotToSave = () => {
-    return false;
-}
-
-
 
 
 
@@ -389,7 +385,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
         }, '0.1s ease-out', () => {
             Globals.hideFindReplaceAlert(body);
         });
-        marked(cntnt, (err, resp) => {
+        marked(cntnt.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
             if(!err) contentField.innerHTML = resp;
         });
         findRepOpen = false;
@@ -516,6 +512,5 @@ BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
 
 
 module.exports = {
-    init: init,
-    forgotToSave: forgotToSave
+    init: init
 }
