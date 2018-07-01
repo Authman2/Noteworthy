@@ -5,6 +5,7 @@
 *************************/
 
 const firebase = require('firebase');
+const alertify = require('alertify.js');
 const home = require(__dirname + '/src/js/Home.js');
 const work = require(__dirname + '/src/js/Work.js');
 const ipc = require('electron').ipcRenderer;
@@ -71,7 +72,8 @@ pageManager.start();
 *************************/
 
 BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
-    
+    alertify.log('Saving...');
+    work.save(false);
     app.quit();
 });
 BrowserWindow.getFocusedWindow().on('check-updates', (event, command) => {

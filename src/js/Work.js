@@ -14,9 +14,7 @@ const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
 
-const tdService = new turndown({
-    bulletListMarked: '-'
-});
+const tdService = new turndown();
 
 /************************
 *                       *
@@ -82,6 +80,11 @@ const init = (root, pageManager) => {
     setupRefs();
 
     // Button clicks.
+    contentField.oninput = () => {
+        setTimeout(() => {
+            if(currentNote) { saveNote(false); }
+        }, 1500);
+    }
     notesButton.onclick = toggleNotebooks;
     searchBar.oninput = handleSearch;
     backButton.onclick = () => {
@@ -195,7 +198,7 @@ const popoulateNotes = () => {
         currentNote = val;
         titleField.value = val.title;
 
-        marked(val.content.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
+        marked(val.content, (err, resp) => {
             if(err) { contentField.innerHTML = err; return; }
             contentField.innerHTML = resp;
             toggleNotebooks();
@@ -226,7 +229,7 @@ const handleSearch = () => {
             currentNote = val;
             titleField.value = val.title;
 
-            marked(val.content.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
+            marked(val.content, (err, resp) => {
                 if(err) { contentField.innerHTML = err; return; }
                 contentField.innerHTML = resp;
                 toggleNotebooks();
@@ -262,7 +265,7 @@ const handleSearch = () => {
 
 /** Saves a note to the local database. Later on the notes can be synced so that
 * there is a copy on all devices. */
-const saveNote = () => {
+const saveNote = (withAlerts = true) => {
     if(currentNote == null) {
         alertify.error('Try creating a page inside of a notebook to save.');
         return;
@@ -270,7 +273,7 @@ const saveNote = () => {
 
     const newTitle = titleField.value;
     const content = contentField.innerHTML.replace('<mark>', '').replace('</mark>', '');
-    var newContent = tdService.turndown(content);
+    var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
 
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     json[currentNote.id].title = newTitle;
@@ -280,7 +283,7 @@ const saveNote = () => {
     loadNotes();
     popoulateNotes();
 
-    alertify.success('Saved!');
+    if(withAlerts === true) alertify.success('Saved!');
 }
 
 
@@ -341,7 +344,6 @@ const addNote = (title) => {
 
 
 
-
 /************************
 *                       *
 *         EVENTS        *
@@ -385,7 +387,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
         }, '0.1s ease-out', () => {
             Globals.hideFindReplaceAlert(body);
         });
-        marked(cntnt.replace(/[ ]/g, '&nbsp;'), (err, resp) => {
+        marked(cntnt, (err, resp) => {
             if(!err) contentField.innerHTML = resp;
         });
         findRepOpen = false;
@@ -512,5 +514,6 @@ BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
 
 
 module.exports = {
-    init: init
+    init: init,
+    save: saveNote
 }
