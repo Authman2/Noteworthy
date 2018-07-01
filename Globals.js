@@ -6,6 +6,54 @@ const nodemailer = require('nodemailer');
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
+// Find and Replace.
+var finds = [];
+
+
+
+/** Shows the find replace alert. */
+const showFindReplaceAlert = (root, contentField, then) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/FindReplace.html`, 'utf8');
+    $('#root').prepend(alert);
+
+    const closeBtn = document.getElementById('closeFindReplaceButton');
+    const findField = document.getElementById('findField');
+    const replaceField = document.getElementById('replaceField');
+    const previousBtn = document.getElementById('previousButton');
+    const nextBtn = document.getElementById('nextButton');
+    const replaceBtn = document.getElementById('replaceButton');
+    const replaceAllBtn = document.getElementById('replaceAllButton');
+
+    closeBtn.onclick = () => {
+        hideFindReplaceAlert(root);
+        then();
+    }
+    previousBtn.onclick = () => {
+        const search = findField.value;
+        
+    }
+    nextBtn.onclick = () => {
+        
+    }
+    replaceBtn.onclick = () => {
+        
+    }
+    replaceAllBtn.onclick = () => {
+        
+    }
+}
+
+/** Hides the find replace alert. */
+const hideFindReplaceAlert = (root) => {
+    $('#findReplaceAlert').animate({
+        bottom: '0px',
+        opacity: '0'
+    }, '0.1s ease-out', () => {
+        const alert = document.getElementById('findReplaceAlert');
+        root.removeChild(alert);
+    });
+}
+
 /** Shows the backup alert. */
 const showBackupAlert = (root, notebooks) => {
     const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/BackupAlert.html`, 'utf8');
@@ -36,8 +84,8 @@ const showBackupAlert = (root, notebooks) => {
         const path = locationField.value + '/Noteworthy';
         fs.mkdir(path, () => {
             // Write files for each note to this folder.
-            const localDatabase = fs.readFileSync(`${__dirname}/Database.json`);
-            const fileName = path + '/NoteworthyBackup' + Date.now() + '.json';
+            const localDatabase = JSON.parse(fs.readFileSync(`${__dirname}/Database.json`));
+            const fileName = path + '/NoteworthyBackup' + Date.now() + '.nbackup';
             fs.writeFileSync(fileName, JSON.stringify(localDatabase), 'utf8');
 
             hideBackupAlert(root);
@@ -388,6 +436,12 @@ module.exports = {
 
     /** Hides the backup alert. */
     hideBackupAlert: hideBackupAlert,
+
+    /** Shows the find replace alert. */
+    showFindReplaceAlert: showFindReplaceAlert,
+
+    /** Hides the find replace alert. */
+    hideFindReplaceAlert: hideFindReplaceAlert,
 
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {

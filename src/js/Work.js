@@ -58,6 +58,9 @@ var createNewButton;
 var notebookViewIsOpen = false;
 var notesViewIsOpen = false;
 
+// Whether or not the find replace window is open.
+var findRepOpen = false;
+
 
 
 
@@ -367,7 +370,18 @@ BrowserWindow.getFocusedWindow().on('select-all', (event, command) => {
     document.execCommand('selectAll');
 });
 BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
-    
+    if(findRepOpen === false) {
+        Globals.showFindReplaceAlert(body, () => { findRepOpen = false });
+        findRepOpen = true;
+    } else {
+        $('#findReplaceAlert').animate({
+            bottom: '0px',
+            opacity: '0'
+        }, '0.1s ease-out', () => {
+            Globals.hideFindReplaceAlert(body);
+        });
+        findRepOpen = false;
+    }
 });
 BrowserWindow.getFocusedWindow().on('save', (event, command) => {
     saveNote();
@@ -412,9 +426,6 @@ BrowserWindow.getFocusedWindow().on('export-html', (event, command) => {
         alertify.success(`Exported to ${filename}!`);
     });
 });
-BrowserWindow.getFocusedWindow().on('word-count', (event, command) => {
-    
-});
 BrowserWindow.getFocusedWindow().on('subscript', (event, command) => {
     document.execCommand('subscript');
 });
@@ -452,7 +463,7 @@ BrowserWindow.getFocusedWindow().on('align-right', (event, command) => {
     document.execCommand('justifyRight');
 });
 BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
-    
+    // TODO
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
     Globals.showAccountAlert(body, () => {
@@ -473,7 +484,18 @@ BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
     Globals.showBackupAlert(body, notebooks);
 });
 BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
-    
+    dialog.showOpenDialog(null, {
+        properties: ['openFile'],
+        filters: [{name: 'nbackup', extensions: ['nbackup']}]
+    }, (paths) => {
+        if(paths.length === 0) return;
+
+        const data = JSON.parse(fs.readFileSync(paths[0], 'utf8'));
+        fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(data), 'utf8');
+        loadNotes();
+        populateNotebooks();
+        alertify.success('Successfully loaded notebooks and notes from backup!');
+    });
 });
 BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
     toggleNotebooks();

@@ -127,11 +127,6 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('find-replace');
         }
-    },{
-        label: 'Word Count',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('word-count');
-        }
     }]
 },{
     label: 'Insert',
@@ -236,7 +231,7 @@ let template = [{
         label: 'Retrieve from Backups',
         click: () => {
             if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('retreive-backups');
+                BrowserWindow.getFocusedWindow().emit('retrieve-backups');
         }
     }]
 },{
