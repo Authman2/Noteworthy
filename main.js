@@ -69,7 +69,7 @@ let template = [{
             label: 'HTML',
             click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-html'); }
         }]
-    },{
+    }, {
         label: 'New Window',
         accelerator: 'CmdOrCtrl+Option+N',
         click: () => { createWindow(); }
@@ -220,6 +220,12 @@ let template = [{
             if(eve !== null && eve !== undefined) {
                 BrowserWindow.getFocusedWindow().emit('goto-account');
             }
+        }
+    },{
+        label: 'Sync',
+        click: () => {
+            if(eve !== null && eve !== undefined) 
+                BrowserWindow.getFocusedWindow().emit('sync');
         }
     }, {
         label: 'Backup Notes',

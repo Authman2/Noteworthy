@@ -8,6 +8,7 @@ const fs = require('fs');
 const $ = require('jquery');
 const marked = require('marked');
 const turndown = require('turndown');
+const firebase = require('firebase');
 const Globals = require('../../Globals.js');
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -276,8 +277,19 @@ const saveNote = (withAlerts = true) => {
     var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
 
     const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    json[currentNote.id].title = newTitle;
-    json[currentNote.id].content = newContent;
+    if(currentNote.id in json) {
+        json[currentNote.id].title = newTitle;
+        json[currentNote.id].content = newContent;
+    } else {
+        json[currentNote.id] = {
+            id: currentNote.id,
+            title: newTitle,
+            timestamp: currentNote.timestamp,
+            notebook: currentNotebook.id,
+            content: newContent,
+            creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
+        }
+    }
     
     fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
     loadNotes();
@@ -289,7 +301,7 @@ const saveNote = (withAlerts = true) => {
 
 /** Loads the notebooks and notes from the local database. */
 const loadNotes = () => {
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+    const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     const nbs = Object.values(json).filter((val, _, __) => val.pages);
     notebooks = nbs;
 
@@ -316,7 +328,8 @@ const addNotebook = (title) => {
         id: randomID,
         title: title,
         created: new Date(),
-        pages: []
+        pages: [],
+        creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
     };
     fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
     loadNotes();
@@ -331,9 +344,10 @@ const addNote = (title) => {
     json[randomID] = {
         id: randomID,
         title: title,
-        created: new Date(),
+        timestamp: new Date(),
         notebook: currentNotebook.id,
-        content: ""
+        content: "",
+        creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
     };
     json[currentNotebook.id].pages.push(randomID);
     fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
@@ -508,6 +522,50 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
     toggleNotebooks();
+});
+BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
+    if(!firebase.auth().currentUser) return;
+    loadNotes();
+
+    const uid = firebase.auth().currentUser.uid;
+    firebase.database().ref().orderByChild('creator')
+                            .equalTo(uid)
+                            .once('value', (snap) => {
+        const allNotebooksAndNotes = snap.val();
+        if(allNotebooksAndNotes == null) { return }
+
+        // 1.) Get everything from the remote database and put it in the local database.
+        const allNotebooks = allNotebooksAndNotes.filter((val, _, __) => !val.notebook);
+        const allNotes = allNotebooksAndNotes.filter((val, _, __) => val.notebook);
+        const tempNotes = notebooks.map((val, _, __) => val.pages);
+
+        for(var id in allNotebooks) {
+            // If the local database does not have the notebook, add it.
+            if(!(id in notebooks)) notebooks.push(allNotebooks[id]);
+        }
+        for(var nID in allNotes) {
+            const nt = allNotes[nID];
+
+            // If the local db doesn't have the note, add it to the local db
+            // and add it to its notebook.
+            if(!(nID in tempNotes)) {
+                notebooks[nt.notebook].pages.push(nID);
+            }
+        }
+
+        // 2.) Take what is not already in the remote db from the local db and
+        // put it on the remote one.
+        const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+        for(var i in json) {
+            const item = json[i];
+
+            if(!(item.id in allNotebooksAndNotes)) {
+                // Push either a notebook or a note and note id to the database.
+            }
+        }
+
+        console.log(notebooks);
+    });
 });
 
 
