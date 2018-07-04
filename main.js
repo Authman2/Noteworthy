@@ -175,34 +175,16 @@ let template = [{
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('bold');
         }
     },{
-        label: 'Underline',
-        accelerator: 'CmdOrCtrl+U',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
-        }
-    },{
         label: 'Italic',
         accelerator: 'CmdOrCtrl+I',
         click: () => {
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('italic');
         }
     },{
-        label: 'Align Left',
-        accelerator: 'CmdOrCtrl+Option+L',
+        label: 'Underline',
+        accelerator: 'CmdOrCtrl+U',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-left');
-        }
-    },{
-        label: 'Align Center',
-        accelerator: 'CmdOrCtrl+Option+C',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-center');
-        }
-    },{
-        label: 'Align Right',
-        accelerator: 'CmdOrCtrl+Option+R',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('align-right');
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
         }
     },{
         label: 'Highlight',
@@ -325,13 +307,6 @@ const createAppMenu = () => {
             submenu: [{
                 label: `About ${name}`,
                 role: 'about'
-            },{
-                label: 'Settings',
-                accelerator: 'CmdOrCtrl+,',
-                click: () => { 
-                    if(eve !== null && eve !== undefined)
-                        BrowserWindow.getFocusedWindow().emit('goto-app-settings');
-                }
             },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',

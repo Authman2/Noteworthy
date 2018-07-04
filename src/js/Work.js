@@ -7,6 +7,7 @@
 const fs = require('fs');
 const $ = require('jquery');
 const marked = require('marked');
+const showdown = require('showdown');
 const turndown = require('turndown');
 const firebase = require('firebase');
 const Globals = require('../../Globals.js');
@@ -14,8 +15,34 @@ const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
+const syntaxHighlighter = require('highlight.js');
 
 const tdService = new turndown();
+tdService.addRule('', {
+    filter: 'mark',
+    replacement: function(content) {
+        return `==${content}==`
+    }
+})
+tdService.addRule('', {
+    filter: 'u',
+    replacement: function(content) {
+        return `<u>${content}</u>`
+    }
+})
+tdService.addRule('', {
+    filter: 'sub',
+    replacement: function(content) {
+        return `~${content}~`
+    }
+})
+tdService.addRule('', {
+    filter: 'sup',
+    replacement: function(content) {
+        return `^${content}^`
+    }
+})
+
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
 worker.addEventListener('message', (event) => {
     if(currentNote) { saveNote(false, true); }
@@ -106,6 +133,12 @@ const init = (root, pageManager) => {
             Globals.showCreateNewAlert(body, 'Notebook', addNotebook);
         } 
     }
+    body.onclick = () => {
+        Globals.hideContextMenu(body);
+    }
+    contentField.addEventListener('contextmenu', (e) => {
+        Globals.showContextMenu(body, e);
+    })
 
     // Load the notebooks and their notes.
     loadNotes();
@@ -306,14 +339,48 @@ const finalSave = (withAlert = true) => {
 /** Saves a note to the local database. Later on the notes can be synced so that
 * there is a copy on all devices. */
 const saveNote = (withAlerts = true, updating = false) => {
+    var a = '\t<mark><del>working<del></mark>\n<pre><code class=\'language-javascript\'>var a = 5;</code></pre>\n<u>working<sup>nicely</sup></u>\nworking<sub>well</sub><br><br> [ ]&nbsp;buy stuff <br> [x]&nbsp;other stuff <br> [ ]&nbsp;more stuff';
+    const md = tdService.turndown(a);
+    console.log('markdown: ', md);
+    
+    var hljs = require('highlight.js');
+    
+    const markDownOnIt = require('markdown-it');
+    const mdOnIt = new markDownOnIt({
+        html: true,
+        breaks: true,
+        highlight: function(str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return hljs.highlight(lang, str).value;
+                } catch (__) {}
+            }
+            return '';
+        }
+    });
+    mdOnIt.use(require('markdown-it-mark'));
+    mdOnIt.use(require('markdown-it-sub'));
+    mdOnIt.use(require('markdown-it-sup'));
+    mdOnIt.use(require('markdown-it-checkbox'));
+
+    const html = mdOnIt.render(md);
+    console.log('html: ', html);
+    contentField.innerHTML = html;
+
+
+    return;
     if(currentNote == null) {
         alertify.error('Try creating a page inside of a notebook to save.');
         return;
     }
 
+    // Remove the highlights from searching.
+    var search = document.getElementById('findReplaceHighlight');
+    if(search) $(search).replaceWith(search.innerHTML);
+
     const newTitle = titleField.value;
-    const content = contentField.innerHTML.replace('<mark>', '').replace('</mark>', '');
-    var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
+    const content = contentField.innerHTML;
+    var newContent = tdService.turndown(content)//.replace(/\n/g, '<br/>');
 
     if(currentNote.id in loadedData) {
         loadedData[currentNote.id].title = newTitle;
@@ -452,7 +519,7 @@ BrowserWindow.getFocusedWindow().on('share-email', (event, command) => {
     Globals.showShareAlert(body, currentNote, contentField.innerHTML);
 });
 BrowserWindow.getFocusedWindow().on('export-txt', (event, command) => {
-    const toExport = tdService.turndown(contentField.innerHTML).replace(/\n/g, '<br/>');
+    const toExport = tdService.turndown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
     dialog.showSaveDialog(null, {
         title: 'Untitled.txt',
         filters: [{name: 'txt', extensions: ['txt']}]
@@ -462,7 +529,7 @@ BrowserWindow.getFocusedWindow().on('export-txt', (event, command) => {
     });
 });
 BrowserWindow.getFocusedWindow().on('export-md', (event, command) => {
-    const toExport = tdService.turndown(contentField.innerHTML).replace(/\n/g, '<br/>');
+    const toExport = tdService.turndown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
     dialog.showSaveDialog(null, {
         title: 'Untitled.md',
         filters: [{name: 'md', extensions: ['md']}]
@@ -494,10 +561,8 @@ BrowserWindow.getFocusedWindow().on('numbered-list', (event, command) => {
     document.execCommand('insertOrderedList');
 });
 BrowserWindow.getFocusedWindow().on('code-segment', (event, command) => {
-    const bgColor = 'background-color: rgb(229, 229, 229);';
-    const font = 'font-family: Monospace; font-size: 15px;';
-    const codeSegment = '<div class="codeSegmentArea" contentEditable="true" tabindex="1" style="' + bgColor + font + '">Start typing code here</div>';
-    document.execCommand('insertHTML', true, '<br>' + codeSegment + '<br>');
+    const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
+    document.execCommand('insertHTML', false, `<br>${code}<br>`);
 });
 BrowserWindow.getFocusedWindow().on('bold', (event, command) => {
     document.execCommand('bold');
@@ -508,17 +573,14 @@ BrowserWindow.getFocusedWindow().on('italic', (event, command) => {
 BrowserWindow.getFocusedWindow().on('underline', (event, command) => {
     document.execCommand('underline');
 });
-BrowserWindow.getFocusedWindow().on('align-left', (event, command) => {
-    document.execCommand('justifyLeft');
-});
-BrowserWindow.getFocusedWindow().on('align-center', (event, command) => {
-    document.execCommand('justifyCenter');
-});
-BrowserWindow.getFocusedWindow().on('align-right', (event, command) => {
-    document.execCommand('justifyRight');
-});
 BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
-    // TODO
+    if(currentNote == null) return;
+    
+    var userSelection = window.getSelection().getRangeAt(0);
+    var newNode = document.createElement("mark");
+    userSelection.surroundContents(newNode);
+
+    saveNote(false, true);
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
     Globals.showAccountAlert(body, () => {
@@ -559,9 +621,7 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
     loadNotes();
 
     const uid = firebase.auth().currentUser.uid;
-    firebase.database().ref().orderByChild('creator')
-                            .equalTo(uid)
-                            .once('value', (snap) => {
+    firebase.database().ref().orderByChild('creator').equalTo(uid).once('value', (snap) => {
         const allNotebooksAndNotes = snap.val();
         if(allNotebooksAndNotes == null) { return }
 
@@ -570,6 +630,11 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
         const allNotes = allNotebooksAndNotes.filter((val, _, __) => val.notebook);
         const tempNotes = notebooks.map((val, _, __) => val.pages);
 
+        /**
+     * 
+     * todo
+     * 
+     */
         for(var id in allNotebooks) {
             // If the local database does not have the notebook, add it.
             if(!(id in notebooks)) notebooks.push(allNotebooks[id]);

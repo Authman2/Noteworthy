@@ -4,6 +4,9 @@ const marked = require('marked');
 const firebase = require('firebase');
 const alertify = require('alertify.js');
 const nodemailer = require('nodemailer');
+const remote = require('electron').remote;
+const BrowserWindow = remote.BrowserWindow;
+
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
 
@@ -155,8 +158,8 @@ const showBackupAlert = (root, notebooks) => {
         }, (paths) => {
             if(paths !== undefined) {
                 locationField.value = paths[0];
-                locationField.blur();
             }
+            locationField.blur();
         });
     }
 
@@ -594,5 +597,45 @@ module.exports = {
             onClick(val);   
         };
         return cell;
+    },
+
+
+    /** Displays the context menu at the selection point. */
+    showContextMenu: (root, e) => {
+        const existing = document.getElementById('contextMenu');
+        if(existing) root.removeChild(existing);
+
+        const alert = fs.readFileSync(`${__dirname}/src/html/ContextMenu.html`, 'utf8');
+        $('#root').prepend(alert);
+
+        const boldBtn = document.getElementById('boldBtn');
+        const italicBtn = document.getElementById('italicBtn');
+        const underlineBtn = document.getElementById('underlineBtn');
+        const subscriptBtn = document.getElementById('subscriptBtn');
+        const superscriptBtn = document.getElementById('superscriptBtn');
+        const bulletedListBtn = document.getElementById('bulletedListBtn');
+        const numberedListBtn = document.getElementById('numberedListBtn');
+        const codeBtn = document.getElementById('codeBtn');
+        const highlightBtn = document.getElementById('highlightBtn');
+        boldBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bold'); }
+        italicBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('italic'); }
+        underlineBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('underline'); }
+        subscriptBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('subscript'); }
+        superscriptBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('superscript'); }
+        bulletedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bulleted-list'); }
+        numberedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('numbered-list'); }
+        codeBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('code-segment'); }
+        highlightBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('highlight'); }
+
+        const wind = document.getElementById('contextMenu');
+        wind.style.top = `${e.clientY}px`;
+        wind.style.left = `${e.clientX}px`;
+    },
+
+
+    /** Hides the context menu. */
+    hideContextMenu: (root) => {
+        const alert = document.getElementById('contextMenu');
+        if(alert) root.removeChild(alert);
     }
 }

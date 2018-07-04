@@ -313,3 +313,13 @@
 #addButton:active {
     color: gray;
 }
+
+.code-segment {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: pre-wrap;
+    font-family: monospace;
+    background-color: rgb(233, 233, 233);
+}
