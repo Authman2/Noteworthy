@@ -72,7 +72,6 @@ pageManager.start();
 *************************/
 
 BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
-    alertify.log('Saving...');
     work.save(false);
     app.quit();
 });

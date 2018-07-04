@@ -65,13 +65,7 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
         const element = document.getElementById('findReplaceHighlight');
         if(element) {
             const elementTop = element.offsetTop;
-            const windowTop = Math.abs(frWindow.offsetTop - 330 - 50); // 330 := size of alert + padding bottom
-
-            if(elementTop >= windowTop) {
-                frWindow.style.opacity = '0.4';
-            } else {
-                frWindow.style.opacity = '1';
-            }
+            contentField.scrollTop = elementTop - 50;
         }
     }
     nextBtn.onclick = () => {
@@ -98,13 +92,7 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
         const element = document.getElementById('findReplaceHighlight');
         if(element) {
             const elementTop = element.offsetTop;
-            const windowTop = Math.abs(frWindow.offsetTop - 330 - 50); // 330 := size of alert + padding bottom
-
-            if(elementTop >= windowTop) {
-                frWindow.style.opacity = '0.4';
-            } else {
-                frWindow.style.opacity = '1';
-            }
+            contentField.scrollTop = elementTop - 50;
         }
     }
     replaceBtn.onclick = () => {
@@ -573,6 +561,7 @@ module.exports = {
             const cell = document.createElement('div');
             const title = document.createElement('p');
             const preview = document.createElement('p');
+            cell.setAttribute('noteID', val.id);
             cell.className = 'noteTableCell';
             title.className = 'noteTableCellTitleLabel';
             preview.className = 'noteTableCellPreviewLabel';
@@ -585,5 +574,25 @@ module.exports = {
             };
             return cell;
         })
+    },
+
+
+    /** Maps a single note to a note table cell. */
+    mapOneNoteToTableCell: (val, onClick) => {
+        const cell = document.createElement('div');
+        const title = document.createElement('p');
+        const preview = document.createElement('p');
+        cell.setAttribute('noteID', val.id);
+        cell.className = 'noteTableCell';
+        title.className = 'noteTableCellTitleLabel';
+        preview.className = 'noteTableCellPreviewLabel';
+        title.innerHTML = `${val.title}`;
+        preview.innerHTML = `${val.content.length === 0 ? '*No Content*' : val.content}`;
+        cell.appendChild(title);
+        cell.appendChild(preview);
+        cell.onclick = () => {
+            onClick(val);   
+        };
+        return cell;
     }
 }

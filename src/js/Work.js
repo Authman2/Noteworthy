@@ -16,6 +16,11 @@ const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
 
 const tdService = new turndown();
+const worker = new Worker(`${__dirname}/AsyncCode.js`);
+worker.addEventListener('message', (event) => {
+    if(currentNote) { saveNote(false, true); }
+});
+
 
 /************************
 *                       *
@@ -24,6 +29,7 @@ const tdService = new turndown();
 *************************/
 
 // The notes that have been loaded from the database.
+var loadedData;
 var notebooks;
 var currentNotebook;
 var currentNote;
@@ -83,7 +89,7 @@ const init = (root, pageManager) => {
     // Button clicks.
     contentField.oninput = () => {
         setTimeout(() => {
-            if(currentNote) { saveNote(false); }
+            worker.postMessage(0);
         }, 1500);
     }
     notesButton.onclick = toggleNotebooks;
@@ -134,7 +140,6 @@ const toggleNotebooks  = () => {
     notebookViewIsOpen = !notebookViewIsOpen;
     
     const titleBar = document.getElementsByClassName('titleBar')[0];
-    
     switch(notebookViewIsOpen) {
         case true:
             workView.style.right = '300px';
@@ -191,23 +196,44 @@ const populateNotebooks = () => {
 }
 
 /** Populates the notes view with new data. */
-const popoulateNotes = () => {
+const popoulateNotes = (updating = false) => {
     if(currentNotebook == null) return;
 
-    const notes = currentNotebook.pages;
-    const a = Globals.mapNoteToTableCell(notes, (val) => {
-        currentNote = val;
-        titleField.value = val.title;
+    if(updating === false) {
+        // If you are not updating, remap ALL of the notes.
+        const notes = currentNotebook.pages;
+        const a = Globals.mapNoteToTableCell(notes, (val) => {
+            currentNote = val;
+            titleField.value = val.title;
 
-        marked(val.content, (err, resp) => {
-            if(err) { contentField.innerHTML = err; return; }
-            contentField.innerHTML = resp;
-            toggleNotebooks();
+            marked(val.content, (err, resp) => {
+                if(err) { contentField.innerHTML = err; return; }
+                contentField.innerHTML = resp;
+                toggleNotebooks();
+            });
         });
-    });
 
-    notesView.innerHTML = '';
-    for(var i in a) { notesView.appendChild(a[i]); }
+        notesView.innerHTML = '';
+        for(var i in a) { notesView.appendChild(a[i]); }
+    }
+    else {
+        if(currentNote === null) return;
+
+        // If updating, only update the current note.
+        const a = Globals.mapOneNoteToTableCell(currentNote, (val) => {
+            currentNote = val;
+            titleField.value = val.title;
+
+            marked(val.content, (err, resp) => {
+                if(err) { contentField.innerHTML = err; return; }
+                contentField.innerHTML = resp;
+                toggleNotebooks();
+            });
+        })
+
+        const view = $(`[noteID=${currentNote.id}]`);
+        view.replaceWith(a);
+    }
 }
 
 
@@ -264,9 +290,22 @@ const handleSearch = () => {
 *                       *
 *************************/
 
+/** Does a final save by taking the json of the notes and notebooks and
+* saves them to a file. */
+const finalSave = (withAlert = true) => {
+    const data = JSON.stringify(loadedData);
+    fs.writeFileSync(`${__dirname}/../../Database.json`, data, 'utf8');
+
+    if(withAlert === true) {
+        setTimeout(() => {
+            alertify.success('Saving...');
+        }, 4000);
+    }
+}
+
 /** Saves a note to the local database. Later on the notes can be synced so that
 * there is a copy on all devices. */
-const saveNote = (withAlerts = true) => {
+const saveNote = (withAlerts = true, updating = false) => {
     if(currentNote == null) {
         alertify.error('Try creating a page inside of a notebook to save.');
         return;
@@ -276,12 +315,11 @@ const saveNote = (withAlerts = true) => {
     const content = contentField.innerHTML.replace('<mark>', '').replace('</mark>', '');
     var newContent = tdService.turndown(content).replace(/\n/g, '<br/>');
 
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    if(currentNote.id in json) {
-        json[currentNote.id].title = newTitle;
-        json[currentNote.id].content = newContent;
+    if(currentNote.id in loadedData) {
+        loadedData[currentNote.id].title = newTitle;
+        loadedData[currentNote.id].content = newContent;
     } else {
-        json[currentNote.id] = {
+        loadedData[currentNote.id] = {
             id: currentNote.id,
             title: newTitle,
             timestamp: currentNote.timestamp,
@@ -291,10 +329,7 @@ const saveNote = (withAlerts = true) => {
         }
     }
     
-    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
-    loadNotes();
-    popoulateNotes();
-
+    popoulateNotes(updating);
     if(withAlerts === true) alertify.success('Saved!');
 }
 
@@ -303,6 +338,7 @@ const saveNote = (withAlerts = true) => {
 const loadNotes = () => {
     const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     const nbs = Object.values(json).filter((val, _, __) => val.pages);
+    loadedData = json;
     notebooks = nbs;
 
     // Go through each notebooks and get the notes.
@@ -322,26 +358,22 @@ const loadNotes = () => {
 
 /** Adds a new notebook to the database. */
 const addNotebook = (title) => {
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     const randomID = Globals.randomID();
-    json[randomID] = {
+    loadedData[randomID] = {
         id: randomID,
         title: title,
         created: new Date(),
         pages: [],
         creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
     };
-    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
-    loadNotes();
     populateNotebooks();
 }
 
 
 /** Adds a new note to a specific notebook in the database. */
 const addNote = (title) => {
-    const json =  JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
     const randomID = Globals.randomID();
-    json[randomID] = {
+    loadedData[randomID] = {
         id: randomID,
         title: title,
         timestamp: new Date(),
@@ -349,9 +381,7 @@ const addNote = (title) => {
         content: "",
         creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
     };
-    json[currentNotebook.id].pages.push(randomID);
-    fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(json), 'utf8');
-    loadNotes();
+    loadedData[currentNotebook.id].pages.push(randomID);
     popoulateNotes();
 }
 
@@ -409,6 +439,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('save', (event, command) => {
     saveNote();
+    finalSave(false);
 });
 BrowserWindow.getFocusedWindow().on('print', (event, command) => {
     window.print();
@@ -553,16 +584,9 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
             }
         }
 
-        // 2.) Take what is not already in the remote db from the local db and
-        // put it on the remote one.
+        // 2.) Save the local database to firebase by updating all the objects with ids.
         const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-        for(var i in json) {
-            const item = json[i];
-
-            if(!(item.id in allNotebooksAndNotes)) {
-                // Push either a notebook or a note and note id to the database.
-            }
-        }
+        /* Save to firebase. */
 
         console.log(notebooks);
     });
@@ -573,5 +597,5 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
 
 module.exports = {
     init: init,
-    save: saveNote
+    save: finalSave
 }
