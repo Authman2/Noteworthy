@@ -1,11 +1,13 @@
 const fs = require('fs');
 const $ = require('jquery');
-const marked = require('marked');
 const firebase = require('firebase');
 const alertify = require('alertify.js');
 const nodemailer = require('nodemailer');
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
+var hljs = require('highlight.js');
+const turndown = require('turndown');
+const markDownOnIt = require('markdown-it');
 
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
@@ -18,6 +20,64 @@ String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
+
+
+const tdService = new turndown();
+tdService.addRule('', {
+    filter: 'mark',
+    replacement: function(content) {
+        return `==${content}==`
+    }
+})
+tdService.addRule('', {
+    filter: 'u',
+    replacement: function(content) {
+        return `<u>${content}</u>`
+    }
+})
+tdService.addRule('', {
+    filter: 'sub',
+    replacement: function(content) {
+        return `~${content}~`
+    }
+})
+tdService.addRule('', {
+    filter: 'sup',
+    replacement: function(content) {
+        return `^${content}^`
+    }
+})
+tdService.addRule('', {
+    filter: 'br',
+    replacement: function(content) {
+        return `<br>`;
+    }
+})
+const mdOnIt = new markDownOnIt({
+    html: true,
+    breaks: true,
+    highlight: function(str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return hljs.highlight(lang, str).value;
+            } catch (__) {}
+        }
+        return '';
+    }
+});
+mdOnIt.use(require('markdown-it-mark'));
+mdOnIt.use(require('markdown-it-sub'));
+mdOnIt.use(require('markdown-it-sup'));
+mdOnIt.use(require('markdown-it-checkbox'));
+
+
+
+
+
+
+
+
+
 
 /** Shows the find replace alert. */
 const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) => {
@@ -637,5 +697,17 @@ module.exports = {
     hideContextMenu: (root) => {
         const alert = document.getElementById('contextMenu');
         if(alert) root.removeChild(alert);
+    },
+
+
+    /** Converts an HTML string into a Markdown string. */
+    toMarkDown: (html) => {
+        return tdService.turndown(html);
+    },
+
+
+    /** Converts a Markdown string into HTML. */
+    toHTML: (md) => {
+        return mdOnIt.render(md);
     }
 }

@@ -42,7 +42,6 @@
         "markdown-it-mark": "^2.0.0",
         "markdown-it-sub": "^1.0.0",
         "markdown-it-sup": "^1.0.0",
-        "marked": "^0.4.0",
         "moment": "^2.21.0",
         "nodemailer": "^4.4.0",
         "shelljs": "^0.7.8",

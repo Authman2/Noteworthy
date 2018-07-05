@@ -6,42 +6,12 @@
 
 const fs = require('fs');
 const $ = require('jquery');
-const marked = require('marked');
-const showdown = require('showdown');
-const turndown = require('turndown');
 const firebase = require('firebase');
 const Globals = require('../../Globals.js');
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
-const syntaxHighlighter = require('highlight.js');
-
-const tdService = new turndown();
-tdService.addRule('', {
-    filter: 'mark',
-    replacement: function(content) {
-        return `==${content}==`
-    }
-})
-tdService.addRule('', {
-    filter: 'u',
-    replacement: function(content) {
-        return `<u>${content}</u>`
-    }
-})
-tdService.addRule('', {
-    filter: 'sub',
-    replacement: function(content) {
-        return `~${content}~`
-    }
-})
-tdService.addRule('', {
-    filter: 'sup',
-    replacement: function(content) {
-        return `^${content}^`
-    }
-})
 
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
 worker.addEventListener('message', (event) => {
@@ -239,11 +209,8 @@ const popoulateNotes = (updating = false) => {
             currentNote = val;
             titleField.value = val.title;
 
-            marked(val.content, (err, resp) => {
-                if(err) { contentField.innerHTML = err; return; }
-                contentField.innerHTML = resp;
-                toggleNotebooks();
-            });
+            contentField.innerHTML = Globals.toHTML(val.content);
+            toggleNotebooks();
         });
 
         notesView.innerHTML = '';
@@ -257,11 +224,8 @@ const popoulateNotes = (updating = false) => {
             currentNote = val;
             titleField.value = val.title;
 
-            marked(val.content, (err, resp) => {
-                if(err) { contentField.innerHTML = err; return; }
-                contentField.innerHTML = resp;
-                toggleNotebooks();
-            });
+            contentField.innerHTML = Globals.toHTML(val.content);
+            toggleNotebooks();
         })
 
         const view = $(`[noteID=${currentNote.id}]`);
@@ -289,11 +253,8 @@ const handleSearch = () => {
             currentNote = val;
             titleField.value = val.title;
 
-            marked(val.content, (err, resp) => {
-                if(err) { contentField.innerHTML = err; return; }
-                contentField.innerHTML = resp;
-                toggleNotebooks();
-            });
+            contentField.innerHTML = Globals.toHTML(val.content);
+            toggleNotebooks();
         });
 
         notesView.innerHTML = '';
@@ -339,36 +300,6 @@ const finalSave = (withAlert = true) => {
 /** Saves a note to the local database. Later on the notes can be synced so that
 * there is a copy on all devices. */
 const saveNote = (withAlerts = true, updating = false) => {
-    var a = '\t<mark><del>working<del></mark>\n<pre><code class=\'language-javascript\'>var a = 5;</code></pre>\n<u>working<sup>nicely</sup></u>\nworking<sub>well</sub><br><br> [ ]&nbsp;buy stuff <br> [x]&nbsp;other stuff <br> [ ]&nbsp;more stuff';
-    const md = tdService.turndown(a);
-    console.log('markdown: ', md);
-    
-    var hljs = require('highlight.js');
-    
-    const markDownOnIt = require('markdown-it');
-    const mdOnIt = new markDownOnIt({
-        html: true,
-        breaks: true,
-        highlight: function(str, lang) {
-            if (lang && hljs.getLanguage(lang)) {
-                try {
-                    return hljs.highlight(lang, str).value;
-                } catch (__) {}
-            }
-            return '';
-        }
-    });
-    mdOnIt.use(require('markdown-it-mark'));
-    mdOnIt.use(require('markdown-it-sub'));
-    mdOnIt.use(require('markdown-it-sup'));
-    mdOnIt.use(require('markdown-it-checkbox'));
-
-    const html = mdOnIt.render(md);
-    console.log('html: ', html);
-    contentField.innerHTML = html;
-
-
-    return;
     if(currentNote == null) {
         alertify.error('Try creating a page inside of a notebook to save.');
         return;
@@ -380,7 +311,7 @@ const saveNote = (withAlerts = true, updating = false) => {
 
     const newTitle = titleField.value;
     const content = contentField.innerHTML;
-    var newContent = tdService.turndown(content)//.replace(/\n/g, '<br/>');
+    var newContent = Globals.toMarkDown(content)//.replace(/\n/g, '<br/>');
 
     if(currentNote.id in loadedData) {
         loadedData[currentNote.id].title = newTitle;
@@ -498,9 +429,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
         }, '0.1s ease-out', () => {
             Globals.hideFindReplaceAlert(body);
         });
-        marked(cntnt, (err, resp) => {
-            if(!err) contentField.innerHTML = resp;
-        });
+        contentField.innerHTML = Globals.toHTML(cntnt);
         findRepOpen = false;
     }
 });
@@ -519,7 +448,7 @@ BrowserWindow.getFocusedWindow().on('share-email', (event, command) => {
     Globals.showShareAlert(body, currentNote, contentField.innerHTML);
 });
 BrowserWindow.getFocusedWindow().on('export-txt', (event, command) => {
-    const toExport = tdService.turndown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
+    const toExport = Globals.toMarkDown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
     dialog.showSaveDialog(null, {
         title: 'Untitled.txt',
         filters: [{name: 'txt', extensions: ['txt']}]
@@ -529,7 +458,7 @@ BrowserWindow.getFocusedWindow().on('export-txt', (event, command) => {
     });
 });
 BrowserWindow.getFocusedWindow().on('export-md', (event, command) => {
-    const toExport = tdService.turndown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
+    const toExport = Globals.toMarkDown(contentField.innerHTML)//.replace(/\n/g, '<br/>');
     dialog.showSaveDialog(null, {
         title: 'Untitled.md',
         filters: [{name: 'md', extensions: ['md']}]
