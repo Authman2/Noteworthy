@@ -187,6 +187,12 @@ let template = [{
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
         }
     },{
+        label: 'Strikethrough',
+        accelerator: 'CmdOrCtrl+Shift+S',
+        click: () => {
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('strikethrough');
+        }
+    },{
         label: 'Highlight',
         accelerator: 'CmdOrCtrl+H',
         click: () => {
@@ -282,7 +288,7 @@ let template = [{
 const createWindow = () => {
     // Create a window object.
     let wind = new BrowserWindow({
-        width: 800,
+        width: 775,
         height: 600,
         title: 'Noteworthy',
         titleBarStyle: 'hiddenInset',

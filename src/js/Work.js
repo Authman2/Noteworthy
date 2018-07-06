@@ -42,6 +42,7 @@ var workView;
 var backButton;
 var notebooksView;
 var notesView;
+var actionsView;
 
 // The title field.
 var titleField;
@@ -89,6 +90,11 @@ const init = (root, pageManager) => {
             worker.postMessage(0);
         }, 1500);
     }
+    // contentField.onkeydown = (e) => {
+    //     if(e.keyCode === 9) {
+    //         document.execCommand('insertText', false, '\t');
+    //     }
+    // }
     notesButton.onclick = toggleNotebooks;
     searchBar.oninput = handleSearch;
     backButton.onclick = () => {
@@ -126,6 +132,7 @@ const setupRefs = () => {
     notesView = document.getElementById('notesTableView');
     createNewButton = document.getElementById('addButton');
     searchBar = document.getElementById('notebooksSearchField');
+    actionsView = document.getElementById('')
 }
 
 
@@ -182,7 +189,7 @@ const toggleNotes  = (val) => {
             backButton.style.display = 'none';
             nbTitleBar.style.width = '80%';
             notebooksView.style.right = '0px';
-            notesView.style.right = '-300px';
+            notesView.style.right = '-500px';
             break;
     }
 }
@@ -211,6 +218,8 @@ const popoulateNotes = (updating = false) => {
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
+        }, (val) => {
+
         });
 
         notesView.innerHTML = '';
@@ -226,13 +235,14 @@ const popoulateNotes = (updating = false) => {
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
+        }, (val) => {
+            
         })
 
         const view = $(`[noteID=${currentNote.id}]`);
         view.replaceWith(a);
     }
 }
-
 
 /** Populate with searches. */
 const handleSearch = () => {
@@ -255,6 +265,8 @@ const handleSearch = () => {
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
+        }, (val) => {
+            
         });
 
         notesView.innerHTML = '';
@@ -269,6 +281,8 @@ const handleSearch = () => {
         const a = Globals.mapNotebookToTableCell(nbs, (val) => {
             currentNotebook = val;
             toggleNotes(val);
+        }, (val) => {
+            
         });
     
         notebooksView.innerHTML = '';
@@ -502,14 +516,16 @@ BrowserWindow.getFocusedWindow().on('italic', (event, command) => {
 BrowserWindow.getFocusedWindow().on('underline', (event, command) => {
     document.execCommand('underline');
 });
+BrowserWindow.getFocusedWindow().on('strikethrough', (event, command) => {
+    document.execCommand('strikethrough');
+});
 BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
-    if(currentNote == null) return;
-    
-    var userSelection = window.getSelection().getRangeAt(0);
-    var newNode = document.createElement("mark");
-    userSelection.surroundContents(newNode);
-
-    saveNote(false, true);
+    // if(currentNote == null) return;
+    // const sel = document.getSelection();
+    // const range = sel.getRangeAt(0);
+    // const hl = document.createElement('mark');
+    // range.surroundContents(hl);
+    // saveNote(false, true);
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
     Globals.showAccountAlert(body, () => {
@@ -535,6 +551,7 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
     }, (paths) => {
         if(paths.length === 0) return;
 
+        finalSave(false);
         const data = JSON.parse(fs.readFileSync(paths[0], 'utf8'));
         fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(data), 'utf8');
         loadNotes();

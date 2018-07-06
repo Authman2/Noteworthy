@@ -21,7 +21,6 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-
 const tdService = new turndown();
 tdService.addRule('', {
     filter: 'mark',
@@ -33,6 +32,12 @@ tdService.addRule('', {
     filter: 'u',
     replacement: function(content) {
         return `<u>${content}</u>`
+    }
+})
+tdService.addRule('', {
+    filter: 'strike',
+    replacement: function(content) {
+        return `~~${content}~~`
     }
 })
 tdService.addRule('', {
@@ -69,10 +74,6 @@ mdOnIt.use(require('markdown-it-mark'));
 mdOnIt.use(require('markdown-it-sub'));
 mdOnIt.use(require('markdown-it-sup'));
 mdOnIt.use(require('markdown-it-checkbox'));
-
-
-
-
 
 
 
@@ -619,7 +620,7 @@ module.exports = {
     },
 
     /** Maps an array of notes to note table cells. */
-    mapNoteToTableCell: (notebooks, onClick) => {
+    mapNoteToTableCell: (notebooks, onClick, onSwipe) => {
         return notebooks.map((val, _, __) => {
             const cell = document.createElement('div');
             const title = document.createElement('p');
@@ -635,6 +636,11 @@ module.exports = {
             cell.onclick = () => {
                 onClick(val);   
             };
+            cell.onmousewheel = (e) => {
+                if(e.deltaX < 0) {
+                    onSwipe(val);
+                }
+            }
             return cell;
         })
     },
@@ -671,6 +677,7 @@ module.exports = {
         const boldBtn = document.getElementById('boldBtn');
         const italicBtn = document.getElementById('italicBtn');
         const underlineBtn = document.getElementById('underlineBtn');
+        const strikeBtn = document.getElementById('strikethroughBtn');
         const subscriptBtn = document.getElementById('subscriptBtn');
         const superscriptBtn = document.getElementById('superscriptBtn');
         const bulletedListBtn = document.getElementById('bulletedListBtn');
@@ -680,6 +687,7 @@ module.exports = {
         boldBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bold'); }
         italicBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('italic'); }
         underlineBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('underline'); }
+        strikeBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('strikethrough'); }
         subscriptBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('subscript'); }
         superscriptBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('superscript'); }
         bulletedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bulleted-list'); }
