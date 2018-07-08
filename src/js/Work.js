@@ -567,12 +567,16 @@ BrowserWindow.getFocusedWindow().on('strikethrough', (event, command) => {
     document.execCommand('strikethrough');
 });
 BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
-    // if(currentNote == null) return;
-    // const sel = document.getSelection();
-    // const range = sel.getRangeAt(0);
+    if(currentNote == null) return;
+    const sel = document.getSelection();
+    const range = sel.getRangeAt(0);
+    const text = range.toString();
     // const hl = document.createElement('mark');
     // range.surroundContents(hl);
-    // saveNote(false, true);
+
+    document.execCommand('insertHTML', false, `<mark>${text}</mark>`);
+
+    saveNote(false, true);
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
     Globals.showAccountAlert(body, () => {

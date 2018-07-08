@@ -791,8 +791,8 @@ module.exports = {
         highlightBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('highlight'); }
 
         const wind = document.getElementById('contextMenu');
-        wind.style.top = `${e.clientY}px`;
-        wind.style.left = `${e.clientX}px`;
+        wind.style.top = `${e.clientY - 10}px`;
+        wind.style.left = `${e.clientX - 37.5}px`;
     },
 
 

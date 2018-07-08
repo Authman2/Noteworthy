@@ -9,8 +9,9 @@
         "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",
         "clean": "rm -rf -R Noteworthy-darwin-x64",
         "electron-toolkit": "electron ./node_modules/electron-toolkit",
-        "build": "build --win",
-        "ship": "build --win -p always"
+        "pack": "electron-builder --dir",
+        "distMac": "electron-builder --x64 --mac",
+        "gh-publish-mac": "eletron-builder --x64 --mac -p always"
     },
     "repository": "https://github.com/Authman2/Noteworthy",
     "keywords": [
@@ -24,7 +25,7 @@
     "license": "MIT",
     "devDependencies": {
         "electron": "~1.6.2",
-        "electron-builder": "^19.49.2",
+        "electron-builder": "^19.56.2",
         "electron-packager": "^9.0.1",
         "electron-toolkit": "^1.0.24"
     },
@@ -73,6 +74,15 @@
                 }
             ],
             "category": "public.app-category.productivity"
+        },
+        "publish": {
+            "provider": "github",
+            "repo": "https://github.com/Authman2/Noteworthy",
+            "owner": "Adeola Uthman",
+            "token": "c527b4b6ef70fcdd2059ad8d9cd5ecbb08749fd9",
+            "vPrefixedTagName": true,
+            "releaseType": "release",
+            "private": false
         }
     }
 }
