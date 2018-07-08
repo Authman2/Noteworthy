@@ -193,7 +193,7 @@
     overflow-x: hidden;
     white-space: nowrap;
     transition-duration: 0.25s;
-    background-color: #4078cc;
+    /* background-color: #4078cc; */
     transition-timing-function: ease-out;
 }
 #notesTableView {
@@ -207,7 +207,7 @@
     overflow-x: hidden;
     white-space: nowrap;
     transition-duration: 0.25s;
-    background-color: #4078cc;
+    /* background-color: #4078cc; */
     transition-timing-function: ease-out;
 }
 #actionsTableView {
@@ -309,7 +309,7 @@
     text-overflow: ellipsis;
 }
 .actionTableCell {
-    position: relative;
+    position: absolute;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -324,6 +324,7 @@
     padding-right: 10px;
     font-family: 'Avenir';
     transition-duration: 0.15s;
+    background-color: rgb(255, 80, 80);
 }
 .actionTableCellOption {
     position: relative;

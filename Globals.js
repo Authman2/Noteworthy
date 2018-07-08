@@ -78,7 +78,35 @@ mdOnIt.use(require('markdown-it-checkbox'));
 
 
 
+/** Shows the account alert. */
+const showConfirmAlert = (root, title, yes) => {
+    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ConfirmAlert.html`, 'utf8');
+    $('#root').prepend(alert);
 
+    const titleField = document.getElementById('confirmAlertTitle');
+    const yesBtn = document.getElementById('confirmYesButton');
+    const noBtn = document.getElementById('confirmNoButton');
+
+    titleField.innerHTML = `${title}`;
+    yesBtn.onclick = () => {
+        yes();
+        hideConfirmAlert(root);
+    }
+    noBtn.onclick = () => {
+        hideConfirmAlert(root);
+    }
+    overlay.onclick = () => {
+        hideConfirmAlert(root);
+    }
+}
+
+/** Hides the account alert. */
+const hideConfirmAlert = (root) => {
+    const alert = document.getElementById('confirmAlert');
+    const overlay = document.getElementById('overlay');
+    root.removeChild(alert);
+    root.removeChild(overlay);
+}
 
 /** Shows the find replace alert. */
 const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) => {
@@ -99,9 +127,7 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
     const replaceAllBtn = document.getElementById('replaceAllButton');
 
     closeBtn.onclick = () => {
-        marked(content, (err, resp) => {
-            if(!err) contentField.innerHTML = resp;
-        });
+        contentField.innerHTML = mdOnIt.render(content);
         hideFindReplaceAlert(root);
         then();
     }
@@ -119,11 +145,7 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
         // the callback with the edited markdown so that it can be
         // rendered in the content area.
         copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
-        marked(copy, (err, resp) => {
-            if(!err) {
-                contentField.innerHTML = resp;
-            }
-        });
+        contentField.innerHTML = mdOnIt.render(copy);
 
         // 3.) Scroll to that element.
         const element = document.getElementById('findReplaceHighlight');
@@ -146,11 +168,7 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
         // the callback with the edited markdown so that it can be
         // rendered in the content area.
         copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
-        marked(copy, (err, resp) => {
-            if(!err) {
-                contentField.innerHTML = resp;
-            }
-        });
+        contentField.innerHTML = mdOnIt.render(copy);
 
         // 3.) Scroll to that element.
         const element = document.getElementById('findReplaceHighlight');
@@ -169,12 +187,8 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
 
         // 2.) Replace the content string and refresh the content field.
         content = `${content.substring(0, findIndex-1)}${replace}${content.substring(findIndex + element.innerHTML.length)}`;
-        marked(content, (err, resp) => {
-            if(!err) {
-                contentField.innerHTML = resp;
-                replaceFunc(content);
-            }
-        });
+        contentField.innerHTML = mdOnIt.render(content);
+        replaceFunc(content);
     }
     replaceAllBtn.onclick = () => {
         const replace = replaceField.value;
@@ -186,12 +200,8 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
 
         // 2.) Replace the content string and refresh the content field.
         content = content.replaceAll(element.innerHTML, replace);
-        marked(content, (err, resp) => {
-            if(!err) {
-                contentField.innerHTML = resp;
-                replaceFunc(content);
-            }
-        });
+        contentField.innerHTML = mdOnIt.render(content);
+        replaceFunc(content);
     }
 }
 
@@ -595,6 +605,13 @@ module.exports = {
     /** Hides the find replace alert. */
     hideFindReplaceAlert: hideFindReplaceAlert,
 
+    /** Shows the confirm alert. */
+    showConfirmAlert: showConfirmAlert,
+
+    /** Hides the confirm alert. */
+    hideConfirmAlert: hideConfirmAlert,
+
+
     /** Maps an array of notebooks to notebook table cells. */
     mapNotebookToTableCell: (notebooks, onClick) => {
         return notebooks.map((val, _, __) => {
@@ -602,25 +619,47 @@ module.exports = {
             const title = document.createElement('p');
             const created = document.createElement('p');
             const pages = document.createElement('p');
+            cell.setAttribute('notebookID', val.id);
             cell.className = 'notebooksTableCell';
             title.className = 'notebooksTableCellTitleLabel';
             created.className = 'notebooksTableCellCreateLabel';
             pages.className = 'notebooksTableCellPagesLabel';
             title.innerHTML = `${val.title}`;
-            created.innerHTML = `${val.created}`;
+            const dString = new Date(Date.UTC(val.created[0], val.created[1], val.created[2], val.created[3], val.created[4], val.created[5])).toUTCString()
+            created.innerHTML = `${dString.substring(0, dString.length - 3)}`;
             pages.innerHTML = `Pages: ${val.pages.length}`;
             cell.appendChild(title);
             cell.appendChild(created);
             cell.appendChild(pages);
             cell.onclick = () => {
+                // Close all others.
+                const othersList = document.getElementsByClassName('noteTableCell');
+                const others = Array.prototype.slice.call(othersList);
+                for(var i in others) { others[i].style.right = '0px'; }
+
                 onClick(val);   
             };
+            cell.onmousewheel = (e) => {
+                if(e.deltaX < -20) {
+                    cell.style.right = '100px';
+
+                    // Close all others.
+                    const othersList = document.getElementsByClassName('noteTableCell');
+                    const others = Array.prototype.slice.call(othersList);
+                    const open = others.filter((val2, _, __) => {
+                        return val2.style.right === '100px' && val2.getAttribute('noteID') !== val.id
+                    });
+                    for(var i in open) { open[i].style.right = '0px'; }
+                } else if(e.deltaX > 20) {
+                    cell.style.right = '0px';
+                }
+            }
             return cell;
         })
     },
 
     /** Maps an array of notes to note table cells. */
-    mapNoteToTableCell: (notebooks, onClick, onSwipe) => {
+    mapNoteToTableCell: (notebooks, onClick) => {
         return notebooks.map((val, _, __) => {
             const cell = document.createElement('div');
             const title = document.createElement('p');
@@ -634,11 +673,26 @@ module.exports = {
             cell.appendChild(title);
             cell.appendChild(preview);
             cell.onclick = () => {
+                // Close all others.
+                const othersList = document.getElementsByClassName('noteTableCell');
+                const others = Array.prototype.slice.call(othersList);
+                for(var i in others) { others[i].style.right = '0px'; }
+
                 onClick(val);   
             };
             cell.onmousewheel = (e) => {
-                if(e.deltaX < 0) {
-                    onSwipe(val);
+                if(e.deltaX < -20) {
+                    cell.style.right = '100px';
+
+                    // Close all others.
+                    const othersList = document.getElementsByClassName('noteTableCell');
+                    const others = Array.prototype.slice.call(othersList);
+                    const open = others.filter((val2, _, __) => {
+                        return val2.style.right === '100px' && val2.getAttribute('noteID') !== val.id
+                    });
+                    for(var i in open) { open[i].style.right = '0px'; }
+                } else if(e.deltaX > 20) {
+                    cell.style.right = '0px';
                 }
             }
             return cell;
@@ -660,8 +714,49 @@ module.exports = {
         cell.appendChild(title);
         cell.appendChild(preview);
         cell.onclick = () => {
+            // Close all others.
+            const othersList = document.getElementsByClassName('noteTableCell');
+            const others = Array.prototype.slice.call(othersList);
+            for(var i in others) { others[i].style.right = '0px'; }
+
             onClick(val);   
         };
+        cell.onmousewheel = (e) => {
+            if(e.deltaX < -20) {
+                cell.style.right = '100px';
+
+                // Close all others.
+                const othersList = document.getElementsByClassName('noteTableCell');
+                const others = Array.prototype.slice.call(othersList);
+                const open = others.filter((val2, _, __) => {
+                    return val2.style.right === '100px' && val2.getAttribute('noteID') !== val.id
+                });
+                for(var i in open) { open[i].style.right = '0px'; }
+            } else if(e.deltaX > 20) {
+                cell.style.right = '0px';
+            }
+        }
+        return cell;
+    },
+
+
+    /** Adds actions behind a cell. */
+    addCellActions: (top, tableCell, onDelete) => {
+        const cell = document.createElement('div');
+        const del = document.createElement('div');
+        cell.className = 'actionTableCell';
+        del.className = 'actionTableCellOption';
+        del.innerHTML = 'Delete';
+        cell.appendChild(del);
+        cell.style.top = top;
+        cell.onclick = () => {
+            onDelete(tableCell);
+        }
+        cell.onmousewheel = (e) => {
+            if(e.deltaX >= 0) {
+                tableCell.style.right = '0px';
+            }
+        }
         return cell;
     },
 

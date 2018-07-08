@@ -42,7 +42,6 @@ var workView;
 var backButton;
 var notebooksView;
 var notesView;
-var actionsView;
 
 // The title field.
 var titleField;
@@ -132,7 +131,6 @@ const setupRefs = () => {
     notesView = document.getElementById('notesTableView');
     createNewButton = document.getElementById('addButton');
     searchBar = document.getElementById('notebooksSearchField');
-    actionsView = document.getElementById('')
 }
 
 
@@ -196,13 +194,29 @@ const toggleNotes  = (val) => {
 
 /** Populates the notebooks view with new data. */
 const populateNotebooks = () => {
+    notebooks = Object.values(loadedData).filter((val, _, __) => val.pages);
     const a = Globals.mapNotebookToTableCell(notebooks, (val) => {
         currentNotebook = val;
         toggleNotes(val);
     });
 
+    var top = 0;
     notebooksView.innerHTML = '';
-    for(var i in a) { notebooksView.appendChild(a[i]); }
+    for(var i in a) {
+        const actions = Globals.addCellActions(`${top}px`, a[i], (view) => {
+            const note = loadedData[view.getAttribute('notebookid')];
+            Globals.showConfirmAlert(body, `Are you sure you want to delete the notebook ${note.title}? This will delete all the notes in it as well.`, () => {
+                const pages = Object.values(loadedData).filter((v, _, __) => v.notebook && v.notebook === note.id);
+                delete loadedData[view.getAttribute('notebookid')];
+                for(var i in pages) { delete loadedData[pages[i].id]; }
+                finalSave(false);
+                populateNotebooks();
+            });
+        });
+        notebooksView.appendChild(actions);
+        notebooksView.appendChild(a[i]);
+        top += 140;
+    }
 }
 
 /** Populates the notes view with new data. */
@@ -211,19 +225,34 @@ const popoulateNotes = (updating = false) => {
 
     if(updating === false) {
         // If you are not updating, remap ALL of the notes.
-        const notes = currentNotebook.pages;
+        const notes = currentNotebook.pages.map((val, _, __) => {
+            return loadedData[val];
+        });
         const a = Globals.mapNoteToTableCell(notes, (val) => {
             currentNote = val;
             titleField.value = val.title;
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
-        }, (val) => {
-
         });
 
+        var top = 0;
         notesView.innerHTML = '';
-        for(var i in a) { notesView.appendChild(a[i]); }
+        for(var i in a) { 
+            const actions = Globals.addCellActions(`${top}px`, a[i], (view) => {
+                const note = loadedData[view.getAttribute('noteid')];
+                Globals.showConfirmAlert(body, `Are you sure you want to delete the note ${note.title}?`, () => {
+                    delete loadedData[view.getAttribute('noteid')];
+                    const nb = note.notebook;
+                    loadedData[nb].pages = loadedData[nb].pages.filter((v, _, __) => v !== note.id);
+                    finalSave(false);
+                    popoulateNotes();
+                });
+            });
+            notesView.appendChild(actions);
+            notesView.appendChild(a[i]);
+            top += 140;
+        }
     }
     else {
         if(currentNote === null) return;
@@ -235,8 +264,6 @@ const popoulateNotes = (updating = false) => {
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
-        }, (val) => {
-            
         })
 
         const view = $(`[noteID=${currentNote.id}]`);
@@ -256,7 +283,9 @@ const handleSearch = () => {
         // Populate, but with filtered results.
         if(currentNotebook == null) return;
 
-        const notes = currentNotebook.pages.filter((val,_,__) => {
+        const notes = currentNotebook.pages.map((val, _, __) => {
+            return loadedData[val];
+        }).filter((val,_,__) => {
             return val.title.includes(search);
         });
         const a = Globals.mapNoteToTableCell(notes, (val) => {
@@ -265,12 +294,25 @@ const handleSearch = () => {
 
             contentField.innerHTML = Globals.toHTML(val.content);
             toggleNotebooks();
-        }, (val) => {
-            
         });
 
+        var top = 0;
         notesView.innerHTML = '';
-        for(var i in a) { notesView.appendChild(a[i]); }
+        for(var i in a) { 
+            const actions = Globals.addCellActions(`${top}px`, a[i], (id) => {
+                const note = loadedData[view.getAttribute('noteid')];
+                Globals.showConfirmAlert(body, `Are you sure you want to delete the note ${note.title}?`, () => {
+                    delete loadedData[view.getAttribute('noteid')];
+                    const nb = note.notebook;
+                    loadedData[nb].pages = loadedData[nb].pages.filter((v, _, __) => v !== note.id);
+                    finalSave(false);
+                    popoulateNotes();
+                });
+            });
+            notesView.appendChild(actions);
+            notesView.appendChild(a[i]);
+            top += 140;
+        }
     }
     else if(notebookViewIsOpen === true) {
         if(notebooks === null || notebooks === undefined) return;
@@ -281,12 +323,25 @@ const handleSearch = () => {
         const a = Globals.mapNotebookToTableCell(nbs, (val) => {
             currentNotebook = val;
             toggleNotes(val);
-        }, (val) => {
-            
         });
     
+        var top = 0;
         notebooksView.innerHTML = '';
-        for(var i in a) { notebooksView.appendChild(a[i]); }
+        for(var i in a) { 
+            const actions = Globals.addCellActions(`${top}px`, a[i], (id) => {
+                const note = loadedData[view.getAttribute('notebookid')];
+                Globals.showConfirmAlert(body, `Are you sure you want to delete the notebook ${note.title}? This will delete all the notes in it as well.`, () => {
+                    const pages = Object.values(loadedData).filter((v, _, __) => v.notebook && v.notebook === note.id);
+                    delete loadedData[view.getAttribute('notebookid')];
+                    for(var i in pages) { delete loadedData[pages[i].id]; }
+                    finalSave(false);
+                    populateNotebooks();
+                });
+            });
+            notebooksView.appendChild(actions);
+            notebooksView.appendChild(a[i]);
+            top += 140;
+        }
     }
 }
 
@@ -352,29 +407,18 @@ const loadNotes = () => {
     const nbs = Object.values(json).filter((val, _, __) => val.pages);
     loadedData = json;
     notebooks = nbs;
-
-    // Go through each notebooks and get the notes.
-    for(var i in nbs) {
-        const notesI = Object.values(json).filter((val, _, __) => {
-            return val.notebook === notebooks[i].id
-        });
-        notebooks[i].pages = notesI;
-        
-        // Reload the current notebook.
-        if(currentNotebook && notebooks[i].id === currentNotebook.id) {
-            currentNotebook.pages = notesI;
-        }
-    }
 }
 
 
 /** Adds a new notebook to the database. */
 const addNotebook = (title) => {
     const randomID = Globals.randomID();
+    const now = new Date();
+    const saveDate = [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDay(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()];
     loadedData[randomID] = {
         id: randomID,
         title: title,
-        created: new Date(),
+        created: saveDate,
         pages: [],
         creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
     };
@@ -385,10 +429,12 @@ const addNotebook = (title) => {
 /** Adds a new note to a specific notebook in the database. */
 const addNote = (title) => {
     const randomID = Globals.randomID();
+    const now = new Date();
+    const saveDate = [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDay(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()];
     loadedData[randomID] = {
         id: randomID,
         title: title,
-        timestamp: new Date(),
+        created: saveDate,
         notebook: currentNotebook.id,
         content: "",
         creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
@@ -425,6 +471,7 @@ BrowserWindow.getFocusedWindow().on('select-all', (event, command) => {
     document.execCommand('selectAll');
 });
 BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
+    if(!currentNote) return;
     const cntnt = currentNote === null ? '' : currentNote.content;
 
     if(findRepOpen === false) {
@@ -564,42 +611,41 @@ BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
     if(!firebase.auth().currentUser) return;
-    loadNotes();
+    finalSave(false);
+    alertify.log('Syncing...');
 
     const uid = firebase.auth().currentUser.uid;
-    firebase.database().ref().orderByChild('creator').equalTo(uid).once('value', (snap) => {
+    firebase.database().ref().orderByKey().equalTo(uid).once('value', (snap) => {
         const allNotebooksAndNotes = snap.val();
-        if(allNotebooksAndNotes == null) { return }
+
+        if(allNotebooksAndNotes == null) {
+            const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+            const outer = `{"${uid}": ${JSON.stringify(json)}}`;
+            firebase.database().ref().set(JSON.parse(outer));
+            return;
+        }
 
         // 1.) Get everything from the remote database and put it in the local database.
-        const allNotebooks = allNotebooksAndNotes.filter((val, _, __) => !val.notebook);
-        const allNotes = allNotebooksAndNotes.filter((val, _, __) => val.notebook);
-        const tempNotes = notebooks.map((val, _, __) => val.pages);
-
-        /**
-     * 
-     * todo
-     * 
-     */
+        const all = Object.values(allNotebooksAndNotes[uid]);
+        const allNotebooks = all.filter((val, _, __) => val.pages);
+        const allNotes = all.filter((val, _, __) => val.notebook);
+        
         for(var id in allNotebooks) {
-            // If the local database does not have the notebook, add it.
-            if(!(id in notebooks)) notebooks.push(allNotebooks[id]);
+            loadedData[ allNotebooks[id].id ] = allNotebooks[id];
         }
-        for(var nID in allNotes) {
-            const nt = allNotes[nID];
-
-            // If the local db doesn't have the note, add it to the local db
-            // and add it to its notebook.
-            if(!(nID in tempNotes)) {
-                notebooks[nt.notebook].pages.push(nID);
-            }
+        for(var id in allNotes) {
+            loadedData[ allNotes[id].id ] = allNotes[id];
+            
+            if(!loadedData[ allNotes[id].notebook ].pages.includes( allNotes[id].id ))
+                loadedData[ allNotes[id].notebook ].pages.push( allNotes[id].id );
         }
-
+        
         // 2.) Save the local database to firebase by updating all the objects with ids.
         const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-        /* Save to firebase. */
+        const outer = `{"${uid}": ${JSON.stringify(json)}}`;
+        firebase.database().ref().set(JSON.parse(outer));
 
-        console.log(notebooks);
+        alertify.success('Synced!');
     });
 });
 
