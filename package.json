@@ -1,6 +1,6 @@
 {
     "name": "Noteworthy",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "Noteworthy is an easy-to-use note taking app designed to be simplistic, yet powerful.\n\nFor more information, visit this project at www.adeolauthman.com/projects/Noteworthy.",
     "main": "main.js",
     "scripts": {
@@ -10,7 +10,7 @@
         "clean": "rm -rf -R Noteworthy-darwin-x64",
         "electron-toolkit": "electron ./node_modules/electron-toolkit",
         "pack": "electron-builder --dir",
-        "distMac": "electron-builder --x64 --mac",
+        "dist": "electron-builder --x64 --mac",
         "gh-publish-mac": "eletron-builder --x64 --mac -p always"
     },
     "repository": "https://github.com/Authman2/Noteworthy",
@@ -33,6 +33,8 @@
         "alertify.js": "^1.0.12",
         "asar": "^0.13.0",
         "dropbox": "^2.5.7",
+        "electron-is-dev": "^0.3.0",
+        "electron-log": "^2.2.16",
         "electron-updater": "^2.23.3",
         "electron-window-manager": "^1.0.4",
         "firebase": "^4.3.0",
@@ -65,14 +67,8 @@
             "output": "dist"
         },
         "mac": {
-            "target": [
-                {
-                    "target": "dmg",
-                    "arch": [
-                        "x64"
-                    ]
-                }
-            ],
+            "asar": "true",
+            "target": ["dmg", "zip"],
             "category": "public.app-category.productivity"
         },
         "publish": {
@@ -82,7 +78,7 @@
             "token": "c527b4b6ef70fcdd2059ad8d9cd5ecbb08749fd9",
             "vPrefixedTagName": true,
             "releaseType": "release",
-            "private": false
+            "private": true
         }
     }
 }
