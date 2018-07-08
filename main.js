@@ -9,6 +9,7 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 const ipc = require('electron').ipcMain;
+const { autoUpdater } = require("electron-updater");
 
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
@@ -340,11 +341,17 @@ const createAppMenu = () => {
 app.on('ready', () => {
     createWindow();
     createAppMenu();
+    autoUpdater.checkForUpdates();
 });
 app.on('window-all-closed', function () { if (process.platform !== 'darwin') app.quit() });
 app.on('activate', function () { if (BrowserWindow.getFocusedWindow() === null) createWindow() });
-
+autoUpdater.on('update-downloaded', (info) => {
+    BrowserWindow.getFocusedWindow().webContents.send('updateReady');
+});
 
 ipc.on('init', (event) => {
     eve = event;
+})
+ipc.on("quitAndInstall", (event, arg) => {
+    autoUpdater.quitAndInstall();
 })
