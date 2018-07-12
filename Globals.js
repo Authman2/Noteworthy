@@ -207,13 +207,12 @@ const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) =>
 
 /** Hides the find replace alert. */
 const hideFindReplaceAlert = (root) => {
-    $('#findReplaceAlert').animate({
-        bottom: '0px',
-        opacity: '0'
-    }, '0.1s ease-out', () => {
-        const alert = document.getElementById('findReplaceAlert');
+    const alert = document.getElementById('findReplaceAlert');
+    alert.style.bottom = '0px';
+    alert.style.opacity = '0';
+    setTimeout(() => {
         root.removeChild(alert);
-    });
+    }, 100);
 }
 
 /** Shows the backup alert. */
@@ -386,7 +385,22 @@ const showCreateNewAlert = (root, newWhat = 'Notebook', then) => {
 
     const titleField = document.getElementById('createNewField');
     const overlay = document.getElementById('overlay');
+    titleField.focus();
+    titleField.onkeydown = (e) => {
+        if(titleField.value === '') {
+            alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
+            return;
+        }
+        if(e.keyCode === 13) {
+            then(titleField.value);
+            hideCreateNewAlert(root);
+        }
+    }
     createBtn.onclick = () => {
+        if(titleField.value === '') {
+            alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
+            return;
+        }
         then(titleField.value);
         hideCreateNewAlert(root);
     }
@@ -409,7 +423,7 @@ const showForgotPasswordAlert = (root) => {
     $('#root').prepend(alert);
 
     const emailField = document.getElementById('resetPasswordField');
-    const sendEmailBtn = document.getElementById('sendResetButton');
+    const sendEmailBtn = document.getElementById('sendPasswordResetButton');
     const overlay = document.getElementById('overlay');
     sendEmailBtn.onclick = () => {
         firebase.auth().sendPasswordResetEmail(emailField.value);
@@ -547,7 +561,9 @@ module.exports = {
 
     /** Log out of firebase account. */
     logout: (success, failure) => {
-        firebase.auth().signOut().then(() => success()).catch((err) => failure(err));
+        firebase.auth().signOut()
+                            .then(() => { success() })
+                            .catch((err) => { failure(err) });
     },
 
 

@@ -505,12 +505,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
                                     });
         findRepOpen = true;
     } else {
-        $('#findReplaceAlert').animate({
-            bottom: '0px',
-            opacity: '0'
-        }, '0.1s ease-out', () => {
-            Globals.hideFindReplaceAlert(body);
-        });
+        Globals.hideFindReplaceAlert(root);
         contentField.innerHTML = Globals.toHTML(cntnt);
         findRepOpen = false;
     }
@@ -606,7 +601,8 @@ BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
         const home = require(`${__dirname}/../js/Home.js`);
         Globals.logout(() => {
             pager.goTo(home);
-        }, (err) => { 
+        }, (err) => {
+            console.log(err);
             pager.goTo(home);
         });
     });

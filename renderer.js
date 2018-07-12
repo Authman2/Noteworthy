@@ -36,7 +36,11 @@ class PageManager {
     /** Setup this, the page manager, to show the home page. */
     start() {
         firebase.auth().onAuthStateChanged((user) => {
-            this.goTo(work);
+            if(user) {
+                this.goTo(work);
+            } else {
+                this.goTo(home);
+            }
         }, (_) => {
             this.goTo(home);
         });

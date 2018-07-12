@@ -55,6 +55,12 @@ const init = (root, pageManager) => {
     loginButton.onclick = handleLogin;
     signUpButton.onclick = handleSignUp;
     forgotPasswordButton.onclick = handleForgotPassword;
+    emailField.onkeydown = (e) => {
+        if(e.keyCode === 13) handleLogin();
+    }
+    passwordField.onkeydown = (e) => {
+        if(e.keyCode === 13) handleLogin();
+    }
 }
 
 /** Gets the references to all of the variables. */
