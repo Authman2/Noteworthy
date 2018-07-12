@@ -9,38 +9,39 @@ const fs = require('fs');
 const url = require('url');
 const path = require('path');
 const ipc = require('electron').ipcMain;
-const autoUpdater = require('electron-updater').autoUpdater;
-const isDev = require('electron-is-dev');
+// const autoUpdater = require('electron-updater').autoUpdater;
+// const isDev = require('electron-is-dev');
 
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const Menu = electron.Menu
 
 // Setup logger.
-autoUpdater.logger = require('electron-log');
-autoUpdater.logger.transports.file.level = 'info';
+// autoUpdater.logger = require('electron-log');
+// autoUpdater.logger.transports.file.level = 'info';
 
 // Setup events.
-autoUpdater.on('checking-for-update', () => {
-    console.log('Checkign for update...');
-});
-autoUpdater.on('update-available', (info) => {
-    console.log('Found update!');
-    console.log(`Version: ${info.version}, Release Date: ${info.releaseDate}`);
-});
-autoUpdater.on('update-not-available', () => {
-    console.log('No update available');
-});
-autoUpdater.on('download-progress', (progress) => {
-    console.log('Download progress: ', progress.percent);
-});
-autoUpdater.on('update-downloaded', () => {
-    console.log('Downlaoded update!!');
-    autoUpdater.quitAndInstall();
-});
-autoUpdater.on('error', (err) => {
-    console.log('Error: ', err);
-});
+// autoUpdater.on('checking-for-update', () => {
+//     console.log('Checkign for update...');
+// });
+// autoUpdater.on('update-available', (info) => {
+//     console.log('Found update!');
+//     console.log(`Version: ${info.version}, Release Date: ${info.releaseDate}`);
+//     autoUpdater.quitAndInstall();
+// });
+// autoUpdater.on('update-not-available', () => {
+//     console.log('No update available');
+// });
+// autoUpdater.on('download-progress', (progress) => {
+//     console.log('Download progress: ', progress.percent);
+// });
+// autoUpdater.on('update-downloaded', () => {
+//     console.log('Downlaoded update!!');
+//     autoUpdater.quitAndInstall();
+// });
+// autoUpdater.on('error', (err) => {
+//     console.log('Error: ', err);
+// });
 
 
 
@@ -361,9 +362,9 @@ const createAppMenu = () => {
 *************************/
 
 app.on('ready', () => {
-    if(!isDev) {
-        autoUpdater.checkForUpdates();
-    }
+    // if(!isDev) {
+    //     autoUpdater.checkForUpdates();
+    // }
 
     createWindow();
     createAppMenu();

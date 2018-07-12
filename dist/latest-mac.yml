@@ -1,10 +1,10 @@
-version: 1.4.0
+version: 1.4.2
 files:
-  - url: Noteworthy-1.4.0-mac.zip
-    sha512: mD/GWXS0DEPjtfYFD3xldyD84S8CH56t6BysQeMQg4f1eeVwbVjbe/WEGxzenN3Pf5sPi9vgnfUBgn5fTxhv7w==
-  - url: Noteworthy-1.4.0.dmg
-    sha512: +Eu3GkoFY4gTFv5cii8EuNRT/kSbwz35Ib8jNq9Urk3as9haQBR1j5b629V7SZU6zWmOxjkPdYRSRI7vtSoweQ==
-    size: 76740066
-path: Noteworthy-1.4.0-mac.zip
-sha512: mD/GWXS0DEPjtfYFD3xldyD84S8CH56t6BysQeMQg4f1eeVwbVjbe/WEGxzenN3Pf5sPi9vgnfUBgn5fTxhv7w==
-releaseDate: '2018-07-08T19:42:29.224Z'
+  - url: Noteworthy-1.4.2-mac.zip
+    sha512: KrrsXtVXDEzsfT6qCMOcL/MwSbXaS2CGCRN3WCVyvcZH0GvvJ13f6UbPz1yHZmampmypGHa3yOsIRlrAbdBIGw==
+  - url: Noteworthy-1.4.2.dmg
+    sha512: H5k5Cqu3omrYv0DNsJBAKsrbln0TfweRqF6RnuSME9JHwWMV3X0cIYW2m7sZi2qWVnPnTyzz5XwF0ioHhPufQQ==
+    size: 76712616
+path: Noteworthy-1.4.2-mac.zip
+sha512: KrrsXtVXDEzsfT6qCMOcL/MwSbXaS2CGCRN3WCVyvcZH0GvvJ13f6UbPz1yHZmampmypGHa3yOsIRlrAbdBIGw==
+releaseDate: '2018-07-11T02:16:32.070Z'

@@ -75,6 +75,6 @@ BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
     work.save(false);
     app.quit();
 });
-BrowserWindow.getFocusedWindow().on('check-updates', (event, command) => {
+// BrowserWindow.getFocusedWindow().on('check-updates', (event, command) => {
     
-});
+// });

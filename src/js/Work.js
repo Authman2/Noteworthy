@@ -12,6 +12,11 @@ const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
+const isDev = require('electron-is-dev');
+
+const app = require('electron').remote.app;
+const os = require('os');
+const storage = require('electron-json-storage');
 
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
 worker.addEventListener('message', (event) => {
@@ -25,8 +30,11 @@ worker.addEventListener('message', (event) => {
 *                       *
 *************************/
 
+// The storage object.
+const store = storage.getDefaultDataPath();
+
 // The notes that have been loaded from the database.
-var loadedData;
+var loadedData = {};
 var notebooks;
 var currentNotebook;
 var currentNote;
@@ -356,8 +364,12 @@ const handleSearch = () => {
 /** Does a final save by taking the json of the notes and notebooks and
 * saves them to a file. */
 const finalSave = (withAlert = true) => {
-    const data = JSON.stringify(loadedData);
-    fs.writeFileSync(`${__dirname}/../../Database.json`, data, 'utf8');
+    storage.set(`Noteworthy_${os.hostname()}`, loadedData, (err) => {
+        if(err) {
+            alertify.error('There was a problem saving the data.');
+            return;
+        }
+    });
 
     if(withAlert === true) {
         setTimeout(() => {
@@ -403,10 +415,19 @@ const saveNote = (withAlerts = true, updating = false) => {
 
 /** Loads the notebooks and notes from the local database. */
 const loadNotes = () => {
-    const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
-    const nbs = Object.values(json).filter((val, _, __) => val.pages);
-    loadedData = json;
-    notebooks = nbs;
+    storage.get(`Noteworthy_${os.hostname()}.json`, (err, data) => {
+        if(err) {
+            loadedData = {}
+            return;
+        }
+
+        const nbs = Object.values(data).filter((val, _, __) => val.pages);
+        loadedData = data;
+        notebooks = nbs;
+
+        populateNotebooks();
+        popoulateNotes(false);
+    });
 }
 
 
@@ -600,12 +621,17 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
         properties: ['openFile'],
         filters: [{name: 'nbackup', extensions: ['nbackup']}]
     }, (paths) => {
+        if(!paths) return;
         if(paths.length === 0) return;
 
         finalSave(false);
+        
         const data = JSON.parse(fs.readFileSync(paths[0], 'utf8'));
-        fs.writeFileSync(`${__dirname}/../../Database.json`, JSON.stringify(data), 'utf8');
-        loadNotes();
+        const nbs = Object.values(data).filter((val, _, __) => val.pages);
+        loadedData = data;
+        notebooks = nbs;
+
+        finalSave(false);
         populateNotebooks();
         alertify.success('Successfully loaded notebooks and notes from backup!');
     });
@@ -623,7 +649,7 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
         const allNotebooksAndNotes = snap.val();
 
         if(allNotebooksAndNotes == null) {
-            const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+            const json = loadedData;
             const outer = `{"${uid}": ${JSON.stringify(json)}}`;
             firebase.database().ref().set(JSON.parse(outer));
             return;
@@ -645,7 +671,8 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
         }
         
         // 2.) Save the local database to firebase by updating all the objects with ids.
-        const json = JSON.parse(fs.readFileSync(`${__dirname}/../../Database.json`));
+        finalSave(false);
+        const json = loadedData;
         const outer = `{"${uid}": ${JSON.stringify(json)}}`;
         firebase.database().ref().set(JSON.parse(outer));
 
