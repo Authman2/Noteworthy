@@ -364,7 +364,7 @@ const handleSearch = () => {
 /** Does a final save by taking the json of the notes and notebooks and
 * saves them to a file. */
 const finalSave = (withAlert = true) => {
-    storage.set(`Noteworthy_${os.hostname()}`, loadedData, (err) => {
+    storage.set(`NoteworthySaveData`, loadedData, (err) => {
         if(err) {
             alertify.error('There was a problem saving the data.');
             return;
@@ -415,7 +415,7 @@ const saveNote = (withAlerts = true, updating = false) => {
 
 /** Loads the notebooks and notes from the local database. */
 const loadNotes = () => {
-    storage.get(`Noteworthy_${os.hostname()}.json`, (err, data) => {
+    storage.get(`NoteworthySaveData.json`, (err, data) => {
         if(err) {
             loadedData = {}
             return;
@@ -677,6 +677,7 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
         firebase.database().ref().set(JSON.parse(outer));
 
         alertify.success('Synced!');
+        populateNotebooks();
     });
 });
 
