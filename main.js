@@ -228,6 +228,12 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('highlight');
         }
+    },{
+        label: 'Remove Highlight',
+        accelerator: 'CmdOrCtrl+Shift+H',
+        click: () => {
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('unhighlight');
+        }
     }]
 },{
     label: 'Account',
@@ -284,11 +290,13 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('open-note-view');
         }
-    },{
-        label: 'Open Developer Tools',
-        accelerator: 'CmdOrCtrl+T',
-        click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
-    }]
+    },
+    // {
+    //     label: 'Open Developer Tools',
+    //     accelerator: 'CmdOrCtrl+T',
+    //     click: () => { BrowserWindow.getFocusedWindow().webContents.openDevTools(); }
+    // }
+    ]
 },{
     label: 'Help',
     role: 'help',

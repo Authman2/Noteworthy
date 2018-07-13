@@ -58,6 +58,12 @@ tdService.addRule('', {
         return `<br>`;
     }
 })
+tdService.addRule('', {
+    filter: 'span',
+    replacement: function(content) {
+        return `==${content}==`;
+    }
+})
 const mdOnIt = new markDownOnIt({
     html: true,
     breaks: true,
@@ -795,6 +801,7 @@ module.exports = {
         const numberedListBtn = document.getElementById('numberedListBtn');
         const codeBtn = document.getElementById('codeBtn');
         const highlightBtn = document.getElementById('highlightBtn');
+        const unhighlightBtn = document.getElementById('unhighlightBtn');
         boldBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bold'); }
         italicBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('italic'); }
         underlineBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('underline'); }
@@ -805,6 +812,7 @@ module.exports = {
         numberedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('numbered-list'); }
         codeBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('code-segment'); }
         highlightBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('highlight'); }
+        unhighlightBtn.onclick =  () => { BrowserWindow.getFocusedWindow().emit('unhighlight'); }
 
         const wind = document.getElementById('contextMenu');
         wind.style.top = `${e.clientY - 10}px`;
@@ -827,6 +835,8 @@ module.exports = {
 
     /** Converts a Markdown string into HTML. */
     toHTML: (md) => {
-        return mdOnIt.render(md);
+        return mdOnIt.render(md)
+                    .replace(/<mark>/g, '<span style="background-color: yellow;">')
+                    .replace(/<\/mark>/g, '</span>');
     }
 }

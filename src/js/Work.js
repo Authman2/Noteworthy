@@ -12,10 +12,6 @@ const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
-const isDev = require('electron-is-dev');
-
-const app = require('electron').remote.app;
-const os = require('os');
 const storage = require('electron-json-storage');
 
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
@@ -382,7 +378,7 @@ const finalSave = (withAlert = true) => {
 * there is a copy on all devices. */
 const saveNote = (withAlerts = true, updating = false) => {
     if(currentNote == null) {
-        alertify.error('Try creating a page inside of a notebook to save.');
+        alertify.log('Try creating a page inside of a notebook to save.');
         return;
     }
 
@@ -584,14 +580,14 @@ BrowserWindow.getFocusedWindow().on('strikethrough', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
     if(currentNote == null) return;
-    const sel = document.getSelection();
-    const range = sel.getRangeAt(0);
-    const text = range.toString();
-    // const hl = document.createElement('mark');
-    // range.surroundContents(hl);
 
-    document.execCommand('insertHTML', false, `<mark>${text}</mark>`);
+    document.execCommand('backColor', false, 'yellow');
+    saveNote(false, true);
+});
+BrowserWindow.getFocusedWindow().on('unhighlight', (event, command) => {
+    if(currentNote == null) return;
 
+    document.execCommand('backColor', false, 'rgba(0,0,0,0)');
     saveNote(false, true);
 });
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
