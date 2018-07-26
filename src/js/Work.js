@@ -122,6 +122,7 @@ const init = (root, pageManager) => {
     // Load the notebooks and their notes.
     loadNotes();
     populateNotebooks();
+    updateFromSynced();
 }
 
 /** Gets the references to all of the variables. */
@@ -359,12 +360,17 @@ const handleSearch = () => {
 
 /** Does a final save by taking the json of the notes and notebooks and
 * saves them to a file. */
-const finalSave = (withAlert = true) => {
+const finalSave = (withAlert = true, then = () => {}) => {
     storage.set(`NoteworthySaveData`, loadedData, (err) => {
         if(err) {
             alertify.error('There was a problem saving the data.');
             return;
         }
+
+        // Sync to firebase so that there is a local copy.
+        syncToFirebase();
+
+        then();
     });
 
     if(withAlert === true) {
@@ -459,6 +465,46 @@ const addNote = (title) => {
     loadedData[currentNotebook.id].pages.push(randomID);
     popoulateNotes();
 }
+
+
+/** Tries to load an updated version of the database that is synced online.
+This should happen as soon as you open the app so you have the most recent
+changes. Then when you close the app it should sync them. */
+const updateFromSynced = () => {
+    const uid = firebase.auth().currentUser.uid;
+    firebase.database().ref().orderByKey().equalTo(uid).once('value', (snap) => {
+        const allNotebooksAndNotes = snap.val();
+
+        if(allNotebooksAndNotes == null) {
+            return;
+        }
+
+        // 1.) Get everything from the remote database and put it in the local database.
+        const all = Object.values(allNotebooksAndNotes[uid]);
+        const allNotebooks = all.filter((val, _, __) => val.pages);
+        const allNotes = all.filter((val, _, __) => val.notebook);
+        
+        // 2.) Check if the stuff you have now does not match up with what was
+        // in firebase. If it doesn't match up then you need to find a way to
+        // apply the changes from firebase to the local database.
+        for(var id in allNotebooks) {
+            
+        }
+        for(var id in allNotes) {
+            
+        }
+    });
+}
+
+/** Sync the notes to the firebase database. Basically happens whenever you
+do a final save. */
+const syncToFirebase = () => {
+    if(BrowserWindow.getFocusedWindow()) {
+        BrowserWindow.getFocusedWindow().emit('sync');
+    }
+}
+
+
 
 
 
@@ -606,7 +652,7 @@ BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
 BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
     if(!notebooks) { return; }
     
-    Globals.showBackupAlert(body, notebooks);
+    Globals.showBackupAlert(body, loadedData);
 });
 BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
     dialog.showOpenDialog(null, {
@@ -616,8 +662,6 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
         if(!paths) return;
         if(paths.length === 0) return;
 
-        finalSave(false);
-        
         const data = JSON.parse(fs.readFileSync(paths[0], 'utf8'));
         const nbs = Object.values(data).filter((val, _, __) => val.pages);
         loadedData = data;
@@ -635,42 +679,14 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
     if(!firebase.auth().currentUser) return;
     finalSave(false);
     alertify.log('Syncing...');
-
-    const uid = firebase.auth().currentUser.uid;
-    firebase.database().ref().orderByKey().equalTo(uid).once('value', (snap) => {
-        const allNotebooksAndNotes = snap.val();
-
-        if(allNotebooksAndNotes == null) {
-            const json = loadedData;
-            const outer = `{"${uid}": ${JSON.stringify(json)}}`;
-            firebase.database().ref().set(JSON.parse(outer));
-            return;
-        }
-
-        // 1.) Get everything from the remote database and put it in the local database.
-        const all = Object.values(allNotebooksAndNotes[uid]);
-        const allNotebooks = all.filter((val, _, __) => val.pages);
-        const allNotes = all.filter((val, _, __) => val.notebook);
         
-        for(var id in allNotebooks) {
-            loadedData[ allNotebooks[id].id ] = allNotebooks[id];
-        }
-        for(var id in allNotes) {
-            loadedData[ allNotes[id].id ] = allNotes[id];
-            
-            if(!loadedData[ allNotes[id].notebook ].pages.includes( allNotes[id].id ))
-                loadedData[ allNotes[id].notebook ].pages.push( allNotes[id].id );
-        }
-        
-        // 2.) Save the local database to firebase by updating all the objects with ids.
-        finalSave(false);
-        const json = loadedData;
-        const outer = `{"${uid}": ${JSON.stringify(json)}}`;
-        firebase.database().ref().set(JSON.parse(outer));
+    // Save the local database to firebase by updating all the objects with ids.
+    const json = loadedData;
+    const outer = `{"${uid}": ${JSON.stringify(json)}}`;
+    firebase.database().ref().set(JSON.parse(outer));
 
-        alertify.success('Synced!');
-        populateNotebooks();
-    });
+    alertify.success('Synced!');
+    populateNotebooks();
 });
 
 

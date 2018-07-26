@@ -222,7 +222,7 @@ const hideFindReplaceAlert = (root) => {
 }
 
 /** Shows the backup alert. */
-const showBackupAlert = (root, notebooks) => {
+const showBackupAlert = (root, dataToSave) => {
     const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/BackupAlert.html`, 'utf8');
     $('#root').prepend(alert);
 
@@ -251,7 +251,7 @@ const showBackupAlert = (root, notebooks) => {
         const path = locationField.value + '/Noteworthy';
         fs.mkdir(path, () => {
             // Write files for each note to this folder.
-            const localDatabase = JSON.parse(fs.readFileSync(`${__dirname}/Database.json`));
+            const localDatabase = dataToSave;
             const fileName = path + '/NoteworthyBackup' + Date.now() + '.nbackup';
             fs.writeFileSync(fileName, JSON.stringify(localDatabase), 'utf8');
 
