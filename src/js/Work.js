@@ -238,6 +238,7 @@ const popoulateNotes = (updating = false) => {
             titleField.value = val.title;
 
             contentField.innerHTML = Globals.toHTML(val.content);
+            resetChecks();
             toggleNotebooks();
         });
 
@@ -268,6 +269,7 @@ const popoulateNotes = (updating = false) => {
             titleField.value = val.title;
 
             contentField.innerHTML = Globals.toHTML(val.content);
+            resetChecks();
             toggleNotebooks();
         })
 
@@ -298,6 +300,7 @@ const handleSearch = () => {
             titleField.value = val.title;
 
             contentField.innerHTML = Globals.toHTML(val.content);
+            resetChecks();
             toggleNotebooks();
         });
 
@@ -500,10 +503,23 @@ const updateFromSynced = () => {
 do a final save. */
 const syncToFirebase = () => {
     if(BrowserWindow.getFocusedWindow()) {
-        BrowserWindow.getFocusedWindow().emit('sync');
+        BrowserWindow.getFocusedWindow().emit('sync-without-alerts');
     }
 }
 
+
+/** Resets the checkboxes. */
+const resetChecks = () => {
+    const checks = document.getElementsByClassName('checkbox');
+    for(var i = 0; i < checks.length; i++) {
+        const item = checks[i];
+        
+        item.onchange = () => {
+            item.setAttribute('checked', item.checked);
+            saveNote(false, true);
+        }
+    }
+}
 
 
 
@@ -539,7 +555,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
 
     if(findRepOpen === false) {
         Globals.showFindReplaceAlert(body, 
-                                    cntnt, 
+                                    cntnt,
                                     contentField, 
                                     () => { findRepOpen = false },
                                     (cont) => {
@@ -549,6 +565,7 @@ BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
     } else {
         Globals.hideFindReplaceAlert(root);
         contentField.innerHTML = Globals.toHTML(cntnt);
+        resetChecks();
         findRepOpen = false;
     }
 });
@@ -607,6 +624,10 @@ BrowserWindow.getFocusedWindow().on('bulleted-list', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('numbered-list', (event, command) => {
     document.execCommand('insertOrderedList');
+});
+BrowserWindow.getFocusedWindow().on('todo-list', (event, command) => {
+    document.execCommand('insertHTML', false, '<p><input class="checkbox" type="checkbox"><label>Checkbox Item</label></p><br/>');
+    resetChecks();
 });
 BrowserWindow.getFocusedWindow().on('code-segment', (event, command) => {
     const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
@@ -677,10 +698,9 @@ BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
 });
 BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
     if(!firebase.auth().currentUser) return;
-    finalSave(false);
-    alertify.log('Syncing...');
         
     // Save the local database to firebase by updating all the objects with ids.
+    const uid = firebase.auth().currentUser.uid;
     const json = loadedData;
     const outer = `{"${uid}": ${JSON.stringify(json)}}`;
     firebase.database().ref().set(JSON.parse(outer));
@@ -688,7 +708,17 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
     alertify.success('Synced!');
     populateNotebooks();
 });
+BrowserWindow.getFocusedWindow().on('sync-without-alerts', (event, command) => {
+    if(!firebase.auth().currentUser) return;
+        
+    // Save the local database to firebase by updating all the objects with ids.
+    const uid = firebase.auth().currentUser.uid;
+    const json = loadedData;
+    const outer = `{"${uid}": ${JSON.stringify(json)}}`;
+    firebase.database().ref().set(JSON.parse(outer));
 
+    populateNotebooks();
+});
 
 
 

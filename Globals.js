@@ -64,6 +64,12 @@ tdService.addRule('', {
         return `==${content}==`;
     }
 })
+// tdService.addRule('', {
+//     filter: 'input',
+//     replacement: function(content) {
+//         return `[ ] ${content}`;
+//     }
+// })
 const mdOnIt = new markDownOnIt({
     html: true,
     breaks: true,
@@ -79,7 +85,7 @@ const mdOnIt = new markDownOnIt({
 mdOnIt.use(require('markdown-it-mark'));
 mdOnIt.use(require('markdown-it-sub'));
 mdOnIt.use(require('markdown-it-sup'));
-mdOnIt.use(require('markdown-it-checkbox'));
+// mdOnIt.use(require('markdown-it-checkbox'));
 
 
 
@@ -393,11 +399,11 @@ const showCreateNewAlert = (root, newWhat = 'Notebook', then) => {
     const overlay = document.getElementById('overlay');
     titleField.focus();
     titleField.onkeydown = (e) => {
-        if(titleField.value === '') {
-            alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
-            return;
-        }
         if(e.keyCode === 13) {
+            if(titleField.value === '') {
+                alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
+                return;
+            }
             then(titleField.value);
             hideCreateNewAlert(root);
         }
@@ -799,6 +805,7 @@ module.exports = {
         const superscriptBtn = document.getElementById('superscriptBtn');
         const bulletedListBtn = document.getElementById('bulletedListBtn');
         const numberedListBtn = document.getElementById('numberedListBtn');
+        const todoList = document.getElementById('todoBtn');
         const codeBtn = document.getElementById('codeBtn');
         const highlightBtn = document.getElementById('highlightBtn');
         const unhighlightBtn = document.getElementById('unhighlightBtn');
@@ -810,6 +817,7 @@ module.exports = {
         superscriptBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('superscript'); }
         bulletedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('bulleted-list'); }
         numberedListBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('numbered-list'); }
+        todoList.onclick = () => { BrowserWindow.getFocusedWindow().emit('todo-list'); }
         codeBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('code-segment'); }
         highlightBtn.onclick = () => { BrowserWindow.getFocusedWindow().emit('highlight'); }
         unhighlightBtn.onclick =  () => { BrowserWindow.getFocusedWindow().emit('unhighlight'); }
@@ -829,14 +837,23 @@ module.exports = {
 
     /** Converts an HTML string into a Markdown string. */
     toMarkDown: (html) => {
-        return tdService.turndown(html);
+        const _html = html.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
+        const ret = tdService.turndown(_html);
+        return ret;
     },
 
 
     /** Converts a Markdown string into HTML. */
     toHTML: (md) => {
-        return mdOnIt.render(md)
+        const ret = mdOnIt.render(md)
                     .replace(/<mark>/g, '<span style="background-color: yellow;">')
-                    .replace(/<\/mark>/g, '</span>');
+                    .replace(/<\/mark>/g, '</span>')
+                    .replace(/id="checkbox[0-9]*"/g, '')
+                    .replace(/\[ \] /g, '<input class="checkbox" type="checkbox"> ')
+                    .replace(/\[x\] /g, '<input class="checkbox" type="checkbox" checked="true"> ');
+        return ret;
     }
 }
