@@ -13,6 +13,8 @@ const BrowserWindow = remote.BrowserWindow;
 const { dialog } = require('electron').remote;
 const alertify = require('alertify.js');
 const storage = require('electron-json-storage');
+const Moment = require('moment');
+const jsdiff = require('diff');
 
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
 worker.addEventListener('message', (event) => {
@@ -122,7 +124,6 @@ const init = (root, pageManager) => {
     // Load the notebooks and their notes.
     loadNotes();
     populateNotebooks();
-    updateFromSynced();
 }
 
 /** Gets the references to all of the variables. */
@@ -439,8 +440,13 @@ const loadNotes = () => {
 /** Adds a new notebook to the database. */
 const addNotebook = (title) => {
     const randomID = Globals.randomID();
-    const now = new Date();
-    const saveDate = [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDay(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()];
+    const now = Moment();
+    const saveDate = [now.year(),
+                    now.month(),
+                    now.day(),
+                    now.hours(),
+                    now.minutes(),
+                    now.seconds()];
     loadedData[randomID] = {
         id: randomID,
         title: title,
@@ -455,8 +461,13 @@ const addNotebook = (title) => {
 /** Adds a new note to a specific notebook in the database. */
 const addNote = (title) => {
     const randomID = Globals.randomID();
-    const now = new Date();
-    const saveDate = [now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDay(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()];
+    const now = Moment();
+    const saveDate = [now.year(),
+                    now.month(),
+                    now.day(),
+                    now.hours(),
+                    now.minutes(),
+                    now.seconds()];
     loadedData[randomID] = {
         id: randomID,
         title: title,
@@ -486,18 +497,23 @@ const updateFromSynced = () => {
         const all = Object.values(allNotebooksAndNotes[uid]);
         const allNotebooks = all.filter((val, _, __) => val.pages);
         const allNotes = all.filter((val, _, __) => val.notebook);
-        
-        // 2.) Check if the stuff you have now does not match up with what was
-        // in firebase. If it doesn't match up then you need to find a way to
-        // apply the changes from firebase to the local database.
+
         for(var id in allNotebooks) {
-            
+            const item = allNotebooks[id];
+            loadedData[item.id] = item;
         }
         for(var id in allNotes) {
-            
+            const item = allNotes[id];
+            loadedData[item.id].title = item.title;
+            loadedData[item.id].content = item.content;
         }
+        notebooks = Object.values(loadedData).filter((val) => val.pages);
+
+        populateNotebooks();
+        popoulateNotes(false);
     });
 }
+
 
 /** Sync the notes to the firebase database. Basically happens whenever you
 do a final save. */
@@ -696,7 +712,7 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
 BrowserWindow.getFocusedWindow().on('open-note-view', (event, command) => {
     toggleNotebooks();
 });
-BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
+BrowserWindow.getFocusedWindow().on('sync-to', (event, command) => {
     if(!firebase.auth().currentUser) return;
         
     // Save the local database to firebase by updating all the objects with ids.
@@ -707,6 +723,12 @@ BrowserWindow.getFocusedWindow().on('sync', (event, command) => {
 
     alertify.success('Synced!');
     populateNotebooks();
+});
+BrowserWindow.getFocusedWindow().on('sync-from', (event, command) => {
+    if(!firebase.auth().currentUser) return;
+        
+    updateFromSynced();
+    alertify.success('Synced!');
 });
 BrowserWindow.getFocusedWindow().on('sync-without-alerts', (event, command) => {
     if(!firebase.auth().currentUser) return;

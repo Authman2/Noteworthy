@@ -109,6 +109,10 @@
     background-color: #19488f;
 }
 
+#notebooksView > * {
+    cursor: default;
+    user-select: none;
+}
 #notebooksView {
     position: absolute;
     top: 0px;
@@ -379,3 +383,4 @@
     font-family: monospace;
     background-color: rgb(233, 233, 233);
 }
+

@@ -246,10 +246,16 @@ let template = [{
             }
         }
     },{
-        label: 'Sync',
+        label: 'Sync to Server',
         click: () => {
             if(eve !== null && eve !== undefined) 
-                BrowserWindow.getFocusedWindow().emit('sync');
+                BrowserWindow.getFocusedWindow().emit('sync-to');
+        }
+    },{
+        label: 'Sync from Server',
+        click: () => {
+            if(eve !== null && eve !== undefined) 
+                BrowserWindow.getFocusedWindow().emit('sync-from');
         }
     }, {
         label: 'Backup Notes',

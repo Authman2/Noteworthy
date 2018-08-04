@@ -8,6 +8,7 @@ const BrowserWindow = remote.BrowserWindow;
 var hljs = require('highlight.js');
 const turndown = require('turndown');
 const markDownOnIt = require('markdown-it');
+const Moment = require('moment');
 
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
@@ -653,7 +654,14 @@ module.exports = {
             created.className = 'notebooksTableCellCreateLabel';
             pages.className = 'notebooksTableCellPagesLabel';
             title.innerHTML = `${val.title}`;
-            const dString = new Date(Date.UTC(val.created[0], val.created[1], val.created[2], val.created[3], val.created[4], val.created[5])).toUTCString()
+            const dString = Moment({
+                                year: val.created[0],
+                                month: val.created[1],
+                                day: val.created[2],
+                                hours: val.created[3],
+                                minutes: val.created[4],
+                                seconds: val.created[5]
+                            }).toString();
             created.innerHTML = `${dString.substring(0, dString.length - 3)}`;
             pages.innerHTML = `Pages: ${val.pages.length}`;
             cell.appendChild(title);
@@ -832,6 +840,25 @@ module.exports = {
     hideContextMenu: (root) => {
         const alert = document.getElementById('contextMenu');
         if(alert) root.removeChild(alert);
+    },
+
+
+    /** Shows the diffing alert view. */
+    showDiffingAlert: (title, then) => {
+        const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/DiffAlert.html`, 'utf8');
+        $('#root').prepend(alert);
+
+        const diffTitle = document.getElementById('diff-alert-note-title');
+        const localBtn = document.getElementById('diff-alert-local-button');
+        const syncBtn = document.getElementById('diff-alert-sync-button');
+        diffTitle.innerHTML = title;
+
+        localBtn.onclick = () => {
+            then();
+        }
+        syncBtn.onclick = () => {
+            then();
+        }
     },
 
 

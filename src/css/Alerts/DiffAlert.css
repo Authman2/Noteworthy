@@ -1,0 +1,80 @@
+.diff-alert {
+    position: relative;
+    top: 0px;
+    width: 70vw;
+    height: 78vh;
+    z-index: 100000;    
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-radius: 10px;
+    background-color: white;
+    border: 3px solid lightgray;
+    box-shadow: 4px 4px 20px 2px rgb(0, 0, 0, 0.5);
+}
+
+.diff-alert-title {
+    position: relative;
+    top: -25px;
+    font-size: 16px;
+    font-weight: 200;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Avenir';
+}
+#diff-alert-note-title {
+    position: relative;
+    top: -50px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 200;
+    text-align: left;
+    padding-left: 20px;
+    font-family: 'Avenir';
+    color: rgb(148, 148, 148);
+}
+
+.diff-content {
+    position: relative;
+    top: -50px;
+    width: 95%;
+    height: 55%;
+    overflow: scroll;
+    margin-left: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: lightgray;
+}
+
+.diff-alert-button {
+    position: relative;
+    top: -50px;
+    width: 40%;
+    bottom: 20px;
+    height: 50px;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: default;
+    background: none;
+    font-size: 2.2vw;
+    font-weight: 200;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-family: 'Avenir';
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.2s;
+    background-color: rgb(192, 192, 192);
+    box-shadow: 2px 2px 20px 2px rgb(0, 0, 0, 0.3);
+}
+.diff-alert-button:hover {
+    background-color: #4078cc;
+}
+.diff-alert-button:active {
+    background-color: #2f5a99;
+}

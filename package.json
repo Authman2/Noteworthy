@@ -30,6 +30,7 @@
     "dependencies": {
         "alertify.js": "^1.0.12",
         "asar": "^0.13.0",
+        "diff": "^3.5.0",
         "dropbox": "^2.5.7",
         "electron-is-dev": "^0.3.0",
         "electron-json-storage": "^4.1.1",
@@ -47,7 +48,7 @@
         "markdown-it-mark": "^2.0.0",
         "markdown-it-sub": "^1.0.0",
         "markdown-it-sup": "^1.0.0",
-        "moment": "^2.21.0",
+        "moment": "^2.22.2",
         "nodemailer": "^4.4.0",
         "shelljs": "^0.7.8",
         "showdown": "^1.8.6",
