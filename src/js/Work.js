@@ -495,17 +495,11 @@ const updateFromSynced = () => {
 
         // 1.) Get everything from the remote database and put it in the local database.
         const all = Object.values(allNotebooksAndNotes[uid]);
-        const allNotebooks = all.filter((val, _, __) => val.pages);
-        const allNotes = all.filter((val, _, __) => val.notebook);
-
-        for(var id in allNotebooks) {
-            const item = allNotebooks[id];
+        
+        loadedData = {};
+        for(var id in all) {
+            const item = all[id];
             loadedData[item.id] = item;
-        }
-        for(var id in allNotes) {
-            const item = allNotes[id];
-            loadedData[item.id].title = item.title;
-            loadedData[item.id].content = item.content;
         }
         notebooks = Object.values(loadedData).filter((val) => val.pages);
 
