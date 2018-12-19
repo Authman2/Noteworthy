@@ -76,9 +76,9 @@ pageManager.start();
 *************************/
 
 BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
-    work.save(false, () => {
+    // work.save(false, () => {
         app.quit();
-    });
+    // });
 });
 // BrowserWindow.getFocusedWindow().on('check-updates', (event, command) => {
     

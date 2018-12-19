@@ -1,60 +1,10 @@
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-.contextMenu {
-    position: absolute;
-    z-index: 5;
-    left: 10px;
-    bottom: 50px;
-    width: 150px;
-    height: 125px;
-    color: black;
-    animation: fadeIn;
-    text-align: center;
-    animation-duration: 0.25s;
-    background-color: white;
-    transition-duration: 0.2s;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.context-menu {
+    height: 50px;
+    border-radius: 10px;
+    background-color: #60A4EB;
 }
 
-.contextMenuSection {
-    position: relative;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    margin-bottom: 10px;
-    /* background-color: orange; */
-}
-
-.contextMenuButton {
-    width: 20px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: none;
-    font-weight: 100;
-    margin-top: 7.5px;
-    margin-right: 10px;
-    border-radius: 5px;
-    padding-right: 5px;
-    text-decoration: none;
-    background-color: white;
-    color: rgb(141, 141, 141);
-}
-.contextMenuButton:hover {
-    color: rgb(82, 82, 82);
-}
-.contextMenuButton:active {
-    color: rgb(27, 27, 27);
-}
-#subscriptBtn {
-    position: relative;
-    top: 2px;
+.context-menu-item {
+    width: 50px;
+    height: 100%;
 }
