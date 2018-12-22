@@ -1,0 +1,42 @@
+.work-page {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    cursor: text;
+    height: calc(100% - 70px);
+}
+
+.title-field {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    background: none;
+    padding-top: 5px;
+    padding-left: 15px;
+    font-family: 'Avenir';
+    text-decoration: none;
+}
+.title-field::placeholder, .note-field::placeholder,
+.title-field::-webkit-input-placeholder, .title-field::-moz-placeholder {
+    color: rgb(124, 124, 124);
+}
+
+.note-field {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 15px;
+    color: black;
+    max-height: 88%;
+    font-size: 18px;
+    font-weight: 200;
+    background: none;
+    font-family: 'Avenir';
+    text-decoration: none;
+}

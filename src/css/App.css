@@ -31,13 +31,13 @@ body, html {
     border-bottom: 2px solid white;
 }
 
-::placeholder {
+.underneathInputField::placeholder {
     color: white;
 }
-:-moz-placeholder {
+.underneathInputField:-moz-placeholder {
     color: white;
 }
-::-webkit-input-placeholder {
+.underneathInputField::-webkit-input-placeholder {
     color: white;
 }
 
@@ -54,10 +54,20 @@ body, html {
     /* box-shadow: 2px 2px #6992d6; */
 }
 
+@keyframes action-alert-fade-in {
+    from {
+        opacity: 0;
+        bottom: -10px;
+    }
+    to {
+        opacity: 1;
+        bottom: 10px;
+    }
+}
 .action-alert {
     position: fixed;
     z-index: 6;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     color: white;
     font-size: 16px;
@@ -68,6 +78,7 @@ body, html {
     padding-right: 15px;
     padding-bottom: 7px;
     font-family: 'Avenir';
-    transform: translateX(-50%);
     background-color: gray;
+    transform: translateX(-50%);
+    animation: action-alert-fade-in 0.3s ease-out;
 }

@@ -280,7 +280,7 @@ let template = [{
         }
     },{
         label: 'Switch Context',
-        accelerator: 'CmdOrCtrl+I',
+        accelerator: 'CmdOrCtrl+L',
         click: () => {
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('switch-context');

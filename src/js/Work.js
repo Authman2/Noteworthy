@@ -37,6 +37,9 @@ var notebooks;
 var currentNotebook;
 var currentNote;
 
+// Button clicks.
+var cmdClicked = false;
+
 // The root body and the page manager.
 var body;
 var pager;
@@ -65,11 +68,22 @@ const init = (root, pageManager) => {
     pager = pageManager;
 
     Globals.loadHTMLInto('Work.html', body);
+
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+    const workPage = document.getElementById('work-page');
+    
+    // noteField.oninput = () => {
+    //     setTimeout(() => {
+    //         worker.postMessage(0);
+    //     }, 1500);
+    // }
+    document.onmousedown = (e) => {
+        if(e.target.id === 'work-page') noteField.focus();
+    }
     
     setupRefs();
     updateContextMenu();
-
-    showActionAlert('Saved!');
 }
 
 /** Gets the references to all of the variables. */
@@ -88,21 +102,25 @@ const updateContextMenu = () => {
         case Contexts.View:
             body.innerHTML += vcm;
             handleViewContextMenuActions();
+            showActionAlert('Switched to <b>View</b> Context', 'gray');
             break;
         case Contexts.Selection:
             body.innerHTML += secm;
             handleViewContextMenuActions();
             handleSelectionContextMenuActions();
+            showActionAlert('Switched to <b>Selection</b> Context', 'gray');
             break;
         case Contexts.Insert:
             body.innerHTML += icm;
             handleViewContextMenuActions();
             handleInsertContextMenuActions();
+            showActionAlert('Switched to <b>Insert</b> Context', 'gray');
             break;
         case Contexts.Settings:
             body.innerHTML += stcm;
             handleViewContextMenuActions();
             handleSettingsContextMenuActions();
+            showActionAlert('Switched to <b>Settings</b> Context', 'gray');
             break;
     }
 }
@@ -117,11 +135,24 @@ const updateContextMenu = () => {
 *************************/
 
 /** Shows the action alert with some text. */
-const showActionAlert = (text) => {
+const showActionAlert = (text, color) => {
+    $('.action-alert').remove();
+
     const alert = document.createElement('p');
     alert.className = 'action-alert';
     alert.innerHTML = text;
+    alert.style.backgroundColor = color;
     body.appendChild(alert);
+
+    setTimeout(() => {
+        $(alert).animate({
+            opacity: 0,
+            bottom: '-10px'
+        }, '0.3s', () => {
+            const children = [].slice.call(document.body.children);
+            if(children.includes(alert)) body.removeChild(alert);
+        })
+    }, 2500);
 }
 
 /** Handles actions on the View Context Menu. */
@@ -237,7 +268,7 @@ const handleSettingsContextMenuActions = () => {
 *                       *
 *************************/
 
-BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
+const switchContext = () => {
     switch(currentContext) {
         case Contexts.View:
             currentContext = Contexts.Selection;
@@ -252,6 +283,10 @@ BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
             currentContext = Contexts.View;
             break;
     }
+}
+
+BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
+    switchContext();
     updateContextMenu();
 })
 
