@@ -87,18 +87,6 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('share-email');
         }
-    },{
-        label: 'Export',
-        submenu: [{
-            label: 'Plain Text',
-            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-txt'); }
-        },{
-            label: 'Markdown',
-            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-md'); }
-        },{
-            label: 'HTML',
-            click: () => { if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('export-html'); }
-        }]
     }, {
         label: 'New Window',
         accelerator: 'CmdOrCtrl+Option+N',
@@ -228,12 +216,6 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('highlight');
         }
-    },{
-        label: 'Remove Highlight',
-        accelerator: 'CmdOrCtrl+Shift+H',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('unhighlight');
-        }
     }]
 },{
     label: 'Account',
@@ -246,13 +228,13 @@ let template = [{
             }
         }
     },{
-        label: 'Sync to Server',
+        label: 'Save Online',
         click: () => {
             if(eve !== null && eve !== undefined) 
                 BrowserWindow.getFocusedWindow().emit('sync-to');
         }
     },{
-        label: 'Sync from Server',
+        label: 'Load Online',
         click: () => {
             if(eve !== null && eve !== undefined) 
                 BrowserWindow.getFocusedWindow().emit('sync-from');
@@ -295,6 +277,13 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('open-note-view');
+        }
+    },{
+        label: 'Switch Context',
+        accelerator: 'CmdOrCtrl+I',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('switch-context');
         }
     },
     {

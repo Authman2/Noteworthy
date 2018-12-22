@@ -89,31 +89,43 @@ const updateContextMenu = () => {
             break;
         case Contexts.Selection:
             body.innerHTML += secm;
+            handleViewContextMenuActions();
+            handleSelectionContextMenuActions();
             break;
         case Contexts.Insert:
             body.innerHTML += icm;
+            handleViewContextMenuActions();
+            handleInsertContextMenuActions();
             break;
         case Contexts.Settings:
             body.innerHTML += stcm;
+            handleViewContextMenuActions();
+            handleSettingsContextMenuActions();
             break;
     }
 }
+
+
+
+
+/************************
+*                       *
+*       FUNCTIONS       *
+*                       *
+*************************/
+
 
 /** Handles actions on the View Context Menu. */
 const handleViewContextMenuActions = () => {
     const previousNoteButton = document.getElementById('vcm-previous-note-btn');
     const nextNoteButton = document.getElementById('vcm-next-note-btn');
     const newButton = document.getElementById('vcm-new-btn');
-    const saveButton = document.getElementById('vcm-save-btn');
     const shareButton = document.getElementById('vcm-share-btn');
     const notebooksButton = document.getElementById('vcm-notebooks-btn');
     const notesButton = document.getElementById('vcm-notes-btn');
 
     newButton.onclick = () => {
         
-    }
-    saveButton.onclick = () => {
-
     }
     shareButton.onclick = () => {
 
@@ -126,13 +138,76 @@ const handleViewContextMenuActions = () => {
     }
 }
 
+/** Handles actions on the View Context Menu. */
+const handleSelectionContextMenuActions = () => {
+    const boldBtn = document.getElementById('secm-bold-btn');
+    const italicBtn = document.getElementById('secm-italic-btn');
+    const underlineBtn = document.getElementById('secm-underline-btn');
+    const highlightBtn = document.getElementById('secm-highlight-btn');
+    const subscriptBtn = document.getElementById('secm-subscript-btn');
+    const superscriptBtn = document.getElementById('secm-superscript-btn');
 
+    boldBtn.onclick = () => {
+        
+    }
+    italicBtn.onclick = () => {
 
-/************************
-*                       *
-*       FUNCTIONS       *
-*                       *
-*************************/
+    }
+    underlineBtn.onclick = () => {
+
+    }
+    highlightBtn.onclick = () => {
+        
+    }
+    subscriptBtn.onclick = () => {
+        
+    }
+    superscriptBtn.onclick = () => {
+        
+    }
+}
+
+/** Handles actions on the View Context Menu. */
+const handleInsertContextMenuActions = () => {
+    const codeBtn = document.getElementById('icm-code-btn');
+    const unsortedBtn = document.getElementById('icm-unsorted-btn');
+    const sortedBtn = document.getElementById('icm-sorted-btn');
+    const checkboxBtn = document.getElementById('icm-checkbox-btn');
+    const imageBtn = document.getElementById('icm-image-btn');
+
+    codeBtn.onclick = () => {
+
+    }
+    unsortedBtn.onclick = () => {
+
+    }
+    sortedBtn.onclick = () => {
+
+    }
+    checkboxBtn.onclick = () => {
+
+    }
+    imageBtn.onclick = () => {
+
+    }
+}
+
+/** Handles actions on the View Context Menu. */
+const handleSettingsContextMenuActions = () => {
+    const accountBtn = document.getElementById('stcm-account-btn');
+    const saveOnlineBtn = document.getElementById('stcm-save-online-btn');
+    const loadOnlineBtn = document.getElementById('stcm-load-online-btn');
+
+    accountBtn.onclick = () => {
+
+    }
+    saveOnlineBtn.onclick = () => {
+
+    }
+    loadOnlineBtn.onclick = () => {
+
+    }
+}
 
 
 
@@ -152,6 +227,24 @@ const handleViewContextMenuActions = () => {
 *         EVENTS        *
 *                       *
 *************************/
+
+BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
+    switch(currentContext) {
+        case Contexts.View:
+            currentContext = Contexts.Selection;
+            break;
+        case Contexts.Selection:
+            currentContext = Contexts.Insert;
+            break;
+        case Contexts.Insert:
+            currentContext = Contexts.Settings;
+            break;
+        case Contexts.Settings:
+            currentContext = Contexts.View;
+            break;
+    }
+    updateContextMenu();
+})
 
 module.exports = {
     init: init
