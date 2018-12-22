@@ -11,8 +11,8 @@ body, html {
     z-index: 10000;
     user-select: none;
     -webkit-app-region: drag;
-    background-color: rgba(0, 0, 0, 0);
     transition-duration: 0.25s;
+    background-color: rgba(0, 0, 0, 0);
     transition-timing-function: ease-out;
 }
 
@@ -54,6 +54,20 @@ body, html {
     /* box-shadow: 2px 2px #6992d6; */
 }
 
-.alertButton {
-    
+.action-alert {
+    position: fixed;
+    z-index: 6;
+    bottom: 20px;
+    left: 50%;
+    color: white;
+    font-size: 16px;
+    font-weight: 200;
+    padding-top: 7px;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 7px;
+    font-family: 'Avenir';
+    transform: translateX(-50%);
+    background-color: gray;
 }

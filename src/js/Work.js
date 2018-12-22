@@ -68,6 +68,8 @@ const init = (root, pageManager) => {
     
     setupRefs();
     updateContextMenu();
+
+    showActionAlert('Saved!');
 }
 
 /** Gets the references to all of the variables. */
@@ -114,6 +116,13 @@ const updateContextMenu = () => {
 *                       *
 *************************/
 
+/** Shows the action alert with some text. */
+const showActionAlert = (text) => {
+    const alert = document.createElement('p');
+    alert.className = 'action-alert';
+    alert.innerHTML = text;
+    body.appendChild(alert);
+}
 
 /** Handles actions on the View Context Menu. */
 const handleViewContextMenuActions = () => {
