@@ -18,7 +18,7 @@ const jsdiff = require('diff');
 
 const worker = new Worker(`${__dirname}/AsyncCode.js`);
 worker.addEventListener('message', (event) => {
-    // if(currentNote) { saveNote(false, true); }
+    if(currentNote) { localSave(); }
 });
 
 
@@ -34,11 +34,9 @@ const store = storage.getDefaultDataPath();
 // The notes that have been loaded from the database.
 var loadedData = {};
 var notebooks;
+var notes;
 var currentNotebook;
 var currentNote;
-
-// Button clicks.
-var cmdClicked = false;
 
 // The root body and the page manager.
 var body;
@@ -73,17 +71,20 @@ const init = (root, pageManager) => {
     const noteField = document.getElementById('note-field');
     const workPage = document.getElementById('work-page');
     
-    // noteField.oninput = () => {
-    //     setTimeout(() => {
-    //         worker.postMessage(0);
-    //     }, 1500);
-    // }
+    noteField.oninput = () => {
+        setTimeout(() => {
+            worker.postMessage(0);
+        }, 1500);
+    }
     document.onmousedown = (e) => {
         noteField.focus();
+        if(e.clientY >= 250) { $('.notes-view').remove(); }
     }
     
     setupRefs();
     updateContextMenu();
+
+    loadNotes();
 }
 
 /** Gets the references to all of the variables. */
@@ -96,7 +97,7 @@ const setupRefs = () => {
 
 /** Updates the view depending on the type of context menu. */
 const updateContextMenu = () => {
-    $('.context-menu').remove();
+    $('.context-menu-holder').remove();
     
     switch(currentContext) {
         case Contexts.View:
@@ -122,6 +123,11 @@ const updateContextMenu = () => {
             handleSettingsContextMenuActions();
             showActionAlert('Switched to <b>Settings</b> Context', 'gray');
             break;
+    }
+
+    if(currentNote) {
+        const titleField = document.getElementById('title-field');
+        titleField.value = `${currentNote.title}`;
     }
 }
 
@@ -184,16 +190,22 @@ const handleViewContextMenuActions = () => {
     const notesButton = document.getElementById('vcm-notes-btn');
 
     newButton.onclick = () => {
-        
+        _newButton();
     }
     shareButton.onclick = () => {
-
+        _shareButton();
     }
     notebooksButton.onclick = () => {
         _notebooksButton();
     }
     notesButton.onclick = () => {
         _notesButton();
+    }
+    previousNoteButton.onclick = () => {
+
+    }
+    nextNoteButton.onclick = () => {
+
     }
 }
 
@@ -261,11 +273,112 @@ const handleSettingsContextMenuActions = () => {
 
     }
     saveOnlineBtn.onclick = () => {
-
+        onlineSave(true, () => {});
     }
     loadOnlineBtn.onclick = () => {
-
+        onlineLoad();
     }
+}
+
+/** Loads the notes from the local computer's file system. */
+const loadNotes = () => {
+    storage.get(`NoteworthySaveData.json`, (err, data) => {
+        if(err) {
+            loadedData = {}
+            return;
+        }
+
+        const nbs = Object.values(data).filter((val, _, __) => val.pages);
+        const nts = Object.values(data).filter((val, _, __) => val.notebook);
+        loadedData = data;
+        notebooks = nbs;
+        notes = nts;
+
+        if(notebooks.length > 0) currentNotebook = notebooks[0];
+    });
+}
+
+/** Opens a note and fills in the title and note fields. */
+const openNote = (note) => {
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+
+    titleField.value = note.title;
+    noteField.innerHTML = note.content;
+    $('.notes-view').remove();
+
+    showActionAlert(`Opened <b>${note.title}</b>`, '#60A4EB');
+}
+
+/** The local save. */
+const localSave = () => {
+    if(!currentNote) return;
+
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+
+    if(currentNote.id in loadedData) {
+        loadedData[currentNote.id].title = titleField.value;
+        loadedData[currentNote.id].content = noteField.innerHTML;
+    } else {
+        loadedData[currentNote.id] = {
+            id: currentNote.id,
+            title: titleField.value,
+            timestamp: currentNote.timestamp,
+            notebook: currentNotebook.id,
+            content: noteField.innerHTML,
+            creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
+        }
+    }
+    notebooks = Object.values(loadedData).filter((val) => val.pages);
+    notes = Object.values(loadedData).filter((val) => val.notebook);
+}
+
+/** The online save. */
+const onlineSave = (withAlert = false, then) => {
+    if(!firebase.auth().currentUser) return;
+    if(withAlert === true) showActionAlert('Saving...', 'gray');
+
+    storage.set(`NoteworthySaveData`, loadedData, (err) => {
+        if(err) {
+            alertify.error('There was a problem saving the data.');
+            return;
+        }
+        
+        // Save the local database to firebase by updating all the objects with ids.
+        const uid = firebase.auth().currentUser.uid;
+        const json = loadedData;
+        const outer = `{"${uid}": ${JSON.stringify(json)}}`;
+        firebase.database().ref().set(JSON.parse(outer));
+
+        if(withAlert === true) showActionAlert('Saved!', '#73BE4D');
+        then();
+    });
+}
+
+/** Loads the data from online. */
+const onlineLoad = () => {
+    showActionAlert('Loading...', 'gray');
+
+    // Sync to firebase so that there is a local copy.
+    const uid = firebase.auth().currentUser.uid;
+    firebase.database().ref().orderByKey().equalTo(uid).once('value', (snap) => {
+        const allNotebooksAndNotes = snap.val();
+        if(allNotebooksAndNotes == null) return;
+
+        // 1.) Get everything from the remote database and put it in the local database.
+        const all = Object.values(allNotebooksAndNotes[uid]);
+        
+        loadedData = {};
+        for(var id in all) {
+            const item = all[id];
+            loadedData[item.id] = item;
+        }
+        notebooks = Object.values(loadedData).filter((val) => val.pages);
+        notes = Object.values(loadedData).filter((val) => val.notebook);
+
+        showActionAlert('Loaded online copy of notes!', '#73BE4D');
+    });
 }
 
 
@@ -277,21 +390,41 @@ const handleSettingsContextMenuActions = () => {
 *************************/
 
 const _newButton = () => {
+    const randomID = Globals.randomID();
+    const now = Moment();
+    const saveDate = [now.year(), now.month(), now.day(), now.hours(), 
+                    now.minutes(), now.seconds()];
+    loadedData[randomID] = {
+        id: randomID,
+        title: '',
+        created: saveDate,
+        notebook: currentNotebook.id,
+        content: "",
+        creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
+    };
+    loadedData[currentNotebook.id].pages.push(randomID);
+    notebooks = Object.values(loadedData).filter((val, _, __) => val.pages);
+    notes = Object.values(loadedData).filter((val, _, __) => val.notebook);
 
+    currentNote = loadedData[randomID];
+
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+    titleField.value = '';
+    noteField.innerHTML = '';
+
+    showActionAlert(`New`, 'gray');
 }
-
 const _saveButton = () => {
-
+    localSave();
+    onlineSave(true, () => {});
 }
-
 const _printButton = () => {
 
 }
-
 const _shareButton = () => {
 
 }
-
 const _notebooksButton = () => {
     // Remove any exisiting containers.
     $('.notes-view').remove();
@@ -305,6 +438,7 @@ const _notebooksButton = () => {
         case Contexts.Settings: transition = -105; break;
     }
 
+    // Show all the notebooks.
     const nbbtn = document.getElementById('vcm-notebooks-btn');
     const container = document.createElement('div');
     container.className = 'notes-view';
@@ -318,15 +452,71 @@ const _notebooksButton = () => {
 
     const list = document.createElement('ul');
     list.className = 'notes-view-list';
-    list.innerHTML = `<li>A much longer title for testing</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li>`;
+    
+    // Make all the notebooks from the data.
+    for(var i = 0; i < notebooks.length; i++) {
+        const nb = notebooks[i];
+        const li = document.createElement('li');
+        li.innerHTML = `${nb.title}`;
+        li.onclick = () => {
+            currentNotebook = nb;
+            showActionAlert(`Current Notebook: <b>${nb.title}</b>`, '#60A4EB');
+        }
+
+        list.appendChild(li);
+    }
     
     container.appendChild(title);
     container.appendChild(list);
     body.appendChild(container);
 }
-
 const _notesButton = () => {
+    if(!currentNotebook) return;
 
+    // Remove any exisiting containers.
+    $('.notes-view').remove();
+
+    // Show the notes window.
+    var transition = -10;
+    switch(currentContext) {
+        case Contexts.View: transition = -10; break;
+        case Contexts.Selection: transition = -165; break;
+        case Contexts.Insert: transition = -138; break;
+        case Contexts.Settings: transition = -105; break;
+    }
+
+    // Show all the notebooks.
+    const nbbtn = document.getElementById('vcm-notebooks-btn');
+    const container = document.createElement('div');
+    container.className = 'notes-view';
+    container.style.top = '50px';
+    container.style.left = `${nbbtn.style.left}px`;
+    container.style.transform = `translateX(${transition}%)`;
+    
+    const title = document.createElement('p');
+    title.className = 'notes-view-title';
+    title.innerHTML = `${currentNotebook.title}`;
+
+    const list = document.createElement('ul');
+    list.className = 'notes-view-list';
+    
+    // Make all the notebooks from the data.
+    const _notes = notes.filter((note, _, __) => note.notebook === currentNotebook.id);
+    for(var i = 0; i < _notes.length; i++) {
+        const nt = _notes[i];
+        const li = document.createElement('li');
+        li.innerHTML = `${nt.title}`;
+        li.onclick = () => {
+            currentNote = nt;
+            openNote(nt);
+        }
+
+        list.appendChild(li);
+    }
+    
+    container.appendChild(title);
+    container.appendChild(list);
+    body.appendChild(container);
 }
 
 const _undoButton = () => { document.execCommand('undo'); }
@@ -343,12 +533,8 @@ const _codeButton = () => {
     const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
     document.execCommand('insertHTML', false, `<br>${code}<br>`);
 }
-const _bulletedListButton = () => {
-    document.execCommand('insertUnorderedList');
-}
-const _numberedListButton = () => {
-    document.execCommand('insertOrderedList');
-}
+const _bulletedListButton = () => { document.execCommand('insertUnorderedList'); }
+const _numberedListButton = () => { document.execCommand('insertOrderedList'); }
 const _checkboxButton = () => {
     document.execCommand('insertHTML', 
                         false, 
@@ -386,6 +572,27 @@ const _highlightButton = () => {
 const _subscriptButton = () => { document.execCommand('subscript'); }
 const _superscriptButton = () => { document.execCommand('superscript'); }
 
+const _backupButton = () => {
+
+}
+const _retrieveBackupButton = () => {
+    dialog.showOpenDialog(null, {
+        properties: ['openFile'],
+        filters: [{name: 'nbackup', extensions: ['nbackup']}]
+    }, (paths) => {
+        if(!paths) return;
+        if(paths.length === 0) return;
+
+        const data = JSON.parse(fs.readFileSync(paths[0], 'utf8'));
+        const nbs = Object.values(data).filter((val, _, __) => val.pages);
+        const nts = Object.values(data).filter((val, _, __) => val.notebook);
+        loadedData = data;
+        notebooks = nbs;
+        notes = nts;
+
+        showActionAlert('Successfully loaded all notebooks and notes from backup!', 'gray');
+    });
+}
 
 
 
@@ -487,15 +694,19 @@ BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
 });
 
 BrowserWindow.getFocusedWindow().on('save-online', (event, command) => {
+    _saveButton();
 });
 
 BrowserWindow.getFocusedWindow().on('load-online', (event, command) => {
+    onlineLoad();
 });
 
 BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
+    _backupButton();
 });
 
-BrowserWindow.getFocusedWindow().on('retrieve-backup', (event, command) => {
+BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
+    _retrieveBackupButton();
 });
 
 BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
@@ -504,5 +715,6 @@ BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
 })
 
 module.exports = {
-    init: init
+    init: init,
+    onlineSave: onlineSave
 }
