@@ -49,8 +49,7 @@
 }
 
 /* Sub and super scripts */
-sub,
-sup,
+sub,sup,
 span[style*="vertical-align:sub"], 
 span[style*="vertical-align:super"] {
     font-size: 10px;
@@ -73,4 +72,52 @@ img {
     left: 50%;
     width: 70%;
     transform: translateX(-50%);
+}
+
+
+.notes-view {
+    position: absolute;
+    left: 50%;
+    z-index: 4;
+    width: 130px;
+    /* max-height: 150px; */
+    border-radius: 0px 0px 10px 10px;
+    background-color: rgb(84, 152, 224);
+}
+.notes-view-title {
+    margin: 0px;
+    padding: 0px;
+    color: white;
+    font-size: 14px;
+    cursor: default;
+    font-weight: 200;
+    user-select: none;
+    padding-left: 5px;
+    font-family: 'Avenir';
+    text-decoration: underline;
+}
+.notes-view-list {
+    margin: 0px;
+    padding: 0px;
+    margin-top: 2px;
+    max-height: 150px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-decoration: none;
+}
+.notes-view-list > li {
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 200;
+    user-select: none;
+    font-family: 'Avenir';
+    list-style-type: none;
+}
+.notes-view-list > li:hover {
+    background-color: rgb(69, 134, 204);
+}
+.notes-view-list > li:nth-last-child(1) {
+    border-radius: 0px 0px 10px 10px;
 }

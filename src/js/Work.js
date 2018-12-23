@@ -135,6 +135,8 @@ const updateContextMenu = () => {
 *************************/
 
 const switchContext = () => {
+    $('.notes-view').remove();
+    
     switch(currentContext) {
         case Contexts.View:
             currentContext = Contexts.Selection;
@@ -188,10 +190,10 @@ const handleViewContextMenuActions = () => {
 
     }
     notebooksButton.onclick = () => {
-
+        _notebooksButton();
     }
     notesButton.onclick = () => {
-        
+        _notesButton();
     }
 }
 
@@ -287,6 +289,43 @@ const _printButton = () => {
 }
 
 const _shareButton = () => {
+
+}
+
+const _notebooksButton = () => {
+    // Remove any exisiting containers.
+    $('.notes-view').remove();
+
+    // Show the notes window.
+    var transition = -10;
+    switch(currentContext) {
+        case Contexts.View: transition = -10; break;
+        case Contexts.Selection: transition = -165; break;
+        case Contexts.Insert: transition = -138; break;
+        case Contexts.Settings: transition = -105; break;
+    }
+
+    const nbbtn = document.getElementById('vcm-notebooks-btn');
+    const container = document.createElement('div');
+    container.className = 'notes-view';
+    container.style.top = '50px';
+    container.style.left = `${nbbtn.style.left}px`;
+    container.style.transform = `translateX(${transition}%)`;
+    
+    const title = document.createElement('p');
+    title.className = 'notes-view-title';
+    title.innerHTML = 'Notebooks';
+
+    const list = document.createElement('ul');
+    list.className = 'notes-view-list';
+    list.innerHTML = `<li>A much longer title for testing</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li><li>Working</li>`;
+    
+    container.appendChild(title);
+    container.appendChild(list);
+    body.appendChild(container);
+}
+
+const _notesButton = () => {
 
 }
 
