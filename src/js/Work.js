@@ -79,7 +79,7 @@ const init = (root, pageManager) => {
     //     }, 1500);
     // }
     document.onmousedown = (e) => {
-        if(e.target.id === 'work-page') noteField.focus();
+        noteField.focus();
     }
     
     setupRefs();
@@ -133,6 +133,23 @@ const updateContextMenu = () => {
 *       FUNCTIONS       *
 *                       *
 *************************/
+
+const switchContext = () => {
+    switch(currentContext) {
+        case Contexts.View:
+            currentContext = Contexts.Selection;
+            break;
+        case Contexts.Selection:
+            currentContext = Contexts.Insert;
+            break;
+        case Contexts.Insert:
+            currentContext = Contexts.Settings;
+            break;
+        case Contexts.Settings:
+            currentContext = Contexts.View;
+            break;
+    }
+}
 
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color) => {
@@ -188,22 +205,22 @@ const handleSelectionContextMenuActions = () => {
     const superscriptBtn = document.getElementById('secm-superscript-btn');
 
     boldBtn.onclick = () => {
-        
+        _boldButton();
     }
     italicBtn.onclick = () => {
-
+        _italicButton();
     }
     underlineBtn.onclick = () => {
-
+        _underlineButton();
     }
     highlightBtn.onclick = () => {
-        
+        _highlightButton();
     }
     subscriptBtn.onclick = () => {
-        
+        _subscriptButton();
     }
     superscriptBtn.onclick = () => {
-        
+        _superscriptButton();
     }
 }
 
@@ -216,19 +233,19 @@ const handleInsertContextMenuActions = () => {
     const imageBtn = document.getElementById('icm-image-btn');
 
     codeBtn.onclick = () => {
-
+        _codeButton();
     }
     unsortedBtn.onclick = () => {
-
+        _bulletedListButton();
     }
     sortedBtn.onclick = () => {
-
+        _numberedListButton();
     }
     checkboxBtn.onclick = () => {
-
+        _checkboxButton();
     }
     imageBtn.onclick = () => {
-
+        _imageButton();
     }
 }
 
@@ -257,7 +274,78 @@ const handleSettingsContextMenuActions = () => {
 *                       *
 *************************/
 
+const _newButton = () => {
 
+}
+
+const _saveButton = () => {
+
+}
+
+const _printButton = () => {
+
+}
+
+const _shareButton = () => {
+
+}
+
+const _undoButton = () => { document.execCommand('undo'); }
+const _redoButton = () => { document.execCommand('redo'); }
+const _cutButton = () => { document.execCommand('cut'); }
+const _copyButton = () => { document.execCommand('copy'); }
+const _pasteButton = () => { document.execCommand('paste'); }
+const _selectAllButton = () => { document.execCommand('selectAll'); }
+
+const _findReplaceButton = () => {
+    
+}
+const _codeButton = () => {
+    const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
+    document.execCommand('insertHTML', false, `<br>${code}<br>`);
+}
+const _bulletedListButton = () => {
+    document.execCommand('insertUnorderedList');
+}
+const _numberedListButton = () => {
+    document.execCommand('insertOrderedList');
+}
+const _checkboxButton = () => {
+    document.execCommand('insertHTML', 
+                        false, 
+                        '<p><input class="checkbox" type="checkbox"><label>Checkbox Item</label></p><br/>');
+    
+    const checks = document.getElementsByClassName('checkbox');
+    for(var i = 0; i < checks.length; i++) {
+        const item = checks[i];
+        
+        item.onchange = () => {
+            item.setAttribute('checked', item.checked);
+        }
+    }
+}
+const _imageButton = () => {
+    const fileTask = document.createElement('input');
+    fileTask.type = 'file';
+    $(fileTask).trigger('click');
+    fileTask.onchange = (e) => {
+        const uploaded = fileTask.files[0];
+        if(uploaded) {
+            const img = `<br><img src='${uploaded.path}' alt='Image Not Found'><br>`;
+            document.execCommand('insertHTML', false, `${img}`);
+        }
+    }
+}
+
+const _boldButton = () => { document.execCommand('bold'); }
+const _italicButton = () => { document.execCommand('italic'); }
+const _underlineButton = () => { document.execCommand('underline'); }
+const _highlightButton = () => { 
+    document.execCommand('useCSS', false, false);
+    document.execCommand('hiliteColor', false, 'yellow');
+}
+const _subscriptButton = () => { document.execCommand('subscript'); }
+const _superscriptButton = () => { document.execCommand('superscript'); }
 
 
 
@@ -268,22 +356,108 @@ const handleSettingsContextMenuActions = () => {
 *                       *
 *************************/
 
-const switchContext = () => {
-    switch(currentContext) {
-        case Contexts.View:
-            currentContext = Contexts.Selection;
-            break;
-        case Contexts.Selection:
-            currentContext = Contexts.Insert;
-            break;
-        case Contexts.Insert:
-            currentContext = Contexts.Settings;
-            break;
-        case Contexts.Settings:
-            currentContext = Contexts.View;
-            break;
-    }
-}
+BrowserWindow.getFocusedWindow().on('new', (event, command) => {
+    _newButton();
+});
+
+BrowserWindow.getFocusedWindow().on('save', (event, command) => {
+    _saveButton();
+});
+
+BrowserWindow.getFocusedWindow().on('print', (event, command) => {
+    _printButton();
+});
+
+BrowserWindow.getFocusedWindow().on('share', (event, command) => {
+    _shareButton();
+});
+
+BrowserWindow.getFocusedWindow().on('undo', (event, command) => {
+    _undoButton();
+});
+
+BrowserWindow.getFocusedWindow().on('redo', (event, command) => {
+    _redoButton();
+});
+
+BrowserWindow.getFocusedWindow().on('cut', (event, command) => {
+    _cutButton();
+});
+
+BrowserWindow.getFocusedWindow().on('copy', (event, command) => {
+    _copyButton();
+});
+
+BrowserWindow.getFocusedWindow().on('paste', (event, command) => {
+    _pasteButton();
+});
+
+BrowserWindow.getFocusedWindow().on('select-all', (event, command) => {
+    _selectAllButton();
+});
+
+BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
+    _findReplaceButton();
+});
+
+BrowserWindow.getFocusedWindow().on('code-segment', (event, command) => {
+    _codeButton();
+});
+
+BrowserWindow.getFocusedWindow().on('bulleted-list', (event, command) => {
+    _bulletedListButton();
+});
+
+BrowserWindow.getFocusedWindow().on('numbered-list', (event, command) => {
+    _numberedListButton();
+});
+
+BrowserWindow.getFocusedWindow().on('checkbox', (event, command) => {
+    _checkboxButton();
+});
+
+BrowserWindow.getFocusedWindow().on('image', (event, command) => {
+    _imageButton();
+});
+
+BrowserWindow.getFocusedWindow().on('bold', (event, command) => {
+    _boldButton();
+});
+
+BrowserWindow.getFocusedWindow().on('italic', (event, command) => {
+    _italicButton();
+});
+
+BrowserWindow.getFocusedWindow().on('underline', (event, command) => {
+    _underlineButton();
+});
+
+BrowserWindow.getFocusedWindow().on('highlight', (event, command) => {
+    _highlightButton();
+});
+
+BrowserWindow.getFocusedWindow().on('subscript', (event, command) => {
+    _subscriptButton();
+});
+
+BrowserWindow.getFocusedWindow().on('superscript', (event, command) => {
+    _superscriptButton();
+});
+
+BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
+});
+
+BrowserWindow.getFocusedWindow().on('save-online', (event, command) => {
+});
+
+BrowserWindow.getFocusedWindow().on('load-online', (event, command) => {
+});
+
+BrowserWindow.getFocusedWindow().on('backup', (event, command) => {
+});
+
+BrowserWindow.getFocusedWindow().on('retrieve-backup', (event, command) => {
+});
 
 BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
     switchContext();

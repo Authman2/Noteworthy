@@ -67,6 +67,13 @@ global.sharedObject = {
 let template = [{
     label: 'File',
     submenu: [{
+        label: 'New',
+        accelerator: 'CmdOrCtrl+N',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('new');
+        }
+    },{
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: () => {
@@ -85,7 +92,7 @@ let template = [{
         accelerator: 'CmdOrCtrl+Option+S',
         click: () => {
             if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('share-email');
+                BrowserWindow.getFocusedWindow().emit('share');
         }
     }, {
         label: 'New Window',
@@ -147,45 +154,7 @@ let template = [{
         }
     }]
 },{
-    label: 'Insert',
-    submenu: [{
-        label: 'Subscript',
-        accelerator: 'CmdOrCtrl+Option+6',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('subscript');
-        }
-    },{
-        label: 'Superscript',
-        accelerator: 'CmdOrCtrl+Shift+6',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('superscript');
-        }
-    },{
-        label: 'Bulleted List',
-        accelerator: 'CmdOrCtrl+Shift+B',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('bulleted-list');
-        }
-    },{
-        label: 'Numbered List',
-        accelerator: 'CmdOrCtrl+Shift+N',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('numbered-list');
-        }
-    },{
-        label: 'Code Segment',
-        accelerator: 'CmdOrCtrl+Shift+C',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('code-segment');
-        }
-    }]
-},{
-    label: 'Format',
+    label: 'Selection',
     submenu: [{
         label: 'Bold',
         accelerator: 'CmdOrCtrl+B',
@@ -205,20 +174,64 @@ let template = [{
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
         }
     },{
-        label: 'Strikethrough',
-        accelerator: 'CmdOrCtrl+Shift+S',
-        click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('strikethrough');
-        }
-    },{
         label: 'Highlight',
         accelerator: 'CmdOrCtrl+H',
         click: () => {
             if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('highlight');
         }
+    },{
+        label: 'Subscript',
+        accelerator: 'CmdOrCtrl+Option+6',
+        click: () => {
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('subscript');
+        }
+    },{
+        label: 'Superscript',
+        accelerator: 'CmdOrCtrl+Shift+6',
+        click: () => {
+            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('superscript');
+        }
     }]
 },{
-    label: 'Account',
+    label: 'Insert',
+    submenu: [{
+        label: 'Code',
+        accelerator: 'CmdOrCtrl+Shift+C',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('code-segment');
+        }
+    },{
+        label: 'Bulleted List',
+        accelerator: 'CmdOrCtrl+Shift+B',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('bulleted-list');
+        }
+    },{
+        label: 'Numbered List',
+        accelerator: 'CmdOrCtrl+Shift+I',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('numbered-list');
+        }
+    },{
+        label: 'Checkbox',
+        accelerator: 'CmdOrCtrl+Shift+B',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('checkbox');
+        }
+    },{
+        label: 'Image',
+        accelerator: 'CmdOrCtrl+Shift+M',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('image');
+        }
+    }]
+},{
+    label: 'Settings',
     submenu: [{
         label: 'Account',
         accelerator: 'CmdOrCtrl+Shift+A',
@@ -231,13 +244,13 @@ let template = [{
         label: 'Save Online',
         click: () => {
             if(eve !== null && eve !== undefined) 
-                BrowserWindow.getFocusedWindow().emit('sync-to');
+                BrowserWindow.getFocusedWindow().emit('save-online');
         }
     },{
         label: 'Load Online',
         click: () => {
             if(eve !== null && eve !== undefined) 
-                BrowserWindow.getFocusedWindow().emit('sync-from');
+                BrowserWindow.getFocusedWindow().emit('load-online');
         }
     }, {
         label: 'Backup Notes',

@@ -3,22 +3,26 @@
     top: 50px;
     width: 100%;
     cursor: text;
+    overflow: hidden;
     height: calc(100% - 70px);
 }
 
 .title-field {
-    width: 100%;
+    position: fixed;
+    left: 50%;
+    top: 80px;
+    width: 96%;
     height: 50px;
     border: none;
     outline: none;
+    padding: 15px;
     color: black;
     font-size: 24px;
-    font-weight: bold;
     background: none;
-    padding-top: 5px;
-    padding-left: 15px;
+    font-weight: bold;
     font-family: 'Avenir';
     text-decoration: none;
+    transform: translateX(-50%);
 }
 .title-field::placeholder, .note-field::placeholder,
 .title-field::-webkit-input-placeholder, .title-field::-moz-placeholder {
@@ -26,17 +30,47 @@
 }
 
 .note-field {
-    position: absolute;
-    top: 50px;
-    width: 100%;
+    position: fixed;
+    top: 136px;
+    left: 50%;
+    width: 96%;
     border: none;
     outline: none;
     padding: 15px;
     color: black;
-    max-height: 88%;
-    font-size: 18px;
+    max-height: 87%;
+    font-size: 16px;
     font-weight: 200;
     background: none;
+    overflow-y: scroll;
     font-family: 'Avenir';
     text-decoration: none;
+    transform: translateX(-50%);
+}
+
+/* Sub and super scripts */
+sub,
+sup,
+span[style*="vertical-align:sub"], 
+span[style*="vertical-align:super"] {
+    font-size: 10px;
+}
+
+/* Code segments */
+.code-segment {
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    font-weight: 100;
+    white-space: pre-wrap;
+    font-family: monospace;
+    background-color: lightgray;
+}
+
+/* Images */
+img {
+    position: relative;
+    left: 50%;
+    width: 70%;
+    transform: translateX(-50%);
 }
