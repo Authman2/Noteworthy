@@ -5,16 +5,12 @@ const alertify = require('alertify.js');
 const nodemailer = require('nodemailer');
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
-var hljs = require('highlight.js');
-const turndown = require('turndown');
-const markDownOnIt = require('markdown-it');
 const Moment = require('moment');
+const { dialog } = require('electron').remote;
+const turndown = require('turndown');
 
 const config = require(__dirname + '/creds.json');
 firebase.initializeApp(config);
-
-// Find and Replace.
-var findIndex = 0;
 
 // Replace all on strings.
 String.prototype.replaceAll = function(search, replacement) {
@@ -65,474 +61,6 @@ tdService.addRule('', {
         return `==${content}==`;
     }
 })
-// tdService.addRule('', {
-//     filter: 'input',
-//     replacement: function(content) {
-//         return `[ ] ${content}`;
-//     }
-// })
-const mdOnIt = new markDownOnIt({
-    html: true,
-    breaks: true,
-    highlight: function(str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-            try {
-                return hljs.highlight(lang, str).value;
-            } catch (__) {}
-        }
-        return '';
-    }
-});
-mdOnIt.use(require('markdown-it-mark'));
-mdOnIt.use(require('markdown-it-sub'));
-mdOnIt.use(require('markdown-it-sup'));
-// mdOnIt.use(require('markdown-it-checkbox'));
-
-
-
-
-/** Shows the account alert. */
-const showConfirmAlert = (root, title, yes) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ConfirmAlert.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const titleField = document.getElementById('confirmAlertTitle');
-    const yesBtn = document.getElementById('confirmYesButton');
-    const noBtn = document.getElementById('confirmNoButton');
-
-    titleField.innerHTML = `${title}`;
-    yesBtn.onclick = () => {
-        yes();
-        hideConfirmAlert(root);
-    }
-    noBtn.onclick = () => {
-        hideConfirmAlert(root);
-    }
-    overlay.onclick = () => {
-        hideConfirmAlert(root);
-    }
-}
-
-/** Hides the account alert. */
-const hideConfirmAlert = (root) => {
-    const alert = document.getElementById('confirmAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the find replace alert. */
-const showFindReplaceAlert = (root, content, contentField, then, replaceFunc) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/FindReplace.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const frWindow = document.getElementById('findReplaceAlert');
-    frWindow.offsetTop = 270;
-    findIndex = 0;
-
-    const closeBtn = document.getElementById('closeFindReplaceButton');
-    const findField = document.getElementById('findField');
-    const replaceField = document.getElementById('replaceField');
-
-    const previousBtn = document.getElementById('previousButton');
-    const nextBtn = document.getElementById('nextButton');
-    const replaceBtn = document.getElementById('replaceButton');
-    const replaceAllBtn = document.getElementById('replaceAllButton');
-
-    closeBtn.onclick = () => {
-        contentField.innerHTML = mdOnIt.render(content);
-        hideFindReplaceAlert(root);
-        then();
-    }
-    previousBtn.onclick = () => {
-        const search = findField.value;
-        var copy = content;
-        
-        // 1.) Get the next index of the search starting from the end
-        // of the previous search.
-        const foundIndex = content.substring(0,findIndex).lastIndexOf(search, findIndex);
-        const endIndex = foundIndex + search.length;
-        findIndex = foundIndex+1;
-        
-        // 2.) Once you have the index, edit the content field and run
-        // the callback with the edited markdown so that it can be
-        // rendered in the content area.
-        copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
-        contentField.innerHTML = mdOnIt.render(copy);
-
-        // 3.) Scroll to that element.
-        const element = document.getElementById('findReplaceHighlight');
-        if(element) {
-            const elementTop = element.offsetTop;
-            contentField.scrollTop = elementTop - 50;
-        }
-    }
-    nextBtn.onclick = () => {
-        const search = findField.value;
-        var copy = content;
-        
-        // 1.) Get the next index of the search starting from the end
-        // of the previous search.
-        const foundIndex = content.indexOf(search, findIndex);
-        const endIndex = foundIndex + search.length;
-        findIndex = foundIndex+1;
-        
-        // 2.) Once you have the index, edit the content field and run
-        // the callback with the edited markdown so that it can be
-        // rendered in the content area.
-        copy = `${copy.substring(0, foundIndex)}<mark id='findReplaceHighlight'>${copy.substring(foundIndex, endIndex)}</mark>${copy.substring(endIndex)}`;
-        contentField.innerHTML = mdOnIt.render(copy);
-
-        // 3.) Scroll to that element.
-        const element = document.getElementById('findReplaceHighlight');
-        if(element) {
-            const elementTop = element.offsetTop;
-            contentField.scrollTop = elementTop - 50;
-        }
-    }
-    replaceBtn.onclick = () => {
-        const replace = replaceField.value;
-        
-        // 1.) Get the string at the find index. Then replace it with
-        // the replace text. Only do this is there is a highlighted element.
-        const element = document.getElementById('findReplaceHighlight');
-        if(!element) return;
-
-        // 2.) Replace the content string and refresh the content field.
-        content = `${content.substring(0, findIndex-1)}${replace}${content.substring(findIndex + element.innerHTML.length)}`;
-        contentField.innerHTML = mdOnIt.render(content);
-        replaceFunc(content);
-    }
-    replaceAllBtn.onclick = () => {
-        const replace = replaceField.value;
-        
-        // 1.) Get the string at the find index. Then replace it with
-        // the replace text. Only do this is there is a highlighted element.
-        const element = document.getElementById('findReplaceHighlight');
-        if(!element) return;
-
-        // 2.) Replace the content string and refresh the content field.
-        content = content.replaceAll(element.innerHTML, replace);
-        contentField.innerHTML = mdOnIt.render(content);
-        replaceFunc(content);
-    }
-}
-
-/** Hides the find replace alert. */
-const hideFindReplaceAlert = (root) => {
-    const alert = document.getElementById('findReplaceAlert');
-    alert.style.bottom = '0px';
-    alert.style.opacity = '0';
-    setTimeout(() => {
-        root.removeChild(alert);
-    }, 100);
-}
-
-/** Shows the backup alert. */
-const showBackupAlert = (root, dataToSave) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/BackupAlert.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const locationField = document.getElementById('backupLocationField');
-    locationField.onfocus = () => {
-        const { dialog } = require('electron').remote;
-        dialog.showOpenDialog(null, {
-            properties: ['openDirectory']
-        }, (paths) => {
-            if(paths !== undefined) {
-                locationField.value = paths[0];
-            }
-            locationField.blur();
-        });
-    }
-
-    const backupBtn = document.getElementById('backupButton');
-    const overlay = document.getElementById('overlay');
-    backupBtn.onclick = () => {
-        if(locationField.value === '') {
-            alertify.error('You must enter a valid backup location.');
-            return;
-        }
-                
-        // Create a folder for the notes.
-        const path = locationField.value + '/Noteworthy';
-        fs.mkdir(path, () => {
-            // Write files for each note to this folder.
-            const localDatabase = dataToSave;
-            const fileName = path + '/NoteworthyBackup' + Date.now() + '.nbackup';
-            fs.writeFileSync(fileName, JSON.stringify(localDatabase), 'utf8');
-
-            hideBackupAlert(root);
-            alertify.success('All notebooks and notes were backed up successfully!');
-        });
-    }
-    overlay.onclick = () => {
-        hideBackupAlert(root);
-    }
-}
-
-/** Hides the backup alert. */
-const hideBackupAlert = (root) => {
-    const alert = document.getElementById('backupAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the share alert. */
-const showShareAlert = (root, note, noteHTML) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ShareAlert.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const shareBtn = document.getElementById('shareButton');
-
-    const fromField = document.getElementById('shareFromField');
-    const passwordField = document.getElementById('sharePasswordField');
-    const toField = document.getElementById('shareToField');
-    const overlay = document.getElementById('overlay');
-    
-    if(firebase.auth().currentUser) {
-        const user = firebase.auth().currentUser;
-        fromField.value = `${user.email}`;
-    }
-
-    shareBtn.onclick = () => {
-        if(fromField.value === '' || passwordField.value === '' || toField.value === '') {
-            alertify.error('You must enter an email and password to share a note.');
-            return;
-        }
-
-        const transport = nodemailer.createTransport({
-            service: 'Gmail',
-            secure: 'false',
-            auth: {
-                user: fromField.value,
-                pass: passwordField.value,
-            },
-            tls: {
-                rejectUnauthorized: false,
-            }
-        });
-        transport.verify((err, success) => {
-            if(err) {
-                alertify.error('You are not able to send an email from this app due to your current email security rules');
-                return;
-            }
-
-            transport.sendMail({
-                from: fromField.value,
-                to: toField.value,
-                subject: note.title,
-                text: note.content,
-                html: noteHTML
-            }, (err2) => {
-                if(err2) { alertify.error('There was an error sharing this note'); return; }
-                alertify.success(`Shared ${note.title} with ${toField.value}!`);
-            })
-        });
-        hideShareAlert(root);
-    }
-    overlay.onclick = () => {
-        hideShareAlert(root);
-    }
-}
-
-/** Hides the share alert. */
-const hideShareAlert = (root) => {
-    const alert = document.getElementById('shareAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the account alert. */
-const showAccountAlert = (root, logoutFunc) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/AccountAlert.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const resetBtn = document.getElementById('sendResetButton');
-    const logoutBtn = document.getElementById('logoutButton');
-
-    const emailField = document.getElementById('accountEmailField');
-    const _ = document.getElementById('accountPasswordField');
-    const overlay = document.getElementById('overlay');
-    
-    if(firebase.auth().currentUser) {
-        const user = firebase.auth().currentUser;
-        emailField.value = `${user.email}`;
-    }
-
-    resetBtn.onclick = () => {
-        firebase.auth().sendPasswordResetEmail(emailField.value);
-        hideAccountAlert(root);
-        alertify.success('Sent password reset email!');
-    }
-    logoutBtn.onclick = () => {
-        logoutFunc();
-        hideAccountAlert(root);
-    }
-    overlay.onclick = () => {
-        hideAccountAlert(root);
-    }
-}
-
-/** Hides the account alert. */
-const hideAccountAlert = (root) => {
-    const alert = document.getElementById('accountAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the create new alert. */
-const showCreateNewAlert = (root, newWhat = 'Notebook', then) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/CreateNew.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const title = document.getElementById('createTitle');
-    const createBtn = document.getElementById('createNewButton');
-    const desc = document.getElementById('createNewDescription');
-    title.innerHTML = `New ${newWhat}`;
-    createBtn.innerHTML = `Create New ${newWhat}`;
-    desc.innerHTML = `Enter a name for your new ${newWhat.toLowerCase()}`;
-
-    const titleField = document.getElementById('createNewField');
-    const overlay = document.getElementById('overlay');
-    titleField.focus();
-    titleField.onkeydown = (e) => {
-        if(e.keyCode === 13) {
-            if(titleField.value === '') {
-                alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
-                return;
-            }
-            then(titleField.value);
-            hideCreateNewAlert(root);
-        }
-    }
-    createBtn.onclick = () => {
-        if(titleField.value === '') {
-            alertify.error(`You must enter a non-empty name for your ${newWhat.toLowerCase()}`);
-            return;
-        }
-        then(titleField.value);
-        hideCreateNewAlert(root);
-    }
-    overlay.onclick = () => {
-        hideCreateNewAlert(root);
-    }
-}
-
-/** Hides the create new alert. */
-const hideCreateNewAlert = (root) => {
-    const alert = document.getElementById('createNewAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the forgot password alert. */
-const showForgotPasswordAlert = (root) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/ForgotPassword.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const emailField = document.getElementById('resetPasswordField');
-    const sendEmailBtn = document.getElementById('sendPasswordResetButton');
-    const overlay = document.getElementById('overlay');
-    sendEmailBtn.onclick = () => {
-        firebase.auth().sendPasswordResetEmail(emailField.value);
-        hideForgotPasswordAlert(root);
-        alertify.success('Sent password reset email!');
-    }
-    overlay.onclick = () => {
-        hideForgotPasswordAlert(root);
-    }
-}
-
-/** Hides the forgot password alert. */
-const hideForgotPasswordAlert = (root) => {
-    const alert = document.getElementById('forgotPasswordAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the login error alert. */
-const showLoginErrorAlert = (root, error) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/LoginError.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const desc = document.getElementById('loginErrorDescription');
-    desc.innerHTML = `${error}`;
-
-    const closeBtn = document.getElementById('closeLoginErrorButton');
-    const overlay = document.getElementById('overlay');
-    closeBtn.onclick = () => {
-        hideLoginErrorAlert(root);
-    }
-    overlay.onclick = () => {
-        hideLoginErrorAlert(root);
-    }
-}
-
-/** Hides the login error alert. */
-const hideLoginErrorAlert = (root) => {
-    const alert = document.getElementById('loginErrorAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the sign up error alert. */
-const showSignUpErrorAlert = (root, error) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/SignUpError.html`, 'utf8');
-    $('#root').prepend(alert);
-
-    const desc = document.getElementById('signUpErrorDescription');
-    desc.innerHTML = `${error}`;
-
-    const closeBtn = document.getElementById('closeSignUpErrorButton');
-    const overlay = document.getElementById('overlay');
-    closeBtn.onclick = () => {
-        hideSignUpErrorAlert(root);
-    }
-    overlay.onclick = () => {
-        hideSignUpErrorAlert(root);
-    }
-}
-
-/** Hides the sign up alert. */
-const hideSignUpErrorAlert = (root) => {
-    const alert = document.getElementById('signUpErrorAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-/** Shows the created account alert. */
-const showCreatedAccountAlert = (root, then) => {
-    const alert = fs.readFileSync(`${__dirname}/src/html/Alerts/CreatedAccount.html`, 'utf8');
-    $('#root').prepend(alert);
-    
-    const closeBtn = document.getElementById('getStartedButton');
-    const overlay = document.getElementById('overlay');
-    closeBtn.onclick = () => {
-        hideCreatedAccountAlert(root);
-        then();
-    }
-    overlay.onclick = () => {
-        hideCreatedAccountAlert(root);
-    }
-}
-
-/** Hides the sign up alert. */
-const hideCreatedAccountAlert = (root) => {
-    const alert = document.getElementById('createdAccountAlert');
-    const overlay = document.getElementById('overlay');
-    root.removeChild(alert);
-    root.removeChild(overlay);
-}
-
-
 
 
 
@@ -580,66 +108,130 @@ module.exports = {
     },
 
 
-    /** Shows the forgot password alert. */
-    showForgotPasswordAlert: showForgotPasswordAlert,
+    /** Shows the new alert. */
+    showNewAlert: (body, then) => {
+        $('.action-alert').remove();
 
-    /** Hides the forgot password alert. */
-    hideForgotPasswordAlert: hideForgotPasswordAlert,
+        const file = fs.readFileSync(__dirname + '/src/html/alerts/NewAlert.html', 'utf8');
+        const div = document.createElement('div');
+        div.innerHTML = file;
+        body.appendChild(div.firstChild);
 
-    /** Shows the login error alert. */
-    showLoginErrorAlert: showLoginErrorAlert,
+        const titleField = document.getElementById('new-alert-input');
+        const notebookOption = document.getElementById('new-alert-notebook-option');
+        const noteOption = document.getElementById('new-alert-note-option');
+        const submitButton = document.getElementById('new-alert-submit');
+        const closeButton = document.getElementsByClassName('new-alert-close')[0];
 
-    /** Hides the login error alert. */
-    hideLoginErrorAlert: hideLoginErrorAlert,
+        submitButton.innerHTML = 'Create Notebook';
+        noteOption.style.backgroundColor = 'white';
+        noteOption.style.border = '1px solid #60A4EB';
+        noteOption.style.color = '#60A4EB';
 
-    /** Shows the sign up error alert. */
-    showSignUpErrorAlert: showSignUpErrorAlert,
+        titleField.oninput = () => {
+            if(titleField.value === '') {
+                submitButton.style.opacity = '0.4';
+                submitButton.disabled = true;
+                submitButton.style.cursor = 'default';
+            } else {
+                submitButton.style.opacity = '1';
+                submitButton.disabled = false;
+                submitButton.style.cursor = 'pointer';
+            }
+        }
+        titleField.oninput();
 
-    /** Hides the sign up error alert. */
-    hideSignUpErrorAlert: hideSignUpErrorAlert,
+        notebookOption.onclick = () => {
+            noteOption.style.backgroundColor = 'white';
+            noteOption.style.border = '1px solid #60A4EB';
+            noteOption.style.color = '#60A4EB';
+            notebookOption.style.backgroundColor = '#60A4EB';
+            notebookOption.style.border = 'unset';
+            notebookOption.style.color = 'white';
+            submitButton.innerHTML = 'Create Notebook';
+        }
+        noteOption.onclick = () => {
+            notebookOption.style.backgroundColor = 'white';
+            notebookOption.style.border = '1px solid #60A4EB';
+            notebookOption.style.color = '#60A4EB';
+            noteOption.style.backgroundColor = '#60A4EB';
+            noteOption.style.border = 'unset';
+            noteOption.style.color = 'white';
+            submitButton.innerHTML = 'Create Note';
+        }
+        closeButton.onclick = () => {
+            const objs = document.getElementsByClassName('new-alert');
+            for(var i = 0; i < objs.length; i++) {
+                objs[i].remove();
+            }
+        }
+        submitButton.onclick = () => {
+            if(notebookOption.style.backgroundColor !== 'white') { then(0, titleField.value); }
+            else { then(1, titleField.value); }
+            const objs = document.getElementsByClassName('new-alert');
+            for(var i = 0; i < objs.length; i++) {
+                objs[i].remove();
+            }
+        }
+    },
 
-    /** Shows the created account alert. */
-    showCreatedAccountAlert: showCreatedAccountAlert,
-
-    /** Hides the created account alert. */
-    hideCreatedAccountAlert: hideCreatedAccountAlert,
-
-    /** Shows the create new alert. */
-    showCreateNewAlert: showCreateNewAlert,
-
-    /** Hides the create new alert. */
-    hideCreateNewAlert: hideCreateNewAlert,
-
-    /** Shows the account alert. */
-    showAccountAlert: showAccountAlert,
-
-    /** Hides the account alert. */
-    hideAccountAlert: hideAccountAlert,
 
     /** Shows the share alert. */
-    showShareAlert: showShareAlert,
+    showShareAlert: (body, title, content, then) => {
+        $('.action-alert').remove();
 
-    /** Hides the account alert. */
-    hideShareAlert: hideShareAlert,
+        const file = fs.readFileSync(__dirname + '/src/html/alerts/ShareAlert.html', 'utf8');
+        const div = document.createElement('div');
+        div.innerHTML = file;
+        body.appendChild(div.firstChild);
 
-    /** Shows the backup alert. */
-    showBackupAlert: showBackupAlert,
+        const textBtn = document.getElementById('share-alert-text');
+        const mdBtn = document.getElementById('share-alert-md');
+        const htmlBtn = document.getElementById('share-alert-html');
+        const closeButton = document.getElementsByClassName('share-alert-close')[0];
 
-    /** Hides the backup alert. */
-    hideBackupAlert: hideBackupAlert,
-
-    /** Shows the find replace alert. */
-    showFindReplaceAlert: showFindReplaceAlert,
-
-    /** Hides the find replace alert. */
-    hideFindReplaceAlert: hideFindReplaceAlert,
-
-    /** Shows the confirm alert. */
-    showConfirmAlert: showConfirmAlert,
-
-    /** Hides the confirm alert. */
-    hideConfirmAlert: hideConfirmAlert,
-
+        textBtn.onclick = () => {
+            const toExport = content;
+            dialog.showSaveDialog(null, {
+                title: `${title}.txt`,
+                filters: [{name: 'txt', extensions: ['txt']}]
+            }, (filename) => {
+                fs.writeFileSync(filename, toExport, 'utf8');
+                then(filename);
+            });
+        }
+        mdBtn.onclick = () => {
+            const _html = content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
+            const md = tdService.turndown(_html);
+            const toExport = md;
+            dialog.showSaveDialog(null, {
+                title: `${title}.md`,
+                filters: [{name: 'md', extensions: ['md']}]
+            }, (filename) => {
+                fs.writeFileSync(filename, toExport, 'utf8');
+                then(filename);
+            });
+        }
+        htmlBtn.onclick = () => {
+            const toExport = content;
+            dialog.showSaveDialog(null, {
+                title: `${title}.html`,
+                filters: [{name: 'html', extensions: ['html']}]
+            }, (filename) => {
+                fs.writeFileSync(filename, toExport, 'utf8');
+                then(filename);
+            });
+        }
+        closeButton.onclick = () => {
+            const objs = document.getElementsByClassName('share-alert');
+            for(var i = 0; i < objs.length; i++) {
+                objs[i].remove();
+            }
+        }
+    }
 
     
 }

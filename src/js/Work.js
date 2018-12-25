@@ -390,30 +390,56 @@ const onlineLoad = () => {
 *************************/
 
 const _newButton = () => {
-    const randomID = Globals.randomID();
-    const now = Moment();
-    const saveDate = [now.year(), now.month(), now.day(), now.hours(), 
-                    now.minutes(), now.seconds()];
-    loadedData[randomID] = {
-        id: randomID,
-        title: '',
-        created: saveDate,
-        notebook: currentNotebook.id,
-        content: "",
-        creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
-    };
-    loadedData[currentNotebook.id].pages.push(randomID);
-    notebooks = Object.values(loadedData).filter((val, _, __) => val.pages);
-    notes = Object.values(loadedData).filter((val, _, __) => val.notebook);
+    Globals.showNewAlert(body, (type, title) => {
+        if(type === 0) {
+            const randomID = Globals.randomID();
+            const now = Moment();
+            const saveDate = [now.year(),
+                            now.month(),
+                            now.day(),
+                            now.hours(),
+                            now.minutes(),
+                            now.seconds()];
+            loadedData[randomID] = {
+                id: randomID,
+                title: title,
+                created: saveDate,
+                pages: [],
+                creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
+            };
+            notebooks = Object.values(loadedData).filter((val, _, __) => val.pages);
 
-    currentNote = loadedData[randomID];
+            currentNotebook = loadedData[randomID];
 
-    const titleField = document.getElementById('title-field');
-    const noteField = document.getElementById('note-field');
-    titleField.value = '';
-    noteField.innerHTML = '';
+            showActionAlert(`Created a new notebook called <b>${title}</b>`, 'gray');
+            return;
+        } else if(type === 1) {
+            const randomID = Globals.randomID();
+            const now = Moment();
+            const saveDate = [now.year(), now.month(), now.day(), now.hours(), 
+                            now.minutes(), now.seconds()];
+            loadedData[randomID] = {
+                id: randomID,
+                title: title,
+                created: saveDate,
+                notebook: currentNotebook.id,
+                content: "",
+                creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
+            };
+            loadedData[currentNotebook.id].pages.push(randomID);
+            notebooks = Object.values(loadedData).filter((val, _, __) => val.pages);
+            notes = Object.values(loadedData).filter((val, _, __) => val.notebook);
 
-    showActionAlert(`New`, 'gray');
+            currentNote = loadedData[randomID];
+
+            const titleField = document.getElementById('title-field');
+            const noteField = document.getElementById('note-field');
+            titleField.value = title;
+            noteField.innerHTML = '';
+
+            showActionAlert(`Created a new note called <b>${title}</b>`, 'gray');
+        }
+    });
 }
 const _saveButton = () => {
     localSave();
@@ -423,7 +449,16 @@ const _printButton = () => {
 
 }
 const _shareButton = () => {
+    if(!currentNote) {
+        showActionAlert('Select a note to share', '#ea4d4d');
+        return;
+    }
 
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+    Globals.showShareAlert(body, titleField.value, noteField.innerHTML, (filename) => {
+        showActionAlert(`Exported to <b>${filename}</b>`, '#73BE4D');
+    });
 }
 const _notebooksButton = () => {
     // Remove any exisiting containers.
@@ -573,7 +608,22 @@ const _subscriptButton = () => { document.execCommand('subscript'); }
 const _superscriptButton = () => { document.execCommand('superscript'); }
 
 const _backupButton = () => {
+    const { dialog } = require('electron').remote;
+    dialog.showOpenDialog(null, {
+        properties: ['openDirectory']
+    }, (paths) => {
+        if(paths === undefined) return;
+            
+        // Create a folder for the notes.
+        const path = paths[0] + '/Noteworthy';
+        fs.mkdir(path, () => {
+            // Write files for each note to this folder.
+            const fileName = path + '/NoteworthyBackup' + Date.now() + '.nbackup';
+            fs.writeFileSync(fileName, JSON.stringify(loadedData), 'utf8');
 
+            showActionAlert('Exported all notebooks and notes to backup file!', '#73BE4D');
+        });
+    });
 }
 const _retrieveBackupButton = () => {
     dialog.showOpenDialog(null, {
