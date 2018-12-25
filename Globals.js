@@ -108,6 +108,34 @@ module.exports = {
     },
 
 
+    /** Shows the password reset alert. */
+    showPasswordResetAlert: (body, then) => {
+        $('.action-alert').remove();
+
+        const file = fs.readFileSync(__dirname + '/src/html/alerts/ForgotPassword.html', 'utf8');
+        const div = document.createElement('div');
+        div.innerHTML = file;
+        body.appendChild(div.firstChild);
+
+        const emailField = document.getElementById('reset-password-field');
+        const sendEmailBtn = document.getElementById('forgot-password-alert-reset');
+        const closeButton = document.getElementsByClassName('account-alert-close')[0];
+
+        sendEmailBtn.onclick = () => {
+            if(emailField.value === '') { then(0); return; }
+
+            firebase.auth().sendPasswordResetEmail(emailField.value);
+            then(1);
+            closeButton.onclick();
+        }
+        closeButton.onclick = () => {
+            const objs = document.getElementsByClassName('forgot-password-alert');
+            for(var i = 0; i < objs.length; i++) {
+                objs[i].remove();
+            }
+        }
+    },
+
     /** Shows the new alert. */
     showNewAlert: (body, then) => {
         $('.action-alert').remove();
@@ -227,6 +255,43 @@ module.exports = {
         }
         closeButton.onclick = () => {
             const objs = document.getElementsByClassName('share-alert');
+            for(var i = 0; i < objs.length; i++) {
+                objs[i].remove();
+            }
+        }
+    },
+
+
+    /** Shows the account alert. */
+    showAccountAlert: (body, then) => {
+        $('.action-alert').remove();
+
+        const file = fs.readFileSync(__dirname + '/src/html/alerts/AccountAlert.html', 'utf8');
+        const div = document.createElement('div');
+        div.innerHTML = file;
+        body.appendChild(div.firstChild);
+
+        const emailField = document.getElementById('account-alert-email-input');
+        const resetBtn = document.getElementById('account-alert-reset');
+        const logoutBtn = document.getElementById('account-alert-logout');
+        const closeButton = document.getElementsByClassName('account-alert-close')[0];
+
+        const user = firebase.auth().currentUser;
+        emailField.value = `${user.email}`;
+        emailField.disabled = true;
+
+        resetBtn.onclick = () => {
+            firebase.auth().sendPasswordResetEmail(emailField.value);
+            closeButton.onclick();
+            then(0);
+        }
+        logoutBtn.onclick = () => {
+            firebase.auth().signOut()
+                            .then(() => { then(1); })
+                            .catch((err) => { return });
+        }
+        closeButton.onclick = () => {
+            const objs = document.getElementsByClassName('account-alert');
             for(var i = 0; i < objs.length; i++) {
                 objs[i].remove();
             }

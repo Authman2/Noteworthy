@@ -81,6 +81,27 @@ const setupRefs = () => {
 *                       *
 *************************/
 
+/** Shows the action alert with some text. */
+const showActionAlert = (text, color) => {
+    $('.action-alert').remove();
+
+    const alert = document.createElement('p');
+    alert.className = 'action-alert';
+    alert.innerHTML = text;
+    alert.style.backgroundColor = color;
+    body.appendChild(alert);
+
+    setTimeout(() => {
+        $(alert).animate({
+            opacity: 0,
+            bottom: '-10px'
+        }, '0.3s', () => {
+            const children = [].slice.call(document.body.children);
+            if(children.includes(alert)) body.removeChild(alert);
+        })
+    }, 2500);
+}
+
 /** Handles logging in and going to the work page. */
 const handleLogin = () => {
     const email = emailField.value;
@@ -151,9 +172,14 @@ const handleSignUp = () => {
 
 /** Brings up an alert to reset the password. */
 const handleForgotPassword = () => {
-    Globals.showForgotPasswordAlert(body);
+    Globals.showPasswordResetAlert(body, (type) => {
+        if(type === 0) {
+            showActionAlert('Enter your email to reset your password', '#ea4d4d');
+        } else {
+            showActionAlert('Sent password reset email', '#73BE4D');
+        }
+    });
 }
-
 
 /** Animates away this home page. */
 const animateAwayPage = (then) => {

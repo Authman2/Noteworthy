@@ -71,10 +71,12 @@ const init = (root, pageManager) => {
     const noteField = document.getElementById('note-field');
     const workPage = document.getElementById('work-page');
     
-    noteField.oninput = () => {
-        setTimeout(() => {
-            worker.postMessage(0);
-        }, 1500);
+    document.oninput = (e) => {
+        if(e.target.id === 'note-field') {
+            setTimeout(() => {
+                worker.postMessage(0);
+            }, 1500);
+        }
     }
     document.onmousedown = (e) => {
         noteField.focus();
@@ -84,7 +86,12 @@ const init = (root, pageManager) => {
     setupRefs();
     updateContextMenu();
 
-    loadNotes();
+    loadNotes(() => {
+        const previousNoteButton = document.getElementById('vcm-previous-note-btn');
+        const nextNoteButton = document.getElementById('vcm-next-note-btn');
+        const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+        updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
+    });
 }
 
 /** Gets the references to all of the variables. */
@@ -96,7 +103,7 @@ const setupRefs = () => {
 }
 
 /** Updates the view depending on the type of context menu. */
-const updateContextMenu = () => {
+const updateContextMenu = (updateQuickMove = false) => {
     $('.context-menu-holder').remove();
     
     switch(currentContext) {
@@ -128,6 +135,47 @@ const updateContextMenu = () => {
     if(currentNote) {
         const titleField = document.getElementById('title-field');
         titleField.value = `${currentNote.title}`;
+    }
+    
+    if(updateQuickMove === true) {
+        const previousNoteButton = document.getElementById('vcm-previous-note-btn');
+        const nextNoteButton = document.getElementById('vcm-next-note-btn');
+        const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+        updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
+    }
+}
+
+/** Updates the previous and next buttons for notes. */
+const updateNotesQuickMove = (previousNoteButton, nextNoteButton, currentNotes) => {
+    const index = currentNote ? currentNotes.indexOf(currentNote) : 0;
+    
+    if(currentNotes.length <= 1) {
+        previousNoteButton.disabled = true;
+        previousNoteButton.style.opacity = 0.3;
+        previousNoteButton.style.cursor = 'pointer';
+        nextNoteButton.disabled = true;
+        nextNoteButton.style.opacity = 0.3;
+        nextNoteButton.style.cursor = 'default';
+    } else {
+
+        if(index <= 0) {
+            previousNoteButton.disabled = true;
+            previousNoteButton.style.opacity = 0.3;
+            previousNoteButton.style.cursor = 'default';
+        } else {
+            previousNoteButton.disabled = false;
+            previousNoteButton.style.opacity = 1;
+            previousNoteButton.style.cursor = 'pointer';
+        }
+        if(index >= currentNotes.length - 1) {
+            nextNoteButton.disabled = true;
+            nextNoteButton.style.opacity = 0.3;
+            nextNoteButton.style.cursor = 'default';
+        } else {
+            nextNoteButton.disabled = false;
+            nextNoteButton.style.opacity = 1;
+            nextNoteButton.style.cursor = 'pointer';
+        }
     }
 }
 
@@ -182,6 +230,8 @@ const showActionAlert = (text, color) => {
 
 /** Handles actions on the View Context Menu. */
 const handleViewContextMenuActions = () => {
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
     const previousNoteButton = document.getElementById('vcm-previous-note-btn');
     const nextNoteButton = document.getElementById('vcm-next-note-btn');
     const newButton = document.getElementById('vcm-new-btn');
@@ -202,10 +252,32 @@ const handleViewContextMenuActions = () => {
         _notesButton();
     }
     previousNoteButton.onclick = () => {
+        const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+        const index = currentNote ? currentNotes.indexOf(currentNote) : 1;
+        
+        if(index - 1 >= 0) {
+            currentNote = currentNotes[index - 1];
+            titleField.value = currentNote.title;
+            noteField.innerHTML = currentNote.content;
+            showActionAlert(`Opened <b>${currentNote.title}</b>`, '#60A4EB');
+        }
 
+        // Update the previous and next buttons.
+        updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
     }
     nextNoteButton.onclick = () => {
+        const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+        const index = currentNote ? currentNotes.indexOf(currentNote) : 1;
+        
+        if(index + 1 < currentNotes.length) {
+            currentNote = currentNotes[index + 1];
+            titleField.value = currentNote.title;
+            noteField.innerHTML = currentNote.content;
+            showActionAlert(`Opened <b>${currentNote.title}</b>`, '#60A4EB');
+        }
 
+        // Update the previous and next buttons.
+        updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
     }
 }
 
@@ -270,7 +342,7 @@ const handleSettingsContextMenuActions = () => {
     const loadOnlineBtn = document.getElementById('stcm-load-online-btn');
 
     accountBtn.onclick = () => {
-
+        _accountButton();
     }
     saveOnlineBtn.onclick = () => {
         onlineSave(true, () => {});
@@ -281,7 +353,7 @@ const handleSettingsContextMenuActions = () => {
 }
 
 /** Loads the notes from the local computer's file system. */
-const loadNotes = () => {
+const loadNotes = (then) => {
     storage.get(`NoteworthySaveData.json`, (err, data) => {
         if(err) {
             loadedData = {}
@@ -295,6 +367,7 @@ const loadNotes = () => {
         notes = nts;
 
         if(notebooks.length > 0) currentNotebook = notebooks[0];
+        if(then) then();
     });
 }
 
@@ -308,6 +381,12 @@ const openNote = (note) => {
     $('.notes-view').remove();
 
     showActionAlert(`Opened <b>${note.title}</b>`, '#60A4EB');
+
+    // Update the previous and next buttons.
+    const previousNoteButton = document.getElementById('vcm-previous-note-btn');
+    const nextNoteButton = document.getElementById('vcm-next-note-btn');
+    const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+    updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
 }
 
 /** The local save. */
@@ -332,6 +411,13 @@ const localSave = () => {
     }
     notebooks = Object.values(loadedData).filter((val) => val.pages);
     notes = Object.values(loadedData).filter((val) => val.notebook);
+    
+    storage.set(`NoteworthySaveData`, loadedData, (err) => {
+        if(err) {
+            showActionAlert('There was a problem saving the data.', '#ea4d4d');
+            return;
+        }
+    });
 }
 
 /** The online save. */
@@ -341,7 +427,7 @@ const onlineSave = (withAlert = false, then) => {
 
     storage.set(`NoteworthySaveData`, loadedData, (err) => {
         if(err) {
-            alertify.error('There was a problem saving the data.');
+            showActionAlert('There was a problem saving the data.', '#ea4d4d');
             return;
         }
         
@@ -446,7 +532,7 @@ const _saveButton = () => {
     onlineSave(true, () => {});
 }
 const _printButton = () => {
-
+    window.print();
 }
 const _shareButton = () => {
     if(!currentNote) {
@@ -561,9 +647,6 @@ const _copyButton = () => { document.execCommand('copy'); }
 const _pasteButton = () => { document.execCommand('paste'); }
 const _selectAllButton = () => { document.execCommand('selectAll'); }
 
-const _findReplaceButton = () => {
-    
-}
 const _codeButton = () => {
     const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
     document.execCommand('insertHTML', false, `<br>${code}<br>`);
@@ -607,6 +690,16 @@ const _highlightButton = () => {
 const _subscriptButton = () => { document.execCommand('subscript'); }
 const _superscriptButton = () => { document.execCommand('superscript'); }
 
+const _accountButton = () => {
+    Globals.showAccountAlert(body, (type) => {
+        if(type === 0) {
+            showActionAlert('Password reset email sent!', 'gray');
+        } else if(type === 1) {
+            const home = require(`${__dirname}/../js/Home.js`);
+            pager.goTo(home);
+        }
+    })
+}
 const _backupButton = () => {
     const { dialog } = require('electron').remote;
     dialog.showOpenDialog(null, {
@@ -692,10 +785,6 @@ BrowserWindow.getFocusedWindow().on('select-all', (event, command) => {
     _selectAllButton();
 });
 
-BrowserWindow.getFocusedWindow().on('find-replace', (event, command) => {
-    _findReplaceButton();
-});
-
 BrowserWindow.getFocusedWindow().on('code-segment', (event, command) => {
     _codeButton();
 });
@@ -741,6 +830,7 @@ BrowserWindow.getFocusedWindow().on('superscript', (event, command) => {
 });
 
 BrowserWindow.getFocusedWindow().on('goto-account', (event, command) => {
+    _accountButton();
 });
 
 BrowserWindow.getFocusedWindow().on('save-online', (event, command) => {
@@ -761,7 +851,43 @@ BrowserWindow.getFocusedWindow().on('retrieve-backups', (event, command) => {
 
 BrowserWindow.getFocusedWindow().on('switch-context', (event, command) => {
     switchContext();
-    updateContextMenu();
+    updateContextMenu(true);
+})
+
+BrowserWindow.getFocusedWindow().on('quick-move-left', (event, command) => {
+    const previousNoteButton = document.getElementById('vcm-previous-note-btn');
+    const nextNoteButton = document.getElementById('vcm-next-note-btn');
+    const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+
+    const index = currentNote ? currentNotes.indexOf(currentNote) : 1;
+    if(index - 1 >= 0) {
+        currentNote = currentNotes[index - 1];
+        titleField.value = currentNote.title;
+        noteField.innerHTML = currentNote.content;
+        showActionAlert(`Opened <b>${currentNote.title}</b>`, '#60A4EB');
+    }
+
+    updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
+})
+
+BrowserWindow.getFocusedWindow().on('quick-move-right', (event, command) => {
+    const previousNoteButton = document.getElementById('vcm-previous-note-btn');
+    const nextNoteButton = document.getElementById('vcm-next-note-btn');
+    const currentNotes = notes.filter((nt) => nt.notebook === currentNotebook.id);
+    const titleField = document.getElementById('title-field');
+    const noteField = document.getElementById('note-field');
+
+    const index = currentNote ? currentNotes.indexOf(currentNote) : 1;
+    if(index + 1 < currentNotes.length) {
+        currentNote = currentNotes[index + 1];
+        titleField.value = currentNote.title;
+        noteField.innerHTML = currentNote.content;
+        showActionAlert(`Opened <b>${currentNote.title}</b>`, '#60A4EB');
+    }
+
+    updateNotesQuickMove(previousNoteButton, nextNoteButton, currentNotes);
 })
 
 module.exports = {

@@ -145,13 +145,6 @@ let template = [{
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('select-all');
         }
-    },{
-        label: 'Find/Replace',
-        accelerator: 'CmdOrCtrl+F',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('find-replace');
-        }
     }]
 },{
     label: 'Selection',
@@ -297,6 +290,20 @@ let template = [{
         click: () => {
             if(eve !== null && eve !== undefined)
                 BrowserWindow.getFocusedWindow().emit('switch-context');
+        }
+    },{
+        label: 'Quick Move Left',
+        accelerator: 'CmdOrCtrl+Shift+{',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('quick-move-left');
+        }
+    },{
+        label: 'Quick Move Right',
+        accelerator: 'CmdOrCtrl+Shift+}',
+        click: () => {
+            if(eve !== null && eve !== undefined)
+                BrowserWindow.getFocusedWindow().emit('quick-move-right');
         }
     },
     {
