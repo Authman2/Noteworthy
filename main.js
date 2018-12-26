@@ -278,13 +278,6 @@ let template = [{
         accelerator: 'CmdOrCtrl+M',
         click: () => { BrowserWindow.getFocusedWindow().minimize(); }
     },{
-        label: 'View Notes',
-        accelerator: 'CmdOrCtrl+O',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('open-note-view');
-        }
-    },{
         label: 'Switch Context',
         accelerator: 'CmdOrCtrl+L',
         click: () => {
@@ -339,7 +332,7 @@ const createWindow = () => {
         height: 600,
         title: 'Noteworthy',
         titleBarStyle: 'hiddenInset',
-        icon: path.join(__dirname, 'NoteworthyAppIcon.icns')
+        icon: path.join(__dirname, 'NoteworthyAppLogo.icns')
     });
 
     // Load the index.html file into the window.

@@ -82,6 +82,15 @@ const init = (root, pageManager) => {
         noteField.focus();
         if(e.clientY >= 250) { $('.notes-view').remove(); }
     }
+    document.onmouseup = (e) => {
+        if(e.target.id === 'note-field') {
+            const sel = document.getSelection();
+            if(currentContext !== Contexts.Selection && sel.toString().length > 0) {
+                currentContext = Contexts.Selection;
+                updateContextMenu(true);
+            }
+        }
+    }
     
     setupRefs();
     updateContextMenu();
@@ -108,24 +117,32 @@ const updateContextMenu = (updateQuickMove = false) => {
     
     switch(currentContext) {
         case Contexts.View:
-            body.innerHTML += vcm;
+            const _vcm = document.createElement('div');
+            _vcm.innerHTML = vcm;
+            body.appendChild(_vcm.firstChild);
             handleViewContextMenuActions();
             showActionAlert('Switched to <b>View</b> Context', 'gray');
             break;
         case Contexts.Selection:
-            body.innerHTML += secm;
+            const _secm = document.createElement('div');
+            _secm.innerHTML = secm;
+            body.appendChild(_secm.firstChild);
             handleViewContextMenuActions();
             handleSelectionContextMenuActions();
             showActionAlert('Switched to <b>Selection</b> Context', 'gray');
             break;
         case Contexts.Insert:
-            body.innerHTML += icm;
+            const _icm = document.createElement('div');
+            _icm.innerHTML = icm;
+            body.appendChild(_icm.firstChild);
             handleViewContextMenuActions();
             handleInsertContextMenuActions();
             showActionAlert('Switched to <b>Insert</b> Context', 'gray');
             break;
         case Contexts.Settings:
-            body.innerHTML += stcm;
+            const _stcm = document.createElement('div');
+            _stcm.innerHTML = stcm;
+            body.appendChild(_stcm.firstChild);
             handleViewContextMenuActions();
             handleSettingsContextMenuActions();
             showActionAlert('Switched to <b>Settings</b> Context', 'gray');
