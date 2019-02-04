@@ -1,0 +1,39 @@
+{
+  "name": "noteworthy",
+  "version": "1.0.0",
+  "description": "Noteworthy is an easy-to-use note taking app designed to be simplistic, yet powerful.\\n\\nFor more information, visit this project at www.adeolauthman.com/projects/Noteworthy.",
+  "main": "main.js",
+  "scripts": {
+    "test": "parcel -p 3000 src/index.html",
+    "clean": "rm -rf dist .cache",
+    "start-mosaic": "parcel build src/index.html --public-url ./",
+    "start": "npm run start-mosaic && electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Authman2/Noteworthy.git"
+  },
+  "keywords": [
+    "noteworthy",
+    "note",
+    "taking",
+    "frontend",
+    "mosaic"
+  ],
+  "author": "Adeola Uthman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Authman2/Noteworthy/issues"
+  },
+  "homepage": "https://github.com/Authman2/Noteworthy#readme",
+  "dependencies": {
+    "@authman2/mosaic": "^0.2.4",
+    "jquery": "^3.3.1",
+    "parcel-bundler": "^1.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "electron": "^4.0.4"
+  }
+}
