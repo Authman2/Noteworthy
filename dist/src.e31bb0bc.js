@@ -18930,7 +18930,7 @@ var _default = new _mosaic.Mosaic({
 });
 
 exports.default = _default;
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","firebase":"../../../../../node_modules/firebase/firebase-browser.js","../components/pillButton":"components/pillButton.js"}],"components/contextMenu.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","firebase":"../../../../../node_modules/firebase/firebase-browser.js","../components/pillButton":"components/pillButton.js"}],"components/contexts/viewContext.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18940,12 +18940,50 @@ exports.default = void 0;
 
 var _mosaic = require("@authman2/mosaic");
 
-var ContextMenuType = Object.seal({
-  view: 0,
-  selection: 1,
-  insert: 2,
-  settings: 3
+var _default = new _mosaic.Mosaic({
+  actions: {
+    switchContext: function switchContext() {
+      this.parent.data.context = 1;
+    }
+  },
+  view: function view() {
+    return h("div", {
+      "class": "context-menu context-menu-0"
+    }, h("div", {
+      "class": "context-menu-item",
+      onclick: this.parent.actions.handleNew
+    }, h("i", {
+      "class": "fas fa-file"
+    }), h("p", null, "New")), h("div", {
+      "class": "context-menu-item",
+      onclick: this.parent.actions.openNotebooks
+    }, h("i", {
+      "class": "fas fa-book-open"
+    }), h("p", null, "Notebooks")), h("div", {
+      "class": "context-menu-item",
+      onclick: this.parent.actions.openNotes
+    }, h("i", {
+      "class": "fas fa-bars"
+    }), h("p", null, "Notes")), h("div", {
+      "class": "context-menu-item",
+      onclick: this.actions.switchContext
+    }, h("i", {
+      "class": "fas fa-sync-alt"
+    }), h("p", null, "Context")));
+  }
 });
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js"}],"components/contexts/selectionContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
 var SelectionOptions = [{
   icon: 'fas fa-bold',
   title: 'Bold'
@@ -18965,64 +19003,17 @@ var SelectionOptions = [{
   icon: 'fas fa-superscript',
   title: 'Superscript'
 }];
-var InsertOptions = [{
-  icon: 'fas fa-code',
-  title: 'Code'
-}, {
-  icon: 'fas fa-ul',
-  title: 'Unsorted'
-}, {
-  icon: 'fas fa-ol',
-  title: 'Sorted'
-}, {
-  icon: 'fas fa-check',
-  title: 'Checkbox'
-}, {
-  icon: 'fas fa-image',
-  title: 'Image'
-}];
-var SettingsOptions = [{
-  icon: 'fas fa-user',
-  title: 'Account'
-}, {
-  icon: 'fas fa-save',
-  title: 'Save Online'
-}, {
-  icon: 'fas fa-load',
-  title: 'Load Online'
-}];
 
 var _default = new _mosaic.Mosaic({
-  data: {
-    type: ContextMenuType.view
-  },
   actions: {
     switchContext: function switchContext() {
-      this.data.type = this.data.type === ContextMenuType.settings ? 0 : this.data.type + 1;
+      this.parent.data.context = 2;
     }
   },
   view: function view() {
-    var type = null;
-
-    switch (this.data.type) {
-      case ContextMenuType.selection:
-        type = SelectionOptions;
-        break;
-
-      case ContextMenuType.insert:
-        type = InsertOptions;
-        break;
-
-      case ContextMenuType.settings:
-        type = SettingsOptions;
-        break;
-
-      default:
-        break;
-    }
-
+    var type = type = SelectionOptions;
     return h("div", {
-      "class": "context-menu context-menu-".concat(this.data.type)
+      "class": "context-menu context-menu-1"
     }, h("div", {
       "class": "context-menu-item"
     }, h("i", {
@@ -19053,7 +19044,7 @@ var _default = new _mosaic.Mosaic({
 });
 
 exports.default = _default;
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js"}],"pages/work.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js"}],"components/contexts/insertContext.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19063,50 +19054,518 @@ exports.default = void 0;
 
 var _mosaic = require("@authman2/mosaic");
 
-var _contextMenu = _interopRequireDefault(require("../components/contextMenu"));
+var InsertOptions = [{
+  icon: 'fas fa-code',
+  title: 'Code'
+}, {
+  icon: 'fas fa-list-ul',
+  title: 'Unsorted'
+}, {
+  icon: 'fas fa-list-ol',
+  title: 'Sorted'
+}, {
+  icon: 'fas fa-check',
+  title: 'Checkbox'
+}, {
+  icon: 'fas fa-image',
+  title: 'Image'
+}];
+
+var _default = new _mosaic.Mosaic({
+  actions: {
+    switchContext: function switchContext() {
+      this.parent.data.context = 3;
+    }
+  },
+  view: function view() {
+    var type = InsertOptions;
+    return h("div", {
+      "class": "context-menu context-menu-2"
+    }, h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-file"
+    }), h("p", null, "New")), h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-book-open"
+    }), h("p", null, "Notebooks")), h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-bars"
+    }), h("p", null, "Notes")), h("div", {
+      "class": "context-menu-item",
+      onclick: this.actions.switchContext
+    }, h("i", {
+      "class": "fas fa-sync-alt"
+    }), h("p", null, "Context")), type ? h("span", {
+      "class": "context-menu-separator"
+    }) : h("div", null), type ? type.map(function (obj) {
+      return h("div", {
+        "class": "context-menu-item"
+      }, h("i", {
+        "class": obj.icon
+      }), h("p", null, obj.title));
+    }) : h("div", null));
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js"}],"components/contexts/settingsContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
+var SettingsOptions = [{
+  icon: 'fas fa-user',
+  title: 'Account'
+}, {
+  icon: 'fas fa-save',
+  title: 'Save Online'
+}, {
+  icon: 'fas fa-download',
+  title: 'Load Online'
+}];
+
+var _default = new _mosaic.Mosaic({
+  actions: {
+    switchContext: function switchContext() {
+      this.parent.data.context = 0;
+    }
+  },
+  view: function view() {
+    var type = SettingsOptions;
+    return h("div", {
+      "class": "context-menu context-menu-3"
+    }, h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-file"
+    }), h("p", null, "New")), h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-book-open"
+    }), h("p", null, "Notebooks")), h("div", {
+      "class": "context-menu-item"
+    }, h("i", {
+      "class": "fas fa-bars"
+    }), h("p", null, "Notes")), h("div", {
+      "class": "context-menu-item",
+      onclick: this.actions.switchContext
+    }, h("i", {
+      "class": "fas fa-sync-alt"
+    }), h("p", null, "Context")), type ? h("span", {
+      "class": "context-menu-separator"
+    }) : h("div", null), type ? type.map(function (obj) {
+      return h("div", {
+        "class": "context-menu-item"
+      }, h("i", {
+        "class": obj.icon
+      }), h("p", null, obj.title));
+    }) : h("div", null));
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js"}],"alerts/create.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
+var _Globals = _interopRequireDefault(require("../other/Globals"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** A full screen alert that asks the user for information to make either a new notebook or new note. */
+var _default = new _mosaic.Mosaic({
+  data: {
+    type: "Notebook"
+  },
+  actions: {
+    toggleType: function toggleType() {
+      this.data.type = this.data.type === 'Notebook' ? 'Note' : 'Notebook';
+    },
+    create: function create() {
+      if (this.data.type === 'Note') {
+        if (!this.parent.data.currentNotebook) {
+          _Globals.default.showActionAlert("You must select a notebook before you can create a note.", _Globals.default.ColorScheme.red);
+
+          return;
+        }
+      }
+
+      var field = document.getElementById('create-name-field');
+
+      if (field.value.length < 1) {
+        _Globals.default.showActionAlert("Please enter a name for this ".concat(this.data.type.toLowerCase()), _Globals.default.ColorScheme.red);
+
+        return;
+      }
+
+      this.data.onCreate(this.data.type, field.value);
+      if (this.parent) this.parent.actions.closeAlert();
+    }
+  },
+  view: function view() {
+    return h("div", {
+      "class": "fullscreen-alert"
+    }, h("button", {
+      "class": "close-btn",
+      onclick: this.actions.closeAlert
+    }, h("span", {
+      "class": "fa fa-times"
+    })), h("h1", {
+      "class": "fullscreen-alert-title"
+    }, "Create New ", this.data.type), h("h4", {
+      "class": "fullscreen-alert-subtitle"
+    }, "Enter a name for your new ", this.data.type), h("input", {
+      "class": "underline-field",
+      placeholder: "Title",
+      id: "create-name-field"
+    }), h("button", {
+      "class": "fullscreen-alert-btn",
+      onclick: this.actions.toggleType
+    }, "Switch to ", this.data.type === 'Notebook' ? 'Note' : 'Notebook'), h("br", null), h("br", null), h("br", null), h("button", {
+      "class": "fullscreen-alert-btn",
+      onclick: this.actions.create
+    }, "Create ", this.data.type));
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../other/Globals":"other/Globals.js"}],"alerts/notebooks.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
+var _Globals = _interopRequireDefault(require("../other/Globals"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NotebookCell = new _mosaic.Mosaic({
+  view: function view() {
+    var _this = this;
+
+    var click = this.data.selectNotebook;
+    var notebook = this.data.notebook;
+    return h("div", {
+      "class": "notebook-cell",
+      onclick: function onclick() {
+        return click(_this.parent, notebook);
+      }
+    }, h("h2", null, "Title: ", notebook.title), h("h5", null, "Notes: ", notebook.pages.length), h("hr", {
+      "class": "cell-separator"
+    }));
+  }
+});
+var NoteCell = new _mosaic.Mosaic({
+  view: function view() {
+    var _this2 = this;
+
+    var select = this.data.selectNote;
+    var note = this.data.note;
+    return h("div", {
+      "class": "notebook-cell",
+      onclick: function onclick() {
+        return select(_this2.parent, note);
+      }
+    }, h("h2", null, "Title: ", note.title), h("hr", {
+      "class": "cell-separator"
+    }));
+  }
+});
+
+var _default = new _mosaic.Mosaic({
+  data: {
+    type: 'Notebook',
+    items: []
+  },
+  actions: {
+    close: function close() {
+      if (this.parent) this.parent.actions.closeAlert();
+    },
+    selectNotebook: function selectNotebook(item) {
+      if (this.data.type === 'Note') {
+        if (this.parent) this.parent.data.currentNote = item;
+        document.getElementById('work-content-field').innerHTML = item.content;
+      } else if (this.parent) this.parent.data.currentNotebook = item;
+
+      this.actions.closeAlert();
+
+      _Globals.default.showActionAlert("Opened the notebook <b>".concat(item.title, "</b>"), _Globals.default.ColorScheme.blue);
+    }
+  },
+  view: function view() {
+    var _this3 = this;
+
+    return h("div", {
+      "class": "fullscreen-alert"
+    }, h("button", {
+      "class": "close-btn",
+      onclick: this.actions.close
+    }, h("span", {
+      "class": "fa fa-times"
+    })), h("h1", {
+      "class": "fullscreen-alert-title"
+    }, this.data.type === 'Notebook' ? 'My Notebooks' : this.parent.data.currentNotebook.title), h("h4", {
+      "class": "fullscreen-alert-subtitle"
+    }, "Select a ", this.data.type.toLowerCase(), " to open:"), h("div", {
+      "class": "notebooks-view"
+    }, this.data.items.length > 0 ? this.data.items.map(function (item, index) {
+      if (_this3.data.type === 'Notebook') {
+        return h(NotebookCell, {
+          link: {
+            name: "cell_".concat(index),
+            parent: _this3
+          },
+          notebook: item,
+          selectNotebook: _this3.actions.selectNotebook.bind(_this3, item)
+        });
+      } else {
+        return h(NoteCell, {
+          link: {
+            name: "cell_".concat(index),
+            parent: _this3
+          },
+          note: item,
+          selectNote: _this3.actions.selectNotebook.bind(_this3, item)
+        });
+      }
+    }) : h("div", null)));
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../other/Globals":"other/Globals.js"}],"alerts/account.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
+var _firebase = _interopRequireDefault(require("firebase"));
+
+var _Globals = _interopRequireDefault(require("../other/Globals"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** A full screen alert that asks the user for information to make either a new notebook or new note. */
+var _default = new _mosaic.Mosaic({
+  data: {
+    currentUser: null
+  },
+  actions: {
+    closeAlert: function closeAlert() {
+      document.getElementsByClassName('fullscreen-alert')[0].className += '-close';
+    },
+    sendPasswordResetEmail: function sendPasswordResetEmail() {
+      _firebase.default.auth().sendPasswordResetEmail(this.data.currentUser.email);
+
+      _Globals.default.showActionAlert("Sent a password reset email!", _Globals.default.ColorScheme.blue);
+    },
+    handleLogout: function handleLogout() {
+      this.parent.actions.handleLogout();
+    }
+  },
+  view: function view() {
+    return (0, _mosaic.h)("div", {
+      "class": "fullscreen-alert"
+    }, (0, _mosaic.h)("button", {
+      "class": "close-btn",
+      onclick: this.actions.closeAlert
+    }, (0, _mosaic.h)("span", {
+      "class": "fa fa-times"
+    })), (0, _mosaic.h)("h1", {
+      "class": "fullscreen-alert-title"
+    }, "Account"), (0, _mosaic.h)("h4", {
+      "class": "fullscreen-alert-subtitle"
+    }, "You are currently logged in as ", this.data.currentUser ? this.data.currentUser.email : ""), (0, _mosaic.h)("br", null), (0, _mosaic.h)("button", {
+      "class": "fullscreen-alert-btn",
+      onclick: this.actions.sendPasswordResetEmail
+    }, "Click to send Password Reset Email"), (0, _mosaic.h)("br", null), (0, _mosaic.h)("button", {
+      "class": "fullscreen-alert-btn",
+      onclick: this.actions.handleLogout
+    }, "Logout"));
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","firebase":"../../../../../node_modules/firebase/firebase-browser.js","../other/Globals":"other/Globals.js"}],"pages/work.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = require("@authman2/mosaic");
+
+var _Globals = _interopRequireDefault(require("../other/Globals"));
+
+var _viewContext = _interopRequireDefault(require("../components/contexts/viewContext"));
+
+var _selectionContext = _interopRequireDefault(require("../components/contexts/selectionContext"));
+
+var _insertContext = _interopRequireDefault(require("../components/contexts/insertContext"));
+
+var _settingsContext = _interopRequireDefault(require("../components/contexts/settingsContext"));
+
+var _create = _interopRequireDefault(require("../alerts/create"));
+
+var _notebooks = _interopRequireDefault(require("../alerts/notebooks"));
+
+var _account = _interopRequireDefault(require("../alerts/account"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import firebase from 'firebase';
 var _default = new _mosaic.Mosaic({
+  data: {
+    context: 0,
+    loadedData: {},
+    currentNotebook: null,
+    currentNote: null,
+    notebooks: [],
+    notes: [],
+    showNotebooks: false,
+    showNotes: false,
+    showCreate: false
+  },
   view: function view() {
+    var cm = h(_viewContext.default, {
+      link: {
+        name: 'vc',
+        parent: this
+      }
+    });
+
+    switch (this.data.context) {
+      case 0:
+        break;
+
+      case 1:
+        cm = h(_selectionContext.default, {
+          link: {
+            name: 'sc',
+            parent: this
+          }
+        });
+        break;
+
+      case 2:
+        cm = h(_insertContext.default, {
+          link: {
+            name: 'ic',
+            parent: this
+          }
+        });
+        break;
+
+      case 3:
+        cm = h(_settingsContext.default, {
+          link: {
+            name: 'stc',
+            parent: this
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
+
     return h("div", {
       "class": "work"
     }, h("div", {
       "class": "context-menu-holder"
-    }, h(_contextMenu.default, {
-      link: {
-        name: 'cm',
-        parent: this
-      }
-    })), h("input", {
+    }, cm), h("div", {
+      contenteditable: "true",
       type: "text",
-      placeholder: "Title",
       id: "work-title-field"
-    }), h("div", {
+    }, this.data.currentNote ? this.data.currentNote.title : 'Title'), h("div", {
       contenteditable: "true",
       id: "work-content-field",
       onclick: this.actions.switchContextOnTripleTap
-    }, "Note"));
-  } //     return <div class='work'>
-  //     <div class={`context-menu-holder ${isMobile() ? 'context-menu-holder-mobile' : ''}`}
-  //         ontouchstart={this.actions.startLongPress}
-  //         ontouchend={this.actions.invalidateLongPress}>
-  //         { contextMenu }
-  //     </div>
-  //     <input type='text' 
-  //         placeholder='Title' 
-  //         id='work-title-field' />
-  //     <div contenteditable='true' 
-  //         id='work-content-field'
-  //         onclick={this.actions.switchContextOnTripleTap}>Note</div>
-  //     { alert }
-  // </div>;
+    }), this.data.showCreate ? h(_create.default, {
+      onCreate: function onCreate(type, title) {
+        console.log(type, title);
+      }
+    }) : h("div", null), this.data.showNotebooks ? h(_notebooks.default, {
+      type: "Notebook",
+      items: this.data.notebooks,
+      link: {
+        name: 'notebooks',
+        parent: this
+      }
+    }) : h("div", null), this.data.showNotes ? h(_notebooks.default, {
+      type: "Note",
+      items: this.data.notes,
+      link: {
+        name: 'notes',
+        parent: this
+      }
+    }) : h("div", null));
+  },
+  actions: {
+    handleNew: function handleNew() {
+      this.data.showCreate = true;
+    },
+    openNotebooks: function openNotebooks() {
+      var items = Array.from(Object.values(this.data.loadedData).filter(function (item) {
+        return item.pages;
+      }));
+      this.data.notebooks = items;
+      this.data.showNotebooks = true;
+    },
+    openNotes: function openNotes() {
+      var _this = this;
 
+      if (!this.data.currentNotebook) {
+        _Globals.default.showActionAlert("Please select a notebook to open a note from.", _Globals.default.ColorScheme.red);
+
+        return;
+      }
+
+      var items = Array.from(Object.values(this.data.loadedData).filter(function (item) {
+        return !item.pages && item.notebook === _this.data.currentNotebook.id;
+      }));
+      this.data.notes = items;
+      this.data.showNotes = true;
+    },
+    openAccount: function openAccount() {
+      this.data.alert = h(_account.default, {
+        handleLogout: function handleLogout() {
+          console.log('logging out');
+        }
+      });
+    },
+    closeAlert: function closeAlert() {
+      this.data.showNotebooks = false;
+      this.data.showNotes = false;
+    }
+  }
 });
 
 exports.default = _default;
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../components/contextMenu":"components/contextMenu.js"}],"index.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../other/Globals":"other/Globals.js","../components/contexts/viewContext":"components/contexts/viewContext.js","../components/contexts/selectionContext":"components/contexts/selectionContext.js","../components/contexts/insertContext":"components/contexts/insertContext.js","../components/contexts/settingsContext":"components/contexts/settingsContext.js","../alerts/create":"alerts/create.js","../alerts/notebooks":"alerts/notebooks.js","../alerts/account":"alerts/account.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _mosaic = require("@authman2/mosaic");
@@ -19189,7 +19648,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50608" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58733" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
