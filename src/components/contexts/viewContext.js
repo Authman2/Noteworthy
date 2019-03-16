@@ -1,4 +1,4 @@
-import { Mosaic } from "@authman2/mosaic";
+
 
 export default new Mosaic({
     actions: {

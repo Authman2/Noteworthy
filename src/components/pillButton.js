@@ -1,9 +1,7 @@
-import { Mosaic } from '@authman2/mosaic';
-
 export default new Mosaic({
     view() {
-        return <button onclick={this.data.onclick} class='pill-button'>
-            { this.children || "Pill Button" }
-        </button>
+        return html`<button onclick='${this.data.onclick}' class='pill-button'>
+            ${ this.data.title || "Pill Button" }
+        </button>`
     }
 });

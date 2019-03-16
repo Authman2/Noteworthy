@@ -1,4 +1,3 @@
-import { Mosaic } from '@authman2/mosaic';
 import firebase from 'firebase';
 
 import PillButton from '../components/pillButton';
@@ -45,20 +44,16 @@ export default new Mosaic({
         }
     },
     view: function() {
-        return <div class='home'>
+        return html`<div class='home'>
             <h1 class='title'>Noteworthy</h1>
             <div class='home-login-fields'>
-                <input class='underline-field' placeholder={this.data.loginPlaceholder} id='login-field' />
-                <input type='password' class='underline-field' id='signup-field' placeholder={this.data.signupPlaceholder} />
+                <input class='underline-field' placeholder=${this.data.loginPlaceholder} id='login-field'>
+                <input type='password' class='underline-field' id='signup-field' placeholder=${this.data.signupPlaceholder}>
 
-                <PillButton link={{ name: 'loginBtn', parent: this }} onclick={this.actions.handleLogin}>
-                    { this.data.loginTitle }
-                </PillButton>
-                <PillButton link={{ name: 'signUpBtn', parent: this }} onclick={this.actions.handleSignUp}>
-                    { this.data.signUpTitle }
-                </PillButton>
+                ${ PillButton.new({ title: this.data.loginTitle, func: this.actions.handleLogin.bind(this) }) }
+                ${ PillButton.new({ title: this.data.signUpTitle, func: this.actions.handleSignUp.bind(this) }) }
             </div>
-        </div>
+        </div>`
     },
     created() {
         this.data.loginPlaceholder = 'Email';

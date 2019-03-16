@@ -1,4 +1,4 @@
-import { Mosaic } from "@authman2/mosaic";
+
 
 const SelectionOptions = [{
     icon: 'fas fa-bold',

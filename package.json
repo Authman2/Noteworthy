@@ -27,13 +27,10 @@
   },
   "homepage": "https://github.com/Authman2/Noteworthy#readme",
   "dependencies": {
-    "@authman2/mosaic": "^0.2.4",
-    "jquery": "^3.3.1",
-    "parcel-bundler": "^1.11.0"
+    "@authman2/mosaic": "^0.3.2",
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
     "electron": "^4.0.4"
   }
 }

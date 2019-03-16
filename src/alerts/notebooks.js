@@ -1,4 +1,4 @@
-import { Mosaic } from "@authman2/mosaic";
+
 import Globals from "../other/Globals";
 
 const NotebookCell = new Mosaic({

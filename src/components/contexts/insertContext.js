@@ -1,4 +1,4 @@
-import { Mosaic } from "@authman2/mosaic";
+
 
 const InsertOptions = [{
     icon: 'fas fa-code',

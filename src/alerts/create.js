@@ -1,4 +1,4 @@
-import { Mosaic } from "@authman2/mosaic";
+
 import Globals from '../other/Globals';
 
 /** A full screen alert that asks the user for information to make either a new notebook or new note. */
