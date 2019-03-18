@@ -1,4 +1,7 @@
 const electron = require('electron');
+const fs = require('fs');
+const url = require('url');
+const path = require('path');
 
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
@@ -273,13 +276,22 @@ const createWindow = () => {
     let wind = new BrowserWindow({
         width: 775,
         height: 600,
+        minWidth: 300,
+        minHeight: 300,
         title: 'Noteworthy',
         titleBarStyle: 'hiddenInset',
-        icon: 'NoteworthyAppLogo.icns'
+        icon: 'NoteworthyAppLogo.icns',
+        webPreferences: {
+            nodeIntegration: true,
+        }
     });
 
     // Load the index.html file into the window.
-    wind.loadFile('dist/index.html');
+    wind.loadURL(url.format({
+        pathname: path.join(__dirname, 'src/index.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
 }
 
 /** Creates the application menu at the top of the computer screen. */

@@ -1,31 +1,53 @@
-html {
-    margin: 0px;
-    padding: 0px;
-    background-color: white;
+.title-bar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    z-index: 10000;
+    user-select: none;
+    -webkit-app-region: drag;
+    transition-duration: 0.25s;
+    background-color: rgba(0, 0, 0, 0);
+    transition-timing-function: ease-out;
+}
+
+.underline-field {
+    width: 80vw;
+    border: none;
+    outline: none;
+    display: block;
+    font-weight: 100;
+    background: none;
+    font-size: 1.2rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    font-family: 'Avenir';
+    text-decoration: none;
 }
 
 .pill-button {
     border: none;
     outline: none;
     display: block;
+    padding: 10px;
+    font-size: 1rem;
     cursor: pointer;
-    font-weight: 200;
-    font-size: 2.2rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
-    margin-bottom: 4rem;
-    border-radius: 25px;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    color: cornflowerblue;
+    background: none;
+    padding-top: 14px;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-radius: 10rem;
+    text-decoration: none;
     background-color: white;
     transition-duration: 0.2s;
 }
 .pill-button:hover {
-    color: rgb(80, 125, 207);
-    background-color: lightgray;
+    transform: scale(1.15);
 }
 .pill-button:active {
-    color: rgb(46, 84, 155);
-    background-color: rgb(172, 172, 172);
+    transform: scale(0.95);
 }

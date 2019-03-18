@@ -1,18 +1,14 @@
-import firebase from 'firebase';
+const Mosaic = require('@authman2/mosaic').default;
+const Creds = require('./other/creds.json');
 
-import Globals from './other/Globals';
-import Creds from './other/creds.json';
-firebase.initializeApp(Creds);
-
-import Home from './pages/home';
-import Work from './pages/work';
+const Home = require('./pages/home');
+const Work = require('./pages/work');
 
 new Mosaic({
 	element: '#root',
 	data: { page: 0 },
-	view: function() {
-		return html`<div>
-			${ this.data.page === 0 ? Home.new({ name: 'home' }) : Work.new({ name: 'work' }) }
-		</div>`
-	}
+	view: (data) => html`<div>
+		<div class='title-bar'></div>
+		${ data.page === 0 ? Home.new() : Work.new() }
+	</div>`
 }).paint();

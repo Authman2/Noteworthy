@@ -1,61 +1,39 @@
-import firebase from 'firebase';
+const Mosaic = require('@authman2/mosaic').default;
+const PillButton = require('../components/pill-button');
 
-import PillButton from '../components/pillButton';
-
-export default new Mosaic({
+module.exports = new Mosaic({
     data: {
-        loginPlaceholder: 'Email',
-        signupPlaceholder: 'Password',
         loginTitle: 'Login',
-        signUpTitle: 'Sign Up'
+        signupTitle: 'Sign Up',
+        emailPlaceholder: 'Email',
+        passwordPlaceholder: 'Password'
     },
     actions: {
-        handleLogin: function() {
-            if(this.data.loginTitle === 'Login') {
-                let email = document.getElementById('login-field').value;
-                let pass = document.getElementById('signup-field').value;
-                
-                firebase.auth().signInWithEmailAndPassword(email, pass).catch((err) => {
-                    alert('Error: ' + err);
-                })
-            } else {
-                let email = document.getElementById('login-field').value;
-                let pass = document.getElementById('signup-field').value;
-                
-                firebase.auth().createUserWithEmailAndPassword(email, pass).catch((err) => {
-                    alert('Error creating account: ' + err);
-                });
-            }
+        handleLogin() {
+
         },
-        handleSignUp: function() {
-            if(this.data.signUpTitle === 'Cancel') {
-                this.data.loginPlaceholder = 'Email';
-                this.data.signupPlaceholder = 'Password';
-                
-                this.data.loginTitle = 'Login';
-                this.data.signUpTitle = 'Sign Up';
-            } else {
-                this.data.loginPlaceholder = 'Enter your email';
-                this.data.signupPlaceholder = 'Createa a 6-character password';
-                
+        handleSignUp() {
+            if(this.data.loginTitle === 'Login') {
                 this.data.loginTitle = 'Create Account';
-                this.data.signUpTitle = 'Cancel';
+                this.data.signupTitle = 'Cancel';
+                this.data.emailPlaceholder = 'Enter your email';
+                this.data.passwordPlaceholder = 'Create a password';
+            } else {
+                this.data.loginTitle = 'Login';
+                this.data.signupTitle = 'Sign Up';
+                this.data.emailPlaceholder = 'Email';
+                this.data.passwordPlaceholder = 'Password';
             }
         }
     },
-    view: function() {
+    view: function(data, actions) {
         return html`<div class='home'>
-            <h1 class='title'>Noteworthy</h1>
-            <div class='home-login-fields'>
-                <input class='underline-field' placeholder=${this.data.loginPlaceholder} id='login-field'>
-                <input type='password' class='underline-field' id='signup-field' placeholder=${this.data.signupPlaceholder}>
-
-                ${ PillButton.new({ title: this.data.loginTitle, func: this.actions.handleLogin.bind(this) }) }
-                ${ PillButton.new({ title: this.data.signUpTitle, func: this.actions.handleSignUp.bind(this) }) }
-            </div>
+            <h1 class='page-title'>Noteworthy</h1>
+            <input type='email' id='email-field' class='underline-field' placeholder='${data.emailPlaceholder}'>
+            <input type='email' id='password-field' class='underline-field' placeholder='${data.passwordPlaceholder}'>
+            <br>
+            ${ PillButton.new({ title: data.loginTitle, click: actions.handleLogin.bind(this) }) }
+            ${ PillButton.new({ title: data.signupTitle, click: actions.handleSignUp.bind(this) }) }
         </div>`
-    },
-    created() {
-        this.data.loginPlaceholder = 'Email';
     }
 });
