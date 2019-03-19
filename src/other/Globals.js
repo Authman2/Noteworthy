@@ -1,5 +1,4 @@
-import firebase from 'firebase';
-import $ from 'jquery';
+const $ = require('jquery');
 
 const saveData = (loadedData) => {
     const uid = firebase.auth().currentUser.uid;
@@ -62,7 +61,7 @@ const ColorScheme = {
     gray: 'gray'
 }
 
-export default {
+module.exports = {
     saveData,
     loadData,
     showActionAlert,

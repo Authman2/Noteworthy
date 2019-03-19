@@ -1,5 +1,6 @@
 const Mosaic = require('@authman2/mosaic').default;
 const PillButton = require('../components/pill-button');
+const Globals = require('../other/Globals');
 
 module.exports = new Mosaic({
     data: {
@@ -10,7 +11,23 @@ module.exports = new Mosaic({
     },
     actions: {
         handleLogin() {
-
+            if(this.data.loginTitle === 'Login') {
+                let email = document.getElementById('email-field').value;
+                let pass = document.getElementById('password-field').value;
+                firebase.auth().signInWithEmailAndPassword(email, pass).then(user => {
+                    this.parent.data.page = 1;
+                }).catch(err => {
+                    Globals.showActionAlert(`${err}`, Globals.ColorScheme.red);
+                });
+            } else {
+                let email = document.getElementById('email-field').value;
+                let pass = document.getElementById('password-field').value;
+                firebase.auth().createUserWithEmailAndPassword(email, pass).then(user => {
+                    this.parent.data.page = 1;
+                }).catch(err => {
+                    Globals.showActionAlert(`${err}`, Globals.ColorScheme.red);
+                })
+            }
         },
         handleSignUp() {
             if(this.data.loginTitle === 'Login') {

@@ -8,5 +8,12 @@
 
 	<div id='root'></div>
 
+	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>
+	<script>
+		const Creds = require('./other/creds.json');
+		firebase.initializeApp(Creds);
+	</script>
 	<script>require('./index.js');</script>
 </html>

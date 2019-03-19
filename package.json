@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/Authman2/Noteworthy#readme",
   "dependencies": {
-    "@authman2/mosaic": "^0.3.2",
+    "@authman2/mosaic": "^0.3.3",
+    "firebase": "^5.9.0",
     "jquery": "^3.3.1"
   },
   "devDependencies": {

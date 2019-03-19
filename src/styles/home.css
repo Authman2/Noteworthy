@@ -39,3 +39,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+.home > .pill-button:hover {
+    color: white;
+    background-color: #5587d2;
+}
