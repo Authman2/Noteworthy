@@ -47,7 +47,7 @@ module.exports = new Mosaic({
         return html`<div class='home'>
             <h1 class='page-title'>Noteworthy</h1>
             <input type='email' id='email-field' class='underline-field' placeholder='${data.emailPlaceholder}'>
-            <input type='email' id='password-field' class='underline-field' placeholder='${data.passwordPlaceholder}'>
+            <input type='password' id='password-field' class='underline-field' placeholder='${data.passwordPlaceholder}'>
             <br>
             ${ PillButton.new({ title: data.loginTitle, click: actions.handleLogin.bind(this) }) }
             ${ PillButton.new({ title: data.signupTitle, click: actions.handleSignUp.bind(this) }) }

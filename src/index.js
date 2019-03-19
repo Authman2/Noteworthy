@@ -9,5 +9,11 @@ new Mosaic({
 	view: (data) => html`<div id='root'>
 		<div class='title-bar'></div>
 		${ data.page === 0 ? Home.new() : Work.new() }
-	</div>`
+	</div>`,
+	created() {
+		firebase.auth().onAuthStateChanged(user => {
+			if(user) this.data.page = 1;
+			else this.data.page = 0;
+		});
+	}
 }).paint();

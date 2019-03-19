@@ -1,3 +1,8 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
 .title-bar {
     position: fixed;
     top: 0px;
