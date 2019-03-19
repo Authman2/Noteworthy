@@ -7,6 +7,7 @@ const portfolio = new Mosaic.Portfolio({
     switch(event) {
         case 'switch-context':
             data.context = data.context === 3 ? 0 : data.context + 1;
+            console.log(data.context);
             break;
         default:
             break;
