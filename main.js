@@ -18,29 +18,25 @@ let template = [{
         label: 'New',
         accelerator: 'CmdOrCtrl+N',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('new');
+            BrowserWindow.getFocusedWindow().emit('new');
         }
     },{
         label: 'Save',
         accelerator: 'CmdOrCtrl+S',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('save');
+            BrowserWindow.getFocusedWindow().emit('save');
         }
     },{
         label: 'Print',
         accelerator: 'CmdOrCtrl+P',
         click: () => { 
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('print');
+            BrowserWindow.getFocusedWindow().emit('print');
         }
     },{
         label: 'Share',
         accelerator: 'CmdOrCtrl+Option+S',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('share');
+            BrowserWindow.getFocusedWindow().emit('share');
         }
     }, {
         label: 'New Window',
@@ -53,15 +49,13 @@ let template = [{
         label: 'Undo',
         accelerator: 'CmdOrCtrl+Z',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('undo');
+            BrowserWindow.getFocusedWindow().emit('undo');
         }
     },{
         label: 'Redo',
         accelerator: 'CmdOrCtrl+Shift+Z',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('redo');
+            BrowserWindow.getFocusedWindow().emit('redo');
         }
     },{
         type: 'separator'
@@ -69,29 +63,25 @@ let template = [{
         label: 'Cut',
         accelerator: 'CmdOrCtrl+X',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('cut');
+            BrowserWindow.getFocusedWindow().emit('cut');
         }
     },{
         label: 'Copy',
         accelerator: 'CmdOrCtrl+C',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('copy');
+            BrowserWindow.getFocusedWindow().emit('copy');
         }
     },{
         label: 'Paste',
         accelerator: 'CmdOrCtrl+V',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('paste');
+            BrowserWindow.getFocusedWindow().emit('paste');
         }
     },{
         label: 'Select All',
         accelerator: 'CmdOrCtrl+A',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('select-all');
+            BrowserWindow.getFocusedWindow().emit('select-all');
         }
     }]
 },{
@@ -100,37 +90,37 @@ let template = [{
         label: 'Bold',
         accelerator: 'CmdOrCtrl+B',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('bold');
+            BrowserWindow.getFocusedWindow().emit('bold');
         }
     },{
         label: 'Italic',
         accelerator: 'CmdOrCtrl+I',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('italic');
+            BrowserWindow.getFocusedWindow().emit('italic');
         }
     },{
         label: 'Underline',
         accelerator: 'CmdOrCtrl+U',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('underline');
+            BrowserWindow.getFocusedWindow().emit('underline');
         }
     },{
         label: 'Highlight',
         accelerator: 'CmdOrCtrl+H',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('highlight');
+            BrowserWindow.getFocusedWindow().emit('highlight');
         }
     },{
         label: 'Subscript',
         accelerator: 'CmdOrCtrl+Option+6',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('subscript');
+            BrowserWindow.getFocusedWindow().emit('subscript');
         }
     },{
         label: 'Superscript',
         accelerator: 'CmdOrCtrl+Shift+6',
         click: () => {
-            if(eve !== null && eve !== undefined) BrowserWindow.getFocusedWindow().emit('superscript');
+            BrowserWindow.getFocusedWindow().emit('superscript');
         }
     }]
 },{
@@ -139,36 +129,31 @@ let template = [{
         label: 'Code',
         accelerator: 'CmdOrCtrl+Shift+C',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('code-segment');
+            BrowserWindow.getFocusedWindow().emit('code-segment');
         }
     },{
         label: 'Bulleted List',
         accelerator: 'CmdOrCtrl+Shift+B',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('bulleted-list');
+            BrowserWindow.getFocusedWindow().emit('bulleted-list');
         }
     },{
         label: 'Numbered List',
         accelerator: 'CmdOrCtrl+Shift+I',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('numbered-list');
+            BrowserWindow.getFocusedWindow().emit('numbered-list');
         }
     },{
         label: 'Checkbox',
         accelerator: 'CmdOrCtrl+Shift+B',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('checkbox');
+            BrowserWindow.getFocusedWindow().emit('checkbox');
         }
     },{
         label: 'Image',
         accelerator: 'CmdOrCtrl+Shift+M',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('image');
+            BrowserWindow.getFocusedWindow().emit('image');
         }
     }]
 },{
@@ -177,33 +162,27 @@ let template = [{
         label: 'Account',
         accelerator: 'CmdOrCtrl+Shift+A',
         click: () => { 
-            if(eve !== null && eve !== undefined) {
-                BrowserWindow.getFocusedWindow().emit('goto-account');
-            }
+            BrowserWindow.getFocusedWindow().emit('show-account');
         }
     },{
         label: 'Save Online',
         click: () => {
-            if(eve !== null && eve !== undefined) 
-                BrowserWindow.getFocusedWindow().emit('save-online');
+            BrowserWindow.getFocusedWindow().emit('save-online');
         }
     },{
         label: 'Load Online',
         click: () => {
-            if(eve !== null && eve !== undefined) 
-                BrowserWindow.getFocusedWindow().emit('load-online');
+            BrowserWindow.getFocusedWindow().emit('load-online');
         }
     }, {
         label: 'Backup Notes',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('backup');
+            BrowserWindow.getFocusedWindow().emit('backup');
         }
     }, {
         label: 'Retrieve from Backups',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('retrieve-backups');
+            BrowserWindow.getFocusedWindow().emit('retrieve-backups');
         }
     }]
 },{
@@ -229,22 +208,7 @@ let template = [{
         label: 'Switch Context',
         accelerator: 'CmdOrCtrl+L',
         click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('switch-context');
-        }
-    },{
-        label: 'Quick Move Left',
-        accelerator: 'CmdOrCtrl+Shift+{',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('quick-move-left');
-        }
-    },{
-        label: 'Quick Move Right',
-        accelerator: 'CmdOrCtrl+Shift+}',
-        click: () => {
-            if(eve !== null && eve !== undefined)
-                BrowserWindow.getFocusedWindow().emit('quick-move-right');
+            BrowserWindow.getFocusedWindow().emit('switch-context');
         }
     },
     {

@@ -6,7 +6,7 @@ const Work = require('./pages/work');
 new Mosaic({
 	element: '#root',
 	data: { page: 0 },
-	view: (data) => html`<div id='root'>
+	view: data => html`<div id='root'>
 		<div class='title-bar'></div>
 		${ data.page === 0 ? Home.new() : Work.new() }
 	</div>`,
