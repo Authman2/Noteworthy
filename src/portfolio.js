@@ -23,6 +23,11 @@ const portfolio = new Mosaic.Portfolio({
         case 'load-data':
             data.loadedData = newData.loadedData;
             break;
+        case 'update-note':
+            let id = newData.id;
+            data.loadedData[id].title = newData.title;
+            data.loadedData[id].content = newData.content;
+            break;
         case 'select-note':
             data.currentNote = newData.currentNote;
             break;

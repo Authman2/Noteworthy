@@ -1,4 +1,7 @@
 const Mosaic = require('@authman2/mosaic').default;
+const remote = require('electron').remote;
+const BW = remote.BrowserWindow;
+const app = remote.app;
 
 const Home = require('./pages/home');
 const Work = require('./pages/work');
@@ -17,3 +20,8 @@ new Mosaic({
 		});
 	}
 }).paint();
+
+BW.getFocusedWindow().on('quit-app', (event, command) => {
+	BW.getFocusedWindow().emit('save');
+	app.quit();
+});

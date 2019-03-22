@@ -149,12 +149,6 @@ let template = [{
         click: () => {
             BrowserWindow.getFocusedWindow().emit('checkbox');
         }
-    },{
-        label: 'Image',
-        accelerator: 'CmdOrCtrl+Shift+M',
-        click: () => {
-            BrowserWindow.getFocusedWindow().emit('image');
-        }
     }]
 },{
     label: 'Settings',

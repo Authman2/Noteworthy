@@ -1,13 +1,10 @@
 .work {
-    position: absolute;
+    position: relative;
     top: 0px;
     left: 0px;
-    margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    margin-left: auto;
-    margin-right: auto;
     text-align: center;
     overflow-x: hidden;
 }
@@ -27,13 +24,14 @@
 #work-content-field {
     position: relative;
     left: 0px;
-    width: 100%;
+    width: 100vw;
     outline: none;
     font-weight: 400;
     padding-top: 3vh;
     text-align: left;
     font-size: 1.1rem;
     font-family: Avenir;
+    text-overflow: clip;
 }
 
 /* Removes the fine-detail-zoom thing on ios. */
