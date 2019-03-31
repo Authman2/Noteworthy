@@ -7,8 +7,7 @@ const portfolio = new Mosaic.Portfolio({
     currentNotebook: null,
     currentNote: null,
     alert: ''
-},
-(event, data, newData) => {
+}, (event, data, newData) => {
     switch(event) {
         case 'switch-context':
             data.context = data.context === 3 ? 0 : data.context + 1;
@@ -34,11 +33,13 @@ const portfolio = new Mosaic.Portfolio({
         case 'select-notebook':
             data.currentNotebook = newData.currentNotebook;
             break;
-        case 'close-alert':
-            data.alert = '';
-            break;
         case 'show-alert':
             data.alert = newData.alert;
+            document.getElementById('root').appendChild(data.alert.element);
+            break;
+        case 'close-alert':
+            document.getElementsByClassName('popup')[0].remove();
+            data.alert = '';
             break;
         case 'create-new':
             let cb = data.currentNotebook;

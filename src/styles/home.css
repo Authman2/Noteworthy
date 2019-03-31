@@ -43,3 +43,22 @@
     color: white;
     background-color: #5587d2;
 }
+
+.forgot-password-button {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    background: none;
+    font-weight: bold;
+    font-size: 0.8rem;
+    font-family: Avenir;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
+.forgot-password-button:hover {
+    transform: scale(1.1);
+}

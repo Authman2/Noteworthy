@@ -19,6 +19,7 @@ module.exports = new Mosaic({
         },
         logout() {
             firebase.auth().signOut().then(() => {
+                this.portfolio.dispatch('close-alert');
                 Globals.showActionAlert('Logged out!', Globals.ColorScheme.gray);
             }).catch((err) => {
                 Globals.showActionAlert(`Logout Error: ${err}`, Globals.ColorScheme.red);
@@ -40,7 +41,7 @@ module.exports = new Mosaic({
             <button class='popup-btn' id='account-alert-logout' onclick='${this.actions.logout}'>
                 Logout
             </button>
-            <br>
+            <br><br>
         </div>`
     }
 });

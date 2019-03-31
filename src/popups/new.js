@@ -27,7 +27,7 @@ module.exports = new Mosaic({
 
             let field = document.getElementById('create-name-field');
             if(field.value.length < 1) {
-                Globals.showActionAlert(`Please enter a name for this ${this.data.type.toLowerCase()}`, Globals.ColorScheme.red);
+                Globals.showActionAlert(`Please enter a name for this ${this.data.type.toLowerCase()}.`, Globals.ColorScheme.red);
                 return;
             }
 
@@ -70,7 +70,7 @@ module.exports = new Mosaic({
             </button>
             <br>
             <button class='popup-btn' onclick='${this.actions.create}'>Create ${ this.data.type }</button>
-            <br>
+            <br><br>
         </div>`
     }
 });

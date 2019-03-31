@@ -5,8 +5,10 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    text-align: center;
+    text-align: left;
     overflow-x: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 #work-title-field {
@@ -31,7 +33,10 @@
     text-align: left;
     font-size: 1.1rem;
     font-family: Avenir;
-    text-overflow: clip;
+}
+#work-title-field, #work-content-field > * {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 /* Removes the fine-detail-zoom thing on ios. */

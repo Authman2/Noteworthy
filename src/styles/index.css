@@ -85,3 +85,22 @@ html, body {
     transform: translateX(-50%);
     animation: action-alert-fade-in 0.3s ease-out;
 }
+
+.tippy-tooltip {
+    color: white;
+    border-radius: 0px;
+    font-family: Avenir;
+    background-color: rgb(68, 131, 199);
+}
+.tippy-tooltip[x-placement^='top'] .tippy-arrow {
+    border-top-color: rgb(68, 131, 199);;
+}
+.tippy-tooltip[x-placement^='bottom'] .tippy-arrow {
+    border-bottom-color: rgb(68, 131, 199);;
+}
+.tippy-tooltip[x-placement^='left'] .tippy-arrow {
+    border-left-color: rgb(68, 131, 199);;
+}
+.tippy-tooltip[x-placement^='right'] .tippy-arrow {
+    border-right-color: rgb(68, 131, 199);;
+}

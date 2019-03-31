@@ -1,8 +1,12 @@
 const Mosaic = require('@authman2/mosaic').default;
 const PillButton = require('../components/pill-button');
 const Globals = require('../other/Globals');
+const portfolio = require('../portfolio');
+
+const ResetPassword = require('../popups/reset-password');
 
 module.exports = new Mosaic({
+    portfolio,
     data: {
         loginTitle: 'Login',
         signupTitle: 'Sign Up',
@@ -41,6 +45,9 @@ module.exports = new Mosaic({
                 this.data.emailPlaceholder = 'Email';
                 this.data.passwordPlaceholder = 'Password';
             }
+        },
+        handleForgotPassword() {
+            this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
         }
     },
     view: function(data, actions) {
@@ -51,6 +58,8 @@ module.exports = new Mosaic({
             <br>
             ${ PillButton.new({ title: data.loginTitle, click: actions.handleLogin.bind(this) }) }
             ${ PillButton.new({ title: data.signupTitle, click: actions.handleSignUp.bind(this) }) }
+
+            <button class='forgot-password-button' onclick='${actions.handleForgotPassword}'>Forgot Password</button>
         </div>`
     }
 });
