@@ -1,0 +1,135 @@
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    z-index: 3;
+    max-height: 60%;
+    overflow-y: auto;
+    text-align: center;
+    border-radius: 10px;
+    background-color: white;
+    transform: translate(-50%, -50%);
+    animation: fade-in 0.2s ease-out;
+    box-shadow: 2px 2px 20px 2px rgba(0,0,0,0.3);
+}
+
+.close-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    background: none;
+    color: lightgray;
+    font-family: Avenir;
+    text-decoration: none;
+}
+.close-btn:hover {
+    color: gray;
+}
+.close-btn:active {
+    color: rgb(88, 88, 88);
+}
+
+.popup-title {
+    font-weight: 500;
+    color: #5587d2;
+    font-size: 1.6rem;
+    user-select: none;
+    font-family: Avenir;
+}
+.popup-subtitle {
+    font-weight: 300;
+    color: #5587d2;
+    font-size: 1.2rem;
+    user-select: none;
+    font-family: Avenir;
+}
+#create-name-field {
+    width: 80%;
+    margin-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid #5587d2;
+}
+#receiver-email-field, #sender-email-field, #sender-password-field {
+    width: 80%;
+    margin-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid #5587d2;
+}
+
+.popup-btn {
+    border: none;
+    padding: 10px;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    background: none;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    background-color: #5587d2;
+}
+.popup-btn:hover {
+    background-color: #3c67a8;
+}
+.popup-btn:active {
+    background-color: #274c83;
+}
+
+.notebooks-view {
+    overflow-y: hidden;
+    margin-bottom: 50px;
+}
+.notebook-cell {
+    position: relative;
+    padding: 20px;
+    cursor: pointer;
+    text-align: left;
+    color: #5587d2;
+    margin-left: auto;
+    margin-right: auto;
+    transition-duration: 0.2s;
+}
+.notebook-cell:hover, .notebook-cell:active {
+    color: white;
+    background-color: #5587d2;
+}
+.notebook-cell > h2 {
+    position: relative;
+    bottom: 0px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0px;
+    font-family: Avenir;
+}
+.notebook-cell > h5 {
+    position: relative;
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-family: Avenir;
+    /* margin-bottom: 30px; */
+}
+.cell-separator {
+    position: absolute;
+    left: 10px;
+    width: 100%;
+    height: 0.5px;
+    padding: 0px;
+    bottom: -1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    background-color: white;
+}

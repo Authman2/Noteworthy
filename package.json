@@ -4,9 +4,7 @@
   "description": "Noteworthy is an easy-to-use note taking app designed to be simplistic, yet powerful.\\n\\nFor more information, visit this project at www.adeolauthman.com/projects/Noteworthy.",
   "main": "main.js",
   "scripts": {
-    "test": "parcel -p 3000 src/index.html",
     "clean": "rm -rf dist .cache && rm -rf -R Noteworthy-darwin-x64",
-    "start-mosaic": "parcel build src/index.html --public-url ./",
     "start": "electron .",
     "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
     "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",
@@ -42,7 +40,8 @@
     "electron": "^4.1.0",
     "electron-builder": "^20.39.0",
     "electron-packager": "^13.1.1",
-    "electron-toolkit": "^1.0.24"
+    "electron-toolkit": "^1.0.24",
+    "parcel-bundler": "^1.12.3"
   },
   "build": {
     "appId": "com.adeolauthman.Noteworthy",

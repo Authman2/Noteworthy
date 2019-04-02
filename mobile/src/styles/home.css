@@ -1,0 +1,64 @@
+.home {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    background: #5587d2;
+    background: linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
+    background: -moz-linear-gradient(45deg, #5587d2 0%, #eed3ee 79%, #eed3ee 79%, #ffffff 100%);
+    background: -webkit-linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
+}
+
+.page-title {
+    color: white;
+    font-size: 35px;
+    cursor: default;
+    font-weight: 100;
+    user-select: none;
+    margin-bottom: 85px;
+    font-family: 'Avenir';
+    animation: fadeIn 1s ease-out;
+}
+
+.home > .underline-field {
+    color: white;
+    border-bottom: 2px solid white;
+}
+.home > .underline-field::placeholder {
+    color: white;
+}
+
+.home > .pill-button {
+    position: relative;
+    color: #5587d2;
+    margin-left: auto;
+    margin-right: auto;
+}
+.home > .pill-button:hover {
+    color: white;
+    background-color: #5587d2;
+}
+
+.forgot-password-button {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    background: none;
+    font-weight: bold;
+    font-size: 0.8rem;
+    font-family: Avenir;
+    text-decoration: none;
+    transition-duration: 0.1s;
+}
+.forgot-password-button:hover {
+    transform: scale(1.1);
+}
