@@ -21,22 +21,24 @@
     padding-top: 2vh;
     text-align: left;
     font-size: 1.6rem;
+    padding-left: 15px;
+    padding-right: 15px;
     font-family: Avenir;
 }
 #work-content-field {
     position: relative;
     left: 0px;
-    width: 100vw;
     outline: none;
     font-weight: 400;
     padding-top: 3vh;
     text-align: left;
     font-size: 1.1rem;
-    font-family: Avenir;
-}
-#work-title-field, #work-content-field > * {
     padding-left: 15px;
     padding-right: 15px;
+    font-family: Avenir;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 }
 
 /* Removes the fine-detail-zoom thing on ios. */

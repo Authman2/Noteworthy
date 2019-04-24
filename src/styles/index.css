@@ -32,6 +32,9 @@ html, body {
     font-family: 'Avenir';
     text-decoration: none;
 }
+.underline-field::placeholder {
+    color: white;
+}
 
 .pill-button {
     border: none;

@@ -1,6 +1,6 @@
 {
   "name": "noteworthy",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Noteworthy is an easy-to-use note taking app designed to be simplistic, yet powerful.\\n\\nFor more information, visit this project at www.adeolauthman.com/projects/Noteworthy.",
   "main": "main.js",
   "scripts": {
