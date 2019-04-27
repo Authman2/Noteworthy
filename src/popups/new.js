@@ -1,7 +1,7 @@
 import Mosaic from '@authman2/mosaic';
 import Moment from 'moment';
 
-import Globals from '../other/Globals';
+import Globals from '../util/Globals';
 import portfolio from '../portfolio';
 
 export default new Mosaic({
@@ -33,28 +33,16 @@ export default new Mosaic({
 
             // Create notebook
             const title = field.value;
-            const randomID = Globals.randomID();
-            const now = new Moment();
-            const saveDate = [now.year(), now.month(), now.day(), now.hours(), now.minutes(), now.seconds()];
-            const newObj = this.data.type === 'Notebook' ? {
-                id: randomID,
-                title: title,
-                created: saveDate,
-                pages: [],
-                creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
-            } : {
-                id: randomID,
-                title: title,
-                created: saveDate,
-                notebook: this.portfolio.get('currentNotebook').id,
+            const newObj = this.data.type === 'Notebook' ? { title } : {
+                title,
+                notebookID: this.portfolio.get('currentNotebook').id,
                 content: "",
-                creator: firebase.auth().currentUser == null ? '' : firebase.auth().currentUser.uid
             };
-            this.portfolio.dispatch(['create-new', 'close-alert'], {
-                type: this.data.type,
-                obj: newObj,
-                randomID
-            });
+            
+            // Call the api endpoint.
+
+            Globals.showActionAlert(`Created ${newData.type.toLowerCase()} called <b>${newData.obj.title}</b>`, Globals.ColorScheme.blue);
+            this.portfolio.dispatch('close-alert');
         }
     },
     view() {

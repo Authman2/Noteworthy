@@ -6,6 +6,7 @@ import Home from './pages/home';
 import Work from './pages/work';
 
 import './styles/index.less';
+import './styles/popups.less';
 
 
 // Setup the router.

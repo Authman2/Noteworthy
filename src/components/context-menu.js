@@ -24,13 +24,14 @@ const ContextItem = new Mosaic({
 })
 
 const ViewContext = new Mosaic({
+    portfolio,
     delayTemplate: true,
     actions: {
         handleNew() {
-
+            this.portfolio.dispatch('show-new-alert');
         },
         handleShare() {
-
+            this.portfolio.dispatch('show-share-alert');
         },
         handleNotebooks() {
 
@@ -144,7 +145,7 @@ export default new Mosaic({
             }
         },
         nextContext() {
-            portfolio.dispatch('switch-context');
+            this.portfolio.dispatch('switch-context');
         }
     },
     view: self => html`<div class='context-menu'>

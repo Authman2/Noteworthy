@@ -1,6 +1,9 @@
 import { Portfolio } from '@authman2/mosaic';
 import Globals from './util/Globals';
 
+import NewAlert from './popups/new';
+import ShareAlert from './popups/share';
+
 const portfolio = new Portfolio({
     context: 0,
     loadedData: {},
@@ -15,7 +18,7 @@ const portfolio = new Portfolio({
             switch(data.context) {
                 case 0: Globals.showActionAlert('Switched to <b>View</b> Context', Globals.ColorScheme.gray); break;
                 case 1: Globals.showActionAlert('Switched to <b>Selection</b> Context', Globals.ColorScheme.gray); break;
-                case 2: Globals.showActionAlert('Switched to <b>Insertion</b> Context', Globals.ColorScheme.gray); break;
+                case 2: Globals.showActionAlert('Switched to <b>Insert</b> Context', Globals.ColorScheme.gray); break;
                 case 3: Globals.showActionAlert('Switched to <b>Settings</b> Context', Globals.ColorScheme.gray); break;
                 default: break;
             }
@@ -34,23 +37,21 @@ const portfolio = new Portfolio({
         case 'select-notebook':
             data.currentNotebook = newData.currentNotebook;
             break;
-        case 'show-alert':
-            data.alert = newData.alert;
+        case 'show-new-alert':
+            data.alert = NewAlert.new();
+            document.getElementById('root').appendChild(data.alert.element);
+            break;
+        case 'show-share-alert':
+            data.alert = ShareAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             break;
         case 'close-alert':
             document.getElementsByClassName('popup')[0].remove();
             data.alert = '';
             break;
-        case 'create-new':
-            let cb = data.currentNotebook;
-            if(newData.type === 'Note' && !cb) break;
-            data.loadedData[newData.randomID] = newData.obj;
-            if(newData.type === 'Note') data.loadedData[cb.id].pages.push(newData.randomID);
-            Globals.showActionAlert(`Created ${newData.type.toLowerCase()} called <b>${newData.obj.title}</b>`, Globals.ColorScheme.blue);
-            break;
         default:
             break;
     }
 });
-module.exports = portfolio;
+
+export default portfolio;

@@ -17,6 +17,8 @@ export default new Mosaic({
                 let email = document.getElementById('email-field').value;
                 let pass = document.getElementById('password-field').value;
                 
+                Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray);
+
                 const resp = await Networking.login(email, pass);
                 if(resp.ok === true) this.router.send('/work');
                 else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
