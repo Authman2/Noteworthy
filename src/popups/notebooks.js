@@ -1,26 +1,24 @@
 import Mosaic from '@authman2/mosaic';
 
-import Globals from '../other/Globals';
-import portfolio from '../portfolio';
+import Globals from '../util/Globals';
+import { portfolio } from '../portfolio';
 
 const NotebookCell = new Mosaic({
+    delayTemplate: true,
     view() {
-        let click = this.data.selectNotebook;
-        let notebook = this.data.notebook || { pages: [] };
-        return html`<div class='notebook-cell' onclick=${click}>
-            <h2>Title: ${notebook.title}</h2>
-            <h5>Notes: ${notebook.pages.length}</h5>
+        return html`<div class='notebook-cell' onclick=${this.data.selectNotebook}>
+            <h2>Title: ${this.data.notebook.title}</h2>
+            <h5>Notes: ${this.data.notebook.pages.length}</h5>
             <hr class='cell-separator'/>
         </div>`
     }
 });
 
 const NoteCell = new Mosaic({
+    delayTemplate: true,
     view() {
-        let select = this.data.selectNote;
-        let note = this.data.note || {};
-        return html`<div class='notebook-cell' onclick=${select}>
-            <h2>${note.title}</h2>
+        return html`<div class='notebook-cell' onclick=${this.data.selectNote}>
+            <h2>${this.data.note.title}</h2>
             <hr class='cell-separator'/>
         </div>`
     }
@@ -28,19 +26,22 @@ const NoteCell = new Mosaic({
 
 export default new Mosaic({
     portfolio,
+    delayTemplate: true,
     data: {
         type: 'Notebook',
         items: []
     },
     actions: {
-        close() { this.portfolio.dispatch('close-alert'); },
+        close() {
+            portfolio.dispatch('close-alert');
+        },
         selectNotebook(item) {
             if(this.data.type === 'Note') {
-                this.portfolio.dispatch('select-note', { currentNote: item });
+                portfolio.dispatch('select-note', { note: item });
                 document.getElementById('work-title-field').innerHTML = item.title;
                 document.getElementById('work-content-field').innerHTML = item.content;
             } else {
-                this.portfolio.dispatch('select-notebook', { currentNotebook: item });
+                portfolio.dispatch('select-notebook', { notebook: item });
             }
 
             this.actions.close.call(this);
@@ -52,7 +53,7 @@ export default new Mosaic({
             <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
             <h1 class='popup-title'>${
-                this.data.type === 'Notebook' ? 'My Notebooks' : this.portfolio.get('currentNotebook').title
+                this.data.type === 'Notebook' ? 'My Notebooks' : portfolio.get('currentNotebook').title
             }</h1>
             <h4 class='popup-subtitle'>Select a ${this.data.type.toLowerCase()} to open:</h4>
 

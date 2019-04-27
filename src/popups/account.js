@@ -1,7 +1,7 @@
 import Mosaic from '@authman2/mosaic';
 
 import Globals from '../other/Globals';
-import portfolio from '../portfolio';
+import { portfolio } from '../portfolio';
 
 export default new Mosaic({
     portfolio,

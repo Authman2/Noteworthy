@@ -1,7 +1,7 @@
 import Mosaic from '@authman2/mosaic';
 
 import ContextMenu from '../components/context-menu';
-import portfolio from '../portfolio';
+import { portfolio } from '../portfolio';
 
 import Globals from '../util/Globals';
 import Networking from '../util/Networking';
@@ -11,13 +11,19 @@ import '../styles/work.less';
 
 
 export default new Mosaic({
-    portfolio,
+    async created() {
+        // Load the notebooks and notes.
+        const cUser = localStorage.getItem('noteworthy-current-user');
+        if(!cUser) return this.router.send('/');
+        else { Networking.currentUser = JSON.parse(cUser); }
+
+        const resp = await Networking.loadNotebooks();
+        portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
+    },
     view: self => html`<div>
         ${ ContextMenu.new() }
 
         <div id='work-title-field' contenteditable='true'>Title</div>
         <div id='work-content-field' contenteditable='true'>Note</div>
-
-        ${ self.portfolio.get('alert') }
     </div>`
 });

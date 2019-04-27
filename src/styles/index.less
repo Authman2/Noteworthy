@@ -2,7 +2,7 @@
 @wide-screen-down: ~'(max-width: 1199px)';
 @desktop-down: ~'(max-width: 991px)';
 @desktop-down-2: ~'(max-width: 960px)';
-@tablet-down: ~'(max-width: 767px)';
+@tablet-down: ~'(max-width: 700px)';
 @phone-down: ~'(max-width: 480px)';
 @small-phone-down: ~'(max-width: 320px)';
 
@@ -97,6 +97,19 @@ html, body {
     background-color: gray;
     transform: translateX(-50%);
     animation: action-alert-fade-in 0.3s ease-out;
+
+    @media @desktop-down {
+        font-size: 2rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1rem;
+    }
+    @media @tablet-down {
+        font-size: 2.5rem;
+    }
+    @media @phone-down {
+        font-size: 1.5rem;
+    }
 }
 
 .tippy-tooltip {

@@ -3,7 +3,7 @@ import Mosaic from '@authman2/mosaic';
 import turndown from 'turndown';
 
 import Globals from '../util/Globals';
-import portfolio from '../portfolio';
+import { portfolio } from '../portfolio';
 
 // const { dialog } = require('electron').remote;
 // const tdService = new turndown();
@@ -51,14 +51,13 @@ import portfolio from '../portfolio';
 // })
 
 export default new Mosaic({
-    portfolio,
     data: {
         title: "",
         content: ""
     },
     actions: {
         close() {
-            this.portfolio.dispatch('close-alert');
+            portfolio.dispatch('close-alert');
         },
         txt() {
             // const toExport = this.data.content;

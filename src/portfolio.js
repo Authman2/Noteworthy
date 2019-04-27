@@ -3,10 +3,12 @@ import Globals from './util/Globals';
 
 import NewAlert from './popups/new';
 import ShareAlert from './popups/share';
+import NotebooksAlert from './popups/notebooks';
 
-const portfolio = new Portfolio({
+export const portfolio = new Portfolio({
     context: 0,
-    loadedData: {},
+    notebooks: [],
+    notes: [],
     currentNotebook: null,
     currentNote: null,
     alert: ''
@@ -23,19 +25,17 @@ const portfolio = new Portfolio({
                 default: break;
             }
             break;
-        case 'load-data':
-            data.loadedData = newData.loadedData;
-            break;
-        case 'update-note':
-            let id = newData.id;
-            data.loadedData[id].title = newData.title;
-            data.loadedData[id].content = newData.content;
-            break;
-        case 'select-note':
-            data.currentNote = newData.currentNote;
+        case 'load-notebooks':
+            data.notebooks = newData.notebooks;
             break;
         case 'select-notebook':
-            data.currentNotebook = newData.currentNotebook;
+            data.currentNotebook = newData.notebook;
+            break;
+        case 'load-notes':
+            data.notes = newData.notes;
+            break;
+        case 'select-note':
+            data.currentNote = newData.note;
             break;
         case 'show-new-alert':
             data.alert = NewAlert.new();
@@ -43,6 +43,13 @@ const portfolio = new Portfolio({
             break;
         case 'show-share-alert':
             data.alert = ShareAlert.new();
+            document.getElementById('root').appendChild(data.alert.element);
+            break;
+        case 'show-notebooks-alert':
+            data.alert = NotebooksAlert.new({
+                type: newData.type || 'Notebook',
+                items: newData.type === 'Notebook' ? data.notebooks : data.notes
+            });
             document.getElementById('root').appendChild(data.alert.element);
             break;
         case 'close-alert':
@@ -53,5 +60,3 @@ const portfolio = new Portfolio({
             break;
     }
 });
-
-export default portfolio;

@@ -11,7 +11,7 @@ import NotebooksPopup from '../popups/notebooks';
 import AccountPopup from '../popups/account';
 
 import Globals from '../other/Globals';
-import portfolio from '../portfolio';
+import { portfolio } from '../portfolio';
 
 
 /** The work page. */

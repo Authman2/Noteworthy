@@ -1,7 +1,9 @@
 import Mosaic from '@authman2/mosaic';
 import tippy from 'tippy.js';
 
-import portfolio from '../portfolio';
+import Global from '../util/Globals';
+import { portfolio } from '../portfolio';
+import Networking from '../util/Networking';
 
 // import remote from 'electron';
 
@@ -34,10 +36,24 @@ const ViewContext = new Mosaic({
             this.portfolio.dispatch('show-share-alert');
         },
         handleNotebooks() {
-
+            this.portfolio.dispatch('show-notebooks-alert', {
+                type: 'Notebook'
+            });
         },
-        handleNotes() {
+        async handleNotes() {
+            if(!portfolio.get('currentNotebook')) {
+                Global.showActionAlert('You must select a notebook before opening notes', Global.ColorScheme.red);
+                return;
+            }
 
+            // Load the current notebooks notes.
+            const nid = portfolio.get('currentNotebook').id;
+            const resp = await Networking.loadNotes(nid);
+            console.log(resp);
+            this.portfolio.dispatch(['load-notes', 'show-notebooks-alert'], {
+                notes: resp.notes.notes,
+                type: 'Note'
+            });
         },
     },
     view: function() {

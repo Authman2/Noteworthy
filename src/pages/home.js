@@ -17,7 +17,7 @@ export default new Mosaic({
                 let email = document.getElementById('email-field').value;
                 let pass = document.getElementById('password-field').value;
                 
-                Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray);
+                Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray, 10000);
 
                 const resp = await Networking.login(email, pass);
                 if(resp.ok === true) this.router.send('/work');
@@ -36,6 +36,13 @@ export default new Mosaic({
         },
         handleForgotPassword() {
             // this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
+        }
+    },
+    created() {
+        const cUser = localStorage.getItem('noteworthy-current-user');
+        if(cUser) {
+            Networking.currentUser = JSON.parse(cUser);
+            this.router.send('/work');
         }
     },
     view: self => html`<div class="home">
