@@ -1,27 +1,28 @@
-const Mosaic = require('@authman2/mosaic').default;
-const remote = require('electron').remote;
-const BW = remote.BrowserWindow;
-const app = remote.app;
+import { Router } from '@authman2/mosaic';
+import 'babel-polyfill';
+// import remote from 'electron';
 
-const Home = require('./pages/home');
-const Work = require('./pages/work');
+import Home from './pages/home';
+import Work from './pages/work';
 
-new Mosaic({
-	element: '#root',
-	data: { page: 0 },
-	view: data => html`<div id='root'>
-		<div class='title-bar'></div>
-		${ data.page === 0 ? Home.new() : Work.new() }
-	</div>`,
-	created() {
-		firebase.auth().onAuthStateChanged(user => {
-			if(user) this.data.page = 1;
-			else this.data.page = 0;
-		});
-	}
-}).paint();
+import './styles/index.less';
 
-BW.getFocusedWindow().on('quit-app', (event, command) => {
-	BW.getFocusedWindow().emit('save');
-	app.quit();
-});
+
+// Setup the router.
+const router = new Router('#root');
+const titleBar = new Mosaic({ view: _ => html`<div class='title-bar'></div>` }).new();
+router.addRoute('/', [
+    titleBar,
+    Home.new()
+]);
+router.addRoute('/work', [
+    titleBar,
+    Work.new()
+]);
+router.paint();
+
+// Electron.
+// remote.BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
+// 	remote.BrowserWindow.getFocusedWindow().emit('save');
+// 	remote.app.quit();
+// });

@@ -1,11 +1,11 @@
-const Mosaic = require('@authman2/mosaic').default;
+import Mosaic from '@authman2/mosaic';
+import fs from 'fs';
+import turndown from 'turndown';
+
+import Globals from '../other/Globals';
+import portfolio from '../portfolio';
+
 const { dialog } = require('electron').remote;
-const fs = require('fs');
-const turndown = require('turndown');
-
-const Globals = require('../other/Globals');
-const portfolio = require('../portfolio');
-
 const tdService = new turndown();
 tdService.addRule('', {
     filter: 'mark',
@@ -50,7 +50,7 @@ tdService.addRule('', {
     }
 })
 
-module.exports = new Mosaic({
+export default new Mosaic({
     portfolio,
     data: {
         title: "",

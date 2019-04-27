@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 const saveData = (loadedData) => {
     const uid = firebase.auth().currentUser.uid;

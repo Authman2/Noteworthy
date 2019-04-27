@@ -1,15 +1,14 @@
-const remote = require('electron').remote;
-const tippy = require('tippy.js');
-const BW = remote.BrowserWindow;
+import Mosaic from '@authman2/mosaic';
+import tippy from 'tippy.js';
 
-const Mosaic = require('@authman2/mosaic').default;
-const portfolio = require('../portfolio');
+import portfolio from '../portfolio';
+
+// import remote from 'electron';
 
 const ContextItem = new Mosaic({
-    view: (data, actions) => html`<button class='context-item'
-                                onclick='${data.click}'
-                                data-tippy-content='${data.title || ""}'
-                                onmouseover="${actions.tooltip}"><span class='${data.icon}'></span></button>`,
+    view: self => html`<button class='context-item' onclick='${self.data.click}'
+        data-tippy-content='${self.data.title || ""}'
+        onmouseover="${self.actions.tooltip}"><span class='${self.data.icon}'></span></button>`,
     actions: {
         tooltip() {
             tippy('.context-item', {
@@ -25,12 +24,20 @@ const ContextItem = new Mosaic({
 })
 
 const ViewContext = new Mosaic({
-    portfolio,
+    delayTemplate: true,
     actions: {
-        handleNew() { BW.getFocusedWindow().emit('new'); },
-        handleShare() { BW.getFocusedWindow().emit('share'); },
-        handleNotebooks() { BW.getFocusedWindow().emit('open-notebooks'); },
-        handleNotes() { BW.getFocusedWindow().emit('open-notes'); },
+        handleNew() {
+
+        },
+        handleShare() {
+
+        },
+        handleNotebooks() {
+
+        },
+        handleNotes() {
+
+        },
     },
     view: function() {
         return html`<div style='display:inline-block;'>
@@ -42,13 +49,26 @@ const ViewContext = new Mosaic({
     }
 });
 const SelectionContext = new Mosaic({
+    delayTemplate: true,
     actions: {
-        handleBold() { BW.getFocusedWindow().emit('bold'); },
-        handleItalic() { BW.getFocusedWindow().emit('italic'); },
-        handleUnderline() { BW.getFocusedWindow().emit('underline'); },
-        handleHighlighter() { BW.getFocusedWindow().emit('highlight'); },
-        handleSubscript() { BW.getFocusedWindow().emit('subscript'); },
-        handleSuperscript() { BW.getFocusedWindow().emit('superscript'); },
+        handleBold() {
+
+        },
+        handleItalic() {
+
+        },
+        handleUnderline() {
+
+        },
+        handleHighlighter() {
+
+        },
+        handleSubscript() {
+
+        },
+        handleSuperscript() {
+
+        },
     },
     view: function() {
         return html`<div style='display:inline-block;'>
@@ -63,11 +83,20 @@ const SelectionContext = new Mosaic({
     }
 });
 const InsertionContext = new Mosaic({
+    delayTemplate: true,
     actions: {
-        handleCode() { BW.getFocusedWindow().emit('code-segment'); },
-        handleListUl() { BW.getFocusedWindow().emit('bulleted-list'); },
-        handleListOl() { BW.getFocusedWindow().emit('numbered-list'); },
-        handleCheckbox() { BW.getFocusedWindow().emit('checkbox'); },
+        handleCode() {
+
+        },
+        handleListUl() {
+
+        },
+        handleListOl() {
+
+        },
+        handleCheckbox() {
+
+        },
     },
     view: function() {
         return html`<div style='display:inline-block;'>
@@ -80,10 +109,17 @@ const InsertionContext = new Mosaic({
     }
 });
 const SettingsContext = new Mosaic({
+    delayTemplate: true,
     actions: {
-        handleAccount() { BW.getFocusedWindow().emit('show-account'); },
-        handleSave() { BW.getFocusedWindow().emit('save-online'); },
-        handleLoad() { BW.getFocusedWindow().emit('load-online'); }
+        handleAccount() {
+
+        },
+        handleSave() {
+
+        },
+        handleLoad() {
+
+        }
     },
     view: function() {
         return html`<div style='display:inline-block;'>
@@ -94,10 +130,10 @@ const SettingsContext = new Mosaic({
         </div>`
     }
 });
-module.exports = new Mosaic({
+export default new Mosaic({
     portfolio,
     actions: {
-        getCurrentContextMenu() {
+        toCM() {
             let ctx = this.portfolio.get('context');
             switch(ctx) {
                 case 0: return ViewContext.new();
@@ -106,9 +142,17 @@ module.exports = new Mosaic({
                 case 3: return SettingsContext.new();
                 default: return ViewContext.new();
             }
+        },
+        nextContext() {
+            portfolio.dispatch('switch-context');
         }
     },
-    view() {
-        return html`<div class='context-menu'>${ this.actions.getCurrentContextMenu.call(this) }</div>`
-    }
+    view: self => html`<div class='context-menu'>
+        ${ self.actions.toCM.call(self) }
+        ${ ContextItem.new({
+            title: 'Next',
+            icon: 'fa fa-chevron-right',
+            click: self.actions.nextContext.bind(self)
+        }) }
+    </div>`
 });

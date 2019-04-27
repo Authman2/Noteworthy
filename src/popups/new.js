@@ -1,10 +1,10 @@
-const Mosaic = require('@authman2/mosaic').default;
-const Moment = require('moment');
+import Mosaic from '@authman2/mosaic';
+import Moment from 'moment';
 
-const Globals = require('../other/Globals');
-const portfolio = require('../portfolio');
+import Globals from '../other/Globals';
+import portfolio from '../portfolio';
 
-module.exports = new Mosaic({
+export default new Mosaic({
     portfolio,
     data: {
         type: 'Notebook'

@@ -1,65 +1,61 @@
-const Mosaic = require('@authman2/mosaic').default;
-const PillButton = require('../components/pill-button');
-const Globals = require('../other/Globals');
-const portfolio = require('../portfolio');
+import Mosaic from '@authman2/mosaic';
 
-const ResetPassword = require('../popups/reset-password');
+import Globals from '../util/Globals';
+import Networking from '../util/Networking';
+import PillButton from '../components/pill-button';
 
-module.exports = new Mosaic({
-    portfolio,
+import '../styles/home.less';
+
+
+export default new Mosaic({
     data: {
-        loginTitle: 'Login',
-        signupTitle: 'Sign Up',
-        emailPlaceholder: 'Email',
-        passwordPlaceholder: 'Password'
+        signUpMode: false
     },
     actions: {
-        handleLogin() {
-            if(this.data.loginTitle === 'Login') {
+        async handleLogin() {
+            if(!this.data.signUpMode) {
                 let email = document.getElementById('email-field').value;
                 let pass = document.getElementById('password-field').value;
-                firebase.auth().signInWithEmailAndPassword(email, pass).then(user => {
-                    this.parent.data.page = 1;
-                }).catch(err => {
-                    Globals.showActionAlert(`${err}`, Globals.ColorScheme.red);
-                });
+                
+                const resp = await Networking.login(email, pass);
+                if(resp.ok === true) this.router.send('/work');
+                else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
             } else {
                 let email = document.getElementById('email-field').value;
                 let pass = document.getElementById('password-field').value;
-                firebase.auth().createUserWithEmailAndPassword(email, pass).then(user => {
-                    this.parent.data.page = 1;
-                }).catch(err => {
-                    Globals.showActionAlert(`${err}`, Globals.ColorScheme.red);
-                })
+
+                const resp = await Networking.createAccount(email, pass);
+                if(resp.ok === true) this.router.send('/work');
+                else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
             }
         },
         handleSignUp() {
-            if(this.data.loginTitle === 'Login') {
-                this.data.loginTitle = 'Create Account';
-                this.data.signupTitle = 'Cancel';
-                this.data.emailPlaceholder = 'Enter your email';
-                this.data.passwordPlaceholder = 'Create a password';
-            } else {
-                this.data.loginTitle = 'Login';
-                this.data.signupTitle = 'Sign Up';
-                this.data.emailPlaceholder = 'Email';
-                this.data.passwordPlaceholder = 'Password';
-            }
+            this.data.signUpMode = !this.data.signUpMode;
         },
         handleForgotPassword() {
-            this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
+            // this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
         }
     },
-    view: function(data, actions) {
-        return html`<div class='home'>
-            <h1 class='page-title'>Noteworthy</h1>
-            <input type='email' id='email-field' class='underline-field' placeholder='${data.emailPlaceholder}'>
-            <input type='password' id='password-field' class='underline-field' placeholder='${data.passwordPlaceholder}'>
-            <br>
-            ${ PillButton.new({ title: data.loginTitle, click: actions.handleLogin.bind(this) }) }
-            ${ PillButton.new({ title: data.signupTitle, click: actions.handleSignUp.bind(this) }) }
+    view: self => html`<div class="home">
+        <h1 class='page-title'>Noteworthy</h1>
+        <input type='email'
+            id='email-field'
+            class='underline-field'
+            placeholder='${self.data.signUpMode ? "Enter your email" : "Email"}'>
+        <input type='password'
+            id='password-field'
+            class='underline-field'
+            placeholder='${self.data.signUpMode ? "Create a password" : "Password"}'>
+        <br>
+        ${ PillButton.new({
+                title: self.data.signUpMode ? "Create Account" : "Login",
+                click: self.actions.handleLogin.bind(self)
+        }) }
+        ${ PillButton.new({
+                title: self.data.signUpMode ? "Cancel" : "Create Account",
+                click: self.actions.handleSignUp.bind(self)
+        }) }
 
-            <button class='forgot-password-button' onclick='${actions.handleForgotPassword}'>Forgot Password</button>
-        </div>`
-    }
+        <button class='forgot-password-button' onclick='${self.actions.handleForgotPassword}'>Forgot Password</button>
+    </div>`
 });

@@ -1,5 +1,5 @@
-const Mosaic = require('@authman2/mosaic').default;
+import Mosaic from '@authman2/mosaic';
 
-module.exports = new Mosaic({
-    view: data => html`<button class='pill-button' onclick='${data.click}'>${ data.title }</button>`
+export default new Mosaic({
+    view: self => html`<button class='pill-button' onclick='${self.data.click}'>${ self.data.title }</button>`
 });

@@ -5,6 +5,8 @@
   "main": "main.js",
   "scripts": {
     "clean": "rm -rf dist .cache && rm -rf -R Noteworthy-darwin-x64",
+    "test": "parcel -p 3000 src/index.html",
+    "package": "parcel build src/index.html --out-dir packaged",
     "start": "electron .",
     "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
     "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",
@@ -29,10 +31,12 @@
   },
   "homepage": "https://github.com/Authman2/Noteworthy#readme",
   "dependencies": {
-    "@authman2/mosaic": "^0.4.4",
+    "@authman2/mosaic": "^0.5.5",
+    "babel-polyfill": "^6.26.0",
     "firebase": "^5.9.0",
     "jquery": "^3.3.1",
     "moment": "^2.24.0",
+    "superagent": "^5.0.3",
     "tippy.js": "^4.2.1",
     "turndown": "^5.0.3"
   },
@@ -41,6 +45,7 @@
     "electron-builder": "^20.39.0",
     "electron-packager": "^13.1.1",
     "electron-toolkit": "^1.0.24",
+    "less": "^3.9.0",
     "parcel-bundler": "^1.12.3"
   },
   "build": {

@@ -1,9 +1,9 @@
-const Mosaic = require('@authman2/mosaic').default;
+import Mosaic from '@authman2/mosaic';
 
-const Globals = require('../other/Globals');
-const portfolio = require('../portfolio');
+import Globals from '../other/Globals';
+import portfolio from '../portfolio';
 
-module.exports = new Mosaic({
+export default new Mosaic({
     portfolio,
     actions: {
         close() {

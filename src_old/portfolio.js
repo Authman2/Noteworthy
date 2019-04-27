@@ -1,5 +1,5 @@
-import { Portfolio } from '@authman2/mosaic';
-import Globals from './util/Globals';
+import Mosaic, { Portfolio } from '@authman2/mosaic';
+import Globals from './other/Globals';
 
 const portfolio = new Portfolio({
     context: 0,
@@ -7,8 +7,7 @@ const portfolio = new Portfolio({
     currentNotebook: null,
     currentNote: null,
     alert: ''
-}, 
-(event, data, newData) => {
+}, (event, data, newData) => {
     switch(event) {
         case 'switch-context':
             data.context = data.context === 3 ? 0 : data.context + 1;
