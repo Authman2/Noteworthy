@@ -54,6 +54,7 @@ export const portfolio = new Portfolio({
             break;
         case 'close-alert':
             document.getElementsByClassName('popup')[0].remove();
+            document.getElementsByClassName('popup-backdrop')[0].remove();
             data.alert = '';
             break;
         default:

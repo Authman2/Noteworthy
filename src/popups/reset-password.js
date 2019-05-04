@@ -19,17 +19,19 @@ export default new Mosaic({
         }
     },
     view() {
-        return html`<div class='popup'>
-            <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
+        return html`<div class='popup-backdrop'>
+            <div class='popup'>
+                <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
-            <h1 class='popup-title'>Reset Password</h1>
-            <p style='font-family:Avenir' id='account-alert-email'>Enter your Email:</p>
-            <input type='email' placeholder="Email" id='reset-email-field'>
-            <br><br>
-            <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetWithoutAccount}'>
-                Send Password Reset Email
-            </button>
-            <br><br>
+                <h1 class='popup-title'>Reset Password</h1>
+                <p style='font-family:Avenir' id='account-alert-email'>Enter your Email:</p>
+                <input type='email' placeholder="Email" id='reset-email-field'>
+                <br><br>
+                <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetWithoutAccount}'>
+                    Send Password Reset Email
+                </button>
+                <br><br>
+            </div>
         </div>`
     }
 });

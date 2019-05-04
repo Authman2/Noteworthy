@@ -28,20 +28,22 @@ export default new Mosaic({
     },
     view() {
         let user = firebase.auth().currentUser;
-        return html`<div class='popup'>
-            <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
+        return html`<div class='popup-backdrop'>
+            <div class='popup'>
+                <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
-            <h1 class='popup-title'>Account</h1>
-            <p style='font-family:Avenir' id='account-alert-email'>Email: ${ user ? user.email : 'Not Available' }</p>
-            <br>
-            <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
-                Send Password Reset Email
-            </button>
-            <br>
-            <button class='popup-btn' id='account-alert-logout' onclick='${this.actions.logout}'>
-                Logout
-            </button>
-            <br><br>
+                <h1 class='popup-title'>Account</h1>
+                <p style='font-family:Avenir' id='account-alert-email'>Email: ${ user ? user.email : 'Not Available' }</p>
+                <br>
+                <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
+                    Send Password Reset Email
+                </button>
+                <br>
+                <button class='popup-btn' id='account-alert-logout' onclick='${this.actions.logout}'>
+                    Logout
+                </button>
+                <br><br>
+            </div>
         </div>`
     }
 });

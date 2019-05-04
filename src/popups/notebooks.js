@@ -8,7 +8,7 @@ const NotebookCell = new Mosaic({
     view() {
         return html`<div class='notebook-cell' onclick=${this.data.selectNotebook}>
             <h2>Title: ${this.data.notebook.title}</h2>
-            <h5>Notes: ${this.data.notebook.pages.length}</h5>
+            <h5>Notes: ${this.data.notebook.pages ? this.data.notebook.pages.length : 0}</h5>
             <hr class='cell-separator'/>
         </div>`
     }
@@ -49,24 +49,26 @@ export default new Mosaic({
         }
     },
     view() {
-        return html`<div class='popup'>
-            <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
+        return html`<div class='popup-backdrop'>
+            <div class='popup'>
+                <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
-            <h1 class='popup-title'>${
-                this.data.type === 'Notebook' ? 'My Notebooks' : portfolio.get('currentNotebook').title
-            }</h1>
-            <h4 class='popup-subtitle'>Select a ${this.data.type.toLowerCase()} to open:</h4>
+                <h1 class='popup-title'>${
+                    this.data.type === 'Notebook' ? 'My Notebooks' : portfolio.get('currentNotebook').title
+                }</h1>
+                <h4 class='popup-subtitle'>Select a ${this.data.type.toLowerCase()} to open:</h4>
 
-            <div class='notebooks-view'>
-                ${
-                    this.data.items.length > 0 ? this.data.items.map((item, index) => {
-                        if(this.data.type === 'Notebook') {
-                            return NotebookCell.new({ notebook: item, selectNotebook: this.actions.selectNotebook.bind(this, item) });
-                        } else {
-                            return NoteCell.new({ note: item, selectNote: this.actions.selectNotebook.bind(this, item) })
-                        }
-                    }) : ''
-                }
+                <div class='notebooks-view'>
+                    ${
+                        this.data.items.length > 0 ? this.data.items.map((item, index) => {
+                            if(this.data.type === 'Notebook') {
+                                return NotebookCell.new({ notebook: item, selectNotebook: this.actions.selectNotebook.bind(this, item) });
+                            } else {
+                                return NoteCell.new({ note: item, selectNote: this.actions.selectNotebook.bind(this, item) })
+                            }
+                        }) : ''
+                    }
+                </div>
             </div>
         </div>`
     }

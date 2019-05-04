@@ -4,8 +4,9 @@ const API_URL = 'https://noteworthy-backend.herokuapp.com';
 export default {
     currentUser: undefined,
 
-    async login(email, password) {
-        const response = await fetch(`${API_URL}/login?email=${email}&password=${password}`);
+    async login(email, password, token) {
+        const response = token ? await fetch(`${API_URL}/login?email=${email}&password=${password}&token=${token}`)
+                                : await fetch(`${API_URL}/login?email=${email}&password=${password}`);
         if(response.ok === true) {
             const user = await response.json();
             this.currentUser = user;
@@ -37,6 +38,42 @@ export default {
         
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/notes?uid=${uid}&notebookID=${notebookID}`);
+        if(response.ok === true) return { notes: await response.json(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
+    async createNotebook(title) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/create-notebook?uid=${uid}`, {
+            method: 'post',
+            body: JSON.stringify({ title })
+        });
+        if(response.ok === true) return { notes: await response.json(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
+    async createNote(title, content, notebookID) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/create-note?uid=${uid}`, {
+            method: 'post',
+            body: JSON.stringify({ title, content, notebookID })
+        });
+        if(response.ok === true) return { notes: await response.json(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
+    async save(data) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/create-note?uid=${uid}`, {
+            method: 'post',
+            body: JSON.stringify({ notebooksAndNotes: data })
+        });
         if(response.ok === true) return { notes: await response.json(), ok: true }
         else return { err: await response.text(), ok: false }
     }

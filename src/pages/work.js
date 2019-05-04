@@ -11,14 +11,11 @@ import '../styles/work.less';
 
 
 export default new Mosaic({
-    async created() {
+    created() {
         // Load the notebooks and notes.
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(!cUser) return this.router.send('/');
         else { Networking.currentUser = JSON.parse(cUser); }
-
-        const resp = await Networking.loadNotebooks();
-        portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
     },
     view: self => html`<div>
         ${ ContextMenu.new() }

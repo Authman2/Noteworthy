@@ -38,11 +38,15 @@ export default new Mosaic({
             // this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
         }
     },
-    created() {
+    async created() {
+        // Auto login using token.
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(cUser) {
-            Networking.currentUser = JSON.parse(cUser);
-            this.router.send('/work');
+            const creds = JSON.parse(cUser);
+
+            const resp = await Networking.login(creds.email, '', creds.token);
+            if(resp.ok === true) this.router.send('/work');
+            else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
         }
     },
     view: self => html`<div class="home">

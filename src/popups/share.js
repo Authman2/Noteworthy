@@ -96,15 +96,17 @@ export default new Mosaic({
         }
     },
     view() {
-        return html`<div class='popup'>
-            <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
+        return html`<div class='popup-backdrop'>
+            <div class='popup'>
+                <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
-            <h1 class='popup-title'>Share</h1>
-            <h1 class='popup-subtitle'>Select the file type to export to:</h1>
-            <button class='popup-btn' onclick='${this.actions.txt}'>TXT</button>
-            <button class='popup-btn' onclick='${this.actions.md}'>Markdown</button>
-            <button class='popup-btn' onclick='${this.actions.html}'>HTML</button>
-            <br><br>
+                <h1 class='popup-title'>Share</h1>
+                <h1 class='popup-subtitle'>Select the file type to export to:</h1>
+                <button class='popup-btn' onclick='${this.actions.txt}'>TXT</button>
+                <button class='popup-btn' onclick='${this.actions.md}'>Markdown</button>
+                <button class='popup-btn' onclick='${this.actions.html}'>HTML</button>
+                <br><br>
+            </div>
         </div>`
     }
 });

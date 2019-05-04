@@ -33,9 +33,17 @@ const ViewContext = new Mosaic({
             this.portfolio.dispatch('show-new-alert');
         },
         handleShare() {
+            if(!portfolio.get('currentNote')) {
+                Global.showActionAlert('You must select a note before you can share one!', Global.ColorScheme.red);
+                return;
+            }
+
             this.portfolio.dispatch('show-share-alert');
         },
-        handleNotebooks() {
+        async handleNotebooks() {
+            const resp = await Networking.loadNotebooks();
+            portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
+
             this.portfolio.dispatch('show-notebooks-alert', {
                 type: 'Notebook'
             });
@@ -46,14 +54,15 @@ const ViewContext = new Mosaic({
                 return;
             }
 
-            // Load the current notebooks notes.
+            // Load the current notebooks' notes.
+            Global.showActionAlert('Loading notes...');
             const nid = portfolio.get('currentNotebook').id;
             const resp = await Networking.loadNotes(nid);
-            console.log(resp);
             this.portfolio.dispatch(['load-notes', 'show-notebooks-alert'], {
                 notes: resp.notes.notes,
                 type: 'Note'
             });
+            Global.hideActionAlert();
         },
     },
     view: function() {
@@ -69,22 +78,23 @@ const SelectionContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleBold() {
-
+            document.execCommand('bold');
         },
         handleItalic() {
-
+            document.execCommand('italic');
         },
         handleUnderline() {
-
+            document.execCommand('underline');
         },
         handleHighlighter() {
-
+            document.execCommand('useCSS', false, false);
+            document.execCommand('hiliteColor', false, 'yellow');
         },
         handleSubscript() {
-
+            document.execCommand('subscript');
         },
         handleSuperscript() {
-
+            document.execCommand('superscript');
         },
     },
     view: function() {
@@ -103,16 +113,26 @@ const InsertionContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleCode() {
-
+            const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
+            document.execCommand('insertHTML', false, `<br>${code}<br>`);
         },
         handleListUl() {
-
+            document.execCommand('insertUnorderedList');
         },
         handleListOl() {
-
+            document.execCommand('insertOrderedList');
         },
         handleCheckbox() {
-
+            document.execCommand('insertHTML', false, '<p><input class="checkbox" type="checkbox"><label>Checkbox Item</label></p><br/>');
+    
+            const checks = document.getElementsByClassName('checkbox');
+            for(var i = 0; i < checks.length; i++) {
+                const item = checks[i];
+                
+                item.onchange = () => {
+                    item.setAttribute('checked', item.checked);
+                }
+            }
         },
     },
     view: function() {
@@ -129,12 +149,25 @@ const SettingsContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleAccount() {
-
+            portfolio.dispatch('show-alert', { alert: AccountPopup.new() });
         },
-        handleSave() {
+        async handleSave() {
+            const nbResp = await Networking.loadNotebooks();
+            if(nbResp.ok === false) return Global.showActionAlert("Couldn't save data.", Global.ColorScheme.red);
+            
+            const toJSON = {};
+            const notebooks = nbResp;
+            const notes = nResp.notes;
+            notebooks.forEach(nb => toJSON[nb.id] = nb);
+            notes.forEach(n => toJSON[n.id] = n);
 
+            console.log(toJSON);
+            return;
+            const result = await Networking.save(toJSON);
+            if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
+            else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
         },
-        handleLoad() {
+        async handleLoad() {
 
         }
     },

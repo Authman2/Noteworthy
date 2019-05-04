@@ -49,6 +49,14 @@ const showActionAlert = (text, color, time = 2500) => {
         })
     }, time);
 }
+const hideActionAlert = () => {
+    $('.action-alert').animate({
+        opacity: 0,
+        bottom: '-10px'
+    }, '0.3s', () => {
+        $('.action-alert').remove();
+    })
+}
 
 const randomID = () => {
     return '_' + Math.random().toString(36).substr(2, 15);
@@ -65,6 +73,7 @@ module.exports = {
     saveData,
     loadData,
     showActionAlert,
+    hideActionAlert,
     randomID,
     ColorScheme
 }
