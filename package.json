@@ -6,12 +6,13 @@
   "scripts": {
     "clean": "rm -rf dist .cache && rm -rf -R Noteworthy-darwin-x64",
     "test": "parcel -p 3000 src/index.html",
-    "package": "parcel build src/index.html --out-dir dist",
+    "package": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",
     "start": "electron .",
     "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
     "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",
     "electron-toolkit": "electron ./node_modules/electron-toolkit",
-    "dist": "electron-builder --x64 --mac"
+    "dist": "electron-builder --x64 --mac",
+    "deploy": "npm run package && git add . && git commit -m \"new version\" && git push"
   },
   "repository": {
     "type": "git",
