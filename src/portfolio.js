@@ -41,10 +41,12 @@ export const portfolio = new Portfolio({
         case 'show-new-alert':
             data.alert = NewAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;
         case 'show-share-alert':
             data.alert = ShareAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;
         case 'show-notebooks-alert':
             data.alert = NotebooksAlert.new({
@@ -52,15 +54,18 @@ export const portfolio = new Portfolio({
                 items: newData.type === 'Notebook' ? data.notebooks : data.notes
             });
             document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;
         case 'show-account-alert':
             data.alert = AccountAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;
         case 'close-alert':
             document.getElementsByClassName('popup')[0].remove();
             document.getElementsByClassName('popup-backdrop')[0].remove();
             data.alert = '';
+            document.getElementsByTagName('body')[0].style.overflowY = 'auto';
             break;
         default:
             break;

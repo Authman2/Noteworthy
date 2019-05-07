@@ -17,7 +17,7 @@ export default new Mosaic({
         if(!cUser) return this.router.send('/');
         else { Networking.currentUser = JSON.parse(cUser); }
     },
-    view: self => html`<div>
+    view: self => html`<div class='work'>
         ${ ContextMenu.new() }
 
         <div id='work-title-field' contenteditable='true'>Title</div>

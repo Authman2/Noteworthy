@@ -32473,11 +32473,13 @@ var portfolio = new _mosaic.Portfolio({
     case 'show-new-alert':
       data.alert = _new.default.new();
       document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
       break;
 
     case 'show-share-alert':
       data.alert = _share.default.new();
       document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
       break;
 
     case 'show-notebooks-alert':
@@ -32486,17 +32488,20 @@ var portfolio = new _mosaic.Portfolio({
         items: newData.type === 'Notebook' ? data.notebooks : data.notes
       });
       document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
       break;
 
     case 'show-account-alert':
       data.alert = _account.default.new();
       document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
       break;
 
     case 'close-alert':
       document.getElementsByClassName('popup')[0].remove();
       document.getElementsByClassName('popup-backdrop')[0].remove();
       data.alert = '';
+      document.getElementsByTagName('body')[0].style.overflowY = 'auto';
       break;
 
     default:
@@ -33179,7 +33184,7 @@ require("../styles/work.less");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div>\n        ", "\n\n        <div id='work-title-field' contenteditable='true'>Title</div>\n        <div id='work-content-field' contenteditable='true'>Note</div>\n    </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='work'>\n        ", "\n\n        <div id='work-title-field' contenteditable='true'>Title</div>\n        <div id='work-content-field' contenteditable='true'>Note</div>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -33294,7 +33299,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64275" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49962" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -16,11 +16,11 @@ self.addEventListener('beforeinstallprompt', e => {
 });
 self.addEventListener('install', e => {
     console.log('Service worker installed!');
-    e.waitUntil(
-        caches.open('noteworthy-cache').then(cache => {
-            cache.addAll(staticAssets);
-        })
-    );
+    // e.waitUntil(
+    //     caches.open('noteworthy-cache').then(cache => {
+    //         cache.addAll(staticAssets);
+    //     })
+    // );
     self.skipWaiting();
 });
 self.addEventListener('activate', e => {
