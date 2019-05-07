@@ -90,6 +90,42 @@ export default {
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }
         else return { err: await response.text(), ok: false }
+    },
+
+    async move(noteID, fromNotebook, toNotebook) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/move-note?uid=${uid}`, {
+            method: 'put',
+            body: JSON.stringify({ noteID, fromNotebook, toNotebook })
+        });
+        if(response.ok === true) return { notes: await response.text(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
+    async deleteNote(noteID) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/delete-note?uid=${uid}`, {
+            method: 'delete',
+            body: JSON.stringify({ noteID })
+        });
+        if(response.ok === true) return { notes: await response.json(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
+    async deleteNotebook(notebookID) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/delete-notebook?uid=${uid}`, {
+            method: 'delete',
+            body: JSON.stringify({ notebookID })
+        });
+        if(response.ok === true) return { notes: await response.json(), ok: true }
+        else return { err: await response.text(), ok: false }
     }
 
 }

@@ -42,7 +42,6 @@ const ViewContext = new Mosaic({
         },
         async handleNotebooks() {
             const resp = await Networking.loadNotebooks();
-            console.log(resp);
             portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
 
             this.portfolio.dispatch('show-notebooks-alert', {

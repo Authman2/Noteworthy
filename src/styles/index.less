@@ -10,6 +10,7 @@ html, body {
     margin: 0px;
     padding: 0px;
     overflow-x: hidden;
+    overflow-y: hidden;
     background-color: white;
 }
 
@@ -99,7 +100,7 @@ html, body {
     animation: action-alert-fade-in 0.3s ease-out;
 
     @media @desktop-down {
-        font-size: 2rem;
+        font-size: 2.7rem;
     }
     @media @desktop-down-2 {
         font-size: 1rem;
@@ -117,6 +118,13 @@ html, body {
     border-radius: 0px;
     font-family: Avenir;
     background-color: rgb(68, 131, 199);
+
+    @media @desktop-down {
+        display: none;
+    }
+    @media @desktop-down-2 {
+        display: block;
+    }
 }
 .tippy-tooltip[x-placement^='top'] .tippy-arrow {
     border-top-color: rgb(68, 131, 199);;

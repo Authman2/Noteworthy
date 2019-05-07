@@ -1,3 +1,5 @@
+@import './index.less';
+
 @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -25,6 +27,13 @@
     transform: translate(-50%, -50%);
     animation: fade-in 0.2s ease-out;
     box-shadow: 2px 2px 20px 2px rgba(0,0,0,0.3);
+
+    @media @wide-screen-down {
+        width: 80%;
+    }
+    @media @desktop-down-2 {
+        width: 80%;
+    }
 }
 
 .close-btn {
@@ -34,9 +43,9 @@
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: 1rem;
     font-weight: 500;
     background: none;
+    font-size: 1.2rem;
     color: lightgray;
     font-family: Avenir;
     text-decoration: none;
@@ -47,6 +56,13 @@
     &:active {
         color: rgb(88, 88, 88);
     }
+
+    @media @wide-screen-down {
+        font-size: 3rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1.2rem;
+    }
 }
 
 .popup-title {
@@ -55,6 +71,13 @@
     font-size: 1.6rem;
     user-select: none;
     font-family: Avenir;
+
+    @media @wide-screen-down {
+        font-size: 3.5rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1.6rem;
+    }
 }
 .popup-subtitle {
     font-weight: 300;
@@ -62,6 +85,13 @@
     font-size: 1.2rem;
     user-select: none;
     font-family: Avenir;
+
+    @media @wide-screen-down {
+        font-size: 2.5rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1.2rem;
+    }
 }
 #create-name-field {
     width: 80%;
@@ -69,6 +99,13 @@
     margin-left: auto;
     margin-right: auto;
     border-bottom: 1px solid #5587d2;
+
+    @media @wide-screen-down {
+        font-size: 2.8rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1.4rem;
+    }
 }
 #receiver-email-field, #sender-email-field, #sender-password-field {
     width: 80%;
@@ -91,12 +128,24 @@
     text-decoration: none;
     background-color: #5587d2;
 
-    &:hover {
-        background-color: #3c67a8;
+    @media @wide-screen-down {
+        padding: 25px;
+        font-size: 2rem;
+        margin-bottom: 30px;
     }
-    &:active {
-        background-color: #274c83;
+    @media @desktop-down-2 {
+        padding: 10px;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+
+        &:hover {
+            background-color: #3c67a8;
+        }
+        &:active {
+            background-color: #274c83;
+        }
     }
+    
 }
 
 .notebooks-view {
@@ -106,17 +155,12 @@
 .notebook-cell {
     position: relative;
     padding: 20px;
-    cursor: pointer;
+    cursor: default;
     text-align: left;
     color: #5587d2;
     margin-left: auto;
     margin-right: auto;
     transition-duration: 0.2s;
-
-    &:hover, &:active {
-        color: white;
-        background-color: #5587d2;
-    }
 
     h2 {
         position: relative;
@@ -125,6 +169,28 @@
         font-weight: bold;
         margin-bottom: 0px;
         font-family: Avenir;
+
+        @media @wide-screen-down {
+            font-size: 3rem;
+        }
+        @media @desktop-down-2 {
+            font-size: 1.2rem;
+        }
+    }
+    h4 {
+        position: relative;
+        bottom: 0px;
+        margin-top: 15px;
+        font-weight: 400;
+        font-size: 1.2rem;
+        font-family: Avenir;
+
+        @media @wide-screen-down {
+            font-size: 1.6rem;
+        }
+        @media @desktop-down-2 {
+            font-size: 1.2rem;
+        }
     }
     h5 {
         position: relative;
@@ -132,6 +198,46 @@
         font-weight: 400;
         font-family: Avenir;
         /* margin-bottom: 30px; */
+    }
+
+    .popup-btn {
+        margin-right: 20px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+.move-popup {
+    h1 {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .move-view {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 20px;
+
+        .popup-btn {
+            margin: 10px;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    }
+}
+
+.delete-popup {
+    padding-bottom: 30px;
+    
+    h4 {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .popup-btn {
+        margin: 10px;
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
 }
 
@@ -146,4 +252,13 @@
     margin-right: auto;
     margin-bottom: 0px;
     background-color: white;
+}
+
+#account-alert-email {
+    @media @wide-screen-down {
+        font-size: 2.5rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1.2rem;
+    }
 }

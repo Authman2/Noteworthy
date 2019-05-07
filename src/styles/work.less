@@ -1,3 +1,5 @@
+@import './index.less';
+
 .work {
     position: relative;
     top: 0px;
@@ -16,14 +18,21 @@
     left: 0px;
     width: 100%;
     outline: none;
-    font-weight: 300;
+    font-size: 2rem;
     padding-top: 2vh;
     text-align: left;
+    font-weight: bold;
     margin-top: 100px;
-    font-size: 1.6rem;
     padding-left: 15px;
     padding-right: 15px;
     font-family: Avenir;
+
+    @media @wide-screen-down {
+        padding-top: 4vh;
+    }
+    @media @desktop-down-2 {
+        padding-top: 2vh;
+    }
 }
 #work-content-field {
     position: relative;

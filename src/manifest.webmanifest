@@ -2,8 +2,9 @@
     "name": "Noteworthy",
     "short_name": "Noteworthy",
     "start_url": "/login",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#fff",
+    "orientation": "portrait",
     "theme_color": "#5386d1",
     "icons": [{
         "src": "../NoteworthyAppLogo.png",

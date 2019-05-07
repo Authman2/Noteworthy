@@ -1,9 +1,11 @@
+@import './index.less';
+
 .home {
-    position: absolute;
+    position: relative;
     top: 0px;
     left: 0px;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     user-select: none;
     margin-left: auto;
     margin-right: auto;
@@ -14,36 +16,69 @@
     background: -webkit-linear-gradient(45deg, #5587d2 0%,#eed3ee 79%,#eed3ee 79%,#ffffff 100%);
 
     .underline-field {
+        position: relative;
         color: white;
         border-bottom: 2px solid white;
     
         &::placeholder {
             color: white;
         }
+
+        @media @wide-screen-down {
+            font-size: 3rem;
+            margin-bottom: 5rem;
+        }
+        @media @desktop-down-2 {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+        }
     }
 
     .pill-button {
         position: relative;
+        padding: 1.4rem;
         color: #5587d2;
         margin-left: auto;
         margin-right: auto;
     
-        &:hover {
-            color: white;
-            background-color: #5587d2;
+        @media @wide-screen-down {
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            padding-left: 3.4rem;
+            padding-right: 3.4rem;
+        }
+        @media @desktop-down-2 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            padding-left: 1.4rem;
+            padding-right: 1.4rem;
+            
+            &:hover {
+                color: white;
+                background-color: #5587d2;
+            }
         }
     }
 }
 
 .page-title {
+    position: relative;
     color: white;
     font-size: 35px;
     cursor: default;
     font-weight: 100;
+    padding-top: 80px;
     user-select: none;
     margin-bottom: 85px;
     font-family: 'Avenir';
     animation: fadeIn 1s ease-out;
+
+    @media @wide-screen-down {
+        font-size: 6rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 3rem;
+    }
 }
 
 .forgot-password-button {
@@ -63,5 +98,14 @@
     
     &:hover {
         transform: scale(1.1);
+    }
+
+    @media @wide-screen-down {
+        right: 30px;
+        bottom: 30px;
+        font-size: 1.7rem;
+    }
+    @media @desktop-down-2 {
+        font-size: 1rem;
     }
 }

@@ -5,6 +5,8 @@ import NewAlert from './popups/new';
 import ShareAlert from './popups/share';
 import NotebooksAlert from './popups/notebooks';
 import AccountAlert from './popups/account';
+import MoveAlert from './popups/move';
+import DeleteAlert from './popups/delete';
 
 export const portfolio = new Portfolio({
     context: 0,
@@ -58,6 +60,26 @@ export const portfolio = new Portfolio({
             break;
         case 'show-account-alert':
             data.alert = AccountAlert.new();
+            document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            break;
+        case 'show-move-alert':
+            data.alert = MoveAlert.new({
+                notebooks: newData.notebooks,
+                title: newData.title,
+                currentNotebook: newData.currentNotebook,
+                movingNote: newData.movingNote
+            });
+            document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            break;
+        case 'show-delete-alert':
+            data.alert = DeleteAlert.new({
+                type: newData.type, // notebook: 0, note: 1
+                message: newData.message,
+                title: newData.title,
+                id: newData.id
+            });
             document.getElementById('root').appendChild(data.alert.element);
             document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;

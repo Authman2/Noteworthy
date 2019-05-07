@@ -21672,6 +21672,224 @@ var _default = {
     }
 
     return save;
+  }(),
+  move: function () {
+    var _move = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee10(noteID, fromNotebook, toNotebook) {
+      var uid, response;
+      return regeneratorRuntime.wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              if (this.currentUser) {
+                _context10.next = 2;
+                break;
+              }
+
+              return _context10.abrupt("return", {
+                err: 'No current user',
+                ok: false
+              });
+
+            case 2:
+              uid = this.currentUser.uid;
+              _context10.next = 5;
+              return fetch("".concat(API_URL, "/move-note?uid=").concat(uid), {
+                method: 'put',
+                body: JSON.stringify({
+                  noteID: noteID,
+                  fromNotebook: fromNotebook,
+                  toNotebook: toNotebook
+                })
+              });
+
+            case 5:
+              response = _context10.sent;
+
+              if (!(response.ok === true)) {
+                _context10.next = 13;
+                break;
+              }
+
+              _context10.next = 9;
+              return response.text();
+
+            case 9:
+              _context10.t0 = _context10.sent;
+              return _context10.abrupt("return", {
+                notes: _context10.t0,
+                ok: true
+              });
+
+            case 13:
+              _context10.next = 15;
+              return response.text();
+
+            case 15:
+              _context10.t1 = _context10.sent;
+              return _context10.abrupt("return", {
+                err: _context10.t1,
+                ok: false
+              });
+
+            case 17:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, this);
+    }));
+
+    function move(_x13, _x14, _x15) {
+      return _move.apply(this, arguments);
+    }
+
+    return move;
+  }(),
+  deleteNote: function () {
+    var _deleteNote = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee11(noteID) {
+      var uid, response;
+      return regeneratorRuntime.wrap(function _callee11$(_context11) {
+        while (1) {
+          switch (_context11.prev = _context11.next) {
+            case 0:
+              if (this.currentUser) {
+                _context11.next = 2;
+                break;
+              }
+
+              return _context11.abrupt("return", {
+                err: 'No current user',
+                ok: false
+              });
+
+            case 2:
+              uid = this.currentUser.uid;
+              _context11.next = 5;
+              return fetch("".concat(API_URL, "/delete-note?uid=").concat(uid), {
+                method: 'delete',
+                body: JSON.stringify({
+                  noteID: noteID
+                })
+              });
+
+            case 5:
+              response = _context11.sent;
+
+              if (!(response.ok === true)) {
+                _context11.next = 13;
+                break;
+              }
+
+              _context11.next = 9;
+              return response.json();
+
+            case 9:
+              _context11.t0 = _context11.sent;
+              return _context11.abrupt("return", {
+                notes: _context11.t0,
+                ok: true
+              });
+
+            case 13:
+              _context11.next = 15;
+              return response.text();
+
+            case 15:
+              _context11.t1 = _context11.sent;
+              return _context11.abrupt("return", {
+                err: _context11.t1,
+                ok: false
+              });
+
+            case 17:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, _callee11, this);
+    }));
+
+    function deleteNote(_x16) {
+      return _deleteNote.apply(this, arguments);
+    }
+
+    return deleteNote;
+  }(),
+  deleteNotebook: function () {
+    var _deleteNotebook = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee12(notebookID) {
+      var uid, response;
+      return regeneratorRuntime.wrap(function _callee12$(_context12) {
+        while (1) {
+          switch (_context12.prev = _context12.next) {
+            case 0:
+              if (this.currentUser) {
+                _context12.next = 2;
+                break;
+              }
+
+              return _context12.abrupt("return", {
+                err: 'No current user',
+                ok: false
+              });
+
+            case 2:
+              uid = this.currentUser.uid;
+              _context12.next = 5;
+              return fetch("".concat(API_URL, "/delete-notebook?uid=").concat(uid), {
+                method: 'delete',
+                body: JSON.stringify({
+                  notebookID: notebookID
+                })
+              });
+
+            case 5:
+              response = _context12.sent;
+
+              if (!(response.ok === true)) {
+                _context12.next = 13;
+                break;
+              }
+
+              _context12.next = 9;
+              return response.json();
+
+            case 9:
+              _context12.t0 = _context12.sent;
+              return _context12.abrupt("return", {
+                notes: _context12.t0,
+                ok: true
+              });
+
+            case 13:
+              _context12.next = 15;
+              return response.text();
+
+            case 15:
+              _context12.t1 = _context12.sent;
+              return _context12.abrupt("return", {
+                err: _context12.t1,
+                ok: false
+              });
+
+            case 17:
+            case "end":
+              return _context12.stop();
+          }
+        }
+      }, _callee12, this);
+    }));
+
+    function deleteNotebook(_x17) {
+      return _deleteNotebook.apply(this, arguments);
+    }
+
+    return deleteNotebook;
   }()
 };
 exports.default = _default;
@@ -32145,6 +32363,8 @@ var _Globals = _interopRequireDefault(require("../util/Globals"));
 
 var _portfolio = require("../portfolio");
 
+var _Networking = _interopRequireDefault(require("../util/Networking"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject3() {
@@ -32158,7 +32378,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["<div class='notebook-cell' onclick=", ">\n            <h2>", "</h2>\n            <hr class='cell-separator'/>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>", "</h2>\n            <h4>Created: ", "</h4>\n            <button class='popup-btn' onclick=\"", "\">Open</button>\n            <button class='popup-btn' onclick=\"", "\">Move</button>\n            <button class='popup-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -32167,8 +32387,12 @@ function _templateObject2() {
   return data;
 }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='notebook-cell' onclick=", ">\n            <h2>Title: ", "</h2>\n            <h5>Notes: ", "</h5>\n            <hr class='cell-separator'/>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>Title: ", "</h2>\n            <h5>Notes: ", "</h5>\n\n            <button class='popup-btn' onclick=\"", "\">Open</button>\n            <button class='popup-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -32181,14 +32405,89 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var NotebookCell = new _mosaic.default({
   delayTemplate: true,
+  actions: {
+    delete: function _delete() {
+      // Make sure there is still a current user.
+      var user = localStorage.getItem('noteworthy-current-user');
+      if (!user) return _Globals.default.showActionAlert('No user is currently logged in.', _Globals.default.ColorScheme.red); // Close this alert and tell the portfolio to open up the Move alert.
+
+      _portfolio.portfolio.dispatch(['close-alert', 'show-delete-alert'], {
+        type: 0,
+        title: this.data.notebook.title,
+        id: this.data.notebook.id,
+        message: "Are you sure you want to delete the notebook \"".concat(this.data.notebook.title, "\"? This\n                    will also remove all of the notes inside of this notebook.")
+      });
+    }
+  },
   view: function view() {
-    return html(_templateObject(), this.data.selectNotebook, this.data.notebook.title, this.data.notebook.pages ? this.data.notebook.pages.length : 0);
+    return html(_templateObject(), this.data.notebook.title, this.data.notebook.pages ? this.data.notebook.pages.length : 0, this.data.selectNotebook, this.actions.delete);
   }
 });
 var NoteCell = new _mosaic.default({
   delayTemplate: true,
+  actions: {
+    move: function () {
+      var _move = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var user, notebooks, cnb;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // Make sure there is still a current user.
+                user = localStorage.getItem('noteworthy-current-user');
+
+                if (user) {
+                  _context.next = 3;
+                  break;
+                }
+
+                return _context.abrupt("return", _Globals.default.showActionAlert('No user is currently logged in.', _Globals.default.ColorScheme.red));
+
+              case 3:
+                // Load up all of the notebooks that this user has.
+                notebooks = _portfolio.portfolio.get('notebooks'); // Close this alert and tell the portfolio to open up the Move alert.
+
+                cnb = _portfolio.portfolio.get('currentNotebook');
+
+                _portfolio.portfolio.dispatch(['close-alert', 'show-move-alert'], {
+                  notebooks: notebooks,
+                  title: this.data.note.title,
+                  currentNotebook: cnb,
+                  movingNote: this.data.note
+                });
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function move() {
+        return _move.apply(this, arguments);
+      }
+
+      return move;
+    }(),
+    delete: function _delete() {
+      // Make sure there is still a current user.
+      var user = localStorage.getItem('noteworthy-current-user');
+      if (!user) return _Globals.default.showActionAlert('No user is currently logged in.', _Globals.default.ColorScheme.red); // Close this alert and tell the portfolio to open up the Move alert.
+
+      _portfolio.portfolio.dispatch(['close-alert', 'show-delete-alert'], {
+        type: 1,
+        title: this.data.note.title,
+        id: this.data.note.id,
+        message: "Are you sure you want to delete the note \"".concat(this.data.note.title, "\"? This cannot be undone.")
+      });
+    }
+  },
   view: function view() {
-    return html(_templateObject2(), this.data.selectNote, this.data.note.title);
+    var date = new Date(this.data.note.created);
+    return html(_templateObject2(), this.data.note.title, date.toDateString(), this.data.selectNote, this.actions.move, this.actions.delete);
   }
 });
 
@@ -32242,7 +32541,7 @@ var _default = new _mosaic.default({
 });
 
 exports.default = _default;
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../util/Globals":"util/Globals.js","../portfolio":"portfolio.js"}],"popups/account.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../util/Globals":"util/Globals.js","../portfolio":"portfolio.js","../util/Networking":"util/Networking.js"}],"popups/account.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32393,6 +32692,243 @@ var _default = new _mosaic.default({
 });
 
 exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../util/Globals":"util/Globals.js","../portfolio":"portfolio.js","../util/Networking":"util/Networking.js"}],"popups/move.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = _interopRequireDefault(require("@authman2/mosaic"));
+
+var _Globals = _interopRequireDefault(require("../util/Globals"));
+
+var _portfolio = require("../portfolio");
+
+var _Networking = _interopRequireDefault(require("../util/Networking"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _templateObject3() {
+  var data = _taggedTemplateLiteral(["<button class='popup-btn' onclick=\"", "\">\n                                ", "\n                            </button>"]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["<span></span>"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup move-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Where would you like to move the note \"", "\" into?</h1>\n                <h4 class='popup-subtitle'>Select a notebook below:</h4>\n\n                <div class='move-view'>\n                    ", "\n                </div>\n            </div>\n        </div>"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var _default = new _mosaic.default({
+  portfolio: _portfolio.portfolio,
+  delayTemplate: true,
+  data: {
+    title: '',
+    notebooks: []
+  },
+  actions: {
+    close: function close() {
+      _portfolio.portfolio.dispatch('close-alert');
+    },
+    moveTo: function () {
+      var _moveTo = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(item) {
+        var noteID, fromNotebook, toNotebook, result;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // Make an API call to actual move the note between the two notebooks.
+                noteID = this.data.movingNote.id;
+                fromNotebook = _portfolio.portfolio.get('currentNotebook').id;
+                toNotebook = item.id;
+                _context.next = 5;
+                return _Networking.default.move(noteID, fromNotebook, toNotebook);
+
+              case 5:
+                result = _context.sent;
+
+                if (result.ok === true) {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("Moved the note <b>".concat(this.data.title, "</b> from \n                <b>").concat(this.data.currentNotebook.title, "</b> into the notebook <b>").concat(item.title, "</b>!"), _Globals.default.ColorScheme.blue, 4000);
+                } else {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("There was a problem moving the note ".concat(this.data.title), _Globals.default.ColorScheme.red);
+                }
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function moveTo(_x) {
+        return _moveTo.apply(this, arguments);
+      }
+
+      return moveTo;
+    }()
+  },
+  view: function view() {
+    var _this = this;
+
+    return html(_templateObject(), this.actions.close, this.data.title, this.data.notebooks.length > 0 ? this.data.notebooks.map(function (item, index) {
+      if (_this.data.currentNotebook && item.id === _this.data.currentNotebook.id) return html(_templateObject2());
+      return html(_templateObject3(), _this.actions.moveTo.bind(_this, item), item.title);
+    }) : '');
+  }
+});
+
+exports.default = _default;
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../util/Globals":"util/Globals.js","../portfolio":"portfolio.js","../util/Networking":"util/Networking.js"}],"popups/delete.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _mosaic = _interopRequireDefault(require("@authman2/mosaic"));
+
+var _Globals = _interopRequireDefault(require("../util/Globals"));
+
+var _portfolio = require("../portfolio");
+
+var _Networking = _interopRequireDefault(require("../util/Networking"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <button class='popup-btn' onclick=\"", "\">Yes, delete now</button>\n                <button class='popup-btn' onclick=\"", "\">No, cancel</button>\n            </div>\n        </div>"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var _default = new _mosaic.default({
+  portfolio: _portfolio.portfolio,
+  delayTemplate: true,
+  data: {
+    title: '',
+    notebooks: []
+  },
+  actions: {
+    close: function close() {
+      _portfolio.portfolio.dispatch('close-alert');
+    },
+    delete: function () {
+      var _delete2 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var result, _result;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(this.data.type === 0)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _context.next = 3;
+                return _Networking.default.deleteNotebook(this.data.id);
+
+              case 3:
+                result = _context.sent;
+
+                if (result.ok === true) {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("Deleted the notebook \"".concat(this.data.title, "\" and all of its notes"));
+                } else {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("There was a problem delete the notebook ".concat(this.data.title), _Globals.default.ColorScheme.red);
+                }
+
+                _context.next = 11;
+                break;
+
+              case 7:
+                _context.next = 9;
+                return _Networking.default.deleteNote(this.data.id);
+
+              case 9:
+                _result = _context.sent;
+
+                if (_result.ok === true) {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("Deleted the note \"".concat(this.data.title, "\""));
+                } else {
+                  _portfolio.portfolio.dispatch('close-alert');
+
+                  _Globals.default.showActionAlert("There was a problem delete the note ".concat(this.data.title), _Globals.default.ColorScheme.red);
+                }
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function _delete() {
+        return _delete2.apply(this, arguments);
+      }
+
+      return _delete;
+    }()
+  },
+  view: function view() {
+    return html(_templateObject(), this.actions.close, this.data.title, this.data.message, this.actions.delete, this.actions.close);
+  }
+});
+
+exports.default = _default;
 },{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","../util/Globals":"util/Globals.js","../portfolio":"portfolio.js","../util/Networking":"util/Networking.js"}],"portfolio.js":[function(require,module,exports) {
 "use strict";
 
@@ -32412,6 +32948,10 @@ var _share = _interopRequireDefault(require("./popups/share"));
 var _notebooks = _interopRequireDefault(require("./popups/notebooks"));
 
 var _account = _interopRequireDefault(require("./popups/account"));
+
+var _move = _interopRequireDefault(require("./popups/move"));
+
+var _delete = _interopRequireDefault(require("./popups/delete"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32497,6 +33037,29 @@ var portfolio = new _mosaic.Portfolio({
       document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
       break;
 
+    case 'show-move-alert':
+      data.alert = _move.default.new({
+        notebooks: newData.notebooks,
+        title: newData.title,
+        currentNotebook: newData.currentNotebook,
+        movingNote: newData.movingNote
+      });
+      document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+      break;
+
+    case 'show-delete-alert':
+      data.alert = _delete.default.new({
+        type: newData.type,
+        // notebook: 0, note: 1
+        message: newData.message,
+        title: newData.title,
+        id: newData.id
+      });
+      document.getElementById('root').appendChild(data.alert.element);
+      document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+      break;
+
     case 'close-alert':
       document.getElementsByClassName('popup')[0].remove();
       document.getElementsByClassName('popup-backdrop')[0].remove();
@@ -32509,7 +33072,7 @@ var portfolio = new _mosaic.Portfolio({
   }
 });
 exports.portfolio = portfolio;
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","./util/Globals":"util/Globals.js","./popups/new":"popups/new.js","./popups/share":"popups/share.js","./popups/notebooks":"popups/notebooks.js","./popups/account":"popups/account.js"}],"components/context-menu.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","./util/Globals":"util/Globals.js","./popups/new":"popups/new.js","./popups/share":"popups/share.js","./popups/notebooks":"popups/notebooks.js","./popups/account":"popups/account.js","./popups/move":"popups/move.js","./popups/delete":"popups/delete.js"}],"components/context-menu.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32643,7 +33206,6 @@ var ViewContext = new _mosaic.default({
 
               case 2:
                 resp = _context.sent;
-                console.log(resp);
 
                 _portfolio.portfolio.dispatch('load-notebooks', {
                   notebooks: resp.notebooks
@@ -32653,7 +33215,7 @@ var ViewContext = new _mosaic.default({
                   type: 'Notebook'
                 });
 
-              case 6:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -33299,7 +33861,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49962" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49553" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

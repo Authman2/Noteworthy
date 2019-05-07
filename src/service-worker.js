@@ -16,24 +16,18 @@ self.addEventListener('beforeinstallprompt', e => {
 });
 self.addEventListener('install', e => {
     console.log('Service worker installed!');
-    // e.waitUntil(
-    //     caches.open('noteworthy-cache').then(cache => {
-    //         cache.addAll(staticAssets);
-    //     })
-    // );
-    self.skipWaiting();
+    e.waitUntil(
+        caches.open('noteworthy-cache').then(cache => {
+            cache.addAll(staticAssets);
+        })
+    );
+    // self.skipWaiting();
 });
 self.addEventListener('activate', e => {
     console.log('Service worker activated!');
     self.clients.claim();
 });
 self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request).then(resp => {
-            if(resp) return resp;
-            else {
-                return fetch(e.request);
-            }
-        })
-    );
+    const url = new URL(e.request.url);
+    e.respondWith(caches.match(e.request).then(resp => resp ? resp : fetch(url)));
 });
