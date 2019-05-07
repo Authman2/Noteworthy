@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist .cache && rm -rf -R Noteworthy-darwin-x64",
     "test": "parcel -p 3000 src/index.html",
-    "package": "parcel build src/index.html --out-dir packaged",
+    "package": "parcel build src/index.html --out-dir dist",
     "start": "electron .",
     "build-MacOS": "electron-packager . Noteworthy --asar=true && cp NoteworthyAppLogo.icns Noteworthy-darwin-x64/Noteworthy.app/Contents/Resources/electron.icns",
     "build-Windows": "electron-packager . Noteworthy --platform=win32 --overwrite --arch=ia32 --asar=true --icon=NoteworthyAppLogo.icns --prune=true --out=release-builds",

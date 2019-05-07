@@ -4,6 +4,7 @@ import Globals from './util/Globals';
 import NewAlert from './popups/new';
 import ShareAlert from './popups/share';
 import NotebooksAlert from './popups/notebooks';
+import AccountAlert from './popups/account';
 
 export const portfolio = new Portfolio({
     context: 0,
@@ -50,6 +51,10 @@ export const portfolio = new Portfolio({
                 type: newData.type || 'Notebook',
                 items: newData.type === 'Notebook' ? data.notebooks : data.notes
             });
+            document.getElementById('root').appendChild(data.alert.element);
+            break;
+        case 'show-account-alert':
+            data.alert = AccountAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             break;
         case 'close-alert':

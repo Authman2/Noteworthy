@@ -1,39 +1,43 @@
 import Mosaic from '@authman2/mosaic';
 
-import Globals from '../other/Globals';
+import Globals from '../util/Globals';
 import { portfolio } from '../portfolio';
+import Networking from '../util/Networking';
 
 export default new Mosaic({
     portfolio,
     actions: {
         close() {
-            this.portfolio.dispatch('close-alert');
+            portfolio.dispatch('close-alert');
         },
-        resetPassword() {
-            let user = firebase.auth().currentUser;
+        async resetPassword() {
+            let user = localStorage.getItem('noteworthy-current-user');
             if(!user) return;
+            const cUser = JSON.parse(user);
 
-            firebase.auth().sendPasswordResetEmail(user.email).then(val => {
-                Globals.showActionAlert(`Sent password reset email to ${user.email}!`, Globals.ColorScheme.gray);
-            })
+            const result = await Networking.forgotPassword(cUser.email);
+            if(result.ok) return Globals.showActionAlert(`Sent password reset email to ${user.email}!`, Globals.ColorScheme.gray);
+            else return Globals.showActionAlert(`${result.err}`, Globals.ColorScheme.red);
         },
-        logout() {
-            firebase.auth().signOut().then(() => {
-                this.portfolio.dispatch('close-alert');
-                Globals.showActionAlert('Logged out!', Globals.ColorScheme.gray);
-            }).catch((err) => {
-                Globals.showActionAlert(`Logout Error: ${err}`, Globals.ColorScheme.red);
-            });
+        async logout() {
+            const result = await Networking.logout();
+            if(result.ok) {
+                portfolio.dispatch('close-alert');
+                return Globals.showActionAlert('Logged out!', Globals.ColorScheme.gray);
+            } else return Globals.showActionAlert(`Logout Error: ${err}`, Globals.ColorScheme.red);
         }
     },
     view() {
-        let user = firebase.auth().currentUser;
+        let user = localStorage.getItem('noteworthy-current-user');
+        if(!user) return html`<div></div>`;
+        let cUser = JSON.parse(user);
+
         return html`<div class='popup-backdrop'>
             <div class='popup'>
                 <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
                 <h1 class='popup-title'>Account</h1>
-                <p style='font-family:Avenir' id='account-alert-email'>Email: ${ user ? user.email : 'Not Available' }</p>
+                <p style='font-family:Avenir' id='account-alert-email'>Email: ${ cUser ? cUser.email : 'Not Available' }</p>
                 <br>
                 <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
                     Send Password Reset Email

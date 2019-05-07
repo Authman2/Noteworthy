@@ -1,6 +1,6 @@
 import sa from 'superagent';
 
-const API_URL = 'https://noteworthy-backend.herokuapp.com';
+const API_URL = /*'http://localhost:8000';*/'https://noteworthy-backend.herokuapp.com';
 export default {
     currentUser: undefined,
 
@@ -15,10 +15,24 @@ export default {
         } else return { err: await response.text(), ok: false }
     },
 
+    async logout() {
+        const res = await fetch(`${API_URL}/logout`);
+        if(res.ok === true) return { user: await res.json(), ok: true }
+        else return { err: await res.text(), ok: false }
+    },
+
     async createAccount(email, password) {
         const res = await fetch(`${API_URL}/create-account`, {
             method: 'POST',
             body: JSON.stringify({ email, password })
+        });
+        if(res.ok === true) return { user: await res.json(), ok: true }
+        else return { err: await res.text(), ok: false }
+    },
+
+    async forgotPassword(email) {
+        const res = await fetch(`${API_URL}/forgot-password?email=${email}`, {
+            method: 'put',
         });
         if(res.ok === true) return { user: await res.json(), ok: true }
         else return { err: await res.text(), ok: false }
@@ -70,7 +84,7 @@ export default {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
         const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/create-note?uid=${uid}`, {
+        const response = await fetch(`${API_URL}/save?uid=${uid}`, {
             method: 'post',
             body: JSON.stringify({ notebooksAndNotes: data })
         });

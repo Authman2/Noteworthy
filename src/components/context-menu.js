@@ -42,6 +42,7 @@ const ViewContext = new Mosaic({
         },
         async handleNotebooks() {
             const resp = await Networking.loadNotebooks();
+            console.log(resp);
             portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
 
             this.portfolio.dispatch('show-notebooks-alert', {
@@ -149,25 +150,49 @@ const SettingsContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleAccount() {
-            portfolio.dispatch('show-alert', { alert: AccountPopup.new() });
+            portfolio.dispatch('show-account-alert');
         },
         async handleSave() {
+            Global.showActionAlert('Saving...');
+
             const nbResp = await Networking.loadNotebooks();
             if(nbResp.ok === false) return Global.showActionAlert("Couldn't save data.", Global.ColorScheme.red);
             
             const toJSON = {};
-            const notebooks = nbResp;
-            const notes = nResp.notes;
-            notebooks.forEach(nb => toJSON[nb.id] = nb);
-            notes.forEach(n => toJSON[n.id] = n);
+            const notebooks = nbResp.notebooks;
 
-            console.log(toJSON);
-            return;
+            for(const nb of notebooks) {
+                if(nb === undefined || !nb.id) continue;
+
+                const notes = await Networking.loadNotes(nb.id);
+                if(notes === undefined || !notes.notes || !notes.notes.notes) continue;
+
+                for(const n of notes.notes.notes) {
+                    if(n === undefined) continue;
+
+                    // If the note you are looking at is the current note,
+                    // then make sure you take any changes that have been
+                    // made since you last typed.
+                    const cNote = portfolio.get('currentNote');
+                    if(cNote && cNote.id === n.id) {
+                        const titleField = document.getElementById('work-title-field');
+                        const contentField = document.getElementById('work-content-field');
+                        n.title = titleField.innerText
+                        n.content = contentField.innerHTML;
+                    }
+                    toJSON[n.id] = n;
+                };
+                toJSON[nb.id] = nb;
+            }
+
             const result = await Networking.save(toJSON);
             if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
             else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
         },
-        async handleLoad() {
+        async handleBackup() {
+            
+        },
+        async handleRestore() {
 
         }
     },
@@ -175,8 +200,9 @@ const SettingsContext = new Mosaic({
         return html`<div style='display:inline-block;'>
             ${ ViewContext.new() }
             ${ ContextItem.new({ title: 'Account', icon: 'fa fa-user-circle', click: this.actions.handleAccount.bind(this) }) }
-            ${ ContextItem.new({ title: 'Save', icon: 'fa fa-cloud-download-alt', click: this.actions.handleSave.bind(this) }) }
-            ${ ContextItem.new({ title: 'Load', icon: 'fa fa-cloud-upload-alt', click: this.actions.handleLoad.bind(this) }) }
+            ${ ContextItem.new({ title: 'Save', icon: 'fa fa-save', click: this.actions.handleSave.bind(this) }) }
+            ${ ContextItem.new({ title: 'Backup', icon: 'fa fa-file-download', click: this.actions.handleBackup.bind(this) }) }
+            ${ ContextItem.new({ title: 'Restore', icon: 'fa fa-file-upload', click: this.actions.handleRestore.bind(this) }) }
         </div>`
     }
 });

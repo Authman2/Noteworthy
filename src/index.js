@@ -2,7 +2,8 @@ import { Router } from '@authman2/mosaic';
 import 'babel-polyfill';
 // import remote from 'electron';
 
-import Home from './pages/home';
+import Landing from './pages/landing';
+import Login from './pages/login';
 import Work from './pages/work';
 
 import './styles/index.less';
@@ -14,7 +15,11 @@ const router = new Router('#root');
 const titleBar = new Mosaic({ view: _ => html`<div class='title-bar'></div>` }).new();
 router.addRoute('/', [
     titleBar,
-    Home.new()
+    Landing.new()
+]);
+router.addRoute('/login', [
+    titleBar,
+    Login.new()
 ]);
 router.addRoute('/work', [
     titleBar,

@@ -245,12 +245,12 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    wind.loadFile('./packaged/index.html');
-    // wind.loadURL(url.format({
-    //     pathname: path.join(__dirname, 'packaged/index.html'),
-    //     protocol: 'file:',
-    //     slashes: true,
-    // }));
+    // wind.loadURL('http://localhost:3000/login');
+    wind.loadURL(url.format({
+        pathname: path.join(__dirname, 'dist', 'index.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
 }
 
 /** Creates the application menu at the top of the computer screen. */
