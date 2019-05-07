@@ -1,0 +1,13 @@
+{
+    "name": "Noteworthy",
+    "short_name": "Noteworthy",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#5386d1",
+    "icons": [{
+        "src": "../NoteworthyAppLogo.png",
+        "sizes": "1024x1024",
+        "type": "image/png"
+    }]
+}
