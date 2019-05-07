@@ -1,0 +1,636 @@
+.home {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  background: #5587d2;
+  background: linear-gradient(45deg, #5587d2 0%, #eed3ee 79%, #eed3ee 79%, #ffffff 100%);
+  background: -moz-linear-gradient(45deg, #5587d2 0%, #eed3ee 79%, #eed3ee 79%, #ffffff 100%);
+  background: -webkit-linear-gradient(45deg, #5587d2 0%, #eed3ee 79%, #eed3ee 79%, #ffffff 100%);
+}
+.home .underline-field {
+  color: white;
+  border-bottom: 2px solid white;
+}
+.home .underline-field::placeholder {
+  color: white;
+}
+.home .pill-button {
+  position: relative;
+  color: #5587d2;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home .pill-button:hover {
+  color: white;
+  background-color: #5587d2;
+}
+.page-title {
+  color: white;
+  font-size: 35px;
+  cursor: default;
+  font-weight: 100;
+  user-select: none;
+  margin-bottom: 85px;
+  font-family: 'Avenir';
+  animation: fadeIn 1s ease-out;
+}
+.forgot-password-button {
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-weight: bold;
+  font-size: 0.8rem;
+  font-family: Avenir;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+.forgot-password-button:hover {
+  transform: scale(1.1);
+}
+
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+  background-color: white;
+}
+.title-bar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  z-index: 10000;
+  user-select: none;
+  -webkit-app-region: drag;
+  transition-duration: 0.25s;
+  background-color: rgba(0, 0, 0, 0);
+  transition-timing-function: ease-out;
+}
+.underline-field {
+  width: 80vw;
+  border: none;
+  outline: none;
+  display: block;
+  font-weight: 100;
+  background: none;
+  font-size: 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  font-family: 'Avenir';
+  text-decoration: none;
+}
+.underline-field::placeholder {
+  color: white;
+}
+.pill-button {
+  border: none;
+  outline: none;
+  display: block;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: none;
+  padding-top: 14px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-radius: 10rem;
+  text-decoration: none;
+  background-color: white;
+  transition-duration: 0.2s;
+}
+.pill-button:hover {
+  transform: scale(1.15);
+}
+.pill-button:active {
+  transform: scale(0.95);
+}
+@keyframes action-alert-fade-in {
+  from {
+    opacity: 0;
+    bottom: -10px;
+  }
+  to {
+    opacity: 1;
+    bottom: 10px;
+  }
+}
+.action-alert {
+  position: fixed;
+  z-index: 6;
+  bottom: 10px;
+  left: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: 200;
+  padding-top: 7px;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 7px;
+  font-family: 'Avenir';
+  background-color: gray;
+  transform: translateX(-50%);
+  animation: action-alert-fade-in 0.3s ease-out;
+}
+@media (max-width: 991px) {
+  .action-alert {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 960px) {
+  .action-alert {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 700px) {
+  .action-alert {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .action-alert {
+    font-size: 1.5rem;
+  }
+}
+.tippy-tooltip {
+  color: white;
+  border-radius: 0px;
+  font-family: Avenir;
+  background-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='top'] .tippy-arrow {
+  border-top-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='bottom'] .tippy-arrow {
+  border-bottom-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='left'] .tippy-arrow {
+  border-left-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='right'] .tippy-arrow {
+  border-right-color: #4483c7;
+}
+@keyframes show-context-item {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.context-menu {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 100;
+  word-wrap: none;
+  overflow-x: auto;
+  padding-top: 10px;
+  overflow-y: hidden;
+  text-align: center;
+  white-space: nowrap;
+  padding-bottom: 10px;
+  background: linear-gradient(to bottom, white 60%, rgba(0, 0, 0, 0));
+}
+.context-menu::-webkit-scrollbar {
+  display: none;
+}
+@media (max-width: 1199px) {
+  .context-menu {
+    height: 90px;
+  }
+}
+@media (max-width: 991px) {
+  .context-menu {
+    height: 90px;
+  }
+}
+@media (max-width: 700px) {
+  .context-menu {
+    height: 10vh;
+  }
+}
+@media (max-width: 480px) {
+  .context-menu {
+    height: 20vh;
+  }
+}
+.context-item {
+  width: 40px;
+  height: 40px;
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  margin-top: 15px;
+  background: none;
+  font-size: 1.1rem;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 100%;
+  text-decoration: none;
+  transition-duration: 0.1s;
+  background-color: #5587d2;
+  animation: show-context-item 0.1s ease-out;
+}
+@media (max-width: 1199px) {
+  .context-item {
+    width: 50px;
+    height: 50px;
+    font-size: 0.9rem;
+  }
+  .context-item:hover {
+    transform: scale(1.2);
+    background-color: #5386d1;
+  }
+  .context-item:active {
+    transform: scale(0.95);
+    background-color: #4f83d0;
+  }
+}
+@media (max-width: 991px) {
+  .context-item {
+    width: 80px;
+    height: 80px;
+  }
+}
+@media (max-width: 960px) {
+  .context-item {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media (max-width: 700px) {
+  .context-item {
+    width: 60px;
+    height: 50px;
+  }
+}
+@media (max-width: 480px) {
+  .context-item {
+    width: 60px;
+    height: 50px;
+  }
+}
+
+.work {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+#work-title-field {
+  position: relative;
+  left: 0px;
+  width: 100%;
+  outline: none;
+  font-weight: 300;
+  padding-top: 2vh;
+  text-align: left;
+  margin-top: 100px;
+  font-size: 1.6rem;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-family: Avenir;
+}
+#work-content-field {
+  position: relative;
+  left: 0px;
+  outline: none;
+  font-weight: 400;
+  padding-top: 3vh;
+  text-align: left;
+  font-size: 1.1rem;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-family: Avenir;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+/* Removes the fine-detail-zoom thing on ios. */
+.context-menu-holder > * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+/* Sub and super scripts */
+sub,
+sup,
+span[style*="vertical-align:sub"],
+span[style*="vertical-align:super"] {
+  font-size: 10px;
+}
+/* Code segments */
+.code-segment {
+  margin: 0px;
+  padding: 0px;
+  font-size: 14px;
+  font-weight: 100;
+  white-space: pre-wrap;
+  font-family: monospace;
+  background-color: lightgray;
+}
+
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+  background-color: white;
+}
+.title-bar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  z-index: 10000;
+  user-select: none;
+  -webkit-app-region: drag;
+  transition-duration: 0.25s;
+  background-color: rgba(0, 0, 0, 0);
+  transition-timing-function: ease-out;
+}
+.underline-field {
+  width: 80vw;
+  border: none;
+  outline: none;
+  display: block;
+  font-weight: 100;
+  background: none;
+  font-size: 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  font-family: 'Avenir';
+  text-decoration: none;
+}
+.underline-field::placeholder {
+  color: white;
+}
+.pill-button {
+  border: none;
+  outline: none;
+  display: block;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: none;
+  padding-top: 14px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-radius: 10rem;
+  text-decoration: none;
+  background-color: white;
+  transition-duration: 0.2s;
+}
+.pill-button:hover {
+  transform: scale(1.15);
+}
+.pill-button:active {
+  transform: scale(0.95);
+}
+@keyframes action-alert-fade-in {
+  from {
+    opacity: 0;
+    bottom: -10px;
+  }
+  to {
+    opacity: 1;
+    bottom: 10px;
+  }
+}
+.action-alert {
+  position: fixed;
+  z-index: 6;
+  bottom: 10px;
+  left: 50%;
+  color: white;
+  font-size: 16px;
+  font-weight: 200;
+  padding-top: 7px;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 7px;
+  font-family: 'Avenir';
+  background-color: gray;
+  transform: translateX(-50%);
+  animation: action-alert-fade-in 0.3s ease-out;
+}
+@media (max-width: 991px) {
+  .action-alert {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 960px) {
+  .action-alert {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 700px) {
+  .action-alert {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .action-alert {
+    font-size: 1.5rem;
+  }
+}
+.tippy-tooltip {
+  color: white;
+  border-radius: 0px;
+  font-family: Avenir;
+  background-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='top'] .tippy-arrow {
+  border-top-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='bottom'] .tippy-arrow {
+  border-bottom-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='left'] .tippy-arrow {
+  border-left-color: #4483c7;
+}
+.tippy-tooltip[x-placement^='right'] .tippy-arrow {
+  border-right-color: #4483c7;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.popup-backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 101;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  z-index: 3;
+  max-height: 60%;
+  overflow-y: auto;
+  text-align: center;
+  border-radius: 10px;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  animation: fade-in 0.2s ease-out;
+  box-shadow: 2px 2px 20px 2px rgba(0, 0, 0, 0.3);
+}
+.close-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  background: none;
+  color: lightgray;
+  font-family: Avenir;
+  text-decoration: none;
+}
+.close-btn:hover {
+  color: gray;
+}
+.close-btn:active {
+  color: #585858;
+}
+.popup-title {
+  font-weight: 500;
+  color: #5587d2;
+  font-size: 1.6rem;
+  user-select: none;
+  font-family: Avenir;
+}
+.popup-subtitle {
+  font-weight: 300;
+  color: #5587d2;
+  font-size: 1.2rem;
+  user-select: none;
+  font-family: Avenir;
+}
+#create-name-field {
+  width: 80%;
+  margin-left: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid #5587d2;
+}
+#receiver-email-field,
+#sender-email-field,
+#sender-password-field {
+  width: 80%;
+  margin-left: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid #5587d2;
+}
+.popup-btn {
+  border: none;
+  padding: 10px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  background-color: #5587d2;
+}
+.popup-btn:hover {
+  background-color: #3c67a8;
+}
+.popup-btn:active {
+  background-color: #274c83;
+}
+.notebooks-view {
+  overflow-y: hidden;
+  margin-bottom: 50px;
+}
+.notebook-cell {
+  position: relative;
+  padding: 20px;
+  cursor: pointer;
+  text-align: left;
+  color: #5587d2;
+  margin-left: auto;
+  margin-right: auto;
+  transition-duration: 0.2s;
+}
+.notebook-cell:hover,
+.notebook-cell:active {
+  color: white;
+  background-color: #5587d2;
+}
+.notebook-cell h2 {
+  position: relative;
+  bottom: 0px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0px;
+  font-family: Avenir;
+}
+.notebook-cell h5 {
+  position: relative;
+  font-size: 1.1rem;
+  font-weight: 400;
+  font-family: Avenir;
+  /* margin-bottom: 30px; */
+}
+.cell-separator {
+  position: absolute;
+  left: 10px;
+  width: 100%;
+  height: 0.5px;
+  padding: 0px;
+  bottom: -1px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+  background-color: white;
+}
+
+
+/*# sourceMappingURL=/src.e31bb0bc.css.map */
