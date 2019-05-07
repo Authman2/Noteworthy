@@ -1,7 +1,7 @@
 {
     "name": "Noteworthy",
     "short_name": "Noteworthy",
-    "start_url": "./login",
+    "start_url": "/login",
     "display": "standalone",
     "background_color": "#fff",
     "theme_color": "#5386d1",
