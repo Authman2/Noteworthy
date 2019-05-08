@@ -7,6 +7,7 @@ import NotebooksAlert from './popups/notebooks';
 import AccountAlert from './popups/account';
 import MoveAlert from './popups/move';
 import DeleteAlert from './popups/delete';
+import ResetPasswordAlert from './popups/reset-password';
 
 export const portfolio = new Portfolio({
     context: 0,
@@ -80,6 +81,11 @@ export const portfolio = new Portfolio({
                 title: newData.title,
                 id: newData.id
             });
+            document.getElementById('root').appendChild(data.alert.element);
+            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            break;
+        case 'show-reset-password-alert':
+            data.alert = ResetPasswordAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
             break;

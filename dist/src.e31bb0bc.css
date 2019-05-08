@@ -1239,6 +1239,24 @@ body {
   margin-bottom: 0px;
   background-color: white;
 }
+.reset-popup {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+#reset-email-field {
+  margin-top: 30px;
+  border-bottom: 1px solid #5587d2;
+}
+@media (max-width: 1199px) {
+  #reset-email-field {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 960px) {
+  #reset-email-field {
+    font-size: 1.2rem;
+  }
+}
 @media (max-width: 1199px) {
   #account-alert-email {
     font-size: 2.5rem;

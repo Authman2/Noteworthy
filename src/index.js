@@ -1,6 +1,5 @@
 import { Router } from '@authman2/mosaic';
 import 'babel-polyfill';
-// import remote from 'electron';
 
 import Landing from './pages/landing';
 import Login from './pages/login';
@@ -8,6 +7,7 @@ import Work from './pages/work';
 
 import './styles/index.less';
 import './styles/popups.less';
+
 if('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js').then(() => {
         console.log('Registered service worker!');
@@ -31,6 +31,9 @@ router.addRoute('/work', [
 ]);
 router.paint();
 
+window.addEventListener('customHello', e => {
+    console.log('Got here from the custom event!!!!', e);
+});
 // Electron.
 // remote.BrowserWindow.getFocusedWindow().on('quit-app', (event, command) => {
 // 	remote.BrowserWindow.getFocusedWindow().emit('save');

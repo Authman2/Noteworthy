@@ -1,31 +1,40 @@
 import Mosaic from '@authman2/mosaic';
 
-import Globals from '../other/Globals';
+import Globals from '../util/Globals';
 import { portfolio } from '../portfolio';
+import Networking from '../util/Networking';
 
 export default new Mosaic({
     portfolio,
     actions: {
         close() {
-            this.portfolio.dispatch('close-alert');
+            portfolio.dispatch('close-alert');
         },
-        resetWithoutAccount() {
+        async resetWithoutAccount() {
             let field = document.getElementById('reset-email-field');
             let email = field.value;
-            firebase.auth().sendPasswordResetEmail(email).then(val => {
-                this.portfolio.dispatch('close-alert');
+
+            const result = await Networking.forgotPassword(email);
+            if(result.ok === true) {
+                portfolio.dispatch('close-alert');
                 Globals.showActionAlert(`Sent password reset email to ${email}!`, Globals.ColorScheme.gray);
-            });
+            } else {
+                Globals.showActionAlert(`There was a problem resetting your password.`, Globals.ColorScheme.red);
+            }
         }
     },
     view() {
         return html`<div class='popup-backdrop'>
-            <div class='popup'>
+            <div class='popup reset-popup'>
                 <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
                 <h1 class='popup-title'>Reset Password</h1>
                 <p style='font-family:Avenir' id='account-alert-email'>Enter your Email:</p>
-                <input type='email' placeholder="Email" id='reset-email-field'>
+                <input type='email'
+                    placeholder="Email"
+                    class='underline-field'
+                    id='reset-email-field'
+                    placeholder='Email'>
                 <br><br>
                 <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetWithoutAccount}'>
                     Send Password Reset Email

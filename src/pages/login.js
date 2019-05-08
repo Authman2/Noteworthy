@@ -3,6 +3,7 @@ import Mosaic from '@authman2/mosaic';
 import Globals from '../util/Globals';
 import Networking from '../util/Networking';
 import PillButton from '../components/pill-button';
+import { portfolio } from "../portfolio";
 
 import '../styles/home.less';
 
@@ -35,7 +36,7 @@ export default new Mosaic({
             this.data.signUpMode = !this.data.signUpMode;
         },
         handleForgotPassword() {
-            // this.portfolio.dispatch('show-alert', { alert: ResetPassword.new() });
+            portfolio.dispatch('show-reset-password-alert');
         }
     },
     async created() {

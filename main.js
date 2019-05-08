@@ -245,12 +245,18 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    // wind.loadURL('http://localhost:3000/login');
-    wind.loadURL(url.format({
-        pathname: path.join(__dirname, 'dist', 'index.html'),
-        protocol: 'file:',
-        slashes: true,
-    }));
+    // wind.loadURL('https://noteworthyapp.netlify.com/login');
+    wind.loadURL('http://localhost:3000');
+    setTimeout(() => {
+        let event = new Event('customHello');
+        self.dispatchEvent(event);
+        console.log('dispatched');
+    }, 2000);
+    // wind.loadURL(url.format({
+    //     pathname: path.join(__dirname, 'dist', 'index.html'),
+    //     protocol: 'file:',
+    //     slashes: true,
+    // }));
 }
 
 /** Creates the application menu at the top of the computer screen. */
@@ -263,10 +269,16 @@ const createAppMenu = () => {
                 label: `About ${name}`,
                 role: 'about'
             },{
+                label: 'Close Window',
+                accelerator: 'CmdOrCtrl+W',
+                click: () => { 
+                    BrowserWindow.getFocusedWindow().close();
+                }
+            },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
                 click: () => { 
-                    BrowserWindow.getFocusedWindow().emit('quit-app');
+                    app.quit();
                 }
             }]
         });

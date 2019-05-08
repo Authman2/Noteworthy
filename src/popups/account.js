@@ -37,7 +37,9 @@ export default new Mosaic({
                 <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
                 <h1 class='popup-title'>Account</h1>
-                <p style='font-family:Avenir' id='account-alert-email'>Email: ${ cUser ? cUser.email : 'Not Available' }</p>
+                <p style='font-family:Avenir' id='account-alert-email'>
+                    Email: ${ cUser ? cUser.email : 'Not Available' }
+                </p>
                 <br>
                 <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
                     Send Password Reset Email
