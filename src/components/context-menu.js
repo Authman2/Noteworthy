@@ -160,7 +160,7 @@ const SettingsContext = new Mosaic({
             const noteID = portfolio.get('currentNote').id;
             const title = document.getElementById('work-title-field').innerText;
             const content = document.getElementById('work-content-field').innerHTML;
-            
+
             const result = await Networking.save(noteID, title, content);
             if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
             else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
