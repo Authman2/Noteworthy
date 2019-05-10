@@ -60,5 +60,10 @@ export default new Mosaic({
         }) }
 
         <button class='forgot-password-button' onclick='${self.actions.handleForgotPassword}'>Forgot Password</button>
-    </div>`
+    </div>`,
+    created() {
+        // Load the notebooks and notes.
+        const cUser = localStorage.getItem('noteworthy-current-user');
+        if(cUser) return this.router.send('/work');
+    },
 });

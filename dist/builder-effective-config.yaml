@@ -1,0 +1,23 @@
+directories:
+  output: dist
+  buildResources: build
+  app: /Users/adeolauthman/Documents/AdeolasCodingStuff/WebDevelopment/Noteworthy
+appId: com.adeolauthman.Noteworthy
+copyright: Copyright © 2018 Adeola Uthman
+productName: Noteworthy
+electronVersion: 1.6.15
+asar: true
+mac:
+  asar: true
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity
+publish:
+  provider: github
+  repo: 'https://github.com/Authman2/Noteworthy'
+  owner: Adeola Uthman
+  token: <stripped sensitive data>
+  vPrefixedTagName: true
+  releaseType: release
+  private: true
