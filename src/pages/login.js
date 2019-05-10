@@ -39,17 +39,6 @@ export default new Mosaic({
             portfolio.dispatch('show-reset-password-alert');
         }
     },
-    async created() {
-        // Auto login using token.
-        const cUser = localStorage.getItem('noteworthy-current-user');
-        if(cUser) {
-            const creds = JSON.parse(cUser);
-
-            const resp = await Networking.login(creds.email, '', creds.token);
-            if(resp.ok === true) this.router.send('/work');
-            else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
-        }
-    },
     view: self => html`<div class="home">
         <h1 class='page-title'>Noteworthy</h1>
         <input type='email'

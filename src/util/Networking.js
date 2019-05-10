@@ -1,5 +1,3 @@
-import sa from 'superagent';
-
 const API_URL = /*'http://localhost:8000';*/'https://noteworthy-backend.herokuapp.com';
 export default {
     currentUser: undefined,
@@ -17,8 +15,10 @@ export default {
 
     async logout() {
         const res = await fetch(`${API_URL}/logout`);
-        if(res.ok === true) return { user: await res.json(), ok: true }
-        else return { err: await res.text(), ok: false }
+        if(res.ok === true) {
+            localStorage.removeItem('noteworthy-current-user');
+            return { user: await res.json(), ok: true }
+        } else return { err: await res.text(), ok: false }
     },
 
     async createAccount(email, password) {
@@ -80,13 +80,13 @@ export default {
         else return { err: await response.text(), ok: false }
     },
 
-    async save(data) {
+    async save(noteID, title, content) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/save?uid=${uid}`, {
             method: 'post',
-            body: JSON.stringify({ notebooksAndNotes: data })
+            body: JSON.stringify({ noteID, title, content })
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }
         else return { err: await response.text(), ok: false }

@@ -1,7 +1,7 @@
 import Mosaic from '@authman2/mosaic';
 import tippy from 'tippy.js';
 import $ from 'jquery';
-import highlight from 'highlightjs';
+import highlight from 'highlight.js';
 import 'highlightjs/styles/vs2015.css';
 
 import Global from '../util/Globals';
@@ -11,7 +11,7 @@ import Networking from '../util/Networking';
 // import remote from 'electron';
 
 const ContextItem = new Mosaic({
-    view: self => html`<button class='context-item' onclick='${self.data.click}'
+    view: self => html`<button class='context-item' onclick='${self.data.click}' on-tap='${self.data.click}'
         data-tippy-content='${self.data.title || ""}'
         onmouseover="${self.actions.tooltip}"><span class='${self.data.icon}'></span></button>`,
     actions: {
@@ -116,17 +116,8 @@ const InsertionContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleCode() {
-            const code = `<pre class='code-segment'><code>var x = 5;</code><br><br></pre>`;
+            const code = `<pre class='code-segment' onclick='this.focus()'><code>var x = 5;</code><br><br></pre>`;
             document.execCommand('insertHTML', false, `<br>${code}<br>`);
-
-            // Add a listener so that everytime you type into a code segment,
-            // it runs the highlight method again.
-            document.body.addEventListener('keypress', e => {
-                if(e.keyCode !== 32) return;
-                $('.code-segment').each((_, element) => {
-                    highlight.highlightBlock(element)
-                });
-            });
         },
         handleListUl() {
             document.execCommand('insertUnorderedList');
@@ -166,37 +157,11 @@ const SettingsContext = new Mosaic({
         async handleSave() {
             Global.showActionAlert('Saving...');
 
-            const nbResp = await Networking.loadNotebooks();
-            if(nbResp.ok === false) return Global.showActionAlert("Couldn't save data.", Global.ColorScheme.red);
+            const noteID = portfolio.get('currentNote').id;
+            const title = document.getElementById('work-title-field').innerText;
+            const content = document.getElementById('work-content-field').innerHTML;
             
-            const toJSON = {};
-            const notebooks = nbResp.notebooks;
-
-            for(const nb of notebooks) {
-                if(nb === undefined || !nb.id) continue;
-
-                const notes = await Networking.loadNotes(nb.id);
-                if(notes === undefined || !notes.notes || !notes.notes.notes) continue;
-
-                for(const n of notes.notes.notes) {
-                    if(n === undefined) continue;
-
-                    // If the note you are looking at is the current note,
-                    // then make sure you take any changes that have been
-                    // made since you last typed.
-                    const cNote = portfolio.get('currentNote');
-                    if(cNote && cNote.id === n.id) {
-                        const titleField = document.getElementById('work-title-field');
-                        const contentField = document.getElementById('work-content-field');
-                        n.title = titleField.innerText
-                        n.content = contentField.innerHTML;
-                    }
-                    toJSON[n.id] = n;
-                };
-                toJSON[nb.id] = nb;
-            }
-
-            const result = await Networking.save(toJSON);
+            const result = await Networking.save(noteID, title, content);
             if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
             else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
         },

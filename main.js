@@ -40,7 +40,7 @@ let template = [{
         }
     }, {
         label: 'New Window',
-        accelerator: 'CmdOrCtrl+Option+N',
+        accelerator: 'CmdOrCtrl+Shift+N',
         click: () => { createWindow(); }
     }]
 },{
@@ -145,9 +145,16 @@ let template = [{
         }
     },{
         label: 'Checkbox',
-        accelerator: 'CmdOrCtrl+Shift+B',
+        accelerator: 'CmdOrCtrl+Option+B',
         click: () => {
             BrowserWindow.getFocusedWindow().emit('checkbox');
+        }
+    },{
+        type: 'separator'
+    },{
+        label: 'Highlight Code',
+        click: () => {
+            BrowserWindow.getFocusedWindow().emit('highlight');
         }
     }]
 },{
@@ -157,16 +164,6 @@ let template = [{
         accelerator: 'CmdOrCtrl+Shift+A',
         click: () => { 
             BrowserWindow.getFocusedWindow().emit('show-account');
-        }
-    },{
-        label: 'Save Online',
-        click: () => {
-            BrowserWindow.getFocusedWindow().emit('save-online');
-        }
-    },{
-        label: 'Load Online',
-        click: () => {
-            BrowserWindow.getFocusedWindow().emit('load-online');
         }
     }, {
         label: 'Backup Notes',
@@ -245,8 +242,8 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    wind.loadURL('https://noteworthyapp.netlify.com/login');
-    // wind.loadURL('http://localhost:3000');
+    // wind.loadURL('https://noteworthyapp.netlify.com/login');
+    wind.loadURL('http://localhost:3000/work');
     // setTimeout(() => {
     //     let event = new Event('customHello');
     //     self.dispatchEvent(event);
@@ -277,8 +274,8 @@ const createAppMenu = () => {
             },{
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+Q',
-                click: () => { 
-                    app.quit();
+                click: () => {
+                    BrowserWindow.getFocusedWindow().emit('quit-app');
                 }
             }]
         });
@@ -298,7 +295,6 @@ app.on('ready', () => {
     // if(!isDev) {
     //     autoUpdater.checkForUpdates();
     // }
-
     createWindow();
     createAppMenu();
 });
