@@ -1,5 +1,8 @@
 import Mosaic from '@authman2/mosaic';
 import tippy from 'tippy.js';
+import $ from 'jquery';
+import highlight from 'highlightjs';
+import 'highlightjs/styles/vs2015.css';
 
 import Global from '../util/Globals';
 import { portfolio } from '../portfolio';
@@ -113,8 +116,17 @@ const InsertionContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleCode() {
-            const code = `<pre class='code-segment'><code>var x = 5;</code></pre>`;
+            const code = `<pre class='code-segment'><code>var x = 5;</code><br><br></pre>`;
             document.execCommand('insertHTML', false, `<br>${code}<br>`);
+
+            // Add a listener so that everytime you type into a code segment,
+            // it runs the highlight method again.
+            document.body.addEventListener('keypress', e => {
+                if(e.keyCode !== 32) return;
+                $('.code-segment').each((_, element) => {
+                    highlight.highlightBlock(element)
+                });
+            });
         },
         handleListUl() {
             document.execCommand('insertUnorderedList');

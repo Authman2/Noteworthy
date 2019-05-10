@@ -1,4 +1,5 @@
 import { Portfolio } from '@authman2/mosaic';
+import { enableBodyScroll, disableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 import Globals from './util/Globals';
 
 import NewAlert from './popups/new';
@@ -44,12 +45,12 @@ export const portfolio = new Portfolio({
         case 'show-new-alert':
             data.alert = NewAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-share-alert':
             data.alert = ShareAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-notebooks-alert':
             data.alert = NotebooksAlert.new({
@@ -57,12 +58,12 @@ export const portfolio = new Portfolio({
                 items: newData.type === 'Notebook' ? data.notebooks : data.notes
             });
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-account-alert':
             data.alert = AccountAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-move-alert':
             data.alert = MoveAlert.new({
@@ -72,7 +73,7 @@ export const portfolio = new Portfolio({
                 movingNote: newData.movingNote
             });
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-delete-alert':
             data.alert = DeleteAlert.new({
@@ -82,18 +83,18 @@ export const portfolio = new Portfolio({
                 id: newData.id
             });
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'show-reset-password-alert':
             data.alert = ResetPasswordAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
-            document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+            document.body.style.overflowY = 'hidden';
             break;
         case 'close-alert':
             document.getElementsByClassName('popup')[0].remove();
             document.getElementsByClassName('popup-backdrop')[0].remove();
             data.alert = '';
-            document.getElementsByTagName('body')[0].style.overflowY = 'auto';
+            document.body.style.overflowY = 'auto';
             break;
         default:
             break;

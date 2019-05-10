@@ -245,13 +245,13 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    // wind.loadURL('https://noteworthyapp.netlify.com/login');
-    wind.loadURL('http://localhost:3000');
-    setTimeout(() => {
-        let event = new Event('customHello');
-        self.dispatchEvent(event);
-        console.log('dispatched');
-    }, 2000);
+    wind.loadURL('https://noteworthyapp.netlify.com/login');
+    // wind.loadURL('http://localhost:3000');
+    // setTimeout(() => {
+    //     let event = new Event('customHello');
+    //     self.dispatchEvent(event);
+    //     console.log('dispatched');
+    // }, 2000);
     // wind.loadURL(url.format({
     //     pathname: path.join(__dirname, 'dist', 'index.html'),
     //     protocol: 'file:',
