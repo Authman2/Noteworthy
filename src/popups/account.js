@@ -18,7 +18,7 @@ export default new Mosaic({
             const result = await Networking.forgotPassword(cUser.email);
             if(result.ok) {
                 portfolio.dispatch('close-alert');
-                return Globals.showActionAlert(`Sent password reset email to ${user.email}!`, Globals.ColorScheme.gray);
+                return Globals.showActionAlert(`Sent password reset email to ${cUser.email}!`, Globals.ColorScheme.gray);
             } else return Globals.showActionAlert(`${result.err}`, Globals.ColorScheme.red);
         },
         async logout() {
