@@ -14,7 +14,9 @@ import Networking from '../util/Networking';
 // import remote from 'electron';
 
 const ContextItem = new Mosaic({
-    view: self => html`<button class='context-item' onclick='${self.data.click}' on-tap='${self.data.click}'
+    view: self => html`<button class='context-item'
+        onclick='${self.data.click}'
+        ontouchend='${self.data.click}'
         data-tippy-content='${self.data.title || ""}'
         onmouseover="${self.actions.tooltip}"><span class='${self.data.icon}'></span></button>`,
     actions: {
