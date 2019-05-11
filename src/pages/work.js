@@ -19,7 +19,7 @@ export default new Mosaic({
         if(!cUser) return this.router.send('/login');
         else {
             Networking.currentUser = JSON.parse(cUser);
-            Globals.showActionAlert(`Welcome ${cUser.email}!`, Globals.ColorScheme.blue);
+            Globals.showActionAlert(`Welcome ${Networking.currentUser.email}!`, Globals.ColorScheme.blue);
         }
     },
     view: self => html`<div class='work'>

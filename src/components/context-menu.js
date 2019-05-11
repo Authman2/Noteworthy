@@ -163,7 +163,7 @@ const SettingsContext = new Mosaic({
     actions: {
         handleAccount() {
             portfolio.dispatch('show-account-alert', {
-                router: this.router
+                router: this.router || this.data.router
             });
         },
         async handleSave() {
