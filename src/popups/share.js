@@ -1,6 +1,6 @@
 import Mosaic from '@authman2/mosaic';
-import fs from 'fs';
 import turndown from 'turndown';
+const fs = require('fs');
 let electron;
 let remote;
 let dialog;
@@ -74,6 +74,7 @@ export default new Mosaic({
                     filters: [{name: 'txt', extensions: ['txt']}]
                 }, (filename) => {
                     fs.writeFileSync(filename, toExport, 'utf8');
+                    portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
                 });
             }
@@ -91,6 +92,7 @@ export default new Mosaic({
                     filters: [{name: 'md', extensions: ['md']}]
                 }, (filename) => {
                     fs.writeFileSync(filename, toExport, 'utf8');
+                    portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
                 });
             }
@@ -103,6 +105,7 @@ export default new Mosaic({
                     filters: [{name: 'html', extensions: ['html']}]
                 }, (filename) => {
                     fs.writeFileSync(filename, toExport, 'utf8');
+                    portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
                 });
             }
