@@ -17,7 +17,10 @@ export default new Mosaic({
         // Load the notebooks and notes.
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(!cUser) return this.router.send('/login');
-        else { Networking.currentUser = JSON.parse(cUser); }
+        else {
+            Networking.currentUser = JSON.parse(cUser);
+            Globals.showActionAlert(`Welcome ${cUser.email}!`, Globals.ColorScheme.blue);
+        }
     },
     view: self => html`<div class='work'>
         ${ ContextMenu.new({ router: self.router }) }
