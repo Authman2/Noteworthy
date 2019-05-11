@@ -2,15 +2,16 @@ import Mosaic from '@authman2/mosaic';
 import turndown from 'turndown';
 let electron;
 let remote;
+let dialog;
 if(window.require) {
     electron = window.require('electron');
     remote = electron.remote;
+    dialog = remote.dialog;
 }
 
 import Globals from '../util/Globals';
 import { portfolio } from '../portfolio';
 
-const { dialog } = remote;
 const tdService = new turndown();
 tdService.addRule('', {
     filter: 'mark',
@@ -65,39 +66,45 @@ export default new Mosaic({
             portfolio.dispatch('close-alert');
         },
         txt() {
-            const toExport = this.data.content;
-            dialog.showSaveDialog(null, {
-                title: `${this.data.title}.txt`,
-                filters: [{name: 'txt', extensions: ['txt']}]
-            }, (filename) => {
-                fs.writeFileSync(filename, toExport, 'utf8');
-                Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
-            });
+            if(window.require) {
+                const toExport = this.data.content;
+                dialog.showSaveDialog(null, {
+                    title: `${this.data.title}.txt`,
+                    filters: [{name: 'txt', extensions: ['txt']}]
+                }, (filename) => {
+                    fs.writeFileSync(filename, toExport, 'utf8');
+                    Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
+                });
+            }
         },
         md() {
-            const _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
-                        .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
-                        .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
-                        .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
-            const md = tdService.turndown(_html);
-            const toExport = md;
-            dialog.showSaveDialog(null, {
-                title: `${this.data.title}.md`,
-                filters: [{name: 'md', extensions: ['md']}]
-            }, (filename) => {
-                fs.writeFileSync(filename, toExport, 'utf8');
-                Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
-            });
+            if(window.require) {
+                const _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
+                            .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
+                            .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
+                            .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
+                const md = tdService.turndown(_html);
+                const toExport = md;
+                dialog.showSaveDialog(null, {
+                    title: `${this.data.title}.md`,
+                    filters: [{name: 'md', extensions: ['md']}]
+                }, (filename) => {
+                    fs.writeFileSync(filename, toExport, 'utf8');
+                    Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
+                });
+            }
         },
         html() {
-            const toExport = this.data.content;
-            dialog.showSaveDialog(null, {
-                title: `${this.data.title}.html`,
-                filters: [{name: 'html', extensions: ['html']}]
-            }, (filename) => {
-                fs.writeFileSync(filename, toExport, 'utf8');
-                Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
-            });
+            if(window.require) {
+                const toExport = this.data.content;
+                dialog.showSaveDialog(null, {
+                    title: `${this.data.title}.html`,
+                    filters: [{name: 'html', extensions: ['html']}]
+                }, (filename) => {
+                    fs.writeFileSync(filename, toExport, 'utf8');
+                    Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
+                });
+            }
         }
     },
     view() {
