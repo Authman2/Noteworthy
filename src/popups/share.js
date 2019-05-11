@@ -1,4 +1,5 @@
 import Mosaic from '@authman2/mosaic';
+import fs from 'fs';
 import turndown from 'turndown';
 let electron;
 let remote;
