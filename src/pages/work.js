@@ -10,8 +10,8 @@ import ElectronMessages from '../util/ElectronMessages';
 import '../styles/context-menu.less';
 import '../styles/work.less';
 
-
 ElectronMessages();
+
 export default new Mosaic({
     created() {
         // Load the notebooks and notes.
@@ -20,7 +20,7 @@ export default new Mosaic({
         else { Networking.currentUser = JSON.parse(cUser); }
     },
     view: self => html`<div class='work'>
-        ${ ContextMenu.new() }
+        ${ ContextMenu.new({ router: self.router }) }
 
         <div id='work-title-field' contenteditable='true'>Title</div>
         <div id='work-content-field' contenteditable='true'>Note</div>

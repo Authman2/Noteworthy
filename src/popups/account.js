@@ -23,6 +23,7 @@ export default new Mosaic({
             const result = await Networking.logout();
             if(result.ok) {
                 portfolio.dispatch('close-alert');
+                this.data.router.send('/login');
                 return Globals.showActionAlert('Logged out!', Globals.ColorScheme.gray);
             } else return Globals.showActionAlert(`Logout Error: ${err}`, Globals.ColorScheme.red);
         }

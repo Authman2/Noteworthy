@@ -1,8 +1,11 @@
 import Mosaic from '@authman2/mosaic';
 import tippy from 'tippy.js';
-import $ from 'jquery';
-import highlight from 'highlight.js';
-import 'highlightjs/styles/vs2015.css';
+let electron;
+let remote;
+if(window.require) {
+    electron = window.require('electron');
+    remote = electron.remote;
+}
 
 import Global from '../util/Globals';
 import { portfolio } from '../portfolio';
@@ -45,11 +48,18 @@ const ViewContext = new Mosaic({
         },
         async handleNotebooks() {
             const resp = await Networking.loadNotebooks();
-            portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
+            if(resp.ok === true) {
+                portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
 
-            this.portfolio.dispatch('show-notebooks-alert', {
-                type: 'Notebook'
-            });
+                this.portfolio.dispatch('show-notebooks-alert', {
+                    type: 'Notebook'
+                });
+            } else {
+                Networking.logout().then(() => {
+                    this.router.send('/login');
+                    Global.showActionAlert(`Sorry! There was a problem verifying your account. Try logging in again.`, Global.ColorScheme.red);
+                });
+            }
         },
         async handleNotes() {
             if(!portfolio.get('currentNotebook')) {
@@ -152,7 +162,9 @@ const SettingsContext = new Mosaic({
     delayTemplate: true,
     actions: {
         handleAccount() {
-            portfolio.dispatch('show-account-alert');
+            portfolio.dispatch('show-account-alert', {
+                router: this.router
+            });
         },
         async handleSave() {
             Global.showActionAlert('Saving...');

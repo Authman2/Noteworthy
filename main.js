@@ -242,8 +242,8 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    wind.loadURL('https://noteworthyapp.netlify.com/login');
-    // wind.loadURL('http://localhost:3000/work');
+    // wind.loadURL('https://noteworthyapp.netlify.com/login');
+    wind.loadURL('http://localhost:3000/login');
     // setTimeout(() => {
     //     let event = new Event('customHello');
     //     self.dispatchEvent(event);

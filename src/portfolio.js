@@ -1,5 +1,4 @@
 import { Portfolio } from '@authman2/mosaic';
-import { enableBodyScroll, disableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 import Globals from './util/Globals';
 
 import NewAlert from './popups/new';
@@ -55,13 +54,13 @@ export const portfolio = new Portfolio({
         case 'show-notebooks-alert':
             data.alert = NotebooksAlert.new({
                 type: newData.type || 'Notebook',
-                items: newData.type === 'Notebook' ? data.notebooks : data.notes
+                items: newData.type === 'Notebook' ? data.notebooks || [] : data.notes || []
             });
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-account-alert':
-            data.alert = AccountAlert.new();
+            data.alert = AccountAlert.new({ router: newData.router });
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';
             break;

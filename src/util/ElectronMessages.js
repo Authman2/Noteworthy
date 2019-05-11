@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import highlight from 'highlightjs';
-import 'highlightjs/styles/vs2015.css';
+import highlight from 'highlight.js';
+import 'highlight.js/styles/vs2015.css';
 
 import Global from './Globals';
 import Networking from './Networking';

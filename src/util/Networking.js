@@ -85,10 +85,10 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/save?uid=${uid}`, {
-            method: 'post',
-            body: JSON.stringify({ noteID, title, content })
+            method: 'POST',
+            body: JSON.stringify({ noteID: noteID, title: title, content: content })
         });
-        if(response.ok === true) return { notes: await response.json(), ok: true }
+        if(response.ok === true) return { message: await response.text(), ok: true }
         else return { err: await response.text(), ok: false }
     },
 

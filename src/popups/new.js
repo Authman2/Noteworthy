@@ -1,5 +1,4 @@
 import Mosaic from '@authman2/mosaic';
-import Moment from 'moment';
 
 import Globals from '../util/Globals';
 import { portfolio } from '../portfolio';
