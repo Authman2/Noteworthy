@@ -16,8 +16,10 @@ export default new Mosaic({
             const cUser = JSON.parse(user);
 
             const result = await Networking.forgotPassword(cUser.email);
-            if(result.ok) return Globals.showActionAlert(`Sent password reset email to ${user.email}!`, Globals.ColorScheme.gray);
-            else return Globals.showActionAlert(`${result.err}`, Globals.ColorScheme.red);
+            if(result.ok) {
+                portfolio.dispatch('close-alert');
+                return Globals.showActionAlert(`Sent password reset email to ${user.email}!`, Globals.ColorScheme.gray);
+            } else return Globals.showActionAlert(`${result.err}`, Globals.ColorScheme.red);
         },
         async logout() {
             const result = await Networking.logout();
