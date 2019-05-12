@@ -92,6 +92,18 @@ export default {
         else return { err: await response.text(), ok: false }
     },
 
+    async restore(notebooksAndNotes) {
+        if(!this.currentUser) return { err: 'No current user', ok: false };
+
+        const uid = this.currentUser.uid;
+        const response = await fetch(`${API_URL}/restore?uid=${uid}`, {
+            method: 'put',
+            body: JSON.stringify({ notebooksAndNotes })
+        });
+        if(response.ok === true) return { message: await response.text(), ok: true }
+        else return { err: await response.text(), ok: false }
+    },
+
     async move(noteID, fromNotebook, toNotebook) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 

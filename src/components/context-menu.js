@@ -1,37 +1,21 @@
 import Mosaic from '@authman2/mosaic';
-import tippy from 'tippy.js';
 let electron;
 let remote;
+let dialog;
+let fs;
 if(window.require) {
+    fs = window.require('fs');
     electron = window.require('electron');
     remote = electron.remote;
+    dialog = remote.dialog;
 }
 
 import Global from '../util/Globals';
 import { portfolio } from '../portfolio';
 import Networking from '../util/Networking';
 
-// import remote from 'electron';
+import ContextItem from './context-item';
 
-const ContextItem = new Mosaic({
-    view: self => html`<button class='context-item'
-        onclick='${self.data.click}'
-        ontouchend='${self.data.click}'
-        data-tippy-content='${self.data.title || ""}'
-        onmouseover="${self.actions.tooltip}"><span class='${self.data.icon}'></span></button>`,
-    actions: {
-        tooltip() {
-            tippy('.context-item', {
-                content: `${this.data.title}`,
-                arrow: true,
-                duration: [150, 150],
-                distance: 15,
-                placement: 'bottom',
-                size: 'small'
-            });
-        }
-    }
-})
 
 const ViewContext = new Mosaic({
     portfolio,
@@ -180,10 +164,61 @@ const SettingsContext = new Mosaic({
             else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
         },
         async handleBackup() {
-            
+            if(window.require) {
+                Global.showActionAlert('Backing up all note data...', Global.ColorScheme.gray, 4000);
+
+                // Get the notebooks.
+                let backup = {};
+                let notebooks = portfolio.get('notebooks');
+                if(notebooks.length === 0) {
+                    const result = await Networking.loadNotebooks();
+                    if(result.ok === true) notebooks = result.notebooks;
+                    else {
+                        return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                    }
+                }
+
+                for(let notebook of notebooks) {
+                    // Load all of the notes from this notebook.
+                    const result = await Networking.loadNotes(notebook.id);
+                    if(result.ok === true) {
+                        result.notes.notes.forEach(async note => {
+                            backup[note.id] = note;
+                        });
+                    }
+                    backup[notebook.id] = notebook;
+                };
+                Global.hideActionAlert();
+                
+                // Save to a local directory on your computer.
+                dialog.showSaveDialog(null, {
+                    title: `NoteworthyBackup_${Date.now()}.txt`,
+                    filters: [{name: 'txt', extensions: ['txt']}]
+                }, async filename => {
+                    const saving = JSON.stringify(backup);
+                    fs.writeFile(filename, saving, _ => {
+                        Global.showActionAlert(`Exported to ${filename}!`, Global.ColorScheme.blue);
+                    });
+                });
+            }
         },
         async handleRestore() {
-
+            if(window.require) {
+                dialog.showOpenDialog(null, {
+                    openFile: true,
+                }, files => {
+                    if(!files) return;
+                    const filename = files[0];
+                    fs.readFile(filename, 'utf8', async (err, resp) => {
+                        // Take each note and notebook from the restored filed
+                        // and save them to the database.
+                        const toJSON = JSON.parse(resp);
+                        const result = await Networking.restore(toJSON);
+                        if(result.ok === true) Global.showActionAlert('Restored notes from backup!', Global.ColorScheme.green);
+                        else Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                    });
+                });
+            }
         }
     },
     view: function() {
