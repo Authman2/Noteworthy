@@ -20,10 +20,19 @@
         color: white;
         border-bottom: 2px solid white;
     
-        &::placeholder {
+        &::-webkit-input-placeholder {
             color: white;
         }
-        ::placeholder {
+        
+        &::-moz-placeholder {
+            color: white;
+        }
+        
+        &::-ms-placeholder {
+            color: white;
+        }
+        
+        &::placeholder {
             color: white;
         }
 
