@@ -54,11 +54,13 @@ const newAlert = new Mosaic({
             <h4 class='popup-subtitle'>Enter a name for your new ${self.data.type}</h4>
 
             <input class='underline-field' placeholder="Title" id='create-name-field'>
-            <button class='popup-btn' onclick='${self.actions.toggle}'>
-                Switch to ${ self.data.type === 'Notebook' ? 'Note' : 'Notebook' }
-            </button>
-            <br>
-            <button class='popup-btn' onclick='${self.actions.create}'>Create ${ self.data.type }</button>
+            <div class="buttons-area">
+                <button class='rect-btn hollow-btn' onclick='${self.actions.toggle}'>
+                    Switch to ${ self.data.type === 'Notebook' ? 'Note' : 'Notebook' }
+                </button>
+                &nbsp;
+                <button class='rect-btn' onclick='${self.actions.create}'>Create ${ self.data.type }</button>
+            </div>
             <br><br>
         </div>
     </div>`

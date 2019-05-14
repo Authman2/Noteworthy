@@ -26,8 +26,8 @@ export const NotebookCell = new Mosaic({
             <h2>Title: ${this.data.notebook.title}</h2>
             <h5>Notes: ${this.data.notebook.pages ? this.data.notebook.pages.length : 0}</h5>
 
-            <button class='popup-btn' onclick="${this.data.selectNotebook}">Open</button>
-            <button class='popup-btn' onclick="${this.actions.delete}">Delete</button>
+            <button class='rect-btn' onclick="${this.data.selectNotebook}">Open</button>
+            <button class='rect-btn' onclick="${this.actions.delete}">Delete</button>
             <hr class='cell-separator'/>
         </div>`
     }
@@ -72,9 +72,9 @@ export const NoteCell = new Mosaic({
         return html`<div class='notebook-cell'>
             <h2>${this.data.note.title}</h2>
             <h4>Created: ${date.toDateString()}</h4>
-            <button class='popup-btn' onclick="${this.data.selectNote}">Open</button>
-            <button class='popup-btn' onclick="${this.actions.move}">Move</button>
-            <button class='popup-btn' onclick="${this.actions.delete}">Delete</button>
+            <button class='rect-btn' onclick="${this.data.selectNote}">Open</button>
+            <button class='rect-btn' onclick="${this.actions.move}">Move</button>
+            <button class='rect-btn' onclick="${this.actions.delete}">Delete</button>
             <hr class='cell-separator'/>
         </div>`
     }

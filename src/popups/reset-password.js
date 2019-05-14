@@ -36,7 +36,7 @@ export default new Mosaic({
                     id='reset-email-field'
                     placeholder='Email'>
                 <br><br>
-                <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetWithoutAccount}'>
+                <button class='rect-btn' id='account-alert-reset' onclick='${this.actions.resetWithoutAccount}'>
                     Send Password Reset Email
                 </button>
                 <br><br>

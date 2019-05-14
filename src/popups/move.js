@@ -45,7 +45,7 @@ export default new Mosaic({
                     ${
                         this.data.notebooks.length > 0 ? this.data.notebooks.map((item, index) => {
                             if(this.data.currentNotebook && item.id === this.data.currentNotebook.id) return html`<span></span>`;
-                            return html`<button class='popup-btn' onclick="${this.actions.moveTo.bind(this, item)}">
+                            return html`<button class='rect-btn' onclick="${this.actions.moveTo.bind(this, item)}">
                                 ${ item.title }
                             </button>`
                         }) : ''

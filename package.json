@@ -4,7 +4,7 @@
   "description": "Noteworthy is an easy-to-use note taking app designed to be simplistic, yet powerful.\\n\\nFor more information, visit this project at www.adeolauthman.com/projects/Noteworthy.",
   "main": "main.js",
   "scripts": {
-    "clean": "rm -rf dist .cache && rm -rf -R Noteworthy-darwin-x64",
+    "clean": "rm -rf dist .cache packaged && rm -rf -R Noteworthy-darwin-x64",
     "test": "parcel -p 3000 src/index.html",
     "package": "parcel build src/index.html --out-dir packaged && cp netlify.toml packaged/netlify.toml",
     "package2": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",

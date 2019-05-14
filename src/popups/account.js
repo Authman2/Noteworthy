@@ -44,11 +44,11 @@ export default new Mosaic({
                     Email: ${ cUser ? cUser.email : 'Not Available' }
                 </p>
                 <br>
-                <button class='popup-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
+                <button class='rect-btn' id='account-alert-reset' onclick='${this.actions.resetPassword}'>
                     Send Password Reset Email
                 </button>
                 <br>
-                <button class='popup-btn' id='account-alert-logout' onclick='${this.actions.logout}'>
+                <button class='rect-btn' id='account-alert-logout' onclick='${this.actions.logout}'>
                     Logout
                 </button>
                 <br><br>

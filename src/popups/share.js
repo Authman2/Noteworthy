@@ -118,9 +118,9 @@ export default new Mosaic({
 
                 <h1 class='popup-title'>Share</h1>
                 <h1 class='popup-subtitle'>Select the file type to export to:</h1>
-                <button class='popup-btn' onclick='${this.actions.txt}'>TXT</button>
-                <button class='popup-btn' onclick='${this.actions.md}'>Markdown</button>
-                <button class='popup-btn' onclick='${this.actions.html}'>HTML</button>
+                <button class='rect-btn' onclick='${this.actions.txt}'>TXT</button>
+                <button class='rect-btn' onclick='${this.actions.md}'>Markdown</button>
+                <button class='rect-btn' onclick='${this.actions.html}'>HTML</button>
                 <br><br>
             </div>
         </div>`

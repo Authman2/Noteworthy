@@ -34,6 +34,19 @@
     @media @desktop-down-2 {
         width: 80%;
     }
+
+    .buttons-area {
+        text-align: right;
+        padding-top: 10px;
+        margin-right: 20px;
+
+        @media @wide-screen-down {
+            text-align: right;
+        }
+        @media @desktop-down-2 {
+            text-align: center;
+        }
+    }
 }
 
 .close-btn {
@@ -115,39 +128,6 @@
     border-bottom: 1px solid #5587d2;
 }
 
-.popup-btn {
-    border: none;
-    padding: 12px;
-    outline: none;
-    color: white;
-    cursor: pointer;
-    background: none;
-    font-size: 0.95rem;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    text-decoration: none;
-    background-color: #5587d2;
-
-    @media @wide-screen-down {
-        padding: 25px;
-        font-size: 2rem;
-        margin-bottom: 30px;
-    }
-    @media @desktop-down-2 {
-        padding: 12px;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-
-        &:hover {
-            background-color: #3c67a8;
-        }
-        &:active {
-            background-color: #274c83;
-        }
-    }
-    
-}
-
 .notebooks-view {
     overflow-y: hidden;
     overflow-x: hidden;
@@ -201,8 +181,8 @@
         /* margin-bottom: 30px; */
     }
 
-    .popup-btn {
-        margin-right: 20px;
+    .rect-btn {
+        margin-right: 10px;
         padding-left: 2rem;
         padding-right: 2rem;
     }
@@ -219,7 +199,7 @@
         padding-right: 10px;
         padding-bottom: 20px;
 
-        .popup-btn {
+        .rect-btn {
             margin: 10px;
             padding-left: 2rem;
             padding-right: 2rem;
@@ -235,7 +215,7 @@
         padding-right: 20px;
     }
 
-    .popup-btn {
+    .rect-btn {
         margin: 10px;
         padding-left: 2rem;
         padding-right: 2rem;

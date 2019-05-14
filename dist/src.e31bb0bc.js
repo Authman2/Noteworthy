@@ -19765,7 +19765,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n        <div class='popup'>\n            <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n            <h1 class='popup-title'>Create New ", "</h1>\n            <h4 class='popup-subtitle'>Enter a name for your new ", "</h4>\n\n            <input class='underline-field' placeholder=\"Title\" id='create-name-field'>\n            <button class='popup-btn' onclick='", "'>\n                Switch to ", "\n            </button>\n            <br>\n            <button class='popup-btn' onclick='", "'>Create ", "</button>\n            <br><br>\n        </div>\n    </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n        <div class='popup'>\n            <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n            <h1 class='popup-title'>Create New ", "</h1>\n            <h4 class='popup-subtitle'>Enter a name for your new ", "</h4>\n\n            <input class='underline-field' placeholder=\"Title\" id='create-name-field'>\n            <div class=\"buttons-area\">\n                <button class='rect-btn hollow-btn' onclick='", "'>\n                    Switch to ", "\n                </button>\n                &nbsp;\n                <button class='rect-btn' onclick='", "'>Create ", "</button>\n            </div>\n            <br><br>\n        </div>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -20692,7 +20692,7 @@ var _portfolio = require("../portfolio");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Share</h1>\n                <h1 class='popup-subtitle'>Select the file type to export to:</h1>\n                <button class='popup-btn' onclick='", "'>TXT</button>\n                <button class='popup-btn' onclick='", "'>Markdown</button>\n                <button class='popup-btn' onclick='", "'>HTML</button>\n                <br><br>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Share</h1>\n                <h1 class='popup-subtitle'>Select the file type to export to:</h1>\n                <button class='rect-btn' onclick='", "'>TXT</button>\n                <button class='rect-btn' onclick='", "'>Markdown</button>\n                <button class='rect-btn' onclick='", "'>HTML</button>\n                <br><br>\n            </div>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -20849,7 +20849,7 @@ var _portfolio = require("../portfolio");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>", "</h2>\n            <h4>Created: ", "</h4>\n            <button class='popup-btn' onclick=\"", "\">Open</button>\n            <button class='popup-btn' onclick=\"", "\">Move</button>\n            <button class='popup-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>", "</h2>\n            <h4>Created: ", "</h4>\n            <button class='rect-btn' onclick=\"", "\">Open</button>\n            <button class='rect-btn' onclick=\"", "\">Move</button>\n            <button class='rect-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -20859,7 +20859,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>Title: ", "</h2>\n            <h5>Notes: ", "</h5>\n\n            <button class='popup-btn' onclick=\"", "\">Open</button>\n            <button class='popup-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='notebook-cell'>\n            <h2>Title: ", "</h2>\n            <h5>Notes: ", "</h5>\n\n            <button class='rect-btn' onclick=\"", "\">Open</button>\n            <button class='rect-btn' onclick=\"", "\">Delete</button>\n            <hr class='cell-separator'/>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -21029,7 +21029,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Account</h1>\n                <p style='font-family:Avenir' id='account-alert-email'>\n                    Email: ", "\n                </p>\n                <br>\n                <button class='popup-btn' id='account-alert-reset' onclick='", "'>\n                    Send Password Reset Email\n                </button>\n                <br>\n                <button class='popup-btn' id='account-alert-logout' onclick='", "'>\n                    Logout\n                </button>\n                <br><br>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Account</h1>\n                <p style='font-family:Avenir' id='account-alert-email'>\n                    Email: ", "\n                </p>\n                <br>\n                <button class='rect-btn' id='account-alert-reset' onclick='", "'>\n                    Send Password Reset Email\n                </button>\n                <br>\n                <button class='rect-btn' id='account-alert-logout' onclick='", "'>\n                    Logout\n                </button>\n                <br><br>\n            </div>\n        </div>"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -21183,7 +21183,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject3() {
-  var data = _taggedTemplateLiteral(["<button class='popup-btn' onclick=\"", "\">\n                                ", "\n                            </button>"]);
+  var data = _taggedTemplateLiteral(["<button class='rect-btn' onclick=\"", "\">\n                                ", "\n                            </button>"]);
 
   _templateObject3 = function _templateObject3() {
     return data;
@@ -21303,7 +21303,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <button class='popup-btn' onclick=\"", "\">Yes, delete now</button>\n                <button class='popup-btn' onclick=\"", "\">No, cancel</button>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <div class=\"buttons-area\">\n                    <button class='rect-btn hollow-btn' onclick=\"", "\">No, cancel</button>\n                    <button class='rect-btn' onclick=\"", "\">Yes, delete now</button>\n                </div>\n            </div>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -21396,7 +21396,7 @@ var _default = new _mosaic.default({
     }()
   },
   view: function view() {
-    return html(_templateObject(), this.actions.close, this.data.title, this.data.message, this.actions.delete, this.actions.close);
+    return html(_templateObject(), this.actions.close, this.data.title, this.data.message, this.actions.close, this.actions.delete);
   }
 });
 
@@ -21420,7 +21420,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup reset-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Reset Password</h1>\n                <p style='font-family:Avenir' id='account-alert-email'>Enter your Email:</p>\n                <input type='email'\n                    placeholder=\"Email\"\n                    class='underline-field'\n                    id='reset-email-field'\n                    placeholder='Email'>\n                <br><br>\n                <button class='popup-btn' id='account-alert-reset' onclick='", "'>\n                    Send Password Reset Email\n                </button>\n                <br><br>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup reset-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Reset Password</h1>\n                <p style='font-family:Avenir' id='account-alert-email'>Enter your Email:</p>\n                <input type='email'\n                    placeholder=\"Email\"\n                    class='underline-field'\n                    id='reset-email-field'\n                    placeholder='Email'>\n                <br><br>\n                <button class='rect-btn' id='account-alert-reset' onclick='", "'>\n                    Send Password Reset Email\n                </button>\n                <br><br>\n            </div>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -49953,7 +49953,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52921" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65169" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
