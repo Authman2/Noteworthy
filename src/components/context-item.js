@@ -6,7 +6,8 @@ export default new Mosaic({
         onclick='${self.data.click}'
         ontouchend='${self.data.click}'
         data-tippy-content='${self.data.title || ""}'
-        onmouseover="${self.actions.tooltip}"><span class='${self.data.icon}'></span></button>`,
+        onmouseover="${self.actions.tooltip}"
+        tabindex="-1"><span class='${self.data.icon}'></span></button>`,
     actions: {
         tooltip() {
             tippy('.context-item', {

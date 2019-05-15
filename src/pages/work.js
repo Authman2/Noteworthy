@@ -12,6 +12,7 @@ import '../styles/work.less';
 
 ElectronMessages();
 
+
 export default new Mosaic({
     created() {
         // Load the notebooks and notes.
@@ -21,11 +22,18 @@ export default new Mosaic({
             Networking.currentUser = JSON.parse(cUser);
             Globals.showActionAlert(`Welcome ${Networking.currentUser.email}!`, Globals.ColorScheme.blue);
         }
+
+        // Add an event listener for tabs.
+        document.getElementById('work-content-field').addEventListener('keydown', e => {
+            if(e.keyCode !== 9) return;
+            e.preventDefault();
+            document.execCommand('insertHTML', false, '&#9;');
+        });
     },
     view: self => html`<div class='work'>
         ${ ContextMenu.new({ router: self.router }) }
 
-        <div id='work-title-field' contenteditable='true'>Title</div>
-        <div id='work-content-field' contenteditable='true'>Note</div>
+        <div id='work-title-field' contenteditable='true' tabindex="-1">Title</div>
+        <div id='work-content-field' contenteditable='true' tabindex="-1">Note</div>
     </div>`
 });

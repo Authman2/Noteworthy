@@ -21824,11 +21824,51 @@ var _default = new _mosaic.default({
       click: self.actions.handleSignUp.bind(self)
     }), self.actions.handleForgotPassword);
   },
-  created: function created() {
-    // Load the notebooks and notes.
-    var cUser = localStorage.getItem('noteworthy-current-user');
-    if (cUser) return this.router.send('/work');
-  }
+  created: function () {
+    var _created = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2() {
+      var cUser, user, result;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              // Load the notebooks and notes.
+              cUser = localStorage.getItem('noteworthy-current-user');
+
+              if (!cUser) {
+                _context2.next = 8;
+                break;
+              }
+
+              user = JSON.parse(cUser);
+              _context2.next = 5;
+              return _Networking.default.login(user.email, '', user.token || user.tok);
+
+            case 5:
+              result = _context2.sent;
+
+              if (!(result.ok === true)) {
+                _context2.next = 8;
+                break;
+              }
+
+              return _context2.abrupt("return", this.router.send('/work'));
+
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function created() {
+      return _created.apply(this, arguments);
+    }
+
+    return created;
+  }()
 });
 
 exports.default = _default;
@@ -26392,7 +26432,7 @@ var _tippy = _interopRequireDefault(require("tippy.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<button class='context-item'\n        onclick='", "'\n        ontouchend='", "'\n        data-tippy-content='", "'\n        onmouseover=\"", "\"><span class='", "'></span></button>"]);
+  var data = _taggedTemplateLiteral(["<button class='context-item'\n        onclick='", "'\n        ontouchend='", "'\n        data-tippy-content='", "'\n        onmouseover=\"", "\"\n        tabindex=\"-1\"><span class='", "'></span></button>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -49823,7 +49863,7 @@ require("../styles/work.less");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='work'>\n        ", "\n\n        <div id='work-title-field' contenteditable='true'>Title</div>\n        <div id='work-content-field' contenteditable='true'>Note</div>\n    </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='work'>\n        ", "\n\n        <div id='work-title-field' contenteditable='true' tabindex=\"-1\">Title</div>\n        <div id='work-content-field' contenteditable='true' tabindex=\"-1\">Note</div>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -49844,7 +49884,13 @@ var _default = new _mosaic.default({
       _Networking.default.currentUser = JSON.parse(cUser);
 
       _Globals.default.showActionAlert("Welcome ".concat(_Networking.default.currentUser.email, "!"), _Globals.default.ColorScheme.blue);
-    }
+    } // Add an event listener for tabs.
+
+    document.getElementById('work-content-field').addEventListener('keydown', function (e) {
+      if (e.keyCode !== 9) return;
+      e.preventDefault();
+      document.execCommand('insertHTML', false, '&#9;');
+    });
   },
   view: function view(self) {
     return html(_templateObject(), _contextMenu.default.new({
@@ -49953,7 +49999,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65169" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56469" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
