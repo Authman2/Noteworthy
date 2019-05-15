@@ -61,9 +61,13 @@ export default new Mosaic({
 
         <button class='forgot-password-button' onclick='${self.actions.handleForgotPassword}'>Forgot Password</button>
     </div>`,
-    created() {
+    async created() {
         // Load the notebooks and notes.
         const cUser = localStorage.getItem('noteworthy-current-user');
-        if(cUser) return this.router.send('/work');
+        if(cUser) {
+            const user = JSON.parse(cUser);
+            const result = await Networking.login(user.email, '', user.token || user.tok);
+            if(result.ok === true) return this.router.send('/work');
+        }
     },
 });
