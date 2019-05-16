@@ -6,7 +6,7 @@ import Networking from '../util/Networking';
 
 const newAlert = new Mosaic({
     data: {
-        type: 'Notebook'
+        type: 'Note'
     },
     actions: {
         close() {

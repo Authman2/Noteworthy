@@ -9,6 +9,17 @@ import MoveAlert from './popups/move';
 import DeleteAlert from './popups/delete';
 import ResetPasswordAlert from './popups/reset-password';
 
+
+function closeAlert(data) {
+    if(document.getElementsByClassName('popup').length === 0 &&
+    document.getElementsByClassName('popup-backdrop').length === 0) return;
+
+    document.getElementsByClassName('popup')[0].remove();
+    document.getElementsByClassName('popup-backdrop')[0].remove();
+    data.alert = '';
+    document.body.style.overflowY = 'auto';
+}
+
 export const portfolio = new Portfolio({
     context: 0,
     notebooks: [],
@@ -42,16 +53,19 @@ export const portfolio = new Portfolio({
             data.currentNote = newData.note;
             break;
         case 'show-new-alert':
+            closeAlert(data);
             data.alert = NewAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-share-alert':
+            closeAlert(data);
             data.alert = ShareAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-notebooks-alert':
+            closeAlert(data);
             data.alert = NotebooksAlert.new({
                 type: newData.type || 'Notebook',
                 items: newData.type === 'Notebook' ? data.notebooks || [] : data.notes || []
@@ -60,11 +74,13 @@ export const portfolio = new Portfolio({
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-account-alert':
+            closeAlert(data);
             data.alert = AccountAlert.new({ router: newData.router });
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-move-alert':
+            closeAlert(data);
             data.alert = MoveAlert.new({
                 notebooks: newData.notebooks,
                 title: newData.title,
@@ -75,6 +91,7 @@ export const portfolio = new Portfolio({
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-delete-alert':
+            closeAlert(data);
             data.alert = DeleteAlert.new({
                 type: newData.type, // notebook: 0, note: 1
                 message: newData.message,
@@ -85,6 +102,7 @@ export const portfolio = new Portfolio({
             document.body.style.overflowY = 'hidden';
             break;
         case 'show-reset-password-alert':
+            closeAlert(data);
             data.alert = ResetPasswordAlert.new();
             document.getElementById('root').appendChild(data.alert.element);
             document.body.style.overflowY = 'hidden';

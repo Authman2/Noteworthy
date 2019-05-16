@@ -46,7 +46,7 @@ export default new Mosaic({
                 <h4 class='popup-subtitle'>${this.data.message}</h4>
 
                 <div class="buttons-area">
-                    <button class='rect-btn hollow-btn' onclick="${this.actions.close}">No, cancel</button>
+                    <button class='hollow-btn' onclick="${this.actions.close}">No, cancel</button>
                     <button class='rect-btn' onclick="${this.actions.delete}">Yes, delete now</button>
                 </div>
             </div>

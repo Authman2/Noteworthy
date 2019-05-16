@@ -1,3 +1,16 @@
+.noteworthy-button {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
 * {
   -webkit-overflow-scrolling: touch;
 }
@@ -99,15 +112,42 @@ body {
   }
 }
 .hollow-btn {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
   color: gray;
   background-color: white;
-  border: 2px solid lightgray;
+  border: 1.5px solid lightgray;
 }
-.hollow-btn:hover {
-  background-color: #eeeeee;
+@media (max-width: 1199px) {
+  .hollow-btn {
+    padding: 25px;
+    font-size: 2rem;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-bottom: 30px;
+  }
 }
-.hollow-btn:active {
-  background-color: #c0c0c0 e;
+@media (max-width: 960px) {
+  .hollow-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .hollow-btn:hover {
+    background-color: #eeeeee;
+  }
+  .hollow-btn:active {
+    background-color: #a3a3a3 e;
+  }
 }
 @keyframes action-alert-fade-in {
   from {
@@ -419,6 +459,19 @@ body {
   width: 100%;
 }
 
+.noteworthy-button {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
 * {
   -webkit-overflow-scrolling: touch;
 }
@@ -520,15 +573,42 @@ body {
   }
 }
 .hollow-btn {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
   color: gray;
   background-color: white;
-  border: 2px solid lightgray;
+  border: 1.5px solid lightgray;
 }
-.hollow-btn:hover {
-  background-color: #eeeeee;
+@media (max-width: 1199px) {
+  .hollow-btn {
+    padding: 25px;
+    font-size: 2rem;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-bottom: 30px;
+  }
 }
-.hollow-btn:active {
-  background-color: #c0c0c0 e;
+@media (max-width: 960px) {
+  .hollow-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .hollow-btn:hover {
+    background-color: #eeeeee;
+  }
+  .hollow-btn:active {
+    background-color: #a3a3a3 e;
+  }
 }
 @keyframes action-alert-fade-in {
   from {
@@ -700,6 +780,19 @@ body {
   }
 }
 
+.noteworthy-button {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
 * {
   -webkit-overflow-scrolling: touch;
 }
@@ -801,15 +894,42 @@ body {
   }
 }
 .hollow-btn {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
   color: gray;
   background-color: white;
-  border: 2px solid lightgray;
+  border: 1.5px solid lightgray;
 }
-.hollow-btn:hover {
-  background-color: #eeeeee;
+@media (max-width: 1199px) {
+  .hollow-btn {
+    padding: 25px;
+    font-size: 2rem;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-bottom: 30px;
+  }
 }
-.hollow-btn:active {
-  background-color: #c0c0c0 e;
+@media (max-width: 960px) {
+  .hollow-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .hollow-btn:hover {
+    background-color: #eeeeee;
+  }
+  .hollow-btn:active {
+    background-color: #a3a3a3 e;
+  }
 }
 @keyframes action-alert-fade-in {
   from {
@@ -971,6 +1091,19 @@ span[style*="vertical-align:super"] {
   background-color: orange;
 }
 
+.noteworthy-button {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
 * {
   -webkit-overflow-scrolling: touch;
 }
@@ -1072,15 +1205,42 @@ body {
   }
 }
 .hollow-btn {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
   color: gray;
   background-color: white;
-  border: 2px solid lightgray;
+  border: 1.5px solid lightgray;
 }
-.hollow-btn:hover {
-  background-color: #eeeeee;
+@media (max-width: 1199px) {
+  .hollow-btn {
+    padding: 25px;
+    font-size: 2rem;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-bottom: 30px;
+  }
 }
-.hollow-btn:active {
-  background-color: #c0c0c0 e;
+@media (max-width: 960px) {
+  .hollow-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .hollow-btn:hover {
+    background-color: #eeeeee;
+  }
+  .hollow-btn:active {
+    background-color: #a3a3a3 e;
+  }
 }
 @keyframes action-alert-fade-in {
   from {
@@ -1153,6 +1313,19 @@ body {
   border-bottom-color: #4483c7;
 }
 
+.noteworthy-button {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
+}
 * {
   -webkit-overflow-scrolling: touch;
 }
@@ -1254,15 +1427,42 @@ body {
   }
 }
 .hollow-btn {
+  border: none;
+  padding: 12px;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  background: none;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  transition-duration: 0.2s;
   color: gray;
   background-color: white;
-  border: 2px solid lightgray;
+  border: 1.5px solid lightgray;
 }
-.hollow-btn:hover {
-  background-color: #eeeeee;
+@media (max-width: 1199px) {
+  .hollow-btn {
+    padding: 25px;
+    font-size: 2rem;
+    padding-left: 45px;
+    padding-right: 45px;
+    margin-bottom: 30px;
+  }
 }
-.hollow-btn:active {
-  background-color: #c0c0c0 e;
+@media (max-width: 960px) {
+  .hollow-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+  .hollow-btn:hover {
+    background-color: #eeeeee;
+  }
+  .hollow-btn:active {
+    background-color: #a3a3a3 e;
+  }
 }
 @keyframes action-alert-fade-in {
   from {
@@ -1352,7 +1552,7 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
 }
 .popup {
-  position: fixed;
+  position: relative;
   top: 50%;
   left: 50%;
   width: 60%;
@@ -1379,17 +1579,8 @@ body {
 .popup .buttons-area {
   text-align: right;
   padding-top: 10px;
-  margin-right: 20px;
-}
-@media (max-width: 1199px) {
-  .popup .buttons-area {
-    text-align: right;
-  }
-}
-@media (max-width: 960px) {
-  .popup .buttons-area {
-    text-align: center;
-  }
+  margin-right: 30px;
+  margin-bottom: -15px;
 }
 .close-btn {
   position: fixed;
@@ -1422,6 +1613,8 @@ body {
   }
 }
 .popup-title {
+  position: relative;
+  top: 20px;
   font-weight: 500;
   color: #5587d2;
   font-size: 1.6rem;
@@ -1439,6 +1632,7 @@ body {
   }
 }
 .popup-subtitle {
+  position: relative;
   font-weight: 300;
   color: #5587d2;
   font-size: 1.2rem;
@@ -1482,8 +1676,7 @@ body {
   border-bottom: 1px solid #5587d2;
 }
 .notebooks-view {
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   margin-bottom: 50px;
 }
 .notebook-cell {

@@ -19782,7 +19782,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var newAlert = new _mosaic.default({
   data: {
-    type: 'Notebook'
+    type: 'Note'
   },
   actions: {
     close: function close() {
@@ -21303,7 +21303,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <div class=\"buttons-area\">\n                    <button class='rect-btn hollow-btn' onclick=\"", "\">No, cancel</button>\n                    <button class='rect-btn' onclick=\"", "\">Yes, delete now</button>\n                </div>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <div class=\"buttons-area\">\n                    <button class='hollow-btn' onclick=\"", "\">No, cancel</button>\n                    <button class='rect-btn' onclick=\"", "\">Yes, delete now</button>\n                </div>\n            </div>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -21515,6 +21515,14 @@ var _resetPassword = _interopRequireDefault(require("./popups/reset-password"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function closeAlert(data) {
+  if (document.getElementsByClassName('popup').length === 0 && document.getElementsByClassName('popup-backdrop').length === 0) return;
+  document.getElementsByClassName('popup')[0].remove();
+  document.getElementsByClassName('popup-backdrop')[0].remove();
+  data.alert = '';
+  document.body.style.overflowY = 'auto';
+}
+
 var portfolio = new _mosaic.Portfolio({
   context: 0,
   notebooks: [],
@@ -21571,18 +21579,21 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-new-alert':
+      closeAlert(data);
       data.alert = _new.default.new();
       document.getElementById('root').appendChild(data.alert.element);
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-share-alert':
+      closeAlert(data);
       data.alert = _share.default.new();
       document.getElementById('root').appendChild(data.alert.element);
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-notebooks-alert':
+      closeAlert(data);
       data.alert = _notebooks.default.new({
         type: newData.type || 'Notebook',
         items: newData.type === 'Notebook' ? data.notebooks || [] : data.notes || []
@@ -21592,6 +21603,7 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-account-alert':
+      closeAlert(data);
       data.alert = _account.default.new({
         router: newData.router
       });
@@ -21600,6 +21612,7 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-move-alert':
+      closeAlert(data);
       data.alert = _move.default.new({
         notebooks: newData.notebooks,
         title: newData.title,
@@ -21611,6 +21624,7 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-delete-alert':
+      closeAlert(data);
       data.alert = _delete.default.new({
         type: newData.type,
         // notebook: 0, note: 1
@@ -21623,6 +21637,7 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-reset-password-alert':
+      closeAlert(data);
       data.alert = _resetPassword.default.new();
       document.getElementById('root').appendChild(data.alert.element);
       document.body.style.overflowY = 'hidden';
@@ -26432,7 +26447,7 @@ var _tippy = _interopRequireDefault(require("tippy.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<button class='context-item'\n        onclick='", "'\n        ontouchend='", "'\n        data-tippy-content='", "'\n        onmouseover=\"", "\"\n        tabindex=\"-1\"><span class='", "'></span></button>"]);
+  var data = _taggedTemplateLiteral(["<button class='context-item'\n        onclick='", "'\n        data-tippy-content='", "'\n        onmouseover=\"", "\"\n        tabindex=\"-1\"><span class='", "'></span></button>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -26445,7 +26460,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var _default = new _mosaic.default({
   view: function view(self) {
-    return html(_templateObject(), self.data.click, self.data.click, self.data.title || "", self.actions.tooltip, self.data.icon);
+    return html(_templateObject(), self.data.click, self.data.title || "", self.actions.tooltip, self.data.icon);
   },
   actions: {
     tooltip: function tooltip() {
@@ -49999,7 +50014,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56469" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57449" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

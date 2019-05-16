@@ -4,7 +4,6 @@ import tippy from 'tippy.js';
 export default new Mosaic({
     view: self => html`<button class='context-item'
         onclick='${self.data.click}'
-        ontouchend='${self.data.click}'
         data-tippy-content='${self.data.title || ""}'
         onmouseover="${self.actions.tooltip}"
         tabindex="-1"><span class='${self.data.icon}'></span></button>`,
