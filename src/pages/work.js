@@ -20,7 +20,7 @@ export default new Mosaic({
         if(!cUser) return this.router.send('/login');
         else {
             Networking.currentUser = JSON.parse(cUser);
-            Globals.showActionAlert(`Welcome ${Networking.currentUser.email}!`, Globals.ColorScheme.blue);
+            Globals.showActionAlert(`Welcome <b>${Networking.currentUser.email}</b>!`, Globals.ColorScheme.blue);
         }
 
         // Add an event listener for tabs.

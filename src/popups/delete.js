@@ -20,7 +20,7 @@ export default new Mosaic({
                 const result = await Networking.deleteNotebook(this.data.id);
                 if(result.ok === true) {
                     portfolio.dispatch('close-alert');
-                    Globals.showActionAlert(`Deleted the notebook "${this.data.title}" and all of its notes`);
+                    Globals.showActionAlert(`Deleted the notebook <b>"${this.data.title}"</b> and all of its notes`);
                 } else {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`There was a problem delete the notebook ${this.data.title}`, Globals.ColorScheme.red);
@@ -29,7 +29,7 @@ export default new Mosaic({
                 const result = await Networking.deleteNote(this.data.id);
                 if(result.ok === true) {
                     portfolio.dispatch('close-alert');
-                    Globals.showActionAlert(`Deleted the note "${this.data.title}"`);
+                    Globals.showActionAlert(`Deleted the note <b>"${this.data.title}"</b>`);
                 } else {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`There was a problem delete the note ${this.data.title}`, Globals.ColorScheme.red);
