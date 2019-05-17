@@ -21353,7 +21353,7 @@ var _default = new _mosaic.default({
                 if (result.ok === true) {
                   _portfolio.portfolio.dispatch('close-alert');
 
-                  _Globals.default.showActionAlert("Deleted the notebook \"".concat(this.data.title, "\" and all of its notes"));
+                  _Globals.default.showActionAlert("Deleted the notebook <b>\"".concat(this.data.title, "\"</b> and all of its notes"));
                 } else {
                   _portfolio.portfolio.dispatch('close-alert');
 
@@ -21373,7 +21373,7 @@ var _default = new _mosaic.default({
                 if (_result.ok === true) {
                   _portfolio.portfolio.dispatch('close-alert');
 
-                  _Globals.default.showActionAlert("Deleted the note \"".concat(this.data.title, "\""));
+                  _Globals.default.showActionAlert("Deleted the note <b>\"".concat(this.data.title, "\"</b>"));
                 } else {
                   _portfolio.portfolio.dispatch('close-alert');
 
@@ -49898,7 +49898,7 @@ var _default = new _mosaic.default({
     if (!cUser) return this.router.send('/login');else {
       _Networking.default.currentUser = JSON.parse(cUser);
 
-      _Globals.default.showActionAlert("Welcome ".concat(_Networking.default.currentUser.email, "!"), _Globals.default.ColorScheme.blue);
+      _Globals.default.showActionAlert("Welcome <b>".concat(_Networking.default.currentUser.email, "</b>!"), _Globals.default.ColorScheme.blue);
     } // Add an event listener for tabs.
 
     document.getElementById('work-content-field').addEventListener('keydown', function (e) {
@@ -50014,7 +50014,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57449" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63613" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -105,9 +105,11 @@ body {
     margin-bottom: 10px;
   }
   .rect-btn:hover {
+    color: #dadada;
     background-color: #3c67a8;
   }
   .rect-btn:active {
+    color: #b9b9b9;
     background-color: #274c83;
   }
 }
@@ -140,13 +142,17 @@ body {
   .hollow-btn {
     padding: 12px;
     font-size: 0.95rem;
+    padding-left: 35px;
+    padding-right: 35px;
     margin-bottom: 10px;
   }
   .hollow-btn:hover {
+    color: gray;
     background-color: #eeeeee;
   }
   .hollow-btn:active {
-    background-color: #a3a3a3 e;
+    color: gray;
+    background-color: #e0e0e0;
   }
 }
 @keyframes action-alert-fade-in {
@@ -566,9 +572,11 @@ body {
     margin-bottom: 10px;
   }
   .rect-btn:hover {
+    color: #dadada;
     background-color: #3c67a8;
   }
   .rect-btn:active {
+    color: #b9b9b9;
     background-color: #274c83;
   }
 }
@@ -601,13 +609,17 @@ body {
   .hollow-btn {
     padding: 12px;
     font-size: 0.95rem;
+    padding-left: 35px;
+    padding-right: 35px;
     margin-bottom: 10px;
   }
   .hollow-btn:hover {
+    color: gray;
     background-color: #eeeeee;
   }
   .hollow-btn:active {
-    background-color: #a3a3a3 e;
+    color: gray;
+    background-color: #e0e0e0;
   }
 }
 @keyframes action-alert-fade-in {
@@ -887,9 +899,11 @@ body {
     margin-bottom: 10px;
   }
   .rect-btn:hover {
+    color: #dadada;
     background-color: #3c67a8;
   }
   .rect-btn:active {
+    color: #b9b9b9;
     background-color: #274c83;
   }
 }
@@ -922,13 +936,17 @@ body {
   .hollow-btn {
     padding: 12px;
     font-size: 0.95rem;
+    padding-left: 35px;
+    padding-right: 35px;
     margin-bottom: 10px;
   }
   .hollow-btn:hover {
+    color: gray;
     background-color: #eeeeee;
   }
   .hollow-btn:active {
-    background-color: #a3a3a3 e;
+    color: gray;
+    background-color: #e0e0e0;
   }
 }
 @keyframes action-alert-fade-in {
@@ -1043,10 +1061,10 @@ body {
   position: relative;
   left: 0px;
   outline: none;
+  font-size: 18px;
   font-weight: 400;
   padding-top: 3vh;
   text-align: left;
-  font-size: 1.1rem;
   padding-left: 15px;
   padding-right: 15px;
   font-family: Avenir;
@@ -1056,12 +1074,12 @@ body {
 }
 @media (max-width: 1199px) {
   #work-content-field {
-    font-size: 2.2rem;
+    font-size: 30px;
   }
 }
 @media (max-width: 960px) {
   #work-content-field {
-    font-size: 1.1rem;
+    font-size: 18px;
   }
 }
 /* Removes the fine-detail-zoom thing on ios. */
@@ -1198,9 +1216,11 @@ body {
     margin-bottom: 10px;
   }
   .rect-btn:hover {
+    color: #dadada;
     background-color: #3c67a8;
   }
   .rect-btn:active {
+    color: #b9b9b9;
     background-color: #274c83;
   }
 }
@@ -1233,13 +1253,17 @@ body {
   .hollow-btn {
     padding: 12px;
     font-size: 0.95rem;
+    padding-left: 35px;
+    padding-right: 35px;
     margin-bottom: 10px;
   }
   .hollow-btn:hover {
+    color: gray;
     background-color: #eeeeee;
   }
   .hollow-btn:active {
-    background-color: #a3a3a3 e;
+    color: gray;
+    background-color: #e0e0e0;
   }
 }
 @keyframes action-alert-fade-in {
@@ -1420,9 +1444,11 @@ body {
     margin-bottom: 10px;
   }
   .rect-btn:hover {
+    color: #dadada;
     background-color: #3c67a8;
   }
   .rect-btn:active {
+    color: #b9b9b9;
     background-color: #274c83;
   }
 }
@@ -1455,13 +1481,17 @@ body {
   .hollow-btn {
     padding: 12px;
     font-size: 0.95rem;
+    padding-left: 35px;
+    padding-right: 35px;
     margin-bottom: 10px;
   }
   .hollow-btn:hover {
+    color: gray;
     background-color: #eeeeee;
   }
   .hollow-btn:active {
-    background-color: #a3a3a3 e;
+    color: gray;
+    background-color: #e0e0e0;
   }
 }
 @keyframes action-alert-fade-in {
