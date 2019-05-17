@@ -18825,43 +18825,29 @@ var _default = {
     var _login = _asyncToGenerator(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee(email, password, token) {
-      var response, user;
+      var params1, params2, query, response, user;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!token) {
-                _context.next = 6;
-                break;
-              }
+              params1 = "email=".concat(email, "&password=").concat(password);
+              params2 = "email=".concat(email, "&password=").concat(password, "&token=").concat(token);
+              query = token ? params2 : params1;
+              _context.next = 5;
+              return fetch("".concat(API_URL, "/login?").concat(query));
 
-              _context.next = 3;
-              return fetch("".concat(API_URL, "/login?email=").concat(email, "&password=").concat(password, "&token=").concat(token));
-
-            case 3:
-              _context.t0 = _context.sent;
-              _context.next = 9;
-              break;
-
-            case 6:
-              _context.next = 8;
-              return fetch("".concat(API_URL, "/login?email=").concat(email, "&password=").concat(password));
-
-            case 8:
-              _context.t0 = _context.sent;
-
-            case 9:
-              response = _context.t0;
+            case 5:
+              response = _context.sent;
 
               if (!(response.ok === true)) {
-                _context.next = 19;
+                _context.next = 15;
                 break;
               }
 
-              _context.next = 13;
+              _context.next = 9;
               return response.json();
 
-            case 13:
+            case 9:
               user = _context.sent;
               this.currentUser = user;
               localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
@@ -18870,18 +18856,18 @@ var _default = {
                 ok: true
               });
 
-            case 19:
-              _context.next = 21;
+            case 15:
+              _context.next = 17;
               return response.text();
 
-            case 21:
-              _context.t1 = _context.sent;
+            case 17:
+              _context.t0 = _context.sent;
               return _context.abrupt("return", {
-                err: _context.t1,
+                err: _context.t0,
                 ok: false
               });
 
-            case 23:
+            case 19:
             case "end":
               return _context.stop();
           }
@@ -21830,15 +21816,6 @@ var _default = new _mosaic.default({
       _portfolio.portfolio.dispatch('show-reset-password-alert');
     }
   },
-  view: function view(self) {
-    return html(_templateObject(), self.data.signUpMode ? "Enter your email" : "Email", self.data.signUpMode ? "Create a password" : "Password", _pillButton.default.new({
-      title: self.data.signUpMode ? "Create Account" : "Login",
-      click: self.actions.handleLogin.bind(self)
-    }), _pillButton.default.new({
-      title: self.data.signUpMode ? "Cancel" : "Create Account",
-      click: self.actions.handleSignUp.bind(self)
-    }), self.actions.handleForgotPassword);
-  },
   created: function () {
     var _created = _asyncToGenerator(
     /*#__PURE__*/
@@ -21883,7 +21860,16 @@ var _default = new _mosaic.default({
     }
 
     return created;
-  }()
+  }(),
+  view: function view(self) {
+    return html(_templateObject(), self.data.signUpMode ? "Enter your email" : "Email", self.data.signUpMode ? "Create a password" : "Password", _pillButton.default.new({
+      title: self.data.signUpMode ? "Create Account" : "Login",
+      click: self.actions.handleLogin.bind(self)
+    }), _pillButton.default.new({
+      title: self.data.signUpMode ? "Cancel" : "Create Account",
+      click: self.actions.handleSignUp.bind(self)
+    }), self.actions.handleForgotPassword);
+  }
 });
 
 exports.default = _default;
@@ -49964,12 +49950,13 @@ if (window.require) {
   remote = electron.remote;
 }
 
-// if('serviceWorker' in navigator) {
-//     navigator.serviceWorker.register('./service-worker.js').then(() => {
-//         console.log('Registered service worker!');
-//     });
-// }
-// Setup the router.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register("/service-worker.js").then(function () {
+    console.log('Registered service worker!');
+  });
+} // Setup the router.
+
+
 var router = new _mosaic.Router('#root');
 var titleBar = new Mosaic({
   view: function view(_) {
@@ -49986,7 +49973,7 @@ if (window.require) {
     remote.app.quit();
   });
 }
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.js.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -50014,7 +50001,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63613" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58367" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

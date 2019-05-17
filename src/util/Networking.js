@@ -3,8 +3,10 @@ export default {
     currentUser: undefined,
 
     async login(email, password, token) {
-        const response = token ? await fetch(`${API_URL}/login?email=${email}&password=${password}&token=${token}`)
-                                : await fetch(`${API_URL}/login?email=${email}&password=${password}`);
+        const params1 = `email=${email}&password=${password}`;
+        const params2 = `email=${email}&password=${password}&token=${token}`;
+        const query = token ? params2 : params1;
+        const response = await fetch(`${API_URL}/login?${query}`);
         if(response.ok === true) {
             const user = await response.json();
             this.currentUser = user;
