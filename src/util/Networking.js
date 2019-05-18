@@ -34,7 +34,7 @@ export default {
 
     async forgotPassword(email) {
         const res = await fetch(`${API_URL}/forgot-password?email=${email}`, {
-            method: 'put',
+            method: 'GET',
         });
         if(res.ok === true) return { user: await res.json(), ok: true }
         else return { err: await res.text(), ok: false }
@@ -75,7 +75,7 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/create-note?uid=${uid}`, {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify({ title, content, notebookID })
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }
@@ -99,7 +99,7 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/restore?uid=${uid}`, {
-            method: 'put',
+            method: 'PUT',
             body: JSON.stringify({ notebooksAndNotes })
         });
         if(response.ok === true) return { message: await response.text(), ok: true }
@@ -111,7 +111,7 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/move-note?uid=${uid}`, {
-            method: 'put',
+            method: 'PUT',
             body: JSON.stringify({ noteID, fromNotebook, toNotebook })
         });
         if(response.ok === true) return { notes: await response.text(), ok: true }
@@ -123,7 +123,7 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/delete-note?uid=${uid}`, {
-            method: 'delete',
+            method: 'DELETE',
             body: JSON.stringify({ noteID })
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }
@@ -135,7 +135,7 @@ export default {
 
         const uid = this.currentUser.uid;
         const response = await fetch(`${API_URL}/delete-notebook?uid=${uid}`, {
-            method: 'delete',
+            method: 'DELETE',
             body: JSON.stringify({ notebookID })
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }

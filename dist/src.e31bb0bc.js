@@ -19009,7 +19009,7 @@ var _default = {
             case 0:
               _context4.next = 2;
               return fetch("".concat(API_URL, "/forgot-password?email=").concat(email), {
-                method: 'put'
+                method: 'GET'
               });
 
             case 2:
@@ -19284,7 +19284,7 @@ var _default = {
               uid = this.currentUser.uid;
               _context8.next = 5;
               return fetch("".concat(API_URL, "/create-note?uid=").concat(uid), {
-                method: 'post',
+                method: 'POST',
                 body: JSON.stringify({
                   title: title,
                   content: content,
@@ -19432,7 +19432,7 @@ var _default = {
               uid = this.currentUser.uid;
               _context10.next = 5;
               return fetch("".concat(API_URL, "/restore?uid=").concat(uid), {
-                method: 'put',
+                method: 'PUT',
                 body: JSON.stringify({
                   notebooksAndNotes: notebooksAndNotes
                 })
@@ -19504,7 +19504,7 @@ var _default = {
               uid = this.currentUser.uid;
               _context11.next = 5;
               return fetch("".concat(API_URL, "/move-note?uid=").concat(uid), {
-                method: 'put',
+                method: 'PUT',
                 body: JSON.stringify({
                   noteID: noteID,
                   fromNotebook: fromNotebook,
@@ -19578,7 +19578,7 @@ var _default = {
               uid = this.currentUser.uid;
               _context12.next = 5;
               return fetch("".concat(API_URL, "/delete-note?uid=").concat(uid), {
-                method: 'delete',
+                method: 'DELETE',
                 body: JSON.stringify({
                   noteID: noteID
                 })
@@ -19650,7 +19650,7 @@ var _default = {
               uid = this.currentUser.uid;
               _context13.next = 5;
               return fetch("".concat(API_URL, "/delete-notebook?uid=").concat(uid), {
-                method: 'delete',
+                method: 'DELETE',
                 body: JSON.stringify({
                   notebookID: notebookID
                 })
@@ -21343,7 +21343,7 @@ var _default = new _mosaic.default({
                 } else {
                   _portfolio.portfolio.dispatch('close-alert');
 
-                  _Globals.default.showActionAlert("There was a problem delete the notebook ".concat(this.data.title), _Globals.default.ColorScheme.red);
+                  _Globals.default.showActionAlert("There was a problem delete the notebook <br>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
                 }
 
                 _context.next = 11;
@@ -21363,7 +21363,7 @@ var _default = new _mosaic.default({
                 } else {
                   _portfolio.portfolio.dispatch('close-alert');
 
-                  _Globals.default.showActionAlert("There was a problem delete the note ".concat(this.data.title), _Globals.default.ColorScheme.red);
+                  _Globals.default.showActionAlert("There was a problem delete the note <b>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
                 }
 
               case 11:
@@ -49950,16 +49950,15 @@ if (window.require) {
   remote = electron.remote;
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register("/service-worker.js").then(function () {
-    console.log('Registered service worker!');
-  });
-} // Setup the router.
-
-
+// if('serviceWorker' in navigator) {
+//     navigator.serviceWorker.register('./service-worker.js').then(() => {
+//         console.log('Registered service worker!');
+//     });
+// }
+// Setup the router.
 var router = new _mosaic.Router('#root');
 var titleBar = new Mosaic({
-  view: function view(_) {
+  view: function view() {
     return html(_templateObject());
   }
 }).new();
@@ -49973,7 +49972,7 @@ if (window.require) {
     remote.app.quit();
   });
 }
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.js.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -50001,7 +50000,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58367" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60475" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
