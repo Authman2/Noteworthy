@@ -16,8 +16,11 @@ ElectronMessages();
 export default new Mosaic({
     async created() {
         const cUser = localStorage.getItem('noteworthy-current-user');
-        if(!cUser) return this.router.send('/login');
-        else {
+        if(!cUser) {
+            return Networking.logout().then(() => {
+                this.router.send('/login');
+            });
+        } else {
             Networking.currentUser = JSON.parse(cUser);
             Globals.showActionAlert(`Welcome <b>${Networking.currentUser.email}</b>!`, Globals.ColorScheme.blue);
         }
