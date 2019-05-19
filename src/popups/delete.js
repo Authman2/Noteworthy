@@ -16,6 +16,8 @@ export default new Mosaic({
             portfolio.dispatch('close-alert');
         },
         async delete() {
+            Globals.showActionAlert(`Deleting <b>"${this.data.title}"</b>...`);
+
             if(this.data.type === 0) {
                 const result = await Networking.deleteNotebook(this.data.id);
                 if(result.ok === true) {
@@ -30,6 +32,9 @@ export default new Mosaic({
                 if(result.ok === true) {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Deleted the note <b>"${this.data.title}"</b>`);
+                    
+                    document.getElementById('work-title-field').innerText = 'Title';
+                    document.getElementById('work-content-field').innerText = 'Note';
                 } else {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`There was a problem delete the note <b>${this.data.title}</b>`, Globals.ColorScheme.red);

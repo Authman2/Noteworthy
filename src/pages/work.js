@@ -14,8 +14,7 @@ ElectronMessages();
 
 
 export default new Mosaic({
-    created() {
-        // Load the notebooks and notes.
+    async created() {
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(!cUser) return this.router.send('/login');
         else {

@@ -41,10 +41,11 @@ const ViewContext = new Mosaic({
                     type: 'Notebook'
                 });
             } else {
-                Networking.logout().then(() => {
-                    this.router.send('/login');
-                    Global.showActionAlert(`Sorry! There was a problem verifying your account. Try logging in again.`, Global.ColorScheme.red);
-                });
+                Global.showActionAlert(resp.err, Global.ColorScheme.red);
+                // Networking.logout().then(() => {
+                //     this.router.send('/login');
+                //     Global.showActionAlert(`Sorry! There was a problem verifying your account. Try logging in again.`, Global.ColorScheme.red);
+                // });
             }
         },
         async handleNotes() {
@@ -153,6 +154,8 @@ const SettingsContext = new Mosaic({
             });
         },
         async handleSave() {
+            if(!portfolio.get('currentNote'))
+                return Global.showActionAlert('You must open a note to save!', Global.ColorScheme.red);
             Global.showActionAlert('Saving...');
 
             const noteID = portfolio.get('currentNote').id;

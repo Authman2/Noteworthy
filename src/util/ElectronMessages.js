@@ -18,6 +18,9 @@ if(window.require) {
             portfolio.dispatch('show-new-alert');
         });
         remote.BrowserWindow.getFocusedWindow().on('save', async event => {
+            if(!portfolio.get('currentNote'))
+                return Global.showActionAlert('You must open a note to save!', Global.ColorScheme.red);
+            
             const noteID = portfolio.get('currentNote').id;
             const title = document.getElementById('work-title-field').innerText;
             const content = document.getElementById('work-content-field').innerHTML;

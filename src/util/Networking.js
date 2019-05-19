@@ -1,12 +1,12 @@
-const API_URL = /*'http://localhost:8000';*/'https://noteworthy-backend.herokuapp.com';
+const API_URL = /*http://localhost:8000';*/'https://noteworthy-backend.herokuapp.com';
 export default {
     currentUser: undefined,
 
-    async login(email, password, token) {
-        const params1 = `email=${email}&password=${password}`;
-        const params2 = `email=${email}&password=${password}&token=${token}`;
-        const query = token ? params2 : params1;
-        const response = await fetch(`${API_URL}/login?${query}`);
+    async login(email, password) {
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            body: JSON.stringify({ email, password })
+        });
         if(response.ok === true) {
             const user = await response.json();
             this.currentUser = user;
@@ -33,8 +33,9 @@ export default {
     },
 
     async forgotPassword(email) {
-        const res = await fetch(`${API_URL}/forgot-password?email=${email}`, {
-            method: 'GET',
+        const res = await fetch(`${API_URL}/forgot-password`, {
+            method: 'PUT',
+            body: JSON.stringify({ email })
         });
         if(res.ok === true) return { user: await res.json(), ok: true }
         else return { err: await res.text(), ok: false }
@@ -43,8 +44,8 @@ export default {
     async loadNotebooks() {
         if(!this.currentUser) return { err: 'No current user', ok: false };
         
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/notebooks?uid=${uid}`);
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/notebooks?token=${token}`);
         if(response.ok === true) return { notebooks: await response.json(), ok: true }
         else return { err: await response.text(), ok: false }
     },
@@ -52,8 +53,8 @@ export default {
     async loadNotes(notebookID) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
         
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/notes?uid=${uid}&notebookID=${notebookID}`);
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/notes?token=${token}&notebookID=${notebookID}`);
         if(response.ok === true) return { notes: await response.json(), ok: true }
         else return { err: await response.text(), ok: false }
     },
@@ -61,9 +62,9 @@ export default {
     async createNotebook(title) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/create-notebook?uid=${uid}`, {
-            method: 'post',
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/create-notebook?token=${token}`, {
+            method: 'POST',
             body: JSON.stringify({ title })
         });
         if(response.ok === true) return { notes: await response.json(), ok: true }
@@ -73,8 +74,8 @@ export default {
     async createNote(title, content, notebookID) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/create-note?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/create-note?token=${token}`, {
             method: 'POST',
             body: JSON.stringify({ title, content, notebookID })
         });
@@ -85,8 +86,8 @@ export default {
     async save(noteID, title, content) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/save?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/save?token=${token}`, {
             method: 'POST',
             body: JSON.stringify({ noteID: noteID, title: title, content: content })
         });
@@ -97,8 +98,8 @@ export default {
     async restore(notebooksAndNotes) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/restore?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/restore?token=${token}`, {
             method: 'PUT',
             body: JSON.stringify({ notebooksAndNotes })
         });
@@ -109,20 +110,20 @@ export default {
     async move(noteID, fromNotebook, toNotebook) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/move-note?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/move-note?token=${token}`, {
             method: 'PUT',
             body: JSON.stringify({ noteID, fromNotebook, toNotebook })
         });
-        if(response.ok === true) return { notes: await response.text(), ok: true }
+        if(response.ok === true) return { response: await response.text(), ok: true }
         else return { err: await response.text(), ok: false }
     },
 
     async deleteNote(noteID) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/delete-note?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/delete-note?token=${token}`, {
             method: 'DELETE',
             body: JSON.stringify({ noteID })
         });
@@ -133,8 +134,8 @@ export default {
     async deleteNotebook(notebookID) {
         if(!this.currentUser) return { err: 'No current user', ok: false };
 
-        const uid = this.currentUser.uid;
-        const response = await fetch(`${API_URL}/delete-notebook?uid=${uid}`, {
+        const token = this.currentUser.token;
+        const response = await fetch(`${API_URL}/delete-notebook?token=${token}`, {
             method: 'DELETE',
             body: JSON.stringify({ notebookID })
         });

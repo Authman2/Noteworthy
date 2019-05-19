@@ -38,7 +38,7 @@ export default new Mosaic({
             <div class='popup move-popup'>
                 <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
 
-                <h1 class='popup-title'>Where would you like to move the note "${this.data.title}" into?</h1>
+                <h1 class='popup-title'>Where would you like to move the note "${this.data.title}" to?</h1>
                 <h4 class='popup-subtitle'>Select a notebook below:</h4>
 
                 <div class='move-view'>
