@@ -8,10 +8,12 @@ import { portfolio } from '../portfolio';
 
 let electron;
 let remote;
+let dialog;
 let setup;
 if(window.require) {
     electron = window.require('electron');
     remote = electron.remote;
+    dialog = remote.dialog;
 
     setup = function() {
         remote.BrowserWindow.getFocusedWindow().on('new', event => {
@@ -27,7 +29,16 @@ if(window.require) {
             
             const result = await Networking.save(noteID, title, content);
             if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
-            else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
+            else {
+                switch(result.code) {
+                    case 401:
+                        Global.showRefreshUserAlert();
+                        break;
+                    default:
+                        Global.showActionAlert(result.err, Global.ColorScheme.red);
+                        break;
+                }
+            }
         });
         remote.BrowserWindow.getFocusedWindow().on('print', event => {
             window.print();
@@ -102,11 +113,77 @@ if(window.require) {
         remote.BrowserWindow.getFocusedWindow().on('show-account', event => {
             portfolio.dispatch('show-account-alert');
         });
-        remote.BrowserWindow.getFocusedWindow().on('backup', event => {
-            
+        remote.BrowserWindow.getFocusedWindow().on('backup', async event => {
+            if(window.require) {
+                Global.showActionAlert('Backing up all note data...', Global.ColorScheme.gray, 4000);
+
+                // Get the notebooks.
+                let backup = {};
+                let notebooks = portfolio.get('notebooks');
+                if(notebooks.length === 0) {
+                    const result = await Networking.loadNotebooks();
+                    if(result.ok === true) notebooks = result.notebooks;
+                    else {
+                        switch(resp.code) {
+                            case 401:
+                                Global.showRefreshUserAlert();
+                                break;
+                            default:
+                                return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                        }
+                    }
+                }
+
+                for(let notebook of notebooks) {
+                    // Load all of the notes from this notebook.
+                    const result = await Networking.loadNotes(notebook.id);
+                    if(result.ok === true) {
+                        result.notes.notes.forEach(async note => {
+                            backup[note.id] = note;
+                        });
+                    }
+                    backup[notebook.id] = notebook;
+                };
+                Global.hideActionAlert();
+                
+                // Save to a local directory on your computer.
+                dialog.showSaveDialog(null, {
+                    title: `NoteworthyBackup_${Date.now()}.txt`,
+                    filters: [{name: 'txt', extensions: ['txt']}]
+                }, async filename => {
+                    const saving = JSON.stringify(backup);
+                    fs.writeFile(filename, saving, _ => {
+                        Global.showActionAlert(`Exported to ${filename}!`, Global.ColorScheme.blue);
+                    });
+                });
+            }
         });
-        remote.BrowserWindow.getFocusedWindow().on('retrieve-backups', event => {
-            
+        remote.BrowserWindow.getFocusedWindow().on('retrieve-backups', async event => {
+            if(window.require) {
+                dialog.showOpenDialog(null, {
+                    openFile: true,
+                }, files => {
+                    if(!files) return;
+                    const filename = files[0];
+                    fs.readFile(filename, 'utf8', async (err, resp) => {
+                        // Take each note and notebook from the restored filed
+                        // and save them to the database.
+                        const toJSON = JSON.parse(resp);
+                        const result = await Networking.restore(toJSON);
+                        if(result.ok === true) Global.showActionAlert('Restored notes from backup!', Global.ColorScheme.green);
+                        else {
+                            switch(result.code) {
+                                case 401:
+                                    Global.showRefreshUserAlert();
+                                    break;
+                                default:
+                                    Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                                    break;
+                            }
+                        }
+                    });
+                });
+            }
         });
         remote.BrowserWindow.getFocusedWindow().on('switch-context', event => {
             portfolio.dispatch('switch-context');

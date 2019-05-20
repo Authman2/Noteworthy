@@ -26,7 +26,7 @@ export default new Mosaic({
                 portfolio.dispatch('select-notebook', { notebook: item });
             }
 
-            this.actions.close.call(this);
+            portfolio.dispatch('close-alert');
             Globals.showActionAlert(`Opened the ${this.data.type.toLowerCase()} <b>${item.title}</b>`, Globals.ColorScheme.blue);
         }
     },

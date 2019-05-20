@@ -41,7 +41,15 @@ const ViewContext = new Mosaic({
                     type: 'Notebook'
                 });
             } else {
-                Global.showActionAlert(resp.err, Global.ColorScheme.red);
+                switch(resp.code) {
+                    case 500:
+                        Global.showRefreshUserAlert();
+                        document.getElementById('insert-alert-button').appendChild(button);
+                        break;
+                    default:
+                        Global.showActionAlert(resp.err, Global.ColorScheme.red);
+                        break;
+                }
                 // Networking.logout().then(() => {
                 //     this.router.send('/login');
                 //     Global.showActionAlert(`Sorry! There was a problem verifying your account. Try logging in again.`, Global.ColorScheme.red);
@@ -164,7 +172,16 @@ const SettingsContext = new Mosaic({
 
             const result = await Networking.save(noteID, title, content);
             if(result.ok) Global.showActionAlert(`Saved!`, Global.ColorScheme.green);
-            else Global.showActionAlert(`${result.err}!`, Global.ColorScheme.red);
+            else {
+                switch(result.code) {
+                    case 401:
+                        Global.showRefreshUserAlert();
+                        break;
+                    default:
+                        Global.showActionAlert(result.err, Global.ColorScheme.red);
+                        break;
+                }
+            }
         },
         async handleBackup() {
             if(window.require) {
@@ -177,7 +194,13 @@ const SettingsContext = new Mosaic({
                     const result = await Networking.loadNotebooks();
                     if(result.ok === true) notebooks = result.notebooks;
                     else {
-                        return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                        switch(resp.code) {
+                            case 401:
+                                Global.showRefreshUserAlert();
+                                break;
+                            default:
+                                return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                        }
                     }
                 }
 
@@ -198,6 +221,8 @@ const SettingsContext = new Mosaic({
                     title: `NoteworthyBackup_${Date.now()}.txt`,
                     filters: [{name: 'txt', extensions: ['txt']}]
                 }, async filename => {
+                    if(!filename) return;
+
                     const saving = JSON.stringify(backup);
                     fs.writeFile(filename, saving, _ => {
                         Global.showActionAlert(`Exported to ${filename}!`, Global.ColorScheme.blue);
@@ -218,7 +243,16 @@ const SettingsContext = new Mosaic({
                         const toJSON = JSON.parse(resp);
                         const result = await Networking.restore(toJSON);
                         if(result.ok === true) Global.showActionAlert('Restored notes from backup!', Global.ColorScheme.green);
-                        else Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                        else {
+                            switch(result.code) {
+                                case 401:
+                                    Global.showRefreshUserAlert();
+                                    break;
+                                default:
+                                    Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                                    break;
+                            }
+                        }
                     });
                 });
             }

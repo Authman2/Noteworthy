@@ -144,6 +144,36 @@ html, body {
         }
     }
 }
+.red-alert-button {
+    .noteworthy-button();
+    border: none;
+    color: #ea4d4d;
+    background-color: white;
+
+    @media @wide-screen-down {
+        padding: 25px;
+        font-size: 2rem;
+        padding-left: 45px;
+        padding-right: 45px;
+        margin-bottom: 30px;
+    }
+    @media @desktop-down-2 {
+        padding: 12px;
+        font-size: 0.95rem;
+        padding-left: 35px;
+        padding-right: 35px;
+        margin-bottom: 10px;
+
+        &:hover {
+            color: #be3434;
+            background-color: rgb(238, 238, 238);
+        }
+        &:active {
+            color: #a82929;
+            background-color: rgb(224, 224, 224);
+        }
+    }
+}
 
 
 @keyframes action-alert-fade-in {

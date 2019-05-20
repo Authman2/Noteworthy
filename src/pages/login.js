@@ -40,12 +40,12 @@ export default new Mosaic({
     },
     async created() {
         // Load the notebooks and notes.
-        // const cUser = localStorage.getItem('noteworthy-current-user');
-        // if(cUser) {
-        //     const user = JSON.parse(cUser);
-        //     const result = await Networking.login(user.email, '');
-        //     if(result.ok === true) return this.router.send('/work');
-        // }
+        const cUser = localStorage.getItem('noteworthy-current-user');
+        if(cUser) {
+            const user = JSON.parse(cUser);
+            const result = await Networking.login(user.email, '');
+            if(result.ok === true) return this.router.send('/work');
+        }
     },
     view: self => html`<div class="home">
         <h1 class='page-title'>Noteworthy</h1>

@@ -1,32 +1,5 @@
 import $ from 'jquery';
-
-const saveData = (loadedData) => {
-    const uid = firebase.auth().currentUser.uid;
-    const json = loadedData;
-    const outer = `{"${uid}": ${JSON.stringify(json)}}`;
-    firebase.database().ref().set(JSON.parse(outer));
-}
-
-const loadData = (then) => {
-    const uid = firebase.auth().currentUser.uid;
-    let loadedData = {};
-
-    firebase.database().ref().orderByKey().equalTo(uid).once('value', (snap) => {
-        const allNotebooksAndNotes = snap.val();
-        if(allNotebooksAndNotes == null) return;
-
-        // 1.) Get everything from the remote database and put it in the local database.
-        const all = Object.values(allNotebooksAndNotes[uid]);
-        
-        loadedData = {};
-        for(var id in all) {
-            const item = all[id];
-            loadedData[item.id] = item;
-        }
-        
-        then(loadedData);
-    });
-}
+import Networking from './Networking';
 
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
@@ -69,11 +42,22 @@ const ColorScheme = {
     gray: 'gray'
 }
 
+const showRefreshUserAlert = () => {
+    const button = document.createElement('button');
+    button.className = 'red-alert-button';
+    button.innerHTML = `Refresh!`;
+    button.addEventListener('click', async () => {
+        const res = await Networking.refreshUser();
+        if(res.ok === true) showActionAlert('Refreshed the current user!', ColorScheme.blue);
+        else showActionAlert(res.err, ColorScheme.red);
+    });
+    showActionAlert(`Could not verify the current user. Click to refresh session!<br><br><div id='insert-alert-button'></div>`, ColorScheme.red, 5000);
+}
+
 module.exports = {
-    saveData,
-    loadData,
     showActionAlert,
     hideActionAlert,
     randomID,
-    ColorScheme
+    ColorScheme,
+    showRefreshUserAlert
 }
