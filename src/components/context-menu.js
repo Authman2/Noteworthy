@@ -35,25 +35,19 @@ const ViewContext = new Mosaic({
         async handleNotebooks() {
             const resp = await Networking.loadNotebooks();
             if(resp.ok === true) {
-                portfolio.dispatch('load-notebooks', { notebooks: resp.notebooks });
-
-                this.portfolio.dispatch('show-notebooks-alert', {
-                    type: 'Notebook'
+                portfolio.dispatch(['load-notebooks', 'show-notebooks-alert'], {
+                    type: 'Notebook',
+                    notebooks: resp.notebooks,
                 });
             } else {
                 switch(resp.code) {
-                    case 500:
+                    case 401:
                         Global.showRefreshUserAlert();
-                        document.getElementById('insert-alert-button').appendChild(button);
                         break;
                     default:
                         Global.showActionAlert(resp.err, Global.ColorScheme.red);
                         break;
                 }
-                // Networking.logout().then(() => {
-                //     this.router.send('/login');
-                //     Global.showActionAlert(`Sorry! There was a problem verifying your account. Try logging in again.`, Global.ColorScheme.red);
-                // });
             }
         },
         async handleNotes() {

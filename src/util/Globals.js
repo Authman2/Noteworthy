@@ -52,6 +52,7 @@ const showRefreshUserAlert = () => {
         else showActionAlert(res.err, ColorScheme.red);
     });
     showActionAlert(`Could not verify the current user. Click to refresh session!<br><br><div id='insert-alert-button'></div>`, ColorScheme.red, 5000);
+    document.getElementById('insert-alert-button').appendChild(button);
 }
 
 module.exports = {
