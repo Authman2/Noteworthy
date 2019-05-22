@@ -30,7 +30,7 @@ export default {
             const user = await res.json();
             this.currentUser = user;
             localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
-            return { user, ok: true }
+            return { user: user, ok: true }
         } else return { err: await res.text(), code: res.status, ok: false }
     },
 
