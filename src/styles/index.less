@@ -186,6 +186,16 @@ html, body {
         bottom: 10px;
     }
 }
+@keyframes action-alert-fade-out {
+    from {
+        opacity: 1;
+        bottom: 10px;
+    }
+    to {
+        opacity: 0;
+        bottom: -10px;
+    }
+}
 .action-alert {
     position: fixed;
     left: 50%;
@@ -216,6 +226,9 @@ html, body {
     @media @phone-down {
         font-size: 1.5rem;
     }
+}
+.action-alert-fade-out {
+    animation: action-alert-fade-out 0.3s ease-out;
 }
 
 .tippy-tooltip {

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import highlight from 'highlight.js';
 import 'highlight.js/styles/vs2015.css';
 
@@ -89,9 +88,9 @@ if(window.require) {
             document.execCommand('insertHTML', false, `<br>${code}<br>`);
         });
         remote.BrowserWindow.getFocusedWindow().on('highlight', event => {
-            $('.code-segment').each((_, element) => {
+            for(const element of document.getElementsByClassName('code-segment')) {
                 highlight.highlightBlock(element);
-            });
+            }
         });
         remote.BrowserWindow.getFocusedWindow().on('bulleted-list', event => {
             document.execCommand('insertUnorderedList');

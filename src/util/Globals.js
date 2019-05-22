@@ -1,10 +1,10 @@
-import $ from 'jquery';
 import Networking from './Networking';
 
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
     let app = document.getElementById('root');
-    $('.action-alert').remove();
+    if(document.getElementsByClassName('action-alert')[0])
+        document.getElementsByClassName('action-alert')[0].remove();
 
     const alert = document.createElement('p');
     alert.className = 'action-alert';
@@ -12,23 +12,27 @@ const showActionAlert = (text, color, time = 2500) => {
     alert.style.backgroundColor = color;
     app.appendChild(alert);
 
-    setTimeout(() => {
-        $(alert).animate({
-            opacity: 0,
-            bottom: '-10px'
-        }, '0.3s', () => {
-            const children = [].slice.call(app.children);
-            if(children.includes(alert)) app.removeChild(alert);
-        })
-    }, time);
+    // Let 0 indicate infinite time.
+    if(time !== 0) {
+        setTimeout(() => {
+            alert.classList.add('action-alert-fade-out');
+            setTimeout(() => {
+                alert.classList.remove('action-alert-fade-out');
+                app.removeChild(alert);
+            }, 300);
+        }, time);
+    }
 }
 const hideActionAlert = () => {
-    $('.action-alert').animate({
-        opacity: 0,
-        bottom: '-10px'
-    }, '0.3s', () => {
-        $('.action-alert').remove();
-    })
+    const app = document.getElementById('root');
+    const alert = document.getElementsByClassName('action-alert')[0];
+    if(alert) {
+        alert.classList.add('action-alert-fade-out');
+        setTimeout(() => {
+            alert.classList.remove('action-alert-fade-out');
+            app.removeChild(alert);
+        }, 300);
+    }
 }
 
 const randomID = () => {
