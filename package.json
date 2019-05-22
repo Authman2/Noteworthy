@@ -68,6 +68,7 @@
     "publish": {
       "provider": "github",
       "repo": "https://github.com/Authman2/Noteworthy",
+      "token": "c527b4b6ef70fcdd2059ad8d9cd5ecbb08749fd9",
       "owner": "Adeola Uthman",
       "vPrefixedTagName": true,
       "releaseType": "release",
