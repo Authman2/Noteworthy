@@ -37,7 +37,7 @@
     "firebase": "^5.9.0",
     "highlight": "^0.2.4",
     "highlight.js": "^9.15.6",
-    "jquery": "^3.3.1",
+    "jquery": ">=3.4.0",
     "tippy.js": "^4.2.1",
     "turndown": "^5.0.3"
   },
