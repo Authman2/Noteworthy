@@ -18,7 +18,7 @@ const showActionAlert = (text, color, time = 2500) => {
             alert.classList.add('action-alert-fade-out');
             setTimeout(() => {
                 alert.classList.remove('action-alert-fade-out');
-                app.removeChild(alert);
+                alert.remove();
             }, 300);
         }, time);
     }
@@ -30,7 +30,7 @@ const hideActionAlert = () => {
         alert.classList.add('action-alert-fade-out');
         setTimeout(() => {
             alert.classList.remove('action-alert-fade-out');
-            app.removeChild(alert);
+            alert.remove();
         }, 300);
     }
 }
