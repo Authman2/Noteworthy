@@ -15,7 +15,7 @@ if(window.require) {
     remote = electron.remote;
     dialog = remote.dialog;
 
-    setup = function() {
+    setup = function(router) {
         remote.BrowserWindow.getFocusedWindow().on('new', event => {
             portfolio.dispatch('show-new-alert');
         });
@@ -35,7 +35,8 @@ if(window.require) {
                         Global.showRefreshUserAlert();
                         break;
                     default:
-                        Global.showActionAlert(result.err, Global.ColorScheme.red);
+                        if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                        else Global.showActionAlert(result.err, Global.ColorScheme.red);
                         break;
                 }
             }
@@ -111,7 +112,9 @@ if(window.require) {
             }
         });
         remote.BrowserWindow.getFocusedWindow().on('show-account', event => {
-            portfolio.dispatch('show-account-alert');
+            portfolio.dispatch('show-account-alert', {
+                router: router
+            });
         });
         remote.BrowserWindow.getFocusedWindow().on('backup', async event => {
             if(window.require) {
@@ -129,7 +132,8 @@ if(window.require) {
                                 Global.showRefreshUserAlert();
                                 break;
                             default:
-                                return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                                if(resp.err.includes('No current user')) return Global.showRefreshUserAlert();
+                                else return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
                         }
                     }
                 }
@@ -177,7 +181,8 @@ if(window.require) {
                                     Global.showRefreshUserAlert();
                                     break;
                                 default:
-                                    Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                                    if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                                    else Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
                                     break;
                             }
                         }

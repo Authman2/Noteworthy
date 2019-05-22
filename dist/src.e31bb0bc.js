@@ -18734,10 +18734,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var API_URL = 'http://localhost:8000';
-/*'https://noteworthy-backend.herokuapp.com'*/
-
-;
+var API_URL =
+/*'http://localhost:8000';*/
+'https://noteworthy-backend.herokuapp.com';
 var _default = {
   currentUser: undefined,
   login: function () {
@@ -18867,7 +18866,7 @@ var _default = {
     var _refreshUser = _asyncToGenerator(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee3() {
-      var token, res;
+      var token, res, user;
       return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -18880,29 +18879,41 @@ var _default = {
               res = _context3.sent;
 
               if (!(res.ok === true)) {
-                _context3.next = 8;
+                _context3.next = 16;
                 break;
               }
 
+              _context3.next = 7;
+              return res.json();
+
+            case 7:
+              user = _context3.sent;
+              this.currentUser = user;
+              localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
+              _context3.next = 12;
+              return res.json();
+
+            case 12:
+              _context3.t0 = _context3.sent;
               return _context3.abrupt("return", {
-                refreshed: true,
+                user: _context3.t0,
                 ok: true
               });
 
-            case 8:
-              _context3.next = 10;
+            case 16:
+              _context3.next = 18;
               return res.text();
 
-            case 10:
-              _context3.t0 = _context3.sent;
-              _context3.t1 = res.status;
+            case 18:
+              _context3.t1 = _context3.sent;
+              _context3.t2 = res.status;
               return _context3.abrupt("return", {
-                err: _context3.t0,
-                code: _context3.t1,
+                err: _context3.t1,
+                code: _context3.t2,
                 ok: false
               });
 
-            case 13:
+            case 21:
             case "end":
               return _context3.stop();
           }
@@ -19788,6 +19799,7 @@ var showRefreshUserAlert = function showRefreshUserAlert() {
     }, _callee);
   })));
   showActionAlert("Could not verify the current user. Click to refresh session!<br><br><div id='insert-alert-button'></div>", ColorScheme.red, 5000);
+  document.getElementById('insert-alert-button').appendChild(button);
 };
 
 module.exports = {
@@ -21918,15 +21930,40 @@ var _default = new _mosaic.default({
     var _created = _asyncToGenerator(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee2() {
+      var cUser, user, result;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              // Load the notebooks and notes.
+              cUser = localStorage.getItem('noteworthy-current-user');
+
+              if (!cUser) {
+                _context2.next = 9;
+                break;
+              }
+
+              user = JSON.parse(cUser);
+              _Networking.default.currentUser = user;
+              _context2.next = 6;
+              return _Networking.default.refreshUser();
+
+            case 6:
+              result = _context2.sent;
+
+              if (!(result.ok === true)) {
+                _context2.next = 9;
+                break;
+              }
+
+              return _context2.abrupt("return", this.router.send('/work'));
+
+            case 9:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, this);
     }));
 
     function created() {
@@ -26659,42 +26696,38 @@ var ViewContext = new _mosaic.default({
                 resp = _context.sent;
 
                 if (!(resp.ok === true)) {
-                  _context.next = 8;
+                  _context.next = 7;
                   break;
                 }
 
-                _portfolio.portfolio.dispatch('load-notebooks', {
+                _portfolio.portfolio.dispatch(['load-notebooks', 'show-notebooks-alert'], {
+                  type: 'Notebook',
                   notebooks: resp.notebooks
                 });
 
-                this.portfolio.dispatch('show-notebooks-alert', {
-                  type: 'Notebook'
-                });
-                _context.next = 16;
+                _context.next = 14;
                 break;
 
-              case 8:
+              case 7:
                 _context.t0 = resp.code;
-                _context.next = _context.t0 === 500 ? 11 : 14;
+                _context.next = _context.t0 === 401 ? 10 : 12;
                 break;
 
-              case 11:
+              case 10:
                 _Globals.default.showRefreshUserAlert();
 
-                document.getElementById('insert-alert-button').appendChild(button);
-                return _context.abrupt("break", 16);
+                return _context.abrupt("break", 14);
+
+              case 12:
+                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert(resp.err, _Globals.default.ColorScheme.red);
+                return _context.abrupt("break", 14);
 
               case 14:
-                _Globals.default.showActionAlert(resp.err, _Globals.default.ColorScheme.red);
-
-                return _context.abrupt("break", 16);
-
-              case 16:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee);
       }));
 
       function handleNotebooks() {
@@ -26879,7 +26912,7 @@ var SettingsContext = new _mosaic.default({
   actions: {
     handleAccount: function handleAccount() {
       _portfolio.portfolio.dispatch('show-account-alert', {
-        router: this.router || this.data.router
+        router: this.data.router
       });
     },
     handleSave: function () {
@@ -26931,8 +26964,7 @@ var SettingsContext = new _mosaic.default({
                 return _context3.abrupt("break", 20);
 
               case 18:
-                _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
-
+                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
                 return _context3.abrupt("break", 20);
 
               case 20:
@@ -26980,7 +27012,7 @@ var SettingsContext = new _mosaic.default({
                           notebooks = _portfolio.portfolio.get('notebooks');
 
                           if (!(notebooks.length === 0)) {
-                            _context6.next = 17;
+                            _context6.next = 21;
                             break;
                           }
 
@@ -26996,7 +27028,7 @@ var SettingsContext = new _mosaic.default({
                           }
 
                           notebooks = result.notebooks;
-                          _context6.next = 17;
+                          _context6.next = 21;
                           break;
 
                         case 11:
@@ -27007,31 +27039,41 @@ var SettingsContext = new _mosaic.default({
                         case 14:
                           _Globals.default.showRefreshUserAlert();
 
-                          return _context6.abrupt("break", 17);
+                          return _context6.abrupt("break", 21);
 
                         case 16:
+                          if (!resp.err.includes('No current user')) {
+                            _context6.next = 20;
+                            break;
+                          }
+
+                          return _context6.abrupt("return", {
+                            v: _Globals.default.showRefreshUserAlert()
+                          });
+
+                        case 20:
                           return _context6.abrupt("return", {
                             v: _Globals.default.showActionAlert('There was a problem trying to backup your notes.', _Globals.default.ColorScheme.red)
                           });
 
-                        case 17:
+                        case 21:
                           _iteratorNormalCompletion = true;
                           _didIteratorError = false;
                           _iteratorError = undefined;
-                          _context6.prev = 20;
+                          _context6.prev = 24;
                           _iterator = notebooks[Symbol.iterator]();
 
-                        case 22:
+                        case 26:
                           if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context6.next = 32;
+                            _context6.next = 36;
                             break;
                           }
 
                           notebook = _step.value;
-                          _context6.next = 26;
+                          _context6.next = 30;
                           return _Networking.default.loadNotes(notebook.id);
 
-                        case 26:
+                        case 30:
                           _result = _context6.sent;
 
                           if (_result.ok === true) {
@@ -27063,46 +27105,46 @@ var SettingsContext = new _mosaic.default({
 
                           backup[notebook.id] = notebook;
 
-                        case 29:
+                        case 33:
                           _iteratorNormalCompletion = true;
-                          _context6.next = 22;
+                          _context6.next = 26;
                           break;
 
-                        case 32:
-                          _context6.next = 38;
+                        case 36:
+                          _context6.next = 42;
                           break;
-
-                        case 34:
-                          _context6.prev = 34;
-                          _context6.t1 = _context6["catch"](20);
-                          _didIteratorError = true;
-                          _iteratorError = _context6.t1;
 
                         case 38:
                           _context6.prev = 38;
-                          _context6.prev = 39;
+                          _context6.t1 = _context6["catch"](24);
+                          _didIteratorError = true;
+                          _iteratorError = _context6.t1;
+
+                        case 42:
+                          _context6.prev = 42;
+                          _context6.prev = 43;
 
                           if (!_iteratorNormalCompletion && _iterator.return != null) {
                             _iterator.return();
                           }
 
-                        case 41:
-                          _context6.prev = 41;
+                        case 45:
+                          _context6.prev = 45;
 
                           if (!_didIteratorError) {
-                            _context6.next = 44;
+                            _context6.next = 48;
                             break;
                           }
 
                           throw _iteratorError;
 
-                        case 44:
-                          return _context6.finish(41);
+                        case 48:
+                          return _context6.finish(45);
 
-                        case 45:
-                          return _context6.finish(38);
+                        case 49:
+                          return _context6.finish(42);
 
-                        case 46:
+                        case 50:
                           ;
 
                           _Globals.default.hideActionAlert(); // Save to a local directory on your computer.
@@ -27151,12 +27193,12 @@ var SettingsContext = new _mosaic.default({
                             };
                           }());
 
-                        case 49:
+                        case 53:
                         case "end":
                           return _context6.stop();
                       }
                     }
-                  }, _callee6, null, [[20, 34, 38, 46], [39,, 41, 45]]);
+                  }, _callee6, null, [[24, 38, 42, 50], [43,, 45, 49]]);
                 })(), "t0", 2);
 
               case 2:
@@ -27238,8 +27280,7 @@ var SettingsContext = new _mosaic.default({
                                 return _context8.abrupt("break", 15);
 
                               case 13:
-                                _Globals.default.showActionAlert('There was a problem restoring your notes. ' + result.err, _Globals.default.ColorScheme.red);
-
+                                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert('There was a problem restoring your notes. ' + result.err, _Globals.default.ColorScheme.red);
                                 return _context8.abrupt("break", 15);
 
                               case 15:
@@ -27298,22 +27339,33 @@ var _default = new _mosaic.default({
   actions: {
     toCM: function toCM() {
       var ctx = this.portfolio.get('context');
+      var router = this.data.router;
 
       switch (ctx) {
         case 0:
-          return ViewContext.new();
+          return ViewContext.new({
+            router: router
+          });
 
         case 1:
-          return SelectionContext.new();
+          return SelectionContext.new({
+            router: router
+          });
 
         case 2:
-          return InsertionContext.new();
+          return InsertionContext.new({
+            router: router
+          });
 
         case 3:
-          return SettingsContext.new();
+          return SettingsContext.new({
+            router: router
+          });
 
         default:
-          return ViewContext.new();
+          return ViewContext.new({
+            router: router
+          });
       }
     },
     nextContext: function nextContext() {
@@ -49866,7 +49918,7 @@ if (window.require) {
   remote = electron.remote;
   dialog = remote.dialog;
 
-  setup = function setup() {
+  setup = function setup(router) {
     remote.BrowserWindow.getFocusedWindow().on('new', function (event) {
       _portfolio.portfolio.dispatch('show-new-alert');
     });
@@ -49919,8 +49971,7 @@ if (window.require) {
                 return _context.abrupt("break", 19);
 
               case 17:
-                _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
-
+                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
                 return _context.abrupt("break", 19);
 
               case 19:
@@ -50010,7 +50061,9 @@ if (window.require) {
       }
     });
     remote.BrowserWindow.getFocusedWindow().on('show-account', function (event) {
-      _portfolio.portfolio.dispatch('show-account-alert');
+      _portfolio.portfolio.dispatch('show-account-alert', {
+        router: router
+      });
     });
     remote.BrowserWindow.getFocusedWindow().on('backup',
     /*#__PURE__*/
@@ -50045,7 +50098,7 @@ if (window.require) {
                           notebooks = _portfolio.portfolio.get('notebooks');
 
                           if (!(notebooks.length === 0)) {
-                            _context4.next = 17;
+                            _context4.next = 21;
                             break;
                           }
 
@@ -50061,7 +50114,7 @@ if (window.require) {
                           }
 
                           notebooks = result.notebooks;
-                          _context4.next = 17;
+                          _context4.next = 21;
                           break;
 
                         case 11:
@@ -50072,31 +50125,41 @@ if (window.require) {
                         case 14:
                           _Globals.default.showRefreshUserAlert();
 
-                          return _context4.abrupt("break", 17);
+                          return _context4.abrupt("break", 21);
 
                         case 16:
+                          if (!resp.err.includes('No current user')) {
+                            _context4.next = 20;
+                            break;
+                          }
+
+                          return _context4.abrupt("return", {
+                            v: _Globals.default.showRefreshUserAlert()
+                          });
+
+                        case 20:
                           return _context4.abrupt("return", {
                             v: _Globals.default.showActionAlert('There was a problem trying to backup your notes.', _Globals.default.ColorScheme.red)
                           });
 
-                        case 17:
+                        case 21:
                           _iteratorNormalCompletion = true;
                           _didIteratorError = false;
                           _iteratorError = undefined;
-                          _context4.prev = 20;
+                          _context4.prev = 24;
                           _iterator = notebooks[Symbol.iterator]();
 
-                        case 22:
+                        case 26:
                           if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context4.next = 32;
+                            _context4.next = 36;
                             break;
                           }
 
                           notebook = _step.value;
-                          _context4.next = 26;
+                          _context4.next = 30;
                           return _Networking.default.loadNotes(notebook.id);
 
-                        case 26:
+                        case 30:
                           _result = _context4.sent;
 
                           if (_result.ok === true) {
@@ -50128,46 +50191,46 @@ if (window.require) {
 
                           backup[notebook.id] = notebook;
 
-                        case 29:
+                        case 33:
                           _iteratorNormalCompletion = true;
-                          _context4.next = 22;
+                          _context4.next = 26;
                           break;
 
-                        case 32:
-                          _context4.next = 38;
+                        case 36:
+                          _context4.next = 42;
                           break;
-
-                        case 34:
-                          _context4.prev = 34;
-                          _context4.t1 = _context4["catch"](20);
-                          _didIteratorError = true;
-                          _iteratorError = _context4.t1;
 
                         case 38:
                           _context4.prev = 38;
-                          _context4.prev = 39;
+                          _context4.t1 = _context4["catch"](24);
+                          _didIteratorError = true;
+                          _iteratorError = _context4.t1;
+
+                        case 42:
+                          _context4.prev = 42;
+                          _context4.prev = 43;
 
                           if (!_iteratorNormalCompletion && _iterator.return != null) {
                             _iterator.return();
                           }
 
-                        case 41:
-                          _context4.prev = 41;
+                        case 45:
+                          _context4.prev = 45;
 
                           if (!_didIteratorError) {
-                            _context4.next = 44;
+                            _context4.next = 48;
                             break;
                           }
 
                           throw _iteratorError;
 
-                        case 44:
-                          return _context4.finish(41);
+                        case 48:
+                          return _context4.finish(45);
 
-                        case 45:
-                          return _context4.finish(38);
+                        case 49:
+                          return _context4.finish(42);
 
-                        case 46:
+                        case 50:
                           ;
 
                           _Globals.default.hideActionAlert(); // Save to a local directory on your computer.
@@ -50208,12 +50271,12 @@ if (window.require) {
                             };
                           }());
 
-                        case 49:
+                        case 53:
                         case "end":
                           return _context4.stop();
                       }
                     }
-                  }, _callee4, null, [[20, 34, 38, 46], [39,, 41, 45]]);
+                  }, _callee4, null, [[24, 38, 42, 50], [43,, 45, 49]]);
                 })(), "t0", 2);
 
               case 2:
@@ -50295,8 +50358,7 @@ if (window.require) {
                                 return _context6.abrupt("break", 15);
 
                               case 13:
-                                _Globals.default.showActionAlert('There was a problem restoring your notes. ' + result.err, _Globals.default.ColorScheme.red);
-
+                                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert('There was a problem restoring your notes. ' + result.err, _Globals.default.ColorScheme.red);
                                 return _context6.abrupt("break", 15);
 
                               case 15:
@@ -50388,8 +50450,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-(0, _ElectronMessages.default)();
-
 var _default = new _mosaic.default({
   created: function () {
     var _created = _asyncToGenerator(
@@ -50400,6 +50460,7 @@ var _default = new _mosaic.default({
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              (0, _ElectronMessages.default)(this.router);
               cUser = localStorage.getItem('noteworthy-current-user');
 
               if (cUser) {
@@ -50417,7 +50478,7 @@ var _default = new _mosaic.default({
                 document.execCommand('insertHTML', false, '&#9;');
               });
 
-            case 3:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -50538,7 +50599,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53565" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56277" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

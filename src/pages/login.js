@@ -43,7 +43,8 @@ export default new Mosaic({
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(cUser) {
             const user = JSON.parse(cUser);
-            const result = await Networking.login(user.email, '');
+            Networking.currentUser = user;
+            const result = await Networking.refreshUser();
             if(result.ok === true) return this.router.send('/work');
         }
     },

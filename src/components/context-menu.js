@@ -45,7 +45,8 @@ const ViewContext = new Mosaic({
                         Global.showRefreshUserAlert();
                         break;
                     default:
-                        Global.showActionAlert(resp.err, Global.ColorScheme.red);
+                        if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                        else Global.showActionAlert(resp.err, Global.ColorScheme.red);
                         break;
                 }
             }
@@ -152,7 +153,7 @@ const SettingsContext = new Mosaic({
     actions: {
         handleAccount() {
             portfolio.dispatch('show-account-alert', {
-                router: this.router || this.data.router
+                router: this.data.router
             });
         },
         async handleSave() {
@@ -172,7 +173,8 @@ const SettingsContext = new Mosaic({
                         Global.showRefreshUserAlert();
                         break;
                     default:
-                        Global.showActionAlert(result.err, Global.ColorScheme.red);
+                        if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                        else Global.showActionAlert(result.err, Global.ColorScheme.red);
                         break;
                 }
             }
@@ -193,7 +195,8 @@ const SettingsContext = new Mosaic({
                                 Global.showRefreshUserAlert();
                                 break;
                             default:
-                                return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
+                                if(resp.err.includes('No current user')) return Global.showRefreshUserAlert();
+                                else return Global.showActionAlert('There was a problem trying to backup your notes.', Global.ColorScheme.red);
                         }
                     }
                 }
@@ -243,7 +246,8 @@ const SettingsContext = new Mosaic({
                                     Global.showRefreshUserAlert();
                                     break;
                                 default:
-                                    Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
+                                    if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                                    else Global.showActionAlert('There was a problem restoring your notes. ' + result.err, Global.ColorScheme.red);
                                     break;
                             }
                         }
@@ -267,12 +271,13 @@ export default new Mosaic({
     actions: {
         toCM() {
             let ctx = this.portfolio.get('context');
+            const router = this.data.router;
             switch(ctx) {
-                case 0: return ViewContext.new();
-                case 1: return SelectionContext.new();
-                case 2: return InsertionContext.new();
-                case 3: return SettingsContext.new();
-                default: return ViewContext.new();
+                case 0: return ViewContext.new({ router });
+                case 1: return SelectionContext.new({ router });
+                case 2: return InsertionContext.new({ router });
+                case 3: return SettingsContext.new({ router });
+                default: return ViewContext.new({ router });
             }
         },
         nextContext() {

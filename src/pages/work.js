@@ -10,9 +10,9 @@ import ElectronMessages from '../util/ElectronMessages';
 import '../styles/context-menu.less';
 import '../styles/work.less';
 
-ElectronMessages();
 export default new Mosaic({
     async created() {
+        ElectronMessages(this.router);
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(cUser) {
             Networking.currentUser = JSON.parse(cUser);

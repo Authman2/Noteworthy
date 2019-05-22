@@ -26,8 +26,12 @@ export default {
     async refreshUser() {
         const token = this.currentUser.customToken;
         const res = await fetch(`${API_URL}/refresh-user?token=${token}`);
-        if(res.ok === true) return { refreshed: true, ok: true }
-        else return { err: await res.text(), code: res.status, ok: false }
+        if(res.ok === true) {
+            const user = await res.json();
+            this.currentUser = user;
+            localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
+            return { user: await res.json(), ok: true }
+        } else return { err: await res.text(), code: res.status, ok: false }
     },
 
     async createAccount(email, password) {
