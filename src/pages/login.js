@@ -3,6 +3,7 @@ import Mosaic from '@authman2/mosaic';
 import Globals from '../util/Globals';
 import Networking from '../util/Networking';
 import PillButton from '../components/pill-button';
+import ElectronMessages from '../util/ElectronMessages';
 import { portfolio } from "../portfolio";
 
 import '../styles/home.less';
@@ -39,6 +40,8 @@ export default new Mosaic({
         }
     },
     async created() {
+        ElectronMessages(this.router);
+        
         // Load the notebooks and notes.
         const cUser = localStorage.getItem('noteworthy-current-user');
         if(cUser) {
