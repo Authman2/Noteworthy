@@ -1,4 +1,5 @@
 const API_URL = /*'http://localhost:8000';*/'https://noteworthy-backend.herokuapp.com';
+
 export default {
     currentUser: undefined,
 

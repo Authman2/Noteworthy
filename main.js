@@ -154,7 +154,7 @@ let template = [{
     },{
         label: 'Highlight Code',
         click: () => {
-            BrowserWindow.getFocusedWindow().emit('highlight');
+            BrowserWindow.getFocusedWindow().emit('highlight-code');
         }
     }]
 },{
@@ -263,7 +263,7 @@ const createAppMenu = () => {
         template.unshift({
             label: name,
             submenu: [{
-                label: `About ${name}`,
+                label: `About Noteworthy`,
                 role: 'about'
             },{
                 label: 'Close Window',

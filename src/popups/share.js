@@ -58,69 +58,66 @@ tdService.addRule('', {
 })
 
 export default new Mosaic({
-    data: {
-        title: "",
-        content: ""
+    element: '#overlay',
+    data: { title: "", content: "" },
+    close() { portfolio.dispatch('close-alert'); },
+    exportTxt() {
+        if(window.require) {
+            const toExport = this.data.content;
+            dialog.showSaveDialog(null, {
+                title: `${this.data.title}.txt`,
+                filters: [{name: 'txt', extensions: ['txt']}]
+            }, filename => {
+                fs.writeFile(filename, toExport, err => {
+                    portfolio.dispatch('close-alert');
+                    Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
+                });
+            });
+        }
     },
-    actions: {
-        close() {
-            portfolio.dispatch('close-alert');
-        },
-        txt() {
-            if(window.require) {
-                const toExport = this.data.content;
-                dialog.showSaveDialog(null, {
-                    title: `${this.data.title}.txt`,
-                    filters: [{name: 'txt', extensions: ['txt']}]
-                }, (filename) => {
-                    fs.writeFileSync(filename, toExport, 'utf8');
+    exportMd() {
+        if(window.require) {
+            const _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
+                        .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
+            const md = tdService.turndown(_html);
+            const toExport = md;
+            dialog.showSaveDialog(null, {
+                title: `${this.data.title}.md`,
+                filters: [{name: 'md', extensions: ['md']}]
+            }, filename => {
+                fs.writeFile(filename, toExport, err => {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
                 });
-            }
-        },
-        md() {
-            if(window.require) {
-                const _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ')
-                            .replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ')
-                            .replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ')
-                            .replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
-                const md = tdService.turndown(_html);
-                const toExport = md;
-                dialog.showSaveDialog(null, {
-                    title: `${this.data.title}.md`,
-                    filters: [{name: 'md', extensions: ['md']}]
-                }, (filename) => {
-                    fs.writeFileSync(filename, toExport, 'utf8');
+            });
+        }
+    },
+    exportHtml() {
+        if(window.require) {
+            const toExport = this.data.content;
+            dialog.showSaveDialog(null, {
+                title: `${this.data.title}.html`,
+                filters: [{name: 'html', extensions: ['html']}]
+            }, filename => {
+                fs.writeFile(filename, toExport, err => {
                     portfolio.dispatch('close-alert');
                     Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
                 });
-            }
-        },
-        html() {
-            if(window.require) {
-                const toExport = this.data.content;
-                dialog.showSaveDialog(null, {
-                    title: `${this.data.title}.html`,
-                    filters: [{name: 'html', extensions: ['html']}]
-                }, (filename) => {
-                    fs.writeFileSync(filename, toExport, 'utf8');
-                    portfolio.dispatch('close-alert');
-                    Globals.showActionAlert(`Exported to ${filename}!`, Globals.ColorScheme.blue);
-                });
-            }
+            });
         }
     },
     view() {
         return html`<div class='popup-backdrop'>
             <div class='popup'>
-                <button class='close-btn' onclick='${this.actions.close}'><span class='fa fa-times'></span></button>
+                <button class='close-btn' onclick=${this.close}><span class='fa fa-times'></span></button>
 
                 <h1 class='popup-title'>Share</h1>
                 <h1 class='popup-subtitle'>Select the file type to export to:</h1>
-                <button class='rect-btn' onclick='${this.actions.txt}'>TXT</button>
-                <button class='rect-btn' onclick='${this.actions.md}'>Markdown</button>
-                <button class='rect-btn' onclick='${this.actions.html}'>HTML</button>
+                <button class='rect-btn' onclick=${this.exportTxt}>TXT</button>
+                <button class='rect-btn' onclick=${this.exportMd}>Markdown</button>
+                <button class='rect-btn' onclick=${this.exportHtml}>HTML</button>
                 <br><br>
             </div>
         </div>`

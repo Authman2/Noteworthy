@@ -34,7 +34,7 @@ if(window.require) {
                         Global.showRefreshUserAlert();
                         break;
                     default:
-                        if(resp.err.includes('No current user')) Global.showRefreshUserAlert();
+                        if(result.err.includes('No current user')) Global.showRefreshUserAlert();
                         else Global.showActionAlert(result.err, Global.ColorScheme.red);
                         break;
                 }
@@ -74,7 +74,7 @@ if(window.require) {
             document.execCommand('underline');
         });
         remote.BrowserWindow.getFocusedWindow().on('highlight', event => {
-            document.execCommand('useCSS', false, false);
+            document.execCommand('styleWithCSS', false, false);
             document.execCommand('hiliteColor', false, 'yellow');
         });
         remote.BrowserWindow.getFocusedWindow().on('subscript', event => {
@@ -87,7 +87,7 @@ if(window.require) {
             const code = `<pre class='code-segment'><code>var x = 5;</code><br><br></pre>`;
             document.execCommand('insertHTML', false, `<br>${code}<br>`);
         });
-        remote.BrowserWindow.getFocusedWindow().on('highlight', event => {
+        remote.BrowserWindow.getFocusedWindow().on('highlight-code', event => {
             for(const element of document.getElementsByClassName('code-segment')) {
                 highlight.highlightBlock(element);
             }

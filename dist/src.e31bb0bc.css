@@ -116,13 +116,13 @@
 
 .noteworthy-button {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -195,13 +195,13 @@ body {
 }
 .rect-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -216,7 +216,7 @@ body {
 }
 @media (max-width: 960px) {
   .rect-btn {
-    padding: 12px;
+    padding: 10px;
     font-size: 0.95rem;
     margin-bottom: 10px;
   }
@@ -231,13 +231,13 @@ body {
 }
 .hollow-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -272,13 +272,13 @@ body {
   }
 }
 .red-alert-button {
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -522,13 +522,13 @@ body {
 
 .noteworthy-button {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -601,13 +601,13 @@ body {
 }
 .rect-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -622,7 +622,7 @@ body {
 }
 @media (max-width: 960px) {
   .rect-btn {
-    padding: 12px;
+    padding: 10px;
     font-size: 0.95rem;
     margin-bottom: 10px;
   }
@@ -637,13 +637,13 @@ body {
 }
 .hollow-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -678,13 +678,13 @@ body {
   }
 }
 .red-alert-button {
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -905,13 +905,13 @@ body {
 
 .noteworthy-button {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -984,13 +984,13 @@ body {
 }
 .rect-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1005,7 +1005,7 @@ body {
 }
 @media (max-width: 960px) {
   .rect-btn {
-    padding: 12px;
+    padding: 10px;
     font-size: 0.95rem;
     margin-bottom: 10px;
   }
@@ -1020,13 +1020,13 @@ body {
 }
 .hollow-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1061,13 +1061,13 @@ body {
   }
 }
 .red-alert-button {
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1276,13 +1276,13 @@ span[style*="vertical-align:super"] {
 
 .noteworthy-button {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1355,13 +1355,13 @@ body {
 }
 .rect-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1376,7 +1376,7 @@ body {
 }
 @media (max-width: 960px) {
   .rect-btn {
-    padding: 12px;
+    padding: 10px;
     font-size: 0.95rem;
     margin-bottom: 10px;
   }
@@ -1391,13 +1391,13 @@ body {
 }
 .hollow-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1432,13 +1432,13 @@ body {
   }
 }
 .red-alert-button {
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1558,13 +1558,13 @@ body {
 
 .noteworthy-button {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1637,13 +1637,13 @@ body {
 }
 .rect-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1658,7 +1658,7 @@ body {
 }
 @media (max-width: 960px) {
   .rect-btn {
-    padding: 12px;
+    padding: 10px;
     font-size: 0.95rem;
     margin-bottom: 10px;
   }
@@ -1673,13 +1673,13 @@ body {
 }
 .hollow-btn {
   border: none;
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -1714,13 +1714,13 @@ body {
   }
 }
 .red-alert-button {
-  padding: 12px;
+  padding: 10px;
   outline: none;
   color: white;
   cursor: pointer;
   background: none;
   font-size: 0.95rem;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 10px;
   text-decoration: none;
   transition-duration: 0.2s;
@@ -2035,6 +2035,16 @@ body {
   font-size: 1.1rem;
   font-family: Avenir;
   /* margin-bottom: 30px; */
+}
+@media (max-width: 1199px) {
+  .notebook-cell h5 {
+    font-size: 1.8rem;
+  }
+}
+@media (max-width: 960px) {
+  .notebook-cell h5 {
+    font-size: 1.1rem;
+  }
 }
 .notebook-cell .rect-btn {
   margin-right: 10px;

@@ -14,11 +14,11 @@ import Work from './pages/work';
 import './styles/index.less';
 import './styles/popups.less';
 
-if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(() => {
-        console.log('Registered service worker!');
-    });
-}
+// if('serviceWorker' in navigator) {
+//     navigator.serviceWorker.register('./service-worker.js').then(() => {
+//         console.log('Registered service worker!');
+//     });
+// }
 
 // Setup the router.
 const router = new Router('#root');

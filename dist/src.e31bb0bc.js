@@ -120,21 +120,21 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"../node_modules/@authman2/mosaic/dist/index.js":[function(require,module,exports) {
 var define;
 parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"Y/Oq":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("./index");function t(e){return e instanceof HTMLElement}exports.marker="{{m-".concat(String(Math.random()).slice(2),"}}"),exports.nodeMarker="\x3c!--".concat(exports.marker,"--\x3e"),exports.lastAttributeNameRegex=/([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F \x09\x0a\x0c\x0d"'>=\/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/,exports.isPrimitive=function(e){return"string"==typeof e||"boolean"==typeof e||"number"==typeof e||"bigint"==typeof e},exports.isBooleanAttribute=function(e){return new RegExp("async|autocomplete|autofocus|autoplay|border|challenge|checked|compact|contenteditable|controls\n    default|defer|disabled|formNoValidate|frameborder|hidden|indeterminate|ismap|loop|multiple|muted|nohref|noresize\n    noshade|novalidate|nowrap|open|readonly|required|reversed|scoped|scrolling|seamless|selected|sortable|spellcheck|translate").test(e)},exports.traverse=function(e,t){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:[0];t&&t(e,r);for(var o=e.childNodes,n=0;n<o.length;n++)exports.traverse(o[n],t,r.concat(n))},exports.traverseValues=function(t,r,o){for(var n=t.values,a=0;a<n.length;a++)n[a]instanceof e.default&&exports.traverseValues(n[a],r,t);r&&r(t,o)},exports.cleanUpMosaic=function(e){e.data={},e.willDestroy&&e.willDestroy()},exports.isHTMLElement=t;var r=function(){return Math.random().toString(36).slice(2)};exports.randomKey=r;var o=function(e){if("string"!=typeof e)return null;if("#"===e.substring(0,1)){var t=e.substring(1);return document.getElementById(t)}return document.getElementById(e)};exports.getDOMfromID=o;
+"use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}Object.defineProperty(exports,"__esModule",{value:!0});var t=require("./index");function r(t){return!(!t||"object"!==e(t))&&(!(!t.hasOwnProperty("items")||!Array.isArray(t.items))&&(!(!t.hasOwnProperty("keys")||!Array.isArray(t.keys))&&!(!t.hasOwnProperty("mapped")||!Array.isArray(t.mapped))))}function n(e){return e instanceof HTMLElement}function o(e,t){var r=[],n=[];return e.forEach(function(e,r){t.find(function(t){return e===t})||n.push({key:e,index:r})}),t.forEach(function(t,n){e.find(function(e){return t===e})||r.push({key:t,index:n})}),{deletions:n,additions:r}}function s(e,t){return t.parentNode.insertBefore(e,t.nextSibling),e}function a(e,r){r instanceof t.default&&(e.parent=r)}exports.marker="{{m-".concat(String(Math.random()).slice(2),"}}"),exports.nodeMarker="\x3c!--".concat(exports.marker,"--\x3e"),exports.lastAttributeNameRegex=/([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F \x09\x0a\x0c\x0d"'>=\/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/,exports.isPrimitive=function(e){return"string"==typeof e||"boolean"==typeof e||"number"==typeof e||"bigint"==typeof e},exports.isBooleanAttribute=function(e){return new RegExp("async|autocomplete|autofocus|autoplay|border|challenge|checked|compact|contenteditable|controls\n    default|defer|disabled|formNoValidate|frameborder|hidden|indeterminate|ismap|loop|multiple|muted|nohref|noresize\n    noshade|novalidate|nowrap|open|readonly|required|reversed|scoped|scrolling|seamless|selected|sortable|spellcheck|translate").test(e)},exports.isKeyedArray=r,exports.traverse=function(e,t){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:[0];t&&t(e,r);for(var n=e.childNodes,o=0;o<n.length;o++)exports.traverse(n[o],t,r.concat(o))},exports.traverseValues=function(e,r,n){for(var o=e.values,s=0;s<o.length;s++)o[s]instanceof t.default&&exports.traverseValues(o[s],r,e);r&&r(e,n)},exports.cleanUpMosaic=function(e){e.data={},e.willDestroy&&e.willDestroy()},exports.isHTMLElement=n,exports.randomKey=function(){return Math.random().toString(36).slice(2)},exports.getDOMfromID=function(e){if("string"!=typeof e)return null;if("#"===e.substring(0,1)){var t=e.substring(1);return document.getElementById(t)}return document.getElementById(e)},exports.getArrayDifferences=o,exports.insertAfter=s,exports.setParent=a;
 },{"./index":"Focm"}],"xpyt":[function(require,module,exports) {
 "use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}Object.defineProperty(exports,"__esModule",{value:!0});var t=require("./util");exports.findInvalidOptions=function(o){return o.element&&!t.isHTMLElement(o.element)&&"string"!=typeof o.element?'The Mosaic could not be created because the "element" property is either not an HTML DOM \n        element or it does not already exist in the DOM. Make sure that the "element" property is an already \n        existing DOM element such as "document.body" or a div with the id of \'root\' for example.':o.data&&"object"!==e(o.data)?"The data property of a Mosaic must be defined as a plain, JavaScript object.":o.view?"function"!=typeof o.view&&"string"!=typeof o.view?"The view property must either be a function that returns JSX code, an h-tree, a string representation\n        of an HTML tree, or the path to an HTML file.":o.actions&&"object"!==e(o.actions)?"Actions must be defined as an object, where each entry is a function.":o.created&&"function"!=typeof o.created?"All lifecycle methods (created, willUpdate, updated, and willDestroy) must be\n        function types.":o.willUpdate&&"function"!=typeof o.willUpdate?"All lifecycle methods (created, willUpdate, updated, and willDestroy) must be\n        function types.":o.updated&&"function"!=typeof o.updated?"All lifecycle methods (created, willUpdate, updated, and willDestroy) must be\n        function types.":o.willDestory&&"function"!=typeof o.willDestory?"All lifecycle methods (created, willUpdate, updated, and willDestroy) must be\n        function types.":void 0:"View is a required property of Mosaic components."};
 },{"./util":"Y/Oq"}],"uXLq":[function(require,module,exports) {
-"use strict";function e(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var r=function r(t,n,s){return e(this,r),new Proxy(t,{get:function(e,t,a){return e[t]&&Array.isArray(e[t])?new r(e[t],n,s):Reflect.get(e,t,a)},set:function(e,r,a){var o=Object.assign({},t);return n&&n(o),e[r]=a,s&&s(e,o),!0}})};exports.Observable=r;
+"use strict";function e(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var t=function t(r,n,s){return e(this,t),new Proxy(r,{get:function(e,r,a){return e[r]&&Array.isArray(e[r])?new t(e[r],n,s):Reflect.get(e,r,a)},set:function(e,t,a,o){var c=Object.assign({},r);return n&&n(c),e[t]=a,s&&s(e,c),Reflect.set(e,t,a,o)}})};exports.Observable=t;
 },{}],"n1Wj":[function(require,module,exports) {
-"use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function n(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}Object.defineProperty(exports,"__esModule",{value:!0});var r=require("./util"),o=require("./index"),a=require("./template"),s=function(e,t){for(var i=0;i<t.memories.length;i++)if(t.values){var n=t.memories[i],r=t.values[i];n.commit(e,r)}},c=function(){function i(e){t(this,i),this.type=e.type,this.steps=e.steps,this.attribute=e.attribute,this.event=e.event}return n(i,[{key:"memoryWasChanged",value:function(t,i,n){return!t||!1===n||(r.isPrimitive(i)?t!==i:"function"==typeof i?""+t==""+i:!!Array.isArray(i)||"object"===e(i)&&(t instanceof o.default?i&&"object"===e(i)&&i instanceof o.default?i.tid!==t.tid?(r.cleanUpMosaic(t),r.traverseValues(i,function(e){e.portfolio&&e.portfolio.addDependency(e),t.router&&(i.router=t.router),e.created&&e.created()}),!0):JSON.stringify(t.injected)!==JSON.stringify(i.injected)?(r.cleanUpMosaic(t),!0):(i.iid=t.iid,!1):(r.cleanUpMosaic(t),!0):i instanceof a.Template?!(t instanceof a.Template)||""+t.values!=""+i.values:JSON.stringify(t)!==JSON.stringify(i)))}},{key:"commit",value:function(e,t){for(var i=e instanceof o.default?e.element:e,n=2;n<this.steps.length;n++){var r=this.steps[n];i=i.childNodes[r]}switch(this.type){case"node":this.commitNode(e,i,t);break;case"attribute":this.commitAttribute(e,i,t);break;case"event":this.commitEvent(e,i,t)}}},{key:"commitNode",value:function(e,t,i){if(Array.isArray(i))this.commitArray(e,t,i);else if(i instanceof o.default)e instanceof o.default&&(i.parent=e),t.replaceWith(i.element);else if(i instanceof a.Template){var n=i.element.content.cloneNode(!0).firstChild;s(n,i),t.replaceWith(n)}else t.replaceWith(i)}},{key:"commitArray",value:function(e,t,i){for(var n=document.createElement("div"),r=0;r<i.length;r++)if(i[r]instanceof o.default)n.appendChild(i[r].element),i[r].created&&i[r].created();else if(i[r]instanceof a.Template){var c=i[r].element.content.cloneNode(!0).firstChild;s(c,i[r]),n.appendChild(c)}else n.appendChild(i[r]);t.replaceWith(n)}},{key:"commitAttribute",value:function(e,t,i){if(this.attribute){var n=this.attribute.name;r.isBooleanAttribute(n)?!0===i?t.setAttribute(n,"true"):t.removeAttribute(n):t.setAttribute(n,i)}}},{key:"commitEvent",value:function(e,t,i){var n=this.event||"",r=t.eventHandlers||{};r[n]&&t.removeEventListener(n.substring(2),r[n]),r[n]=i.bind(e),t.eventHandlers=r,t.addEventListener(n.substring(2),t.eventHandlers[n]),t.removeAttribute(n)}}]),i}();exports.Memory=c;
+"use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}function i(e,t,i){return t&&n(e.prototype,t),i&&n(e,i),e}Object.defineProperty(exports,"__esModule",{value:!0});var r=require("./util"),a=require("./index"),o=require("./template"),s=function(){function n(e){t(this,n),this.type=e.type,this.steps=e.steps,this.attribute=e.attribute,this.event=e.event}return i(n,[{key:"changed",value:function(t,n,i){return!t||!0===i||(r.isPrimitive(n)?t!==n:"function"==typeof n?""+t==""+n:Array.isArray(n)?""+t!=""+n:r.isKeyedArray(n)?""+t.keys!=""+n.keys:"object"===e(n)&&(t instanceof a.default?n&&"object"===e(n)&&n instanceof a.default?n.tid!==t.tid?(r.cleanUpMosaic(t),r.traverseValues(n,function(e){e.portfolio&&e.portfolio.addDependency(e),t.router&&(n.router=t.router),e.created&&e.created()}),!0):(n.iid=t.iid,JSON.stringify(t.injected)!==JSON.stringify(n.injected)&&(r.cleanUpMosaic(t),!0)):(r.cleanUpMosaic(t),!0):n instanceof o.Template?!(t instanceof o.Template)||""+t.values!=""+n.values:JSON.stringify(t)!==JSON.stringify(n)))}},{key:"commit",value:function(e,t,n){for(var i=!(arguments.length>3&&void 0!==arguments[3])||arguments[3],r=e instanceof a.default?e.element:e,o=2;o<this.steps.length;o++){var s=this.steps[o];r=r.childNodes[s]}switch(t instanceof a.default&&n instanceof a.default&&(n.iid=t.iid),this.type){case"node":this.commitNode(e,r,t,n,i);break;case"attribute":this.commitAttribute(e,r,t,n,i);break;case"event":this.commitEvent(e,r,t,n,i)}}},{key:"commitNode",value:function(e,t,n,i,s){if(Array.isArray(i))this.commitArray(e,t,n,i,s);else if(r.isKeyedArray(i))this.commitKeyedArray(e,t,n,i,s);else if(i instanceof a.default)e instanceof a.default&&(i.parent=e),t.replaceWith(i.element),i.created&&i.created();else if(i instanceof o.Template){var c=i.constructAndRepaint();t.replaceWith(c)}else t.replaceWith(i)}},{key:"commitArray",value:function(e,t,n,i,s){for(var c=document.createElement("span"),u=0;u<i.length;u++){var l=i[u];if(l instanceof a.default)r.setParent(l,e),c.appendChild(l.element),l.created&&l.created();else if(l instanceof o.Template){var f=l.constructAndRepaint();c.appendChild(f)}}t.replaceWith(c)}},{key:"commitKeyedArray",value:function(e,t,n,i,s){var c=n.keys,u=n.mapped,l=i.keys,f=i.mapped;if(!0!==s&&u){var d=r.getArrayDifferences(c,l),y=d.deletions,m=d.additions;y.forEach(function(e){var t=e.key,n=document.querySelector("[key='".concat(t,"']"));n&&n.remove()}),m.forEach(function(n){var i=n.key,a=n.index,o=f[a];o.element.setAttribute("key",i),r.setParent(o,e);for(var s=t,c=0;c<a;c++)s=s?s.nextSibling:null;u.length,s&&r.insertAfter(o.element,s.previousSibling),o.created&&o.created()})}else for(var p=t,v=function(e){8===p.nodeType?(p.replaceWith(e),p=e):p=r.insertAfter(e,p)},b=0;b<f.length;b++){var h=f[b],A=l[b];if(h instanceof a.default)h.element.setAttribute("key",A),r.setParent(h,e),v(h.element),h.created&&h.created();else if(h instanceof o.Template){var k=h.constructAndRepaint();k.setAttribute("key",A),v(k)}}}},{key:"commitAttribute",value:function(e,t,n,i,a){if(this.attribute){var o=this.attribute.name;r.isBooleanAttribute(o)?!0===i?t.setAttribute(o,"true"):t.removeAttribute(o):t.setAttribute(o,i)}}},{key:"commitEvent",value:function(e,t,n,i,r){var a=this.event||"",o=t.eventHandlers||{};o[a]&&t.removeEventListener(a.substring(2),o[a]),o[a]=i.bind(e),t.eventHandlers=o,t.addEventListener(a.substring(2),t.eventHandlers[a]),t.removeAttribute(a)}}]),n}();exports.Memory=s;
 },{"./util":"Y/Oq","./index":"Focm","./template":"fw1k"}],"fw1k":[function(require,module,exports) {
-"use strict";function e(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function t(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function r(e,r,n){return r&&t(e.prototype,r),n&&t(e,n),e}Object.defineProperty(exports,"__esModule",{value:!0});var n=require("./util"),s=require("./memory"),a=function(){function t(r){e(this,t),this.strings=r,this.values=arguments.length<=1?void 0:arguments[1];var n=document.createElement("template");n.innerHTML=this.constructHTML(),this.element=n,this.memories=this.memorize()}return r(t,[{key:"constructHTML",value:function(){for(var e="",t=0;t<this.strings.length-1;t++){var r=this.strings[t].trim();this.strings[t].startsWith(" ")&&(r=" ".concat(r)),this.strings[t].endsWith(" ")&&(r+=" ");var s=n.lastAttributeNameRegex.exec(r);if(s)e+=r.substring(0,s.index)+s[1]+s[2]+s[3]+n.marker;else e+=r+n.nodeMarker}return e+this.strings[this.strings.length-1]}},{key:"memorize",value:function(){var e=this,t=this.element.content.cloneNode(!0),r=[];return n.traverse(t,function(t,n){switch(t.nodeType){case 1:e.parseAttributes(t,n,r);break;case 3:e.parseText(t,n,r);break;case 8:e.parseComment(t,n,r)}}),r}},{key:"parseAttributes",value:function(e,t,r){if(e.hasAttributes())for(var a=e.attributes,i=0;i<a.length;i++){var o=a[i].name,u=a[i].value;if(!(u.indexOf(n.marker)<0)){var c=new s.Memory({type:o.startsWith("on")?"event":"attribute",steps:t,attribute:{name:o,value:u},event:o});r.push(c)}}}},{key:"parseComment",value:function(e,t,r){if(e.data===n.marker){var a=new s.Memory({type:"node",steps:t});r.push(a)}else for(var i=-1;-1!==(i=e.data.indexOf(n.marker,i+1));){var o=new s.Memory({type:"node",steps:t});r.push(o)}}},{key:"parseText",value:function(e,t,r){if(e.textContent===n.marker){var a=new s.Memory({type:"node",steps:t});r.push(a)}}}]),t}();exports.Template=a;
-},{"./util":"Y/Oq","./memory":"n1Wj"}],"hPM2":[function(require,module,exports) {
-"use strict";function t(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")}function r(t,r){for(var a=0;a<r.length;a++){var e=r[a];e.enumerable=e.enumerable||!1,e.configurable=!0,"value"in e&&(e.writable=!0),Object.defineProperty(t,e.key,e)}}function a(t,a,e){return a&&r(t.prototype,a),e&&r(t,e),t}Object.defineProperty(exports,"__esModule",{value:!0});var e=require("./util"),n=function(t,r){var a=this;r&&(this.params=r.params||{},this.data=r.data||{});var n=this.routes[t];if(!n){if(!this.notfound)return;n=this.notfound,this.data.status=404}for(;this.base.firstChild;)this.base.removeChild(this.base.firstChild);var i=!0,o=!1,s=void 0;try{for(var u,c=n[Symbol.iterator]();!(i=(u=c.next()).done);i=!0){var h=u.value;this.base.appendChild(h.element),e.traverseValues(h,function(t){t.router=a,t.portfolio&&t.portfolio.addDependency(t),t.created&&t.created()})}}catch(l){o=!0,s=l}finally{try{i||null==c.return||c.return()}finally{if(o)throw s}}},i=function(){function r(a){var i=this;t(this,r),this.base=a,this.routes={},this.params={},this.data={},this.current="/",this.base=("string"==typeof a?e.getDOMfromID(a):a)||document.body,window.onpopstate=function(){var t=window.location.pathname;n.call(i,t,{params:i.params,data:i.data}),t+=window.location.search}}return a(r,[{key:"addRoute",value:function(){var t=this,r=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"/",a=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[],e=function(r){Array.isArray(a)?a.forEach(function(r){return r.router=t}):a.router=t,t.routes[r]=Array.isArray(a)?a:[a]};Array.isArray(r)?r.forEach(function(t){return e(t)}):e(r)}},{key:"setNotFound",value:function(t){this.notfound=Array.isArray(t)?t:[t]}},{key:"send",value:function(t){var r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},a="";r.params&&(a+="?",Object.keys(r.params||{}).forEach(function(t,e,n){a+="".concat(t,"=").concat((r&&r.params||{})[t]),e<n.length-1&&(a+="&")})),this.current=t+a,window.history.pushState({},this.current,window.location.origin+this.current),n.call(this,t,r)}},{key:"paint",value:function(){window.location.pathname!==this.current&&(this.current=window.location.pathname),this.send(this.current)}}]),r}();exports.Router=i;
+"use strict";function e(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function t(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function r(e,r,n){return r&&t(e.prototype,r),n&&t(e,n),e}Object.defineProperty(exports,"__esModule",{value:!0});var n=require("./util"),i=require("./memory"),s=require("./index"),a=function(){function t(r){e(this,t),this.memories=[],this.strings=r,this.values=arguments.length<=1?void 0:arguments[1],this.element=document.createElement("template")}return r(t,[{key:"constructAndRepaint",value:function(){this.element.innerHTML=this.constructHTML(),this.memories=this.memorize();var e=this.element.content.cloneNode(!0).firstChild;return this.repaint(e,[],this.values,!0),e}},{key:"constructHTML",value:function(){for(var e="",t=0;t<this.strings.length-1;t++){var r=this.strings[t].trim();this.strings[t].startsWith(" ")&&(r=" ".concat(r)),this.strings[t].endsWith(" ")&&(r+=" ");var i=n.lastAttributeNameRegex.exec(r);if(i)e+=r.substring(0,i.index)+i[1]+i[2]+i[3]+n.marker;else e+=r+n.nodeMarker}return e+this.strings[this.strings.length-1]}},{key:"memorize",value:function(){var e=this,t=this.element.content.cloneNode(!0),r=[];return n.traverse(t,function(t,n){switch(t.nodeType){case 1:r=r.concat(e.parseAttributes(t,n));break;case 3:r=r.concat(e.parseText(t,n));break;case 8:r=r.concat(e.parseComment(t,n))}}),r}},{key:"repaint",value:function(e){for(var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[],r=arguments.length>2?arguments[2]:void 0,n=!(arguments.length>3&&void 0!==arguments[3])||arguments[3],i=0;i<this.memories.length;i++){var a=this.memories[i],o=0===t.length?void 0:t[i],u=r[i];a.changed(o,u,n)?a.commit(e,o,u,n):e instanceof s.default&&(e.values[i]=o)}}},{key:"parseAttributes",value:function(e,t){if(!e.hasAttributes())return[];for(var r=[],s=0;s<e.attributes.length;s++){var a=e.attributes[s].name,o=e.attributes[s].value;o.indexOf(n.marker)<0&&o.indexOf(n.nodeMarker)<0||r.push(new i.Memory({type:a.startsWith("on")?"event":"attribute",steps:t,attribute:{name:a,value:o},event:a}))}return r}},{key:"parseComment",value:function(e,t){if(e.data===n.marker)return[new i.Memory({type:"node",steps:t})];for(var r=-1,s=[];-1!==(r=e.data.indexOf(n.marker,r+1));){var a=new i.Memory({type:"node",steps:t});s.push(a)}return s}},{key:"parseText",value:function(e,t){return e.textContent!==n.marker?[]:[new i.Memory({type:"node",steps:t})]}}]),t}();exports.Template=a;
+},{"./util":"Y/Oq","./memory":"n1Wj","./index":"Focm"}],"hPM2":[function(require,module,exports) {
+"use strict";function t(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")}function r(t,r){for(var e=0;e<r.length;e++){var n=r[e];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}function e(t,e,n){return e&&r(t.prototype,e),n&&r(t,n),t}Object.defineProperty(exports,"__esModule",{value:!0});var n=require("./util"),i=function(t,r){var e=this,i=this.routes[t];if(r&&(this.data=r||{}),!i){if(!this.notfound)return;i=this.notfound,this.data.status=404}for(;this.base.firstChild;)this.base.removeChild(this.base.firstChild);var o=!0,a=!1,s=void 0;try{for(var u,c=i[Symbol.iterator]();!(o=(u=c.next()).done);o=!0){var h=u.value;this.base.appendChild(h.element),n.traverseValues(h,function(t){t.router=e,t.portfolio&&t.portfolio.addDependency(t),t.created&&t.created()})}}catch(l){a=!0,s=l}finally{try{o||null==c.return||c.return()}finally{if(a)throw s}}},o=function(){function r(e){var o=this;t(this,r),this.base=e,this.routes={},this.data={},this.current="/",this.base=("string"==typeof e?n.getDOMfromID(e):e)||document.body,window.onpopstate=function(){var t=window.location.pathname;i.call(o,t,{data:o.data}),t+=window.location.search}}return e(r,[{key:"addRoute",value:function(){var t=this,r=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"/",e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[],n=function(r){Array.isArray(e)?e.forEach(function(r){return r.router=t}):e.router=t,t.routes[r]=Array.isArray(e)?e:[e]};Array.isArray(r)?r.forEach(function(t){return n(t)}):n(r)}},{key:"setNotFound",value:function(t){this.notfound=Array.isArray(t)?t:[t]}},{key:"send",value:function(t){var r=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};this.current=t,window.history.pushState({},this.current,window.location.origin+this.current),i.call(this,t,r)}},{key:"paint",value:function(){window.location.pathname!==this.current&&(this.current=window.location.pathname),i.call(this,this.current)}}]),r}();exports.Router=o;
 },{"./util":"Y/Oq"}],"pzHV":[function(require,module,exports) {
 "use strict";function e(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}function n(e,n){for(var t=0;t<n.length;t++){var i=n[t];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}function t(e,t,i){return t&&n(e.prototype,t),i&&n(e,i),e}Object.defineProperty(exports,"__esModule",{value:!0});var i=function(){function n(t,i){e(this,n),this.dependencies={},this.data=t,this.action=i}return t(n,[{key:"get",value:function(e){return this.data[e]}},{key:"addDependency",value:function(e){e.iid&&(this.dependencies[e.iid]=e)}},{key:"removeDependency",value:function(e){e.iid&&delete this.dependencies[e.iid]}},{key:"dispatch",value:function(e){var n=this,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};if(!this.action)throw new Error("You must define an action in the Portfolio \n            constructor before dispatching events.");Array.isArray(e)?e.forEach(function(e){return n.action(e,n.data,t)}):this.action(e,this.data,t);for(var i=[],r=Object.keys(this.dependencies),o=0;o<r.length;o++){var a=r[o],c=this.dependencies[a];c.repaint(),!1===document.contains(c.element)&&i.push(c.iid)}i.forEach(function(e){return delete n.dependencies[e]})}}]),n}();exports.Portfolio=i;
 },{}],"Focm":[function(require,module,exports) {
-"use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){for(var i=0;i<t.length;i++){var s=t[i];s.enumerable=s.enumerable||!1,s.configurable=!0,"value"in s&&(s.writable=!0),Object.defineProperty(e,s.key,s)}}function s(e,t,s){return t&&i(e.prototype,t),s&&i(e,s),e}Object.defineProperty(exports,"__esModule",{value:!0});var r=require("./validations"),o=require("./util"),n=require("./observable"),a=require("./template"),l=require("./router");exports.Router=l.Router;var h=require("./portfolio");exports.Portfolio=h.Portfolio;var u={},d=function(){function i(e){t(this,i),this.values=[],this.mosaicsFirstRendered=[],this.base=null;var s=r.findInvalidOptions(e);if(s)throw new Error(s);return this.tid=e.tid||o.randomKey(),this.element="string"==typeof e.element?o.getDOMfromID(e.element):e.element,this.view=e.view,this.actions=e.actions,this.created=e.created,this.willUpdate=e.willUpdate,this.updated=e.updated,this.willDestroy=e.willDestroy,this.portfolio=e.portfolio,this.delayTemplate=e.delayTemplate,this.data=c.call(this,e.data||{}),this.options=Object.assign({},e),this.delayTemplate||f.call(this,e),this}return s(i,[{key:"paint",value:function(t){var i=this;if(t)if("object"===e(t)){var s=Object.assign({},this.data||{},t||{});this.data=c.call(this,s)}else this.base="string"==typeof t?o.getDOMfromID(t):t;if(!this.base||!o.isHTMLElement(this.base))throw new Error("This Mosaic could not be painted because its element property is either not set\n            or is not a valid HTML element.");for(;this.base.firstChild;)this.base.removeChild(this.base.firstChild);var r=this.new();r.base.appendChild(r.element),o.traverseValues(r,function(e){e.portfolio&&e.portfolio.addDependency(e),i.router&&(e.router=i.router),e.created&&e.created()})}},{key:"repaint",value:function(){var e=this.view(this),t=this.values.slice();this.values=e.values.slice();for(var i=u[this.tid],s=0;s<i.memories.length;s++){var r=i.memories[s],o=t[s],n=this.values[s],a=this.mosaicsFirstRendered[s];r.memoryWasChanged(o,n,a)?r.commit(this,n):this.values[s]=t[s],this.mosaicsFirstRendered[s]=!0}}},{key:"new",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=Object.assign({},this.options);t.data=Object.assign({},this.data,e),t.tid=this.tid;var s=new i(t);return s.iid=o.randomKey(),s.values=this.values.slice(),s.injected=e,this.base&&(s.base=this.base),!0===t.delayTemplate&&f.call(s,t),s.repaint(),s}},{key:"toHTML",value:function(){return this.repaint(),this.element}}]),i}(),c=function(e){var t=this;return new n.Observable(e,function(e){t.iid&&(t.portfolio&&t.portfolio.removeDependency(t),t.willUpdate&&t.willUpdate(e))},function(){t.iid&&(t.repaint(),t.portfolio&&t.portfolio.addDependency(t),t.updated&&t.updated())})},f=function(e){var t=this.view(this),i=t.element.content.cloneNode(!0).firstChild;this.values=t.values.slice(),this.mosaicsFirstRendered=new Array(this.values.length).fill(!1),this.tid in u||(u[this.tid]=t),document.contains(this.element)&&(this.base=e.base||("string"==typeof e.element?o.getDOMfromID(e.element):e.element)),this.element=i};window.html=function(e){for(var t=arguments.length,i=new Array(t>1?t-1:0),s=1;s<t;s++)i[s-1]=arguments[s];return new a.Template(e,i)},window.Mosaic=d,exports.default=d;
+"use strict";function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){for(var i=0;i<t.length;i++){var n=t[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function n(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}Object.defineProperty(exports,"__esModule",{value:!0});var r=require("./validations"),a=require("./util"),o=require("./observable"),s=require("./template"),l=require("./router");exports.Router=l.Router;var u=require("./portfolio");exports.Portfolio=u.Portfolio;var c={},h=function(){function i(e){var n=this;t(this,i),this.values=[],this.initialRender=!0,this.barrierOn=!1,this.base=null;var o=r.findInvalidOptions(e);if(o)throw new Error(o);return this.tid=e.tid||a.randomKey(),this.element="string"==typeof e.element?a.getDOMfromID(e.element):e.element,Object.keys(e).forEach(function(t){"tid"!==t&&"data"!==t&&"element"!==t&&(n[t]=e[t])}),this.data=d.call(this,e.data||{}),this.options=Object.assign({},e),this.delayTemplate||f.call(this,e),this}return n(i,[{key:"paint",value:function(t){var i=this;if(t&&("object"===e(t)?this.data=d.call(this,Object.assign({},this.data||{},t||{})):this.base="string"==typeof t?a.getDOMfromID(t):t),!this.base||!a.isHTMLElement(this.base))throw new Error("This Mosaic could not be painted because its \n            element property is either not set or is not a valid HTML element.");for(;this.base.firstChild;)this.base.removeChild(this.base.firstChild);var n=this.new();n.base.appendChild(n.element),a.traverseValues(n,function(e){e.portfolio&&e.portfolio.addDependency(e),i.router&&(e.router=i.router),e.created&&e.created()})}},{key:"repaint",value:function(){var e=this.view(this),t=this.values.slice(),i=e.values.slice();c[this.tid].repaint(this,t,i,this.initialRender),this.values=i,this.initialRender=!1}},{key:"new",value:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{},t=Object.assign({},this.options);t.data=Object.assign({},this.data,e),t.tid=this.tid;var n=new i(t);return n.iid=a.randomKey(),n.values=this.values.slice(),n.injected=e,this.base&&(n.base=this.base),!0===t.delayTemplate&&f.call(n,t),n.repaint(),n}},{key:"set",value:function(e){var t=this;this.barrierOn=!0,Object.keys(e).forEach(function(i){return t.data[i]=e[i]}),this.barrierOn=!1,this.repaint()}},{key:"toHTML",value:function(){return this.repaint(),this.element}}],[{key:"list",value:function(e,t,i){var n=e.map(function(e){return t(e)}),r=e.map(function(e,t){return i(e,t)});return{items:e,keys:n,mapped:r}}}]),i}(),d=function(e){var t=this;return new o.Observable(e,function(e){!0!==t.barrierOn&&t.iid&&(t.portfolio&&t.portfolio.removeDependency(t),t.willUpdate&&t.willUpdate(e))},function(){!0!==t.barrierOn&&t.iid&&(t.repaint(),t.portfolio&&t.portfolio.addDependency(t),t.updated&&t.updated())})},f=function(e){var t=this.view(this);this.values=(t.values||[]).slice(),this.initialRender=!0;var i=document.createElement("template");i.innerHTML=t.constructHTML(),t.element=i,t.memories=t.memorize();var n=t.element.content.cloneNode(!0).firstChild;this.tid in c||(c[this.tid]=t),document.contains(this.element)&&(this.base=e.base||("string"==typeof e.element?a.getDOMfromID(e.element):e.element)),this.element=n};window.html=function(e){for(var t=arguments.length,i=new Array(t>1?t-1:0),n=1;n<t;n++)i[n-1]=arguments[n];return new s.Template(e,i)},window.Mosaic=h,exports.default=h;
 },{"./validations":"xpyt","./util":"Y/Oq","./observable":"uXLq","./template":"fw1k","./router":"hPM2","./portfolio":"pzHV"}]},{},["Focm"], "Mosaic")
 },{}],"../node_modules/core-js/modules/_global.js":[function(require,module,exports) {
 
@@ -31844,7 +31844,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n        <div class='popup'>\n            <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n            <h1 class='popup-title'>Create New ", "</h1>\n            <h4 class='popup-subtitle'>Enter a name for your new ", "</h4>\n\n            <input class='underline-field' placeholder=\"Title\" id='create-name-field'>\n            <div class=\"buttons-area\">\n                <button class='rect-btn hollow-btn' onclick='", "'>\n                    Switch to ", "\n                </button>\n                &nbsp;\n                <button class='rect-btn' onclick='", "'>Create ", "</button>\n            </div>\n            <br><br>\n        </div>\n    </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n        <div class='popup'>\n            <button class='close-btn' onclick='", "'>\n                <span class='fa fa-times'></span>\n            </button>\n\n            <h1 class='popup-title'>Create New ", "</h1>\n            <h4 class='popup-subtitle'>Enter a name for your new ", "</h4>\n\n            <input class='underline-field' placeholder=\"Title\" id='create-name-field'>\n            <div class=\"buttons-area\">\n                <button class='rect-btn hollow-btn' onclick='", "'>\n                    Switch to ", "\n                </button>\n                &nbsp;\n                <button class='rect-btn' onclick='", "'>Create ", "</button>\n            </div>\n            <br><br>\n        </div>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -31860,116 +31860,115 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var newAlert = new _mosaic.default({
+  element: '#overlay',
   data: {
     type: 'Note'
   },
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    toggle: function toggle() {
-      this.data.type = this.data.type === 'Notebook' ? 'Note' : 'Notebook';
-    },
-    create: function () {
-      var _create = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var cnb, field, title, result, _result;
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
+  },
+  toggle: function toggle() {
+    this.data.type = this.data.type === 'Notebook' ? 'Note' : 'Notebook';
+  },
+  create: function () {
+    var _create = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee() {
+      var cnb, field, title, result, _result;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                cnb = _portfolio.portfolio.get('currentNotebook');
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              cnb = _portfolio.portfolio.get('currentNotebook');
 
-                if (!(this.data.type === 'Note')) {
-                  _context.next = 5;
-                  break;
-                }
+              if (!(this.data.type === 'Note')) {
+                _context.next = 5;
+                break;
+              }
 
-                if (cnb) {
-                  _context.next = 5;
-                  break;
-                }
+              if (cnb) {
+                _context.next = 5;
+                break;
+              }
 
-                _Globals.default.showActionAlert("You must select a notebook before you can create a note.", _Globals.default.ColorScheme.red);
+              _Globals.default.showActionAlert("You must select a notebook before you can create a note.", _Globals.default.ColorScheme.red);
 
-                return _context.abrupt("return");
+              return _context.abrupt("return");
 
-              case 5:
-                field = document.getElementById('create-name-field');
+            case 5:
+              field = document.getElementById('create-name-field');
 
-                if (!(field.value.length < 1)) {
-                  _context.next = 9;
-                  break;
-                }
+              if (!(field.value.length < 1)) {
+                _context.next = 9;
+                break;
+              }
 
-                _Globals.default.showActionAlert("Please enter a name for this ".concat(this.data.type.toLowerCase(), "."), _Globals.default.ColorScheme.red);
+              _Globals.default.showActionAlert("Please enter a name for this ".concat(this.data.type.toLowerCase(), "."), _Globals.default.ColorScheme.red);
 
-                return _context.abrupt("return");
+              return _context.abrupt("return");
 
-              case 9:
-                // Create notebook
-                title = field.value; // Call the api endpoint.
+            case 9:
+              // Create notebook
+              title = field.value; // Call the api endpoint.
 
-                if (!(this.data.type === 'Note')) {
-                  _context.next = 18;
-                  break;
-                }
+              if (!(this.data.type === 'Note')) {
+                _context.next = 18;
+                break;
+              }
 
-                _context.next = 13;
-                return _Networking.default.createNote(title, '', cnb.id);
+              _context.next = 13;
+              return _Networking.default.createNote(title, '', cnb.id);
 
-              case 13:
-                result = _context.sent;
+            case 13:
+              result = _context.sent;
 
-                if (!(result.ok === false)) {
-                  _context.next = 16;
-                  break;
-                }
+              if (!(result.ok === false)) {
+                _context.next = 16;
+                break;
+              }
 
-                return _context.abrupt("return", _Globals.default.showActionAlert("".concat(result.err), _Globals.default.ColorScheme.red));
+              return _context.abrupt("return", _Globals.default.showActionAlert("".concat(result.err), _Globals.default.ColorScheme.red));
 
-              case 16:
+            case 16:
+              _context.next = 23;
+              break;
+
+            case 18:
+              _context.next = 20;
+              return _Networking.default.createNotebook(title);
+
+            case 20:
+              _result = _context.sent;
+
+              if (!(_result.ok === false)) {
                 _context.next = 23;
                 break;
+              }
 
-              case 18:
-                _context.next = 20;
-                return _Networking.default.createNotebook(title);
+              return _context.abrupt("return", _Globals.default.showActionAlert("".concat(_result.err), _Globals.default.ColorScheme.red));
 
-              case 20:
-                _result = _context.sent;
+            case 23:
+              _Globals.default.showActionAlert("Created ".concat(this.data.type.toLowerCase(), " called <b>").concat(title, "</b>"), _Globals.default.ColorScheme.blue);
 
-                if (!(_result.ok === false)) {
-                  _context.next = 23;
-                  break;
-                }
+              _portfolio.portfolio.dispatch('close-alert');
 
-                return _context.abrupt("return", _Globals.default.showActionAlert("".concat(_result.err), _Globals.default.ColorScheme.red));
-
-              case 23:
-                _Globals.default.showActionAlert("Created ".concat(this.data.type.toLowerCase(), " called <b>").concat(title, "</b>"), _Globals.default.ColorScheme.blue);
-
-                _portfolio.portfolio.dispatch('close-alert');
-
-              case 25:
-              case "end":
-                return _context.stop();
-            }
+            case 25:
+            case "end":
+              return _context.stop();
           }
-        }, _callee, this);
-      }));
+        }
+      }, _callee, this);
+    }));
 
-      function create() {
-        return _create.apply(this, arguments);
-      }
+    function create() {
+      return _create.apply(this, arguments);
+    }
 
-      return create;
-    }()
-  },
+    return create;
+  }(),
   view: function view(self) {
-    return html(_templateObject(), self.actions.close.bind(self), self.data.type, self.data.type, self.actions.toggle, self.data.type === 'Notebook' ? 'Note' : 'Notebook', self.actions.create, self.data.type);
+    return html(_templateObject(), self.close.bind(self), self.data.type, self.data.type, self.toggle, self.data.type === 'Notebook' ? 'Note' : 'Notebook', self.create, self.data.type);
   }
 });
 var _default = newAlert;
@@ -32980,7 +32979,7 @@ var _portfolio = require("../portfolio");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Share</h1>\n                <h1 class='popup-subtitle'>Select the file type to export to:</h1>\n                <button class='rect-btn' onclick='", "'>TXT</button>\n                <button class='rect-btn' onclick='", "'>Markdown</button>\n                <button class='rect-btn' onclick='", "'>HTML</button>\n                <br><br>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup'>\n                <button class='close-btn' onclick=", "><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Share</h1>\n                <h1 class='popup-subtitle'>Select the file type to export to:</h1>\n                <button class='rect-btn' onclick=", ">TXT</button>\n                <button class='rect-btn' onclick=", ">Markdown</button>\n                <button class='rect-btn' onclick=", ">HTML</button>\n                <br><br>\n            </div>\n        </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -33048,74 +33047,73 @@ tdService.addRule('', {
 });
 
 var _default = new _mosaic.default({
+  element: '#overlay',
   data: {
     title: "",
     content: ""
   },
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    txt: function txt() {
-      if (window.require) {
-        var toExport = this.data.content;
-        dialog.showSaveDialog(null, {
-          title: "".concat(this.data.title, ".txt"),
-          filters: [{
-            name: 'txt',
-            extensions: ['txt']
-          }]
-        }, function (filename) {
-          fs.writeFileSync(filename, toExport, 'utf8');
-
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
+  },
+  exportTxt: function exportTxt() {
+    if (window.require) {
+      var toExport = this.data.content;
+      dialog.showSaveDialog(null, {
+        title: "".concat(this.data.title, ".txt"),
+        filters: [{
+          name: 'txt',
+          extensions: ['txt']
+        }]
+      }, function (filename) {
+        fs.writeFile(filename, toExport, function (err) {
           _portfolio.portfolio.dispatch('close-alert');
 
           _Globals.default.showActionAlert("Exported to ".concat(filename, "!"), _Globals.default.ColorScheme.blue);
         });
-      }
-    },
-    md: function md() {
-      if (window.require) {
-        var _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ').replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ').replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ').replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
+      });
+    }
+  },
+  exportMd: function exportMd() {
+    if (window.require) {
+      var _html = this.data.content.replace(/<input class="checkbox" type="checkbox">/g, '[ ] ').replace(/<input class="checkbox" id="checkbox[0-9]*" type="checkbox">/g, '[ ] ').replace(/<input class="checkbox" type="checkbox" checked="false">/g, '[ ] ').replace(/<input class="checkbox" type="checkbox" checked="true">/g, '[x] ');
 
-        var md = tdService.turndown(_html);
-        var toExport = md;
-        dialog.showSaveDialog(null, {
-          title: "".concat(this.data.title, ".md"),
-          filters: [{
-            name: 'md',
-            extensions: ['md']
-          }]
-        }, function (filename) {
-          fs.writeFileSync(filename, toExport, 'utf8');
-
+      var md = tdService.turndown(_html);
+      var toExport = md;
+      dialog.showSaveDialog(null, {
+        title: "".concat(this.data.title, ".md"),
+        filters: [{
+          name: 'md',
+          extensions: ['md']
+        }]
+      }, function (filename) {
+        fs.writeFile(filename, toExport, function (err) {
           _portfolio.portfolio.dispatch('close-alert');
 
           _Globals.default.showActionAlert("Exported to ".concat(filename, "!"), _Globals.default.ColorScheme.blue);
         });
-      }
-    },
-    html: function html() {
-      if (window.require) {
-        var toExport = this.data.content;
-        dialog.showSaveDialog(null, {
-          title: "".concat(this.data.title, ".html"),
-          filters: [{
-            name: 'html',
-            extensions: ['html']
-          }]
-        }, function (filename) {
-          fs.writeFileSync(filename, toExport, 'utf8');
-
+      });
+    }
+  },
+  exportHtml: function exportHtml() {
+    if (window.require) {
+      var toExport = this.data.content;
+      dialog.showSaveDialog(null, {
+        title: "".concat(this.data.title, ".html"),
+        filters: [{
+          name: 'html',
+          extensions: ['html']
+        }]
+      }, function (filename) {
+        fs.writeFile(filename, toExport, function (err) {
           _portfolio.portfolio.dispatch('close-alert');
 
           _Globals.default.showActionAlert("Exported to ".concat(filename, "!"), _Globals.default.ColorScheme.blue);
         });
-      }
+      });
     }
   },
   view: function view() {
-    return html(_templateObject(), this.actions.close, this.actions.txt, this.actions.md, this.actions.html);
+    return html(_templateObject(), this.close, this.exportTxt, this.exportMd, this.exportHtml);
   }
 });
 
@@ -33250,50 +33248,52 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var _default = new _mosaic.default({
   portfolio: _portfolio.portfolio,
+  element: '#overlay',
   delayTemplate: true,
   data: {
     type: 'Notebook',
     items: []
   },
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    selectNotebook: function selectNotebook(item) {
-      if (this.data.type === 'Note') {
-        _portfolio.portfolio.dispatch('select-note', {
-          note: item
-        });
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
+  },
+  selectNotebook: function selectNotebook(item) {
+    if (this.data.type === 'Note') {
+      _portfolio.portfolio.dispatch('select-note', {
+        note: item
+      });
 
-        document.getElementById('work-title-field').innerHTML = item.title;
-        document.getElementById('work-content-field').innerHTML = item.content;
-      } else {
-        _portfolio.portfolio.dispatch('select-notebook', {
-          notebook: item
-        });
-      }
-
-      _portfolio.portfolio.dispatch('close-alert');
-
-      _Globals.default.showActionAlert("Opened the ".concat(this.data.type.toLowerCase(), " <b>").concat(item.title, "</b>"), _Globals.default.ColorScheme.blue);
+      document.getElementById('work-title-field').innerHTML = item.title;
+      document.getElementById('work-content-field').innerHTML = item.content;
+    } else {
+      _portfolio.portfolio.dispatch('select-notebook', {
+        notebook: item
+      });
     }
+
+    _portfolio.portfolio.dispatch('close-alert');
+
+    _Globals.default.showActionAlert("Opened the ".concat(this.data.type.toLowerCase(), " <b>").concat(item.title, "</b>"), _Globals.default.ColorScheme.blue);
   },
   view: function view() {
     var _this = this;
 
-    return html(_templateObject(), this.actions.close, this.data.type === 'Notebook' ? 'My Notebooks' : _portfolio.portfolio.get('currentNotebook').title, this.data.type.toLowerCase(), this.data.items.length > 0 ? this.data.items.map(function (item, index) {
-      if (_this.data.type === 'Notebook') {
-        return _noteCells.NotebookCell.new({
-          notebook: item,
-          selectNotebook: _this.actions.selectNotebook.bind(_this, item)
-        });
-      } else {
-        return _noteCells.NoteCell.new({
-          note: item,
-          selectNote: _this.actions.selectNotebook.bind(_this, item)
-        });
-      }
-    }) : '');
+    var _this$data = this.data,
+        items = _this$data.items,
+        type = _this$data.type;
+    var selectNotebook = this.selectNotebook;
+    return html(_templateObject(), this.close, this.data.type === 'Notebook' ? 'My Notebooks' : _portfolio.portfolio.get('currentNotebook').title, this.data.type.toLowerCase(), _mosaic.default.list(items, function (item) {
+      return item.id;
+    }, function (item) {
+      var func = selectNotebook.bind(_this, item);
+      if (type === 'Notebook') return _noteCells.NotebookCell.new({
+        notebook: item,
+        selectNotebook: func
+      });else return _noteCells.NoteCell.new({
+        note: item,
+        selectNote: func
+      });
+    }));
   }
 });
 
@@ -33344,110 +33344,109 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var _default = new _mosaic.default({
   portfolio: _portfolio.portfolio,
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    resetPassword: function () {
-      var _resetPassword = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var user, cUser, result;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                user = localStorage.getItem('noteworthy-current-user');
-
-                if (user) {
-                  _context.next = 3;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 3:
-                cUser = JSON.parse(user);
-                _context.next = 6;
-                return _Networking.default.forgotPassword(cUser.email);
-
-              case 6:
-                result = _context.sent;
-
-                if (!result.ok) {
-                  _context.next = 12;
-                  break;
-                }
-
-                _portfolio.portfolio.dispatch('close-alert');
-
-                return _context.abrupt("return", _Globals.default.showActionAlert("Sent password reset email to ".concat(cUser.email, "!"), _Globals.default.ColorScheme.gray));
-
-              case 12:
-                return _context.abrupt("return", _Globals.default.showActionAlert("".concat(result.err), _Globals.default.ColorScheme.red));
-
-              case 13:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function resetPassword() {
-        return _resetPassword.apply(this, arguments);
-      }
-
-      return resetPassword;
-    }(),
-    logout: function () {
-      var _logout = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2() {
-        var result;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return _Networking.default.logout();
-
-              case 2:
-                result = _context2.sent;
-
-                if (!result.ok) {
-                  _context2.next = 9;
-                  break;
-                }
-
-                _portfolio.portfolio.dispatch('close-alert');
-
-                this.data.router.send('/login');
-                return _context2.abrupt("return", _Globals.default.showActionAlert('Logged out!', _Globals.default.ColorScheme.gray));
-
-              case 9:
-                return _context2.abrupt("return", _Globals.default.showActionAlert("Logout Error: ".concat(err), _Globals.default.ColorScheme.red));
-
-              case 10:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function logout() {
-        return _logout.apply(this, arguments);
-      }
-
-      return logout;
-    }()
+  element: '#overlay',
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
   },
+  resetPassword: function () {
+    var _resetPassword = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee() {
+      var user, cUser, result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              user = localStorage.getItem('noteworthy-current-user');
+
+              if (user) {
+                _context.next = 3;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 3:
+              cUser = JSON.parse(user);
+              _context.next = 6;
+              return _Networking.default.forgotPassword(cUser.email);
+
+            case 6:
+              result = _context.sent;
+
+              if (!result.ok) {
+                _context.next = 12;
+                break;
+              }
+
+              _portfolio.portfolio.dispatch('close-alert');
+
+              return _context.abrupt("return", _Globals.default.showActionAlert("Sent password reset email to ".concat(cUser.email, "!"), _Globals.default.ColorScheme.gray));
+
+            case 12:
+              return _context.abrupt("return", _Globals.default.showActionAlert("".concat(result.err), _Globals.default.ColorScheme.red));
+
+            case 13:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function resetPassword() {
+      return _resetPassword.apply(this, arguments);
+    }
+
+    return resetPassword;
+  }(),
+  logout: function () {
+    var _logout = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2() {
+      var result;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _Networking.default.logout();
+
+            case 2:
+              result = _context2.sent;
+
+              if (!result.ok) {
+                _context2.next = 9;
+                break;
+              }
+
+              _portfolio.portfolio.dispatch('close-alert');
+
+              if (this.data.router) this.data.router.send('/login');
+              return _context2.abrupt("return", _Globals.default.showActionAlert('Logged out!', _Globals.default.ColorScheme.gray));
+
+            case 9:
+              return _context2.abrupt("return", _Globals.default.showActionAlert("Logout Error: ".concat(err), _Globals.default.ColorScheme.red));
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function logout() {
+      return _logout.apply(this, arguments);
+    }
+
+    return logout;
+  }(),
   view: function view() {
     var user = localStorage.getItem('noteworthy-current-user');
     if (!user) return html(_templateObject());
     var cUser = JSON.parse(user);
-    return html(_templateObject2(), this.actions.close, cUser ? cUser.email : 'Not Available', this.actions.resetPassword, this.actions.logout);
+    return html(_templateObject2(), this.close, cUser ? cUser.email : 'Not Available', this.resetPassword, this.logout);
   }
 });
 
@@ -33508,65 +33507,64 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var _default = new _mosaic.default({
   portfolio: _portfolio.portfolio,
+  element: '#overlay',
   delayTemplate: true,
   data: {
     title: '',
     notebooks: []
   },
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    moveTo: function () {
-      var _moveTo = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(item) {
-        var noteID, fromNotebook, toNotebook, result;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                // Make an API call to actual move the note between the two notebooks.
-                noteID = this.data.movingNote.id;
-                fromNotebook = _portfolio.portfolio.get('currentNotebook').id;
-                toNotebook = item.id;
-                _context.next = 5;
-                return _Networking.default.move(noteID, fromNotebook, toNotebook);
-
-              case 5:
-                result = _context.sent;
-
-                if (result.ok === true) {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("Moved the note <b>".concat(this.data.title, "</b> from \n                <b>").concat(this.data.currentNotebook.title, "</b> into the notebook <b>").concat(item.title, "</b>!"), _Globals.default.ColorScheme.blue, 4000);
-                } else {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("There was a problem moving the note ".concat(this.data.title), _Globals.default.ColorScheme.red);
-                }
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function moveTo(_x) {
-        return _moveTo.apply(this, arguments);
-      }
-
-      return moveTo;
-    }()
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
   },
+  moveTo: function () {
+    var _moveTo = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(item) {
+      var noteID, fromNotebook, toNotebook, result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              // Make an API call to actual move the note between the two notebooks.
+              noteID = this.data.movingNote.id;
+              fromNotebook = _portfolio.portfolio.get('currentNotebook').id;
+              toNotebook = item.id;
+              _context.next = 5;
+              return _Networking.default.move(noteID, fromNotebook, toNotebook);
+
+            case 5:
+              result = _context.sent;
+
+              if (result.ok === true) {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("Moved the note <b>".concat(this.data.title, "</b> from \n            <b>").concat(this.data.currentNotebook.title, "</b> into the notebook <b>").concat(item.title, "</b>!"), _Globals.default.ColorScheme.blue, 4000);
+              } else {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("There was a problem moving the note ".concat(this.data.title), _Globals.default.ColorScheme.red);
+              }
+
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function moveTo(_x) {
+      return _moveTo.apply(this, arguments);
+    }
+
+    return moveTo;
+  }(),
   view: function view() {
     var _this = this;
 
-    return html(_templateObject(), this.actions.close, this.data.title, this.data.notebooks.length > 0 ? this.data.notebooks.map(function (item, index) {
+    return html(_templateObject(), this.close, this.data.title, this.data.notebooks.length > 0 ? this.data.notebooks.map(function (item, index) {
       if (_this.data.currentNotebook && item.id === _this.data.currentNotebook.id) return html(_templateObject2());
-      return html(_templateObject3(), _this.actions.moveTo.bind(_this, item), item.title);
+      return html(_templateObject3(), _this.moveTo.bind(_this, item), item.title);
     }) : '');
   }
 });
@@ -33591,7 +33589,7 @@ var _Networking = _interopRequireDefault(require("../util/Networking"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n            <div class='popup delete-popup'>\n                <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n                <h1 class='popup-title'>Deleting \"", "\"</h1>\n                <h4 class='popup-subtitle'>", "</h4>\n\n                <div class=\"buttons-area\">\n                    <button class='hollow-btn' onclick=\"", "\">No, cancel</button>\n                    <button class='rect-btn' onclick=\"", "\">Yes, delete now</button>\n                </div>\n            </div>\n        </div>"]);
+  var data = _taggedTemplateLiteral(["<div class='popup-backdrop'>\n        <div class='popup delete-popup'>\n            <button class='close-btn' onclick='", "'><span class='fa fa-times'></span></button>\n\n            <h1 class='popup-title'>Deleting \"", "\"</h1>\n            <h4 class='popup-subtitle'>", "</h4>\n\n            <div class=\"buttons-area\">\n                <button class='hollow-btn' onclick=\"", "\">No, cancel</button>\n                <button class='rect-btn' onclick=\"", "\">Yes, delete now</button>\n            </div>\n        </div>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -33608,85 +33606,84 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var _default = new _mosaic.default({
   portfolio: _portfolio.portfolio,
+  element: '#overlay',
   delayTemplate: true,
   data: {
     title: '',
     notebooks: []
   },
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    delete: function () {
-      var _delete2 = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var result, _result;
-
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _Globals.default.showActionAlert("Deleting <b>\"".concat(this.data.title, "\"</b>..."));
-
-                if (!(this.data.type === 0)) {
-                  _context.next = 8;
-                  break;
-                }
-
-                _context.next = 4;
-                return _Networking.default.deleteNotebook(this.data.id);
-
-              case 4:
-                result = _context.sent;
-
-                if (result.ok === true) {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("Deleted the notebook <b>\"".concat(this.data.title, "\"</b> and all of its notes"));
-                } else {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("There was a problem delete the notebook <br>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
-                }
-
-                _context.next = 12;
-                break;
-
-              case 8:
-                _context.next = 10;
-                return _Networking.default.deleteNote(this.data.id);
-
-              case 10:
-                _result = _context.sent;
-
-                if (_result.ok === true) {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("Deleted the note <b>\"".concat(this.data.title, "\"</b>"));
-                } else {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("There was a problem delete the note <b>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
-                }
-
-              case 12:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function _delete() {
-        return _delete2.apply(this, arguments);
-      }
-
-      return _delete;
-    }()
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
   },
-  view: function view() {
-    return html(_templateObject(), this.actions.close, this.data.title, this.data.message, this.actions.close, this.actions.delete);
+  delete: function () {
+    var _delete2 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee() {
+      var result, _result;
+
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _Globals.default.showActionAlert("Deleting <b>\"".concat(this.data.title, "\"</b>..."));
+
+              if (!(this.data.type === 0)) {
+                _context.next = 8;
+                break;
+              }
+
+              _context.next = 4;
+              return _Networking.default.deleteNotebook(this.data.id);
+
+            case 4:
+              result = _context.sent;
+
+              if (result.ok === true) {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("Deleted the notebook <b>\"".concat(this.data.title, "\"</b> and all of its notes"));
+              } else {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("There was a problem delete the notebook <br>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
+              }
+
+              _context.next = 12;
+              break;
+
+            case 8:
+              _context.next = 10;
+              return _Networking.default.deleteNote(this.data.id);
+
+            case 10:
+              _result = _context.sent;
+
+              if (_result.ok === true) {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("Deleted the note <b>\"".concat(this.data.title, "\"</b>"));
+              } else {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("There was a problem delete the note <b>".concat(this.data.title, "</b>"), _Globals.default.ColorScheme.red);
+              }
+
+            case 12:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function _delete() {
+      return _delete2.apply(this, arguments);
+    }
+
+    return _delete;
+  }(),
+  view: function view(self) {
+    return html(_templateObject(), self.close, self.data.title, self.data.message, self.close, self.delete);
   }
 });
 
@@ -33727,52 +33724,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var _default = new _mosaic.default({
   portfolio: _portfolio.portfolio,
-  actions: {
-    close: function close() {
-      _portfolio.portfolio.dispatch('close-alert');
-    },
-    resetWithoutAccount: function () {
-      var _resetWithoutAccount = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var field, email, result;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                field = document.getElementById('reset-email-field');
-                email = field.value;
-                _context.next = 4;
-                return _Networking.default.forgotPassword(email);
-
-              case 4:
-                result = _context.sent;
-
-                if (result.ok === true) {
-                  _portfolio.portfolio.dispatch('close-alert');
-
-                  _Globals.default.showActionAlert("Sent password reset email to ".concat(email, "!"), _Globals.default.ColorScheme.gray);
-                } else {
-                  _Globals.default.showActionAlert("There was a problem resetting your password.", _Globals.default.ColorScheme.red);
-                }
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function resetWithoutAccount() {
-        return _resetWithoutAccount.apply(this, arguments);
-      }
-
-      return resetWithoutAccount;
-    }()
+  element: '#overlay',
+  close: function close() {
+    _portfolio.portfolio.dispatch('close-alert');
   },
+  resetWithoutAccount: function () {
+    var _resetWithoutAccount = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee() {
+      var field, email, result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              field = document.getElementById('reset-email-field');
+              email = field.value;
+              _context.next = 4;
+              return _Networking.default.forgotPassword(email);
+
+            case 4:
+              result = _context.sent;
+
+              if (result.ok === true) {
+                _portfolio.portfolio.dispatch('close-alert');
+
+                _Globals.default.showActionAlert("Sent password reset email to ".concat(email, "!"), _Globals.default.ColorScheme.gray);
+              } else {
+                _Globals.default.showActionAlert("There was a problem resetting your password.", _Globals.default.ColorScheme.red);
+              }
+
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function resetWithoutAccount() {
+      return _resetWithoutAccount.apply(this, arguments);
+    }
+
+    return resetWithoutAccount;
+  }(),
   view: function view() {
-    return html(_templateObject(), this.actions.close, this.actions.resetWithoutAccount);
+    return html(_templateObject(), this.close, this.resetWithoutAccount);
   }
 });
 
@@ -33804,14 +33800,6 @@ var _delete = _interopRequireDefault(require("./popups/delete"));
 var _resetPassword = _interopRequireDefault(require("./popups/reset-password"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function closeAlert(data) {
-  if (document.getElementsByClassName('popup').length === 0 && document.getElementsByClassName('popup-backdrop').length === 0) return;
-  document.getElementsByClassName('popup')[0].remove();
-  document.getElementsByClassName('popup-backdrop')[0].remove();
-  data.alert = '';
-  document.body.style.overflowY = 'auto';
-}
 
 var portfolio = new _mosaic.Portfolio({
   context: 0,
@@ -33869,67 +33857,60 @@ var portfolio = new _mosaic.Portfolio({
       break;
 
     case 'show-new-alert':
-      closeAlert(data);
-      data.alert = _new.default.new();
-      document.getElementById('root').appendChild(data.alert.element);
+      _new.default.paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-share-alert':
-      closeAlert(data);
-      data.alert = _share.default.new();
-      document.getElementById('root').appendChild(data.alert.element);
+      _share.default.new().paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-notebooks-alert':
-      closeAlert(data);
-      data.alert = _notebooks.default.new({
+      _notebooks.default.new({
         type: newData.type || 'Notebook',
         items: newData.type === 'Notebook' ? data.notebooks || [] : data.notes || []
-      });
-      document.getElementById('root').appendChild(data.alert.element);
+      }).paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-account-alert':
-      closeAlert(data);
-      data.alert = _account.default.new({
+      _account.default.new({
         router: newData.router
-      });
-      document.getElementById('root').appendChild(data.alert.element);
+      }).paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-move-alert':
-      closeAlert(data);
-      data.alert = _move.default.new({
+      _move.default.new({
         notebooks: newData.notebooks,
         title: newData.title,
         currentNotebook: newData.currentNotebook,
         movingNote: newData.movingNote
-      });
-      document.getElementById('root').appendChild(data.alert.element);
+      }).paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-delete-alert':
-      closeAlert(data);
-      data.alert = _delete.default.new({
+      _delete.default.new({
         type: newData.type,
         // notebook: 0, note: 1
         message: newData.message,
         title: newData.title,
         id: newData.id
-      });
-      document.getElementById('root').appendChild(data.alert.element);
+      }).paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
     case 'show-reset-password-alert':
-      closeAlert(data);
-      data.alert = _resetPassword.default.new();
-      document.getElementById('root').appendChild(data.alert.element);
+      _resetPassword.default.new().paint();
+
       document.body.style.overflowY = 'hidden';
       break;
 
@@ -34034,7 +34015,7 @@ if (window.require) {
                 return _context.abrupt("break", 19);
 
               case 17:
-                if (resp.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
+                if (result.err.includes('No current user')) _Globals.default.showRefreshUserAlert();else _Globals.default.showActionAlert(result.err, _Globals.default.ColorScheme.red);
                 return _context.abrupt("break", 19);
 
               case 19:
@@ -34083,7 +34064,7 @@ if (window.require) {
       document.execCommand('underline');
     });
     remote.BrowserWindow.getFocusedWindow().on('highlight', function (event) {
-      document.execCommand('useCSS', false, false);
+      document.execCommand('styleWithCSS', false, false);
       document.execCommand('hiliteColor', false, 'yellow');
     });
     remote.BrowserWindow.getFocusedWindow().on('subscript', function (event) {
@@ -34096,7 +34077,7 @@ if (window.require) {
       var code = "<pre class='code-segment'><code>var x = 5;</code><br><br></pre>";
       document.execCommand('insertHTML', false, "<br>".concat(code, "<br>"));
     });
-    remote.BrowserWindow.getFocusedWindow().on('highlight', function (event) {
+    remote.BrowserWindow.getFocusedWindow().on('highlight-code', function (event) {
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -34512,7 +34493,7 @@ require("../styles/home.less");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["<div class=\"home\">\n        <h1 class='page-title'>Noteworthy</h1>\n        <input type='email'\n            id='email-field'\n            class='underline-field'\n            placeholder='", "'>\n        <input type='password'\n            id='password-field'\n            class='underline-field'\n            placeholder='", "'>\n        <br>\n        ", "\n        ", "\n\n        <button class='forgot-password-button' onclick='", "'>Forgot Password</button>\n    </div>"]);
+  var data = _taggedTemplateLiteral(["<div class=\"home\">\n        <h1 class='page-title'>Noteworthy</h1>\n        <input type='email'\n            id='email-field'\n            class='underline-field'\n            placeholder='", "'>\n        <input type='password'\n            id='password-field'\n            class='underline-field'\n            onkeypress='", "'\n            placeholder='", "'>\n        <br>\n        ", "\n        ", "\n\n        <button class='forgot-password-button' onclick='", "'>\n            Forgot Password\n        </button>\n    </div>"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -34531,66 +34512,72 @@ var _default = new _mosaic.default({
   data: {
     signUpMode: false
   },
-  actions: {
-    handleLogin: function () {
-      var _handleLogin = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var email, pass, resp, _email, _pass, _resp;
+  handleLogin: function () {
+    var _handleLogin = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee(e) {
+      var email, pass, resp, _email, _pass, _resp;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (this.data.signUpMode) {
-                  _context.next = 10;
-                  break;
-                }
-
-                email = document.getElementById('email-field').value;
-                pass = document.getElementById('password-field').value;
-
-                _Globals.default.showActionAlert("Logging in...", _Globals.default.ColorScheme.gray, 10000);
-
-                _context.next = 6;
-                return _Networking.default.login(email, pass);
-
-              case 6:
-                resp = _context.sent;
-                if (resp.ok === true) this.router.send('/work');else _Globals.default.showActionAlert("".concat(resp.err), _Globals.default.ColorScheme.red);
-                _context.next = 16;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!(e && e.keyCode && e.keyCode !== 13)) {
+                _context.next = 2;
                 break;
+              }
 
-              case 10:
-                _email = document.getElementById('email-field').value;
-                _pass = document.getElementById('password-field').value;
-                _context.next = 14;
-                return _Networking.default.createAccount(_email, _pass);
+              return _context.abrupt("return");
 
-              case 14:
-                _resp = _context.sent;
-                if (_resp.ok === true) this.router.send('/work');else _Globals.default.showActionAlert("".concat(_resp.err), _Globals.default.ColorScheme.red);
+            case 2:
+              if (this.data.signUpMode) {
+                _context.next = 12;
+                break;
+              }
 
-              case 16:
-              case "end":
-                return _context.stop();
-            }
+              email = document.getElementById('email-field').value;
+              pass = document.getElementById('password-field').value;
+
+              _Globals.default.showActionAlert("Logging in...", _Globals.default.ColorScheme.gray, 10000);
+
+              _context.next = 8;
+              return _Networking.default.login(email, pass);
+
+            case 8:
+              resp = _context.sent;
+              if (resp.ok === true) this.router.send('/work');else _Globals.default.showActionAlert("".concat(resp.err), _Globals.default.ColorScheme.red);
+              _context.next = 18;
+              break;
+
+            case 12:
+              _email = document.getElementById('email-field').value;
+              _pass = document.getElementById('password-field').value;
+              _context.next = 16;
+              return _Networking.default.createAccount(_email, _pass);
+
+            case 16:
+              _resp = _context.sent;
+              if (_resp.ok === true) this.router.send('/work');else _Globals.default.showActionAlert("".concat(_resp.err), _Globals.default.ColorScheme.red);
+
+            case 18:
+            case "end":
+              return _context.stop();
           }
-        }, _callee, this);
-      }));
+        }
+      }, _callee, this);
+    }));
 
-      function handleLogin() {
-        return _handleLogin.apply(this, arguments);
-      }
-
-      return handleLogin;
-    }(),
-    handleSignUp: function handleSignUp() {
-      this.data.signUpMode = !this.data.signUpMode;
-    },
-    handleForgotPassword: function handleForgotPassword() {
-      _portfolio.portfolio.dispatch('show-reset-password-alert');
+    function handleLogin(_x) {
+      return _handleLogin.apply(this, arguments);
     }
+
+    return handleLogin;
+  }(),
+  handleSignUp: function handleSignUp() {
+    this.data.signUpMode = !this.data.signUpMode;
+  },
+  handleForgotPassword: function handleForgotPassword() {
+    _portfolio.portfolio.dispatch('show-reset-password-alert');
   },
   created: function () {
     var _created = _asyncToGenerator(
@@ -34601,7 +34588,7 @@ var _default = new _mosaic.default({
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              (0, _ElectronMessages.default)(this.router); // Load the notebooks and notes.
+              (0, _ElectronMessages.default)(this.router); // Load the current user.
 
               cUser = localStorage.getItem('noteworthy-current-user');
 
@@ -34640,13 +34627,13 @@ var _default = new _mosaic.default({
     return created;
   }(),
   view: function view(self) {
-    return html(_templateObject(), self.data.signUpMode ? "Enter your email" : "Email", self.data.signUpMode ? "Create a password" : "Password", _pillButton.default.new({
+    return html(_templateObject(), self.data.signUpMode ? "Enter your email" : "Email", self.handleLogin, self.data.signUpMode ? "Create a password" : "Password", _pillButton.default.new({
       title: self.data.signUpMode ? "Create Account" : "Login",
-      click: self.actions.handleLogin.bind(self)
+      click: self.handleLogin.bind(self)
     }), _pillButton.default.new({
       title: self.data.signUpMode ? "Cancel" : "Create Account",
-      click: self.actions.handleSignUp.bind(self)
-    }), self.actions.handleForgotPassword);
+      click: self.handleSignUp.bind(self)
+    }), self.handleForgotPassword);
   }
 });
 
@@ -40200,13 +40187,12 @@ if (window.require) {
   remote = electron.remote;
 }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register("/service-worker.js").then(function () {
-    console.log('Registered service worker!');
-  });
-} // Setup the router.
-
-
+// if('serviceWorker' in navigator) {
+//     navigator.serviceWorker.register('./service-worker.js').then(() => {
+//         console.log('Registered service worker!');
+//     });
+// }
+// Setup the router.
 var router = new _mosaic.Router('#root');
 var titleBar = new Mosaic({
   view: function view() {
@@ -40223,7 +40209,7 @@ if (window.require) {
     remote.app.quit();
   });
 }
-},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.js.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@authman2/mosaic":"../node_modules/@authman2/mosaic/dist/index.js","babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./pages/landing":"pages/landing.js","./pages/login":"pages/login.js","./pages/work":"pages/work.js","./styles/index.less":"styles/index.less","./styles/popups.less":"styles/popups.less"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -40251,7 +40237,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59519" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52704" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
