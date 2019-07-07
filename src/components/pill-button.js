@@ -6,14 +6,13 @@ export default new Mosaic({
         return html`
         <button onpointerdown='${this.touchDown}'
                 onpointerup='${this.touchUp}'
-                onpointerenter='${this.touchEnter}'
-                onpointerout='${this.touchUp}'>
+                onpointerout='${this.touchLeave}'>
             ${this.data.title || ''}
         </button>
         `
     },
     touchDown(e) {
-        e.target.style.color = 'cornflowerblue';
+        e.target.style.color = '#427fdb';
         e.target.style.backgroundColor = 'white';
         if(e.pointerType === 'mouse')
             e.target.style.top = '4px';
@@ -22,15 +21,13 @@ export default new Mosaic({
         e.target.style.top = '0px';
         e.target.style.color = 'white';
         e.target.style.backgroundColor = 'rgba(0,0,0,0)';
-    },
-    touchEnter(e) {
-        if(e.pointerType !== 'mouse') return;
-        e.target.style.color = 'cornflowerblue';
-        e.target.style.backgroundColor = 'white';
+
+        const { click } = this.data;
+        if(click) click();
     },
     touchLeave(e) {
-        if(e.pointerType !== 'mouse') return;
+        e.target.style.top = '0px';
         e.target.style.color = 'white';
         e.target.style.backgroundColor = 'rgba(0,0,0,0)';
-    },
+    }
 })
