@@ -6,12 +6,8 @@
   "scripts": {
     "clean": "rm -rf dist .cache packaged && rm -rf -R Noteworthy-darwin-x64",
     "test": "parcel -p 3000 src/index.html",
-    "package": "parcel build src/index.html --out-dir packaged && cp netlify.toml packaged/netlify.toml",
-    "package2": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",
-    "start": "electron .",
-    "electron-toolkit": "electron ./node_modules/electron-toolkit",
-    "dist": "electron-builder --x64 --mac",
-    "deploy": "npm run package2 && git add . && git commit -m \"new version\" && git push"
+    "package": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",
+    "deploy": "npm run package && git add . && git commit -m \"new version\" && git push"
   },
   "repository": {
     "type": "git",
@@ -31,20 +27,15 @@
   },
   "homepage": "https://github.com/Authman2/Noteworthy#readme",
   "dependencies": {
-    "@authman2/mosaic": "^0.5.6",
+    "@authman2/mosaic": "^0.6.0",
     "babel-polyfill": "^6.26.0",
     "dotenv": "^8.0.0",
     "firebase": "^5.9.0",
     "highlight.js": "^9.15.6",
-    "original-fs": "^1.0.0",
     "tippy.js": "^4.2.1",
     "turndown": "^5.0.3"
   },
   "devDependencies": {
-    "electron": "^5.0.1",
-    "electron-builder": "^20.39.0",
-    "electron-packager": "^13.1.1",
-    "electron-toolkit": "^1.0.24",
     "less": "^3.9.0",
     "parcel-bundler": "^1.12.3"
   },
