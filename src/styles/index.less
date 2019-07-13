@@ -1,6 +1,8 @@
-// Colors:
+// Variables:
 @primary: #427fdb;
 @secondary: rgb(238, 210, 238);
+@min-width: 768px;
+
 
 // Fonts:
 .main-font() {
@@ -61,4 +63,68 @@ underline-field > *:nth-child(1) {
         font-weight: 100;
         font-style: italic;
     }
+}
+
+
+// Other:
+* {
+    -webkit-overflow-scrolling: touch;
+}
+
+html, body {
+    position: absolute;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    overflow-x: hidden;
+    background-color: white;
+}
+
+.red-alert-button {
+    border: none;
+    color: #ea4d4d;
+    background-color: white;
+}
+
+@keyframes action-alert-fade-in {
+    from {
+        opacity: 0;
+        bottom: -10px;
+    }
+    to {
+        opacity: 1;
+        bottom: 10px;
+    }
+}
+@keyframes action-alert-fade-out {
+    from {
+        opacity: 1;
+        bottom: 10px;
+    }
+    to {
+        opacity: 0;
+        bottom: -10px;
+    }
+}
+.action-alert {
+    position: fixed;
+    left: 50%;
+    z-index: 102;
+    bottom: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: 200;
+    padding-top: 10px;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    font-family: 'Avenir';
+    background-color: gray;
+    transform: translateX(-50%);
+    animation: action-alert-fade-in 0.3s ease-out;
+}
+.action-alert-fade-out {
+    animation: action-alert-fade-out 0.3s ease-out;
 }

@@ -1,5 +1,8 @@
 import Mosaic from '@authman2/mosaic';
 
+import Globals from '../util/Globals';
+import * as Networking from '../util/Networking';
+
 import '../components/pill-button';
 import '../components/underline-field';
 
@@ -15,8 +18,21 @@ export default new Mosaic({
         buttonOneTitle: 'Login',
         buttonTwoTitle: 'Sign Up',
     },
-    selectButtonOne() {
-        // Log in or create an account.
+    async selectButtonOne() {
+        if(this.mode === 0) {
+            let fields = document.getElementsByClassName('field');
+            let email = fields[0].firstChild.value;
+            let pass = fields[1].firstChild.value;
+            
+            Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray, 10000);
+
+            const resp = await Networking.login(email, pass);
+            if(resp.ok === true) this.router.send('/work');
+            else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
+        } else {
+            // Create Account.
+            
+        }
     },
     selectButtonTwo() {
         this.mode = this.mode === 0 ? 1 : 0;
@@ -24,16 +40,16 @@ export default new Mosaic({
     conditional() {
         if(this.mode === 0) {
             return html`<div>
-                <underline-field type='email' place='Email'>
+                <underline-field type='email' place='Email' class="field">
                 </underline-field>
-                <underline-field type='password' place='Password'>
+                <underline-field type='password' place='Password' class="field">
                 </underline-field>
             </div>`
         } else {
             return html`<div>
-                <underline-field type='email' place='Enter your email'>
+                <underline-field type='email' place='Enter your email' class="field">
                 </underline-field>
-                <underline-field type='password' place='Create a password'>
+                <underline-field type='password' place='Create a password' class="field">
                 </underline-field>
             </div>`
         }

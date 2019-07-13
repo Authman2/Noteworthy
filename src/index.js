@@ -1,4 +1,5 @@
 import { Router } from '@authman2/mosaic';
+import 'babel-polyfill';
 
 import Landing from './pages/landing-page';
 import Login from './pages/login-page';
