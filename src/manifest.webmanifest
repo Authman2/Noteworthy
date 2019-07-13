@@ -1,0 +1,17 @@
+{
+    "name": "Noteworthy",
+    "short_name": "Noteworthy",
+    "categories": ["education","productivity"],
+    "description": "A cross-platform note taking app.",
+    "icons": [{
+        "src": "../res/NoteworthyLogo.png",
+        "sizes": "144x144",
+        "type": "image/png"
+    }],
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#427fdb",
+    "crossorigin": "anonymous",
+    "background_color": "white"
+  }

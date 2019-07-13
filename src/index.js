@@ -10,3 +10,10 @@ const router = new Router('root');
 router.addRoute('/', Landing);
 router.addRoute('/login', Login);
 router.paint();
+
+// Service worker.
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./serviceWorker.js').then(() => {
+        console.log('Registered service worker from client!');
+    });
+}

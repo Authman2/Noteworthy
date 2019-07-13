@@ -16,7 +16,7 @@ export default new Mosaic({
         buttonTwoTitle: 'Sign Up',
     },
     selectButtonOne() {
-
+        // Log in or create an account.
     },
     selectButtonTwo() {
         this.mode = this.mode === 0 ? 1 : 0;
