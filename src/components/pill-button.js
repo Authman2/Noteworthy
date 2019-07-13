@@ -2,12 +2,13 @@ import Mosaic from '@authman2/mosaic';
 
 export default new Mosaic({
     name: 'pill-button',
+    data: { title: '', click: () => {} },
     view() {
         return html`
         <button onpointerdown='${this.touchDown}'
                 onpointerup='${this.touchUp}'
                 onpointerout='${this.touchLeave}'>
-            ${this.data.title || ''}
+            ${this.title}
         </button>
         `
     },
@@ -22,7 +23,7 @@ export default new Mosaic({
         e.target.style.color = 'white';
         e.target.style.backgroundColor = 'rgba(0,0,0,0)';
 
-        const { click } = this.data;
+        const { click } = this;
         if(click) click();
     },
     touchLeave(e) {
