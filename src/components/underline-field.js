@@ -2,9 +2,15 @@ import Mosaic from '@authman2/mosaic';
 
 export default new Mosaic({
     name: 'underline-field',
-    data: { type: '', place: '' },
-    view() {
-        const { type, place } = this;
-        return html`<input type='${type}' placeholder='${place}'>`
-    }
+    received(attrs) {
+        const { type, place } = attrs;
+        if(type && place) {
+            const input = this.getElementsByTagName('input')[0];
+            if(input) {
+                input.type = type;
+                input.placeholder = place;
+            }
+        }
+    },
+    view: () => html`<input>`
 })

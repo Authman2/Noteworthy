@@ -19,14 +19,14 @@ export default new Mosaic({
         buttonTwoTitle: 'Sign Up',
     },
     async selectButtonOne() {
-        if(this.mode === 0) {
+        if(this.data.mode === 0) {
             let fields = document.getElementsByClassName('field');
             let email = fields[0].firstChild.value;
             let pass = fields[1].firstChild.value;
             
             Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray, 10000);
 
-            const resp = await Networking.login(email, pass);
+            const resp = await Networking.login(''+email, ''+pass);
             if(resp.ok === true) this.router.send('/work');
             else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
         } else {
@@ -35,10 +35,10 @@ export default new Mosaic({
         }
     },
     selectButtonTwo() {
-        this.mode = this.mode === 0 ? 1 : 0;
+        this.data.mode = this.data.mode === 0 ? 1 : 0;
     },
     conditional() {
-        if(this.mode === 0) {
+        if(this.data.mode === 0) {
             return html`<div>
                 <underline-field type='email' place='Email' class="field">
                 </underline-field>
@@ -54,17 +54,30 @@ export default new Mosaic({
             </div>`
         }
     },
+    conditional2() {
+        if(this.data.mode === 0) {
+            return html`<div>
+                <pill-button title='Login'
+                    click='${this.selectButtonOne.bind(this)}'></pill-button>
+                <pill-button title='Sign Up'
+                            click='${this.selectButtonTwo.bind(this)}'></pill-button>
+            </div>`
+        } else {
+            return html`<div>
+                <pill-button title='Create Account'
+                    click='${this.selectButtonOne.bind(this)}'></pill-button>
+                <pill-button title='Cancel'
+                            click='${this.selectButtonTwo.bind(this)}'></pill-button>
+            </div>`
+        }
+    },
     view() {
         return html`
         <h1>Noteworthy</h1>
         <br><br>
 
         ${this.conditional.bind(this)}
-
-        <pill-button title='${this.mode === 0 ? "Login" : "Create Account"}'
-                    click='${this.selectButtonOne.bind(this)}'></pill-button>
-        <pill-button title='${this.mode === 0 ? "Sign Up" : "Cancel"}'
-                    click='${this.selectButtonTwo.bind(this)}'></pill-button>
+        ${this.conditional2.bind(this)}
         `
     }
 })

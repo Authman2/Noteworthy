@@ -5,8 +5,12 @@ let currentUser = undefined;
 export async function login(email, password) {
     const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ email, password })
     });
+    console.log(response);
     if(response.ok === true) {
         const user = await response.json();
         currentUser = user;

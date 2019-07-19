@@ -18,3 +18,9 @@ if('serviceWorker' in navigator) {
         console.log('Registered service worker from client!');
     });
 }
+
+// Remove manifest for iOS.
+const userAgent = navigator.userAgent.toLowerCase();
+if(/iphone|ipad|ipod/.test(userAgent)) {
+    document.querySelector(`link[rel="manifest"]`).setAttribute("rel", "no-on-ios");
+}

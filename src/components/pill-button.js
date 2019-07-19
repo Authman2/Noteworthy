@@ -2,7 +2,10 @@ import Mosaic from '@authman2/mosaic';
 
 export default new Mosaic({
     name: 'pill-button',
-    data: { title: '', click: () => {} },
+    data: {
+        title: '',
+        click: () => {}
+    },
     view() {
         return html`
         <button onpointerdown='${this.touchDown}'
@@ -23,7 +26,7 @@ export default new Mosaic({
         e.target.style.color = 'white';
         e.target.style.backgroundColor = 'rgba(0,0,0,0)';
 
-        const { click } = this;
+        const { click } = this.data;
         if(click) click();
     },
     touchLeave(e) {

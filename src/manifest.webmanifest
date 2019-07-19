@@ -10,8 +10,8 @@
     }],
     "scope": "/",
     "start_url": "/",
+    "theme_color": "white",
     "display": "standalone",
-    "theme_color": "#427fdb",
     "crossorigin": "anonymous",
     "background_color": "white"
   }
