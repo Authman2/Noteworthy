@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "clean": "rm -rf dist .cache packaged && rm -rf -R Noteworthy-darwin-x64",
-    "test": "parcel -p 3000 src/index.html",
+    "start": "parcel -p 3000 src/index.html",
     "package": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",
     "deploy": "npm run package && git add . && git commit -m \"new version\" && git push"
   },

@@ -6,32 +6,17 @@ export default new Mosaic({
         title: '',
         click: () => {}
     },
+    created() {
+        this.addEventListener('click', this.touchDown);
+    },
+    willDestroy() {
+        this.removeEventListener('click', this.touchDown);
+    },
     view() {
-        return html`
-        <button onpointerdown='${this.touchDown}'
-                onpointerup='${this.touchUp}'
-                onpointerout='${this.touchLeave}'>
-            ${this.title}
-        </button>
-        `
+        return html`${this.title}`
     },
-    touchDown(e) {
-        e.target.style.color = '#427fdb';
-        e.target.style.backgroundColor = 'white';
-        if(e.pointerType === 'mouse')
-            e.target.style.top = '4px';
-    },
-    touchUp(e) {
-        e.target.style.top = '0px';
-        e.target.style.color = 'white';
-        e.target.style.backgroundColor = 'rgba(0,0,0,0)';
-
+    touchDown() {
         const { click } = this.data;
         if(click) click();
-    },
-    touchLeave(e) {
-        e.target.style.top = '0px';
-        e.target.style.color = 'white';
-        e.target.style.backgroundColor = 'rgba(0,0,0,0)';
     }
 })

@@ -14,17 +14,17 @@
 
 
 // Buttons:
-pill-button > *:nth-child(1) {
+pill-button {
     position: relative;
     top: 0px;
-    padding: 8px;
     border: none;
+    padding: 10px;
     outline: none;
     color: white;
     display: block;
     font-size: 18px;
     cursor: pointer;
-    min-height: 50px;
+    max-width: 150px;
     background: none;
     user-select: none;
     margin-left: auto;
@@ -37,6 +37,17 @@ pill-button > *:nth-child(1) {
     border: 1px solid white;
     transition: top 0.08s ease-out;
     background-color: rgba(0, 0, 0, 0);
+
+    &:hover {
+        top: 4px;
+        color: #427fdb;
+        background-color: white;
+    }
+
+    &:active {
+        border-color: darken(white, 10%);
+        background-color: darken(white, 10%);
+    }
 }
 
 // Fields:
