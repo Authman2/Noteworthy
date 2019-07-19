@@ -63,11 +63,12 @@ underline-field > *:nth-child(1) {
     background: none;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 0px;
     margin-bottom: 50px;
     text-decoration: none;
-    border-bottom: 2px solid white;
     transition-duration: 0.1s;
-
+    border-bottom: 2px solid white;
+    
     &::placeholder {
         opacity: 0.5;
         color: white;
@@ -79,7 +80,9 @@ underline-field > *:nth-child(1) {
 
 // Other:
 * {
+    -webkit-touch-callout: none;
     -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
 }
 button {
     user-select: none;
