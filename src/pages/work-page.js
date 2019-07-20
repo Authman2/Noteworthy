@@ -1,5 +1,7 @@
 import Mosaic from '@authman2/mosaic';
 
+import AppDrawer from '../components/app-drawer';
+
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
 
@@ -10,7 +12,7 @@ export default new Mosaic({
     name: 'work-page',
     
     view: self => html`
-        <ion-icon name="menu"></ion-icon>
+        <ion-icon name="menu" onclick='${self.openDrawer}'></ion-icon>
 
         <div id='title-field' contenteditable='true' tabindex='-1'>Title</div>
         <div id='content-field' contenteditable='true' tabindex='-1'>Start typing!</div>
@@ -31,4 +33,13 @@ export default new Mosaic({
             document.execCommand('insertHTML', false, '&#9;');
         });
     },
+
+    openDrawer() {
+        AppDrawer.paint();
+        const overlay = document.getElementById('overlay');
+        if(overlay) {
+            overlay.style.opacity = 1;
+            overlay.style.zIndex = 99;
+        }
+    }
 })

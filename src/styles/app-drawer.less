@@ -1,0 +1,102 @@
+@import './index.less';
+
+@keyframes slideInDrawer {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+@keyframes slideOutDrawer {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+// The app's main form of navigation.
+.close-app-drawer {
+    animation: slideOutDrawer 0.2s cubic-bezier(.56, .56, .27, .95);
+}
+app-drawer {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 40%;
+    bottom: 0px;
+    z-index: 100;
+    .main-font();
+    background-color: #ECECEC;
+    box-shadow: -2px 0px 20px 4px rgba(0,0,0,0.3);
+    animation: slideInDrawer 0.2s cubic-bezier(.56, .56, .27, .95);
+
+    // The top portion of the app drawer, which says the title of the
+    // current navigation page, a search field, and a button to close it.
+    header {
+        position: relative;
+        top: 0px;
+        padding: 10px;
+        text-align: center;
+        padding-bottom: 15px;
+        background-color: white;
+        box-shadow: 0px 2px 20px 4px rgba(77, 77, 77, 0.12);
+
+        // The close button.
+        ion-icon[name='close'] {
+            position: absolute;
+            top: 16px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #B2B2B2;
+        }
+
+        // The title.
+        h1 {
+            position: relative;
+            top: -5px;
+            font-size: 18px;
+            color: #B2B2B2;
+            user-select: none;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+            -webkit-user-select: none;
+        }
+
+        // The search bar.
+        input[type='search'] {
+            width: 95%;
+            padding: 8px;
+            border: none;
+            outline: none;
+            background: none;
+            border-radius: 25px;
+            text-decoration: none;
+            background-color: #EAEAEA;
+        }
+    }
+}
+
+// The overlay that gives more attention to the app drawer.
+#overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    opacity: 0;
+    bottom: 0px;
+    z-index: -1;
+    transition-duration: 0.2s;
+    background-color: rgba(0,0,0,0.4);
+}
+
+
+@media not screen and (min-width: 768px) {
+    app-drawer {
+        width: 80%;
+    }
+}
