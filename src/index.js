@@ -3,6 +3,7 @@ import 'babel-polyfill';
 
 import Landing from './pages/landing-page';
 import Login from './pages/login-page';
+import Work from './pages/work-page';
 
 import './styles/index.less';
 
@@ -10,6 +11,7 @@ import './styles/index.less';
 const router = new Router('root');
 router.addRoute('/', Landing);
 router.addRoute('/login', Login);
+router.addRoute('/work', Work);
 router.paint();
 
 // Service worker.

@@ -108,30 +108,38 @@ html, body {
 }
 
 @keyframes action-alert-fade-in {
-    from {
+    0% {
         opacity: 0;
         bottom: -10px;
     }
-    to {
+    50% {
         opacity: 1;
-        bottom: 10px;
+        bottom: 30px;
+    }
+    100% {
+        opacity: 1;
+        bottom: 15px;
     }
 }
 @keyframes action-alert-fade-out {
-    from {
+    0% {
         opacity: 1;
-        bottom: 10px;
+        bottom: 15px;
     }
-    to {
+    50% {
+        opacity: 1;
+        bottom: 30px;
+    }
+    100% {
         opacity: 0;
         bottom: -10px;
     }
 }
-.action-alert {
+toast-alert {
     position: fixed;
     left: 50%;
     z-index: 102;
-    bottom: 10px;
+    bottom: 15px;
     color: white;
     font-size: 16px;
     font-weight: 200;
@@ -143,10 +151,11 @@ html, body {
     font-family: 'Avenir';
     background-color: gray;
     transform: translateX(-50%);
-    animation: action-alert-fade-in 0.3s ease-out;
+    animation: action-alert-fade-in 0.5s sin(360);
 }
-.action-alert-fade-out {
-    animation: action-alert-fade-out 0.3s ease-out;
+.toast-alert-fade-out {
+    opacity: 0;
+    animation: action-alert-fade-out 0.5s sin(360);
 }
 
 
@@ -161,5 +170,9 @@ html, body {
             color: #427fdb;
             background-color: white;
         }
+    }
+
+    toast-alert {
+        width: 70%;
     }
 }

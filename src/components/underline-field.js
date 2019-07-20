@@ -4,13 +4,10 @@ export default new Mosaic({
     name: 'underline-field',
     received(attrs) {
         const { type, place } = attrs;
-        if(type && place) {
-            const input = this.getElementsByTagName('input')[0];
-            if(input) {
-                input.type = type;
-                input.placeholder = place;
-            }
-        }
+        const input = this.getElementsByTagName('input')[0];
+        
+        if(type && input) input.type = type;
+        if(place && input) input.placeholder = place;
     },
     view: () => html`<input>`
 })

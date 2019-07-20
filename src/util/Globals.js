@@ -1,35 +1,33 @@
 import Networking from './Networking';
 
+import ToastAlert from '../components/toast-alert';
+
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
-    if(document.getElementsByClassName('action-alert')[0])
-        document.getElementsByClassName('action-alert')[0].remove();
-
-    const alert = document.createElement('p');
-    alert.className = 'action-alert';
-    alert.innerHTML = text;
-    alert.style.backgroundColor = color;
-    document.body.appendChild(alert);
-
+    const holder = document.getElementById('toasts');
+    holder.innerHTML = `<toast-alert color='${color}'>
+        ${text}
+    </toast-alert>`;
+    
     // Let 0 indicate infinite time.
     if(time !== 0) {
+        const alert = document.getElementsByTagName('toast-alert')[0];
         setTimeout(() => {
-            alert.classList.add('action-alert-fade-out');
+            alert.classList.add('toast-alert-fade-out');
             setTimeout(() => {
-                alert.classList.remove('action-alert-fade-out');
+                alert.classList.remove('toast-alert-fade-out');
                 alert.remove();
-            }, 300);
+            }, 500);
         }, time);
     }
 }
 const hideActionAlert = () => {
-    const alert = document.getElementsByClassName('action-alert')[0];
+    const alert = document.getElementsByTagName('toast-alert')[0];
     if(alert) {
-        alert.classList.add('action-alert-fade-out');
+        alert.classList.add('toast-alert-fade-out');
         setTimeout(() => {
-            alert.classList.remove('action-alert-fade-out');
             alert.remove();
-        }, 300);
+        }, 400);
     }
 }
 
