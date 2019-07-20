@@ -13,10 +13,6 @@ export default new Mosaic({
     name: 'login-page',
     data: {
         mode: 0,
-        emailPlaceholder: 'Email',
-        passPlaceholder: 'Password',
-        buttonOneTitle: 'Login',
-        buttonTwoTitle: 'Sign Up',
     },
     async selectButtonOne() {
         if(this.data.mode === 0) {
@@ -26,16 +22,24 @@ export default new Mosaic({
             
             Globals.showActionAlert(`Logging in...`, Globals.ColorScheme.gray, 10000);
 
-            const resp = await Networking.login(''+email, ''+pass);
+            const resp = await Networking.login(email, pass);
             if(resp.ok === true) this.router.send('/work');
-            else Globals.showActionAlert(`${resp.err}`, Globals.ColorScheme.red);
+            else Globals.showActionAlert(`${resp.error}`, Globals.ColorScheme.red);
         } else {
-            // Create Account.
-            
+            let fields = document.getElementsByClassName('field');
+            let email = fields[0].firstChild.value;
+            let pass = fields[1].firstChild.value;
+
+            const resp = await Networking.createAccount(email, pass);
+            if(resp.ok === true) this.router.send('/work');
+            else Globals.showActionAlert(`${resp.error}`, Globals.ColorScheme.red);
         }
     },
     selectButtonTwo() {
         this.data.mode = this.data.mode === 0 ? 1 : 0;
+    },
+    selectForgotPassword() {
+        alert('Trying to recover password');
     },
     conditional() {
         if(this.data.mode === 0) {
@@ -78,6 +82,8 @@ export default new Mosaic({
 
         ${this.conditional.bind(this)}
         ${this.conditional2.bind(this)}
+        
+        <h4 onclick='${this.selectForgotPassword}'>Forgot Password?</h4>
         `
     }
 })

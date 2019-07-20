@@ -21,4 +21,33 @@ login-page {
         font-weight: bolder;
         letter-spacing: 3px;
     }
+
+    // The "forgot password" button.
+    & > h4 {
+        position: absolute;
+        left: 50%;
+        bottom: 5px;
+        .main-font();
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        font-weight: bolder;
+        transform: translateX(-50%);
+
+        // Give it some hover feedback.
+        &:hover {
+            color: black;
+        }
+    }
+}
+
+
+@media not screen and (min-width: 768px) {
+    login-page {
+        & > h4 {
+            // Switch from "hover" to "active" on mobile.
+            &:hover { color: white; }
+            &:active { color: black; }
+        }
+    }
 }
