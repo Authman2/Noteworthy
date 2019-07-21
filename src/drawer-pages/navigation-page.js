@@ -32,7 +32,7 @@ export default new Mosaic({
             </drawer-card>
 
             <!-- Settings -->
-            <drawer-card color='#868686'>
+            <drawer-card color='#868686' onclick='${()=>portfolio.dispatch('go-to-settings')}'>
                 <h3>Settings</h3>
                 <p>Make changes to your app settings and view your account details.</p>
             </drawer-card>

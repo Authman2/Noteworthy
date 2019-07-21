@@ -48,6 +48,35 @@ pill-button {
         background-color: darken(white, 10%);
     }
 }
+rect-button {
+    position: relative;
+    .main-font();
+    border: none;
+    padding: 10px;
+    outline: none;
+    color: white;
+    display: block;
+    font-size: 14px;
+    cursor: pointer;
+    max-width: 120px;
+    font-weight: 100;
+    background: none;
+    user-select: none;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.15s;
+    box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+        box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.15);
+    }
+    &:active {
+        transform: scale(0.93);
+    }
+}
 
 // Fields:
 underline-field > *:nth-child(1) {
@@ -67,6 +96,7 @@ underline-field > *:nth-child(1) {
     text-decoration: none;
     transition-duration: 0.1s;
     border-bottom: 2px solid white;
+    box-shadow: 0px 2px 40px 4px rgba(255, 255, 255, 0.15);
     
     &::placeholder {
         opacity: 0.5;
@@ -169,6 +199,15 @@ toast-alert {
         &:active {
             color: #427fdb;
             background-color: white;
+        }
+    }
+
+    rect-button {
+        &:hover {
+            box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.3);
+        }
+        &:active {
+            box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.15);
         }
     }
 

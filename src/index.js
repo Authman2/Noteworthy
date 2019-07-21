@@ -8,6 +8,12 @@ import Work from './pages/work-page';
 import './styles/index.less';
 
 
+// Add a quick Array utility function.
+Array.prototype.last = function() {
+    if(this.length === 0) return null;
+    else return this[this.length - 1];
+}
+
 const router = new Router('root');
 router.addRoute('/', Landing);
 router.addRoute('/login', Login);

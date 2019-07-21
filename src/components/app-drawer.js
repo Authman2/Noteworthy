@@ -5,6 +5,7 @@ import portfolio from '../portfolio';
 import '../components/drawer-card';
 import '../drawer-pages/navigation-page';
 import '../drawer-pages/notebooks-page';
+import '../drawer-pages/settings-page';
 
 import '../styles/app-drawer.less';
 
@@ -16,6 +17,11 @@ export default new Mosaic({
     view() {
         return html`
             <header>
+                ${ portfolio.get('pages').last() !== 'navigation' ?
+                    html`<ion-icon name="ios-arrow-back" onclick='${this.moveBackOnePage}'>
+                    </ion-icon>` 
+                    : ""
+                }
                 <ion-icon name="close" onclick='${this.closeDrawer}'></ion-icon>
                 <h1>Noteworthy</h1>
                 <input type='search' placeholder='Find'>
@@ -26,9 +32,11 @@ export default new Mosaic({
     },
 
     getDrawerPage() {
-        switch(portfolio.get('navigationPage')) {
+        const last = portfolio.get('pages').last();
+        switch(last) {
             case 'navigation': return html`<navigation-page></navigation-page>`;
-            case 'notebooks': return html`<notebooks-page></notebooks-page>`
+            case 'notebooks': return html`<notebooks-page></notebooks-page>`;
+            case 'settings': return html`<settings-page></settings-page>`;
             default: return html`<h1>something</h1>`
         }
     },
@@ -44,5 +52,9 @@ export default new Mosaic({
             this.classList.remove('close-app-drawer');
             this.remove();
         }, 200);
+    },
+
+    moveBackOnePage() {
+        portfolio.dispatch('go-back');
     }
 })
