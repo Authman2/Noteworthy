@@ -17,6 +17,19 @@
     }
 }
 
+// The overlay that gives more attention to the app drawer.
+#overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    opacity: 0;
+    bottom: 0px;
+    z-index: -1;
+    transition-duration: 0.2s;
+    background-color: rgba(0,0,0,0.4);
+}
+
 // The app's main form of navigation.
 .close-app-drawer {
     animation: slideOutDrawer 0.2s cubic-bezier(.56, .56, .27, .95);
@@ -29,6 +42,7 @@ app-drawer {
     bottom: 0px;
     z-index: 100;
     .main-font();
+    overflow-y: scroll;
     background-color: #ECECEC;
     box-shadow: -2px 0px 20px 4px rgba(0,0,0,0.3);
     animation: slideInDrawer 0.2s cubic-bezier(.56, .56, .27, .95);
@@ -79,19 +93,15 @@ app-drawer {
             background-color: #EAEAEA;
         }
     }
-}
 
-// The overlay that gives more attention to the app drawer.
-#overlay {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    opacity: 0;
-    bottom: 0px;
-    z-index: -1;
-    transition-duration: 0.2s;
-    background-color: rgba(0,0,0,0.4);
+    // The main content section of the navigation.
+    .drawer-page {
+        position: relative;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
 }
 
 
