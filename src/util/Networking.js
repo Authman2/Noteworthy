@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const DEV_API_URL = 'http://localhost:8000';
 const API_URL = 'https://noteworthy-backend.herokuapp.com';
-let currentUser = undefined;
+export let currentUser = undefined;
 
 export async function login(email, password) {
     const res = await fetch(`${API_URL}/login`, {
@@ -60,12 +60,14 @@ export async function forgotPassword(email) {
 }
 
 export async function loadNotebooks() {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
     
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/notebooks?token=${token}`);
-    // if(response.ok === true) return { notebooks: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/notebooks?token=${token}`);
+    if(response.ok === true) return { notebooks: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function loadNotes(notebookID) {

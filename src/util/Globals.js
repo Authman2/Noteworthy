@@ -55,10 +55,16 @@ const showRefreshUserAlert = () => {
     document.getElementById('insert-alert-button').appendChild(button);
 }
 
-module.exports = {
+/** Returns the date from an array. */
+const getDateFromArray = (array) => {
+    return new Date(...array);
+}
+
+export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
+    getDateFromArray,
     showRefreshUserAlert
 }

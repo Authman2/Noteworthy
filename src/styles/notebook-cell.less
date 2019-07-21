@@ -1,0 +1,71 @@
+@import './index.less';
+
+@keyframes fadeInNotebookCell {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.notebook-cell {
+    position: relative;
+    width: 85%;
+    padding: 10px;
+    height: 150px;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    background-color: white;
+    transition-duration: 0.15s;
+    animation: fadeInNotebookCell 0.5s sin(360);
+    box-shadow: 2px 10px 10px 1px rgba(0,0,0,0.05);
+
+    &:hover {
+        box-shadow: 2px 10px 50px 1px rgba(0,0,0,0.15);
+    }
+    &:active {
+        transform: scale(0.95);
+    }
+
+    // The title of the notebook.
+    h2 {
+        .main-font();
+        font-size: 18px;
+        color: #6E6E6E;
+        font-weight: 100;
+    }
+
+    // The pages and created labels.
+    p {
+        .main-font();
+        font-size: 13px;
+        color: #6E6E6E;
+
+        b {
+            font-family: Avenir;
+            font-weight: bolder;
+        }
+    }
+
+    // The delete button.
+    alert-button {
+        position: absolute;
+        right: 15px;
+        bottom: 5px;
+    }
+}
+
+@media not screen and (min-width: 768px) {
+    .notebook-cell {
+        &:hover {
+            box-shadow: 2px 10px 10px 1px rgba(0,0,0,0.05);
+        }
+    }
+}
