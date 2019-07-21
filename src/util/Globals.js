@@ -1,6 +1,8 @@
 import Networking from './Networking';
 
-import ToastAlert from '../components/toast-alert';
+import '../components/toast-alert';
+import '../alerts/delete-alert';
+import '../alerts/move-alert';
 
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
@@ -60,11 +62,28 @@ const getDateFromArray = (array) => {
     return new Date(...array);
 }
 
+const showDeleteAlert = (title, subtitle) => {
+    const container = document.getElementById('alerts');
+    const alert = document.createElement('delete-alert');
+    container.appendChild(alert);
+    
+    alert.set({ title, subtitle });
+}
+const showMoveAlert = (title, subtitle) => {
+    const container = document.getElementById('alerts');
+    const alert = document.createElement('move-alert');
+    container.appendChild(alert);
+    
+    alert.set({ title, subtitle });
+}
+
 export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
     getDateFromArray,
-    showRefreshUserAlert
+    showRefreshUserAlert,
+    showDeleteAlert,
+    showMoveAlert
 }

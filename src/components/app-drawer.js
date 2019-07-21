@@ -31,6 +31,10 @@ export default new Mosaic({
             ${this.getDrawerPage}
         `
     },
+    created() {
+        const overlay = document.getElementById('overlay');
+        if(overlay && !overlay.onclick) overlay.onclick = () => this.closeDrawer();
+    },
 
     getDrawerPage() {
         const last = portfolio.get('pages').last();

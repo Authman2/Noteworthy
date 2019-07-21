@@ -17,10 +17,24 @@ export default new Mosaic({
         portfolio.dispatch('select-note', { note: this.data.note });
     },
     moveNote() {
-        console.log('moving', this.data.note);
+        const { title } = this.data.note;
+        Globals.showMoveAlert(`Moving "${title}"`, `Select the notebook that you would like to
+        move ${title} into.`);
+
+        const drawer = document.getElementsByTagName('app-drawer')[0];
+        if(!drawer) return;
+
+        drawer.style.transform = 'translateX(100%)';
     },
     deleteNote() {
-        console.log('delete', this.data.note);
+        const { title } = this.data.note;
+        Globals.showDeleteAlert(`Deleting "${title}"`, `Are you sure you want to delete
+        the note "${title}"? This action can only be reversed with a Noteworthy backup file.`);
+
+        const drawer = document.getElementsByTagName('app-drawer')[0];
+        if(!drawer) return;
+
+        drawer.style.transform = 'translateX(100%)';
     },
     view() {
         let created = '-----';
