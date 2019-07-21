@@ -5,6 +5,8 @@ import * as Networking from '../util/Networking';
 
 import '../components/notebook-cell';
 
+import '../styles/notebooks-page.less';
+
 
 export default new Mosaic({
     name: 'notebooks-page',

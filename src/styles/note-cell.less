@@ -1,10 +1,10 @@
 @import './index.less';
 
-.notebook-cell {
+.note-cell {
     position: relative;
     width: 85%;
     padding: 10px;
-    height: 150px;
+    height: 160px;
     cursor: pointer;
     margin-top: 30px;
     margin-left: auto;
@@ -27,19 +27,27 @@
         margin-top: 0px;
     }
 
-    // The title of the notebook.
+    // The title of the note.
     h2 {
         .main-font();
+        max-lines: 1;
+        line-clamp: 1;
         font-size: 18px;
+        max-height: 50px;
         color: #6E6E6E;
         font-weight: 100;
+        overflow: hidden;
+        margin-bottom: 15px;
+        text-overflow: ellipsis;
     }
 
-    // The pages and created labels.
+    // The created and last modified labels.
     p {
         .main-font();
         font-size: 13px;
+        margin-top: 5px;
         color: #6E6E6E;
+        margin-bottom: 0px;
 
         b {
             font-family: Avenir;
@@ -48,7 +56,12 @@
     }
 
     // The delete button.
-    alert-button {
+    alert-button:nth-of-type(1) {
+        position: absolute;
+        right: 95px;
+        bottom: 5px;
+    }
+    alert-button:nth-of-type(2) {
         position: absolute;
         right: 15px;
         bottom: 5px;

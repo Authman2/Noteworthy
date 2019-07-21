@@ -5,6 +5,7 @@ import portfolio from '../portfolio';
 import '../components/drawer-card';
 import '../drawer-pages/navigation-page';
 import '../drawer-pages/notebooks-page';
+import '../drawer-pages/notes-page';
 import '../drawer-pages/settings-page';
 
 import '../styles/app-drawer.less';
@@ -36,6 +37,7 @@ export default new Mosaic({
         switch(last) {
             case 'navigation': return html`<navigation-page></navigation-page>`;
             case 'notebooks': return html`<notebooks-page></notebooks-page>`;
+            case 'notes': return html`<notes-page></notes-page>`;
             case 'settings': return html`<settings-page></settings-page>`;
             default: return html`<h1>something</h1>`
         }

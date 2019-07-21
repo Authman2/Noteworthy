@@ -71,12 +71,14 @@ export async function loadNotebooks() {
 }
 
 export async function loadNotes(notebookID) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
     
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/notes?token=${token}&notebookID=${notebookID}`);
-    // if(response.ok === true) return { notes: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/notes?token=${token}&notebookID=${notebookID}`);
+    if(response.ok === true) return { notes: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function createNotebook(title) {

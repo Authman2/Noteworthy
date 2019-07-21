@@ -20,7 +20,11 @@ export default new Mosaic({
         this.removeEventListener('touchstart', this.onActive);
         this.removeEventListener('touchend', this.onNotActive);
     },
-    touchDown() {
+    touchDown(e) {
+        if(!e) e = window.event
+        e.cancelBubble = true;
+        if(e.stopPropogation) e.stopPropogation();
+        
         const { click } = this.data;
         if(click) click();
     },
