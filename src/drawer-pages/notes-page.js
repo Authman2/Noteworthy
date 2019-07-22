@@ -14,10 +14,13 @@ export default new Mosaic({
     data: {
         notes: []
     },
-    async created() {
+    created() {
         this.class = 'drawer-page';
 
         // Load the notes for the selected notebook.
+        this.refreshNotes();
+    },
+    async refreshNotes() {
         const currentNotebook = portfolio.get('currentNotebook');
         console.log(currentNotebook);
         const result = await Networking.loadNotes(currentNotebook.id);

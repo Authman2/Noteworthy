@@ -21,7 +21,8 @@ export default new Mosaic({
     deleteNotebook() {
         const { title } = this.data.notebook;
         Globals.showDeleteAlert(`Deleting "${title}"`, `Are you sure you want to delete
-        the notebook "${title}"? This will also delete all of the notes inside of this notebook.`);
+        the notebook "${title}"? This will also delete all of the notes inside of this notebook.`,
+        this.data.notebook, 0);
 
         const drawer = document.getElementsByTagName('app-drawer')[0];
         if(!drawer) return;

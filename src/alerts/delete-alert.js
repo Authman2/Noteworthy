@@ -1,5 +1,8 @@
 import Mosaic from '@authman2/mosaic';
 
+import Globals from '../util/Globals';
+import * as Networking from '../util/Networking';
+
 import '../components/alert-button';
 
 import '../styles/alerts.less';
@@ -16,8 +19,38 @@ export default new Mosaic({
         const drawer = document.getElementsByTagName('app-drawer')[0];
         if(drawer) drawer.style.transform = 'translateX(0%)';
     },
-    confirm() {
-        alert("Confirming!");
+    async confirm() {
+        const { note, type } = this.data;
+        if(!note.id) return;
+
+        // Make api request to delete the note/notebook.
+        if(type === 0) {
+            const result = await Networking.deleteNotebook(note.id);
+            if(result.ok) {
+                Globals.showActionAlert(`Deleted the notebook ${note.title}!`, Globals.ColorScheme.blue, 4000);
+                
+                // Reload the note list.
+                const page = document.getElementsByTagName('notes-page')[0];
+                if(page) page.refreshNotes();
+
+                this.cancel();
+            } else {
+                Globals.showActionAlert(result.err, Globals.ColorScheme.red, 4000);
+            }
+        } else {
+            const result = await Networking.deleteNote(note.id);
+            if(result.ok) {
+                Globals.showActionAlert(`Deleted the note ${note.title}!`, Globals.ColorScheme.blue, 4000);
+                
+                // Reload the note list.
+                const page = document.getElementsByTagName('notes-page')[0];
+                if(page) page.refreshNotes();
+
+                this.cancel();
+            } else {
+                Globals.showActionAlert(result.err, Globals.ColorScheme.red, 4000);
+            }
+        }
     },
     view() {
         return html`<div class='modal-alert'>

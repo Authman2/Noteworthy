@@ -62,19 +62,19 @@ const getDateFromArray = (array) => {
     return new Date(...array);
 }
 
-const showDeleteAlert = (title, subtitle) => {
+const showDeleteAlert = (title, subtitle, note, type) => {
     const container = document.getElementById('alerts');
     const alert = document.createElement('delete-alert');
     container.appendChild(alert);
     
-    alert.set({ title, subtitle });
+    alert.set({ title, subtitle, note, type });
 }
-const showMoveAlert = (title, subtitle) => {
+const showMoveAlert = (title, subtitle, note) => {
     const container = document.getElementById('alerts');
     const alert = document.createElement('move-alert');
     container.appendChild(alert);
     
-    alert.set({ title, subtitle });
+    alert.set({ title, subtitle, note });
 }
 
 export default {

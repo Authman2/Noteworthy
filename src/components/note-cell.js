@@ -19,7 +19,7 @@ export default new Mosaic({
     moveNote() {
         const { title } = this.data.note;
         Globals.showMoveAlert(`Moving "${title}"`, `Select the notebook that you would like to
-        move ${title} into.`);
+        move ${title} into.`, this.data.note);
 
         const drawer = document.getElementsByTagName('app-drawer')[0];
         if(!drawer) return;
@@ -29,7 +29,7 @@ export default new Mosaic({
     deleteNote() {
         const { title } = this.data.note;
         Globals.showDeleteAlert(`Deleting "${title}"`, `Are you sure you want to delete
-        the note "${title}"? This action can only be reversed with a Noteworthy backup file.`);
+        the note "${title}"? This action can only be reversed with a Noteworthy backup file.`, this.data.note, 1);
 
         const drawer = document.getElementsByTagName('app-drawer')[0];
         if(!drawer) return;

@@ -38,6 +38,7 @@ export default new Portfolio({
                 drawer.classList.remove('close-app-drawer');
                 drawer.remove();
             }, 200);
+            document.body.scrollTo({ top: 0, behavior: 'auto' });
             return;
     }
 })

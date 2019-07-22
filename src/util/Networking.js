@@ -73,7 +73,7 @@ export async function loadNotebooks() {
 export async function loadNotes(notebookID) {
     const user = localStorage.getItem('noteworthy-current-user');
     if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
+    currentUser = JSON.parse(user)
     
     const token = currentUser.idToken;
     const response = await fetch(`${API_URL}/notes?token=${token}&notebookID=${notebookID}`);
@@ -82,15 +82,17 @@ export async function loadNotes(notebookID) {
 }
 
 export async function createNotebook(title) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user)
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/create-notebook?token=${token}`, {
-    //     method: 'POST',
-    //     body: JSON.stringify({ title })
-    // });
-    // if(response.ok === true) return { notes: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/create-notebook?token=${token}`, {
+        method: 'POST',
+        body: JSON.stringify({ title })
+    });
+    if(response.ok === true) return { notes: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function createNote(title, content, notebookID) {
@@ -130,37 +132,43 @@ export async function restore(notebooksAndNotes) {
 }
 
 export async function move(noteID, fromNotebook, toNotebook) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user)
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/move-note?token=${token}`, {
-    //     method: 'PUT',
-    //     body: JSON.stringify({ noteID, fromNotebook, toNotebook })
-    // });
-    // if(response.ok === true) return { response: await response.text(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/move-note?token=${token}`, {
+        method: 'PUT',
+        body: JSON.stringify({ noteID, fromNotebook, toNotebook })
+    });
+    if(response.ok === true) return { response: await response.text(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function deleteNote(noteID) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/delete-note?token=${token}`, {
-    //     method: 'DELETE',
-    //     body: JSON.stringify({ noteID })
-    // });
-    // if(response.ok === true) return { notes: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/delete-note?token=${token}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ noteID })
+    });
+    if(response.ok === true) return { notes: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function deleteNotebook(notebookID) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/delete-notebook?token=${token}`, {
-    //     method: 'DELETE',
-    //     body: JSON.stringify({ notebookID })
-    // });
-    // if(response.ok === true) return { notes: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/delete-notebook?token=${token}`, {
+        method: 'DELETE',
+        body: JSON.stringify({ notebookID })
+    });
+    if(response.ok === true) return { notes: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
