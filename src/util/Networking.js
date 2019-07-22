@@ -108,15 +108,17 @@ export async function createNote(title, content, notebookID) {
 }
 
 export async function save(noteID, title, content) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/save?token=${token}`, {
-    //     method: 'POST',
-    //     body: JSON.stringify({ noteID: noteID, title: title, content: content })
-    // });
-    // if(response.ok === true) return { message: await response.text(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/save?token=${token}`, {
+        method: 'POST',
+        body: JSON.stringify({ noteID: noteID, title: title, content: content })
+    });
+    if(response.ok === true) return { message: await response.text(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function restore(notebooksAndNotes) {
@@ -134,7 +136,7 @@ export async function restore(notebooksAndNotes) {
 export async function move(noteID, fromNotebook, toNotebook) {
     const user = localStorage.getItem('noteworthy-current-user');
     if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user)
+    currentUser = JSON.parse(user);
 
     const token = currentUser.idToken;
     const response = await fetch(`${API_URL}/move-note?token=${token}`, {

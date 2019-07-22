@@ -77,6 +77,23 @@ const showMoveAlert = (title, subtitle, note) => {
     alert.set({ title, subtitle, note });
 }
 
+const slideOutCard = (selector, then) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(ele => ele.classList.add('card-slide-out'));
+    setTimeout(() => {
+        elements.forEach(ele => ele.classList.remove('card-slide-out'));
+        then();
+    }, 700);
+}
+const slideBackCard = (selector, then) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(ele => ele.classList.add('card-slide-back'));
+    setTimeout(() => {
+        elements.forEach(ele => ele.classList.remove('card-slide-back'));
+        then();
+    }, 700);
+}
+
 export default {
     showActionAlert,
     hideActionAlert,
@@ -85,5 +102,7 @@ export default {
     getDateFromArray,
     showRefreshUserAlert,
     showDeleteAlert,
-    showMoveAlert
+    showMoveAlert,
+    slideOutCard,
+    slideBackCard
 }

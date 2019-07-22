@@ -9,6 +9,7 @@ import '../drawer-pages/notes-page';
 import '../drawer-pages/settings-page';
 
 import '../styles/app-drawer.less';
+import Globals from '../util/Globals';
 
 
 export default new Mosaic({
@@ -61,6 +62,14 @@ export default new Mosaic({
     },
 
     moveBackOnePage() {
-        portfolio.dispatch('go-back');
+        let selector = '';
+        let last = portfolio.get('pages').last();
+        if(last === 'notes') selector = '.note-cell';
+        else if(last === 'notebooks') selector = '.notebook-cell';
+        else selector = '.drawer-card';
+
+        Globals.slideBackCard(selector, () => {
+            portfolio.dispatch('go-back');
+        });
     }
 })

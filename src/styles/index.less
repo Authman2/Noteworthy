@@ -225,6 +225,33 @@ toast-alert {
     animation: action-alert-fade-out 0.5s sin(360);
 }
 
+@keyframes slideOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100%)
+    }
+}
+@keyframes slideBack {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%)
+    }
+}
+.card-slide-out {
+    animation: slideOut 0.8s sin(360);
+}
+.card-slide-back {
+    animation: slideBack 0.8s sin(360);
+}
+
 
 @media not screen and (min-width: 768px) {
     pill-button {
@@ -255,6 +282,7 @@ toast-alert {
     }
 
     toast-alert {
+        max-width: 80%;
         width: fit-content;
     }
 }

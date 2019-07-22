@@ -14,9 +14,11 @@ export default new Mosaic({
         notebook: {}
     },
     selectNotebook() {
-        portfolio.dispatch('go-to-notes', {
-            notebook: this.data.notebook
-        });
+        Globals.slideOutCard('.notebook-cell', () => {
+            portfolio.dispatch('go-to-notes', {
+                notebook: this.data.notebook
+            });
+        })
     },
     deleteNotebook() {
         const { title } = this.data.notebook;

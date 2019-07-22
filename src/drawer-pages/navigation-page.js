@@ -60,7 +60,11 @@ export default new Mosaic({
     view() {
         return html`
             <!-- Notebooks -->
-            <drawer-card color='#6792DD' onclick='${()=>portfolio.dispatch('go-to-notebooks')}'>
+            <drawer-card color='#6792DD' onclick='${()=>{
+                Globals.slideOutCard('.drawer-card', () => {
+                    portfolio.dispatch('go-to-notebooks')
+                });
+            }}'>
                 <h3>Notebooks</h3>
                 <p>View all of your notebooks, then select one to view the notes inside.</p>
             </drawer-card>
