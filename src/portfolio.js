@@ -1,9 +1,10 @@
-import { Portfolio } from "@authman2/mosaic";
+import { Portfolio } from "mosaic-framework";
 
 export default new Portfolio({
     pages: ['navigation'],
     currentNotebook: undefined,
-    currentNote: undefined
+    currentNote: undefined,
+    currentSearch: ''
 },
 (event, data, other) => {
     switch(event) {
@@ -39,6 +40,9 @@ export default new Portfolio({
                 drawer.remove();
             }, 200);
             document.body.scrollTo({ top: 0, behavior: 'auto' });
+            return;
+        case 'search':
+            data.search = other.search;
             return;
     }
 })

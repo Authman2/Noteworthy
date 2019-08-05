@@ -1,15 +1,17 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
 
+import Globals from '../util/Globals';
+import * as Networking from '../util/Networking';
 import portfolio from '../portfolio';
 
-import '../components/drawer-card';
+import './drawer-card';
+import './flat-rect-button';
 import '../drawer-pages/navigation-page';
 import '../drawer-pages/notebooks-page';
 import '../drawer-pages/notes-page';
 import '../drawer-pages/settings-page';
 
 import '../styles/app-drawer.less';
-import Globals from '../util/Globals';
 
 
 export default new Mosaic({
@@ -26,10 +28,16 @@ export default new Mosaic({
                 }
                 <ion-icon name="close" onclick='${this.closeDrawer}'></ion-icon>
                 <h1>Noteworthy</h1>
-                <input type='search' placeholder='Find'>
+                <input type='search' placeholder='Find' oninput='${this.search}'>
             </header>
 
-            ${this.getDrawerPage}
+            <div>
+                <flat-rect-button color='lightgray' click='${this.saveCurrentNote}'>
+                    Save
+                </flat-rect-button>
+            </div>
+
+            ${this.getDrawerPage.bind(this)}
         `
     },
     created() {
@@ -44,7 +52,7 @@ export default new Mosaic({
             case 'notebooks': return html`<notebooks-page></notebooks-page>`;
             case 'notes': return html`<notes-page></notes-page>`;
             case 'settings': return html`<settings-page></settings-page>`;
-            default: return html`<h1>something</h1>`
+            default: return html`<navigation-page></navigation-page>`;
         }
     },
 
@@ -70,6 +78,31 @@ export default new Mosaic({
 
         Globals.slideBackCard(selector, () => {
             portfolio.dispatch('go-back');
+        });
+    },
+
+    async saveCurrentNote() {
+        const note = portfolio.get('currentNote');
+        if(!note)
+            return Globals.showActionAlert(`You must have a note open before you can save anything!`, 
+            Globals.ColorScheme.red, 3000);
+
+        Globals.showActionAlert('Saving...');
+        const title = document.getElementById('title-field').innerText;
+        const content = document.getElementById('content-field').innerHTML;
+
+        const result = await Networking.save(note.id, title, content);
+        if(result.ok) Globals.showActionAlert(`Saved!`, Globals.ColorScheme.green);
+        else {
+            if(resp.err.includes('No current user')) Globals.showRefreshUserAlert();
+            else Global.showActionAlert(result.err, Globals.ColorScheme.red);
+        }
+    },
+
+    search(e) {
+        const searchString = e.currentTarget.value;
+        portfolio.dispatch('search', {
+            search: searchString
         });
     }
 })

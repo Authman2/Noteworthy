@@ -1,7 +1,9 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
+import '@polymer/paper-spinner/paper-spinner.js';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
+import portfolio from '../portfolio';
 
 import '../components/notebook-cell';
 
@@ -20,15 +22,28 @@ export default new Mosaic({
         const result = await Networking.loadNotebooks();
         if(result.ok === true) {
             const nbs = result.notebooks;
-            console.log(nbs);
             this.data.notebooks = nbs;
         } else {
             Globals.showActionAlert(result.err, Globals.ColorScheme.red);
         }
     },
     view() {
-        return html`${this.data.notebooks.map(notebook => {
-            return html`<notebook-cell notebook='${notebook}'></notebook-cell>`
-        })}`
+        return html`${this.data.notebooks.length > 0 ?
+            this.data.notebooks
+                .filter(notebook => {
+                    const srh = portfolio.get('search');
+                    if(srh && srh.length > 0) {
+                        const reg = new RegExp(srh, 'gi');
+                        return reg.test(notebook.title);
+                    } else {
+                        return true;
+                    }
+                })
+                .map(notebook => {
+                    return html`<notebook-cell notebook='${notebook}'></notebook-cell>`
+                })
+            :
+            html`<paper-spinner active></paper-spinner>`
+        }`
     }
 })

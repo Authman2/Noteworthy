@@ -1,9 +1,10 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
 
 import AppDrawer from '../components/app-drawer';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
+import portfolio from '../portfolio';
 
 import '../styles/work-page.less';
 
@@ -28,6 +29,15 @@ export default new Mosaic({
 
         // Clicking "tab" will add a tab space.
         document.getElementById('content-field').addEventListener('keydown', e => {
+            // Save the note after some interval of characters.
+            if(portfolio.get('currentNote')) {
+                if(Globals.typeCount > 0) Globals.typeCount -= 1;
+                else {
+                    this.saveCurrentNote();
+                    Globals.typeCount = 20;
+                }
+            }
+
             if(e.keyCode !== 9) return;
             e.preventDefault();
             document.execCommand('insertHTML', false, '&#9;');
@@ -36,10 +46,18 @@ export default new Mosaic({
 
     openDrawer() {
         AppDrawer.paint();
+        AppDrawer.router = this.router;
         const overlay = document.getElementById('overlay');
         if(overlay) {
             overlay.style.opacity = 1;
             overlay.style.zIndex = 99;
         }
+    },
+
+    async saveCurrentNote() {
+        const note = portfolio.get('currentNote');
+        const title = document.getElementById('title-field').innerText;
+        const content = document.getElementById('content-field').innerHTML;
+        await Networking.save(note.id, title, content);
     }
 })

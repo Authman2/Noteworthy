@@ -94,6 +94,8 @@ const slideBackCard = (selector, then) => {
     }, 700);
 }
 
+let typeCount = 20;
+
 export default {
     showActionAlert,
     hideActionAlert,
@@ -104,5 +106,6 @@ export default {
     showDeleteAlert,
     showMoveAlert,
     slideOutCard,
-    slideBackCard
+    slideBackCard,
+    typeCount
 }

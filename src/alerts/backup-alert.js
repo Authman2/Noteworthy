@@ -1,4 +1,4 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';

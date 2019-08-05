@@ -38,7 +38,7 @@ app-drawer {
     position: fixed;
     top: 0px;
     right: 0px;
-    width: 40%;
+    width: 40vw;
     bottom: 0px;
     z-index: 100;
     .main-font();
@@ -50,9 +50,12 @@ app-drawer {
     // The top portion of the app drawer, which says the title of the
     // current navigation page, a search field, and a button to close it.
     header {
-        position: relative;
+        position: fixed;
         top: 0px;
-        padding: 10px;
+        right: 0px;
+        width: 40vw;
+        padding: 0px;
+        z-index: 101;
         text-align: center;
         padding-bottom: 15px;
         background-color: white;
@@ -61,7 +64,7 @@ app-drawer {
         // The back button.
         ion-icon[name='ios-arrow-back'] {
             position: absolute;
-            top: 18px;
+            top: 15px;
             left: 15px;
             font-size: 20px;
             cursor: pointer;
@@ -71,7 +74,7 @@ app-drawer {
         // The close button.
         ion-icon[name='close'] {
             position: absolute;
-            top: 18px;
+            top: 15px;
             right: 15px;
             font-size: 20px;
             cursor: pointer;
@@ -81,7 +84,7 @@ app-drawer {
         // The title.
         h1 {
             position: relative;
-            top: -6px;
+            top: 0px;
             font-size: 18px;
             color: #B2B2B2;
             user-select: none;
@@ -104,6 +107,18 @@ app-drawer {
         }
     }
 
+    // The buttons view.
+    & > div {
+        position: relative;
+        word-wrap: none;
+        margin-top: 95px;
+        padding-top: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 8px;
+    }
+
     // The main content section of the navigation.
     .drawer-page {
         position: relative;
@@ -118,6 +133,10 @@ app-drawer {
 
 @media not screen and (min-width: 768px) {
     app-drawer {
-        width: 80%;
+        width: 80vw;
+
+        header {
+            width: 80vw;
+        }
     }
 }

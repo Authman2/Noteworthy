@@ -1,5 +1,6 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
 import turndown from 'turndown';
+import isMobile from 'is-mobile';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
@@ -70,19 +71,24 @@ export default new Mosaic({
             </drawer-card>
 
             <!-- Backup -->
-            <drawer-card color='#84C594' onclick='${this.backupNotes.bind(this)}'>
-                <h3>Backup Notes</h3>
-                <p>Keep a local copy of your notebooks and notes.</p>
-            </drawer-card>
-
+            ${ !isMobile() ?
+                html`<drawer-card color='#84C594' onclick='${this.backupNotes.bind(this)}'>
+                        <h3>Backup Notes</h3>
+                        <p>Keep a local copy of your notebooks and notes.</p>
+                    </drawer-card>`
+                : ''
+            }
             <!-- Restore -->
-            <drawer-card color='#906FC2'>
-                <h3>Restore Backup</h3>
-                <p>
-                    Use a Noteworthy backup file to restore all of your data from a
-                    previous state.
-                </p>
-            </drawer-card>
+            ${ !isMobile() ?
+                html`<drawer-card color='#906FC2'>
+                    <h3>Restore Backup</h3>
+                    <p>
+                        Use a Noteworthy backup file to restore all of your data from a
+                        previous state.
+                    </p>
+                </drawer-card>`
+                : ''
+            }
 
             <!-- Settings -->
             <drawer-card color='#868686' onclick='${()=>portfolio.dispatch('go-to-settings')}'>
