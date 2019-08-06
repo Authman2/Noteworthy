@@ -1,6 +1,7 @@
 import Mosaic from 'mosaic-framework';
 
 import AppDrawer from '../components/app-drawer';
+import AppTools from '../components/app-tools';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
@@ -42,6 +43,11 @@ export default new Mosaic({
             e.preventDefault();
             document.execCommand('insertHTML', false, '&#9;');
         });
+
+        // Setup the tools.
+        if(window.matchMedia('(min-width: 768px)')) {
+            AppTools.paint();
+        }
     },
 
     openDrawer() {

@@ -51,12 +51,12 @@ export async function createAccount(email, password) {
 }
 
 export async function forgotPassword(email) {
-    // const res = await fetch(`${API_URL}/forgot-password`, {
-    //     method: 'PUT',
-    //     body: JSON.stringify({ email })
-    // });
-    // if(res.ok === true) return { user: await res.json(), ok: true }
-    // else return { err: await res.text(), code: res.status, ok: false }
+    const res = await fetch(`${API_URL}/forgot-password`, {
+        method: 'PUT',
+        body: JSON.stringify({ email })
+    });
+    if(res.ok === true) return { user: await res.json(), ok: true }
+    else return { err: await res.text(), code: res.status, ok: false }
 }
 
 export async function loadNotebooks() {

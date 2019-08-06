@@ -5,6 +5,7 @@ import * as Networking from '../util/Networking';
 
 import '../components/pill-button';
 import '../components/underline-field';
+import Alert from '../alerts/forgot-password';
 
 import '../styles/login-page.less';
 
@@ -41,7 +42,7 @@ export default new Mosaic({
         this.data.mode = this.data.mode === 0 ? 1 : 0;
     },
     selectForgotPassword() {
-        alert('Trying to recover password');
+        Alert.paint();
     },
     view() {
         const { mode } = this.data;

@@ -33,7 +33,7 @@ export default new Mosaic({
     },
     view() {
         const pages = (this.data.notebook.pages && this.data.notebook.pages.length) || 0;
-        const date = Globals.getDateFromArray((this.data.notebook.pages && this.data.notebook.pages.created) || []);
+        const date = Globals.getDateFromArray((this.data.notebook && this.data.notebook.created) || []);
 
         return html`<div class='notebook-cell' onclick='${this.selectNotebook}'>
             <h2>${this.data.notebook.title}</h2>

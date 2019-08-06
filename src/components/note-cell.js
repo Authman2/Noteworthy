@@ -40,12 +40,12 @@ export default new Mosaic({
         let created = '-----';
         let modified = '-----';
         created = this.data.note.created ? new Date(this.data.note.created) : new Date();
-        modified = this.data.note.modified ? new Date(this.data.note.modified) : new Date();
+        modified = this.data.note.modified ? new Date(this.data.note.modified) : '------';
 
         return html`<div class='note-cell' onclick='${this.selectNote}'>
             <h2>${this.data.note.title}</h2>
             <p><b>Created:</b> ${created.toDateString() || '-----'}</p>
-            <p><b>Last Modified:</b> ${modified.toDateString() || '-----'}</p>
+            <p><b>Last Modified:</b> ${modified.toDateString ? modified.toDateString() : '-----'}</p>
 
             <alert-button color='#427fdb' click='${this.moveNote.bind(this)}'>MOVE</alert-button>
             <alert-button color='#8F3936' click='${this.deleteNote.bind(this)}'>DELETE</alert-button>
