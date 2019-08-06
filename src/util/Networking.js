@@ -122,15 +122,17 @@ export async function save(noteID, title, content) {
 }
 
 export async function restore(notebooksAndNotes) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/restore?token=${token}`, {
-    //     method: 'PUT',
-    //     body: JSON.stringify({ notebooksAndNotes })
-    // });
-    // if(response.ok === true) return { message: await response.text(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/restore?token=${token}`, {
+        method: 'PUT',
+        body: JSON.stringify({ notebooksAndNotes })
+    });
+    if(response.ok === true) return { message: await response.text(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function move(noteID, fromNotebook, toNotebook) {

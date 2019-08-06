@@ -6,6 +6,7 @@ import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
 import portfolio from '../portfolio';
 
+const fs = require('fs');
 
 const tdService = new turndown();
 tdService.addRule('', {
@@ -80,7 +81,7 @@ export default new Mosaic({
             }
             <!-- Restore -->
             ${ !isMobile() ?
-                html`<drawer-card color='#906FC2'>
+                html`<drawer-card color='#906FC2' onclick='${this.restoreBackup.bind(this)}'>
                     <h3>Restore Backup</h3>
                     <p>
                         Use a Noteworthy backup file to restore all of your data from a
@@ -132,5 +133,41 @@ export default new Mosaic({
         }
 
         Globals.showActionAlert('Finished creating Noteworthy backup file!', Globals.ColorScheme.green, 4000);
+    },
+    async restoreBackup() {
+        const file = document.createElement('input');
+        file.type = 'file';
+        file.onchange = function(e) {
+            const file = e.target.files[0];
+            if(!file) {
+                return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const res = event.target.result;
+                if(!res) {
+                    return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+                }
+
+                const toJSON = JSON.parse(res);
+                const result = await Networking.restore(toJSON);
+                if(result.ok === true) 
+                    Globals.showActionAlert('Restored notes from backup!', Globals.ColorScheme.green);
+                else {
+                    switch(result.code) {
+                        case 401:
+                            Globals.showRefreshUserAlert();
+                            break;
+                        default:
+                            if(result.err.includes('No current user')) Global.showRefreshUserAlert();
+                            else Globals.showActionAlert('There was a problem restoring your notes. ' + result.err, Globals.ColorScheme.red);
+                            break;
+                    }
+                }
+            }
+            reader.readAsText(file);
+        }
+        file.click();
     }
 })
