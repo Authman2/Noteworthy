@@ -29,9 +29,9 @@ export default new Mosaic({
             if(result.ok) {
                 Globals.showActionAlert(`Deleted the notebook ${note.title}!`, Globals.ColorScheme.blue, 4000);
                 
-                // Reload the note list.
-                const page = document.getElementsByTagName('notes-page')[0];
-                if(page) page.refreshNotes();
+                // Reload the notebook list.
+                const page = document.getElementsByTagName('notebooks-page')[0];
+                if(page) page.refreshNotebooks();
 
                 this.cancel();
             } else {

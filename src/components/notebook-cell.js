@@ -32,13 +32,20 @@ export default new Mosaic({
         drawer.style.transform = 'translateX(100%)';
     },
     view() {
-        const pages = (this.data.notebook.pages && this.data.notebook.pages.length) || 0;
-        const date = Globals.getDateFromArray((this.data.notebook && this.data.notebook.created) || []);
+        const { notebook } = this.data;
+        let pages = 0;
+        let date = '------';
+        if(notebook && notebook.pages) {
+            pages = notebook.pages.length;
+        }
+        if(notebook && notebook.created) {
+            date = Globals.getDateFromArray(notebook.created).toDateString();
+        }
 
         return html`<div class='notebook-cell' onclick='${this.selectNotebook}'>
             <h2>${this.data.notebook.title}</h2>
             <p><b>Pages:</b> ${pages}</p>
-            <p><b>Created:</b> ${date.toDateString()}</p>
+            <p><b>Created:</b> ${date}</p>
 
             <alert-button color='#8F3936' onclick='${this.deleteNotebook.bind(this)}'>DELETE</alert-button>
         </div>`

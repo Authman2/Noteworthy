@@ -55,7 +55,7 @@ app-drawer {
         right: 0px;
         width: 40vw;
         padding: 0px;
-        z-index: 101;
+        z-index: 150;
         text-align: center;
         padding-bottom: 15px;
         background-color: white;
@@ -115,8 +115,19 @@ app-drawer {
         overflow-x: auto;
         padding-top: 15px;
         overflow-y: hidden;
+        padding-left: 20px;
+        padding-right: 20px;
         white-space: nowrap;
         padding-bottom: 0px;
+
+        flat-rect-button {
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        &::-webkit-scrollbar { 
+            display: none; 
+        }
     }
 
     // The main content section of the navigation.

@@ -10,6 +10,7 @@ import '../drawer-pages/navigation-page';
 import '../drawer-pages/notebooks-page';
 import '../drawer-pages/notes-page';
 import '../drawer-pages/settings-page';
+import CreateNew from '../alerts/create-new';
 
 import '../styles/app-drawer.less';
 
@@ -36,6 +37,12 @@ export default new Mosaic({
             <div>
                 <flat-rect-button color='lightgray' click='${this.saveCurrentNote}'>
                     Save
+                </flat-rect-button>
+                <flat-rect-button color='lightgray' click='${this.createNote.bind(this)}'>
+                    New Note
+                </flat-rect-button>
+                <flat-rect-button color='lightgray' click='${this.createNotebook.bind(this)}'>
+                    New Notebook
                 </flat-rect-button>
             </div>
 
@@ -102,6 +109,24 @@ export default new Mosaic({
             if(resp.err.includes('No current user')) Globals.showRefreshUserAlert();
             else Global.showActionAlert(result.err, Globals.ColorScheme.red);
         }
+    },
+
+    async createNote() {
+        CreateNew.paint();
+        CreateNew.set({ type: 'Note' });
+        
+        const drawer = document.getElementsByTagName('app-drawer')[0];
+        if(!drawer) return;
+        drawer.style.transform = 'translateX(100%)';
+    },
+
+    async createNotebook() {
+        CreateNew.paint();
+        CreateNew.set({ type: 'Notebook' });
+        
+        const drawer = document.getElementsByTagName('app-drawer')[0];
+        if(!drawer) return;
+        drawer.style.transform = 'translateX(100%)';
     },
 
     search(e) {

@@ -30,6 +30,13 @@ export async function logout() {
     } else return { error: await res.text(), code: res.status, ok: false }
 }
 
+export async function getUserInfo() {
+    const res = await fetch(`${API_URL}/get-user-info`);
+    if(res.ok === true) {
+        return { info: await res.json(), ok: true }
+    } else return { error: await res.text(), code: res.status, ok: false }
+}
+
 export async function refreshUser() {
     // const token = currentUser.customToken;
     // const res = await fetch(`${API_URL}/refresh-user?token=${token}`);
@@ -96,15 +103,17 @@ export async function createNotebook(title) {
 }
 
 export async function createNote(title, content, notebookID) {
-    // if(!currentUser) return { err: 'No current user', ok: false };
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user)
 
-    // const token = currentUser.idToken;
-    // const response = await fetch(`${API_URL}/create-note?token=${token}`, {
-    //     method: 'POST',
-    //     body: JSON.stringify({ title, content, notebookID })
-    // });
-    // if(response.ok === true) return { notes: await response.json(), ok: true }
-    // else return { err: await response.text(), code: response.status, ok: false }
+    const token = currentUser.idToken;
+    const response = await fetch(`${API_URL}/create-note?token=${token}`, {
+        method: 'POST',
+        body: JSON.stringify({ title, content, notebookID })
+    });
+    if(response.ok === true) return { notes: await response.json(), ok: true }
+    else return { err: await response.text(), code: response.status, ok: false }
 }
 
 export async function save(noteID, title, content) {

@@ -6,6 +6,7 @@ import * as Networking from '../util/Networking';
 import '../components/pill-button';
 import '../components/underline-field';
 import Alert from '../alerts/forgot-password';
+import AppTools from '../components/app-tools';
 
 import '../styles/login-page.less';
 
@@ -43,6 +44,9 @@ export default new Mosaic({
     },
     selectForgotPassword() {
         Alert.paint();
+    },
+    created() {
+        AppTools.remove();
     },
     view() {
         const { mode } = this.data;

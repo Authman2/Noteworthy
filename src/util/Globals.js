@@ -59,7 +59,10 @@ const showRefreshUserAlert = () => {
 
 /** Returns the date from an array. */
 const getDateFromArray = (array) => {
-    return new Date(...array);
+    if(array && Array.isArray(array)) return new Date(...array);
+    else if(!Array.isArray(array) && typeof array === 'number')
+        return new Date(array);
+    else return new Date();
 }
 
 const showDeleteAlert = (title, subtitle, note, type) => {

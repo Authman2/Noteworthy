@@ -19,6 +19,9 @@ export default new Mosaic({
         this.class = 'drawer-page';
 
         // Load the notebooks.
+        this.refreshNotebooks();
+    },
+    async refreshNotebooks() {
         const result = await Networking.loadNotebooks();
         if(result.ok === true) {
             const nbs = result.notebooks;
