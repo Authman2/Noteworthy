@@ -236,6 +236,20 @@ body {
     background-color: white;
 }
 
+.code-segment {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition-duration: 0.2s;
+    background-color: lightgray;
+
+    &:hover {
+        border: 1px solid gray;
+    }
+}
+
 @keyframes action-alert-fade-in {
     0% {
         opacity: 0;
@@ -346,9 +360,5 @@ toast-alert {
     toast-alert {
         max-width: 80%;
         width: fit-content;
-    }
-
-    app-tools {
-        display: none;
     }
 }

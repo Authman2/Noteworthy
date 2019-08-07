@@ -28,7 +28,9 @@ export default new Mosaic({
                 }
                 <ion-icon name="close" onclick='${this.closeDrawer}'></ion-icon>
                 <h1>Noteworthy</h1>
-                <input type='search' placeholder='Find' oninput='${this.search}'>
+                <input type='search' placeholder='Find' oninput='${this.search}'
+                    id="find-field"
+                    readonly='${portfolio.get('pages').last() === 'navigation' ? true : false}'>
             </header>
 
             <div>
@@ -47,6 +49,9 @@ export default new Mosaic({
 
     getDrawerPage() {
         const last = portfolio.get('pages').last();
+        if(last === 'navigation') {
+            document.getElementById('find-field').value = '';
+        }
         switch(last) {
             case 'navigation': return html`<navigation-page></navigation-page>`;
             case 'notebooks': return html`<notebooks-page></notebooks-page>`;
