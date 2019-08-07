@@ -9,42 +9,77 @@ export default new Mosaic({
     data: {
         tools: [{
             name: 'Code',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                
+            }
         },{
             name: 'Bulleted List',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                
+            }
         },{
             name: 'Numbered List',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                
+            }
         },{
             name: 'Checkbox',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                
+            }
         },{
             name: 'Bold',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('bold', true);
+            }
         },{
             name: 'Italic',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('italic', true);
+            }
         },{
             name: 'Underline',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('underline', true);
+            }
         },{
             name: 'Subscript',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('subscript', true);
+            }
         },{
             name: 'Superscript',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('superscript', true);
+            }
         },{
             name: 'Highlight',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('backColor', true, 'yellow');
+            }
         },{
             name: 'Clear Highlight',
-            key: randomKey()
+            key: randomKey(),
+            action: function() {
+                document.execCommand('backColor', true, 'transparent');
+            }
         }]
     },
     view() {
-        return html`${Mosaic.list(this.data.tools, tool => tool.key, tool => {
-            return html`<rect-button color='#427fdb'>${tool.name}</rect-button>`
+        return html`${this.data.tools.map(tool => {
+            return html`<rect-button color='#427fdb' click='${tool.action}'>
+                ${tool.name}
+            </rect-button>`
         })}`
     }
 });
