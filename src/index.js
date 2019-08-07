@@ -59,6 +59,7 @@ window.addEventListener('keydown', async e => {
 
     // Bulleted List.
     if(e.keyCode === 66 && e.shiftKey === true && e.metaKey === true) {
+        e.preventDefault();
         document.execCommand('insertUnorderedList');
     }
 
