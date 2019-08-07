@@ -58,12 +58,12 @@ window.addEventListener('keydown', async e => {
     }
 
     // Bulleted List.
-    if(e.keyCode === 66 && e.shiftKey === true) {
+    if(e.keyCode === 66 && e.shiftKey === true && e.metaKey === true) {
         document.execCommand('insertUnorderedList');
     }
 
     // Numbered List.
-    if(e.keyCode === 73 && e.shiftKey === true) {
+    if(e.keyCode === 73 && e.shiftKey === true && e.metaKey === true) {
         document.execCommand('insertOrderedList');
     }
 
