@@ -57,7 +57,8 @@ export default new Mosaic({
 
         <underline-field type='email' place='${mode === 0 ? "Email" : "Enter your email"}' class="field">
         </underline-field>
-        <underline-field type='password' place='${mode === 0 ? "Password" : "Create a password"}' class="field">
+        <underline-field type='password' place='${mode === 0 ? "Password" : "Create a password"}' class="field"
+            onkeypress="${e => e.keyCode === 13 && this.selectButtonOne()}">
         </underline-field>
 
         <pill-button click='${this.selectButtonOne.bind(this)}'>

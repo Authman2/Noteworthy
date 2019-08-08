@@ -103,4 +103,12 @@ window.addEventListener('keydown', async e => {
             }, 200);
         }
     }
+
+    // Print.
+    if(e.keyCode === 80 && e.metaKey === true) {
+        e.preventDefault();
+        document.getElementsByTagName('app-tools')[0].style.visibility = 'hidden';
+        window.print();
+        document.getElementsByTagName('app-tools')[0].style.visibility = 'visible';
+    }
 });

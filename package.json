@@ -34,7 +34,7 @@
     "firebase": "^5.9.0",
     "highlight.js": "^9.15.6",
     "is-mobile": "^2.1.0",
-    "mosaic-framework": "^0.7.0",
+    "mosaic-framework": "^0.7.3",
     "tippy.js": "^4.2.1",
     "turndown": "^5.0.3"
   },

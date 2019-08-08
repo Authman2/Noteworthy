@@ -44,6 +44,9 @@ export default new Mosaic({
                 <flat-rect-button color='lightgray' click='${this.createNotebook.bind(this)}'>
                     New Notebook
                 </flat-rect-button>
+                <flat-rect-button color='lightgray' click='${this.shareNote.bind(this)}'>
+                    Share
+                </flat-rect-button>
             </div>
 
             ${this.getDrawerPage.bind(this)}
@@ -86,6 +89,7 @@ export default new Mosaic({
         let last = portfolio.get('pages').last();
         if(last === 'notes') selector = '.note-cell';
         else if(last === 'notebooks') selector = '.notebook-cell';
+        else if(last === 'settings') selector = '.settings-child';
         else selector = '.drawer-card';
 
         Globals.slideBackCard(selector, () => {
@@ -127,6 +131,28 @@ export default new Mosaic({
         const drawer = document.getElementsByTagName('app-drawer')[0];
         if(!drawer) return;
         drawer.style.transform = 'translateX(100%)';
+    },
+
+    async shareNote() {
+        const cnb = portfolio.get('currentNotebook');
+        const note = portfolio.get('currentNote');
+        if(!cnb)
+            return Globals.showActionAlert('Please open a note first to share', Globals.ColorScheme.red, 2500);
+        if(!note)
+            return Globals.showActionAlert(`Please open a note first to share`, Globals.ColorScheme.red, 2500);
+        
+        // Create the plain text share file.
+        if('share' in navigator || 'Share' in navigator) {
+            navigator.share({
+                title: `${note.title}`,
+                text: '' + note.content,
+                url: 'https://noteworthyapp.netlify.com/work'
+            })
+        } else {
+            const data = '' + note.content;
+            const uri = `data:application/octet-stream,${encodeURIComponent(data)}`;
+            window.open(uri);
+        }
     },
 
     search(e) {

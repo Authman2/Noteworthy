@@ -86,10 +86,8 @@ export default new Mosaic({
         }]
     },
     view() {
-        return html`${this.data.tools.map(tool => {
-            return html`<rect-button color='#427fdb' click='${tool.action}'>
-                ${tool.name}
-            </rect-button>`
+        return html`${Mosaic.list(this.data.tools, tool => tool.key, tool => {
+            return html`<rect-button color='#427fdb' click='${tool.action}'>${tool.name}</rect-button>`
         })}`
     }
 });

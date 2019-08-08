@@ -92,7 +92,11 @@ export default new Mosaic({
             }
 
             <!-- Settings -->
-            <drawer-card color='#868686' onclick='${()=>portfolio.dispatch('go-to-settings')}'>
+            <drawer-card color='#868686' onclick='${() => {
+                Globals.slideOutCard('.drawer-card', () => {
+                    portfolio.dispatch('go-to-settings');
+                });
+            }}'>
                 <h3>Settings</h3>
                 <p>Make changes to your app settings and view your account details.</p>
             </drawer-card>

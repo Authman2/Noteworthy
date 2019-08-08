@@ -2,7 +2,9 @@ import Mosaic from 'mosaic-framework';
 
 export default new Mosaic({
     name: 'rect-button',
-    data: { click: () => {} },
+    data: {
+        click: () => {}
+    },
     received({ color }) {
         this.style.backgroundColor = color;
     },

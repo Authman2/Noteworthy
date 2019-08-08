@@ -37,13 +37,13 @@ export default new Mosaic({
     },
     view() {
         return html`
-            <h2>Account Information</h2>
-            <h3><b>Email:</b> authman2@gmail.com</h3>
-            <h3><b>Created Account:</b> ${this.data.created}</h3>
-            <h3><b>Last Logged In:</b> ${this.data.loggedIn}</h3>
+            <h2 class='settings-child'>Account Information</h2>
+            <h3 class='settings-child'><b>Email:</b> authman2@gmail.com</h3>
+            <h3 class='settings-child'><b>Created Account:</b> ${this.data.created}</h3>
+            <h3 class='settings-child'><b>Last Logged In:</b> ${this.data.loggedIn}</h3>
 
             <br>
-            <rect-button color='gray' click='${this.signOut.bind(this)}'>Sign Out</rect-button>
+            <rect-button class='settings-child' color='gray' click='${this.signOut.bind(this)}'>Sign Out</rect-button>
             <br>
         `
     },
