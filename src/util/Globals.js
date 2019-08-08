@@ -1,37 +1,35 @@
 import Networking from './Networking';
 
+import '../components/toast-alert';
+import '../alerts/delete-alert';
+import '../alerts/move-alert';
+
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
-    let app = document.getElementById('root');
-    if(document.getElementsByClassName('action-alert')[0])
-        document.getElementsByClassName('action-alert')[0].remove();
-
-    const alert = document.createElement('p');
-    alert.className = 'action-alert';
-    alert.innerHTML = text;
-    alert.style.backgroundColor = color;
-    app.appendChild(alert);
-
+    const holder = document.getElementById('toasts');
+    holder.innerHTML = `<toast-alert color='${color}'>
+        ${text}
+    </toast-alert>`;
+    
     // Let 0 indicate infinite time.
     if(time !== 0) {
+        const alert = document.getElementsByTagName('toast-alert')[0];
         setTimeout(() => {
-            alert.classList.add('action-alert-fade-out');
+            alert.classList.add('toast-alert-fade-out');
             setTimeout(() => {
-                alert.classList.remove('action-alert-fade-out');
+                alert.classList.remove('toast-alert-fade-out');
                 alert.remove();
-            }, 300);
+            }, 500);
         }, time);
     }
 }
 const hideActionAlert = () => {
-    const app = document.getElementById('root');
-    const alert = document.getElementsByClassName('action-alert')[0];
+    const alert = document.getElementsByTagName('toast-alert')[0];
     if(alert) {
-        alert.classList.add('action-alert-fade-out');
+        alert.classList.add('toast-alert-fade-out');
         setTimeout(() => {
-            alert.classList.remove('action-alert-fade-out');
             alert.remove();
-        }, 300);
+        }, 400);
     }
 }
 
@@ -59,10 +57,58 @@ const showRefreshUserAlert = () => {
     document.getElementById('insert-alert-button').appendChild(button);
 }
 
-module.exports = {
+/** Returns the date from an array. */
+const getDateFromArray = (array) => {
+    if(array && Array.isArray(array)) return new Date(...array);
+    else if(!Array.isArray(array) && typeof array === 'number')
+        return new Date(array);
+    else return new Date();
+}
+
+const showDeleteAlert = (title, subtitle, note, type) => {
+    const container = document.getElementById('alerts');
+    const alert = document.createElement('delete-alert');
+    container.appendChild(alert);
+    
+    alert.set({ title, subtitle, note, type });
+}
+const showMoveAlert = (title, subtitle, note) => {
+    const container = document.getElementById('alerts');
+    const alert = document.createElement('move-alert');
+    container.appendChild(alert);
+    
+    alert.set({ title, subtitle, note });
+}
+
+const slideOutCard = (selector, then) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(ele => ele.classList.add('card-slide-out'));
+    setTimeout(() => {
+        elements.forEach(ele => ele.classList.remove('card-slide-out'));
+        then();
+    }, 700);
+}
+const slideBackCard = (selector, then) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(ele => ele.classList.add('card-slide-back'));
+    setTimeout(() => {
+        elements.forEach(ele => ele.classList.remove('card-slide-back'));
+        then();
+    }, 700);
+}
+
+let typeCount = 20;
+
+export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
-    showRefreshUserAlert
+    getDateFromArray,
+    showRefreshUserAlert,
+    showDeleteAlert,
+    showMoveAlert,
+    slideOutCard,
+    slideBackCard,
+    typeCount
 }

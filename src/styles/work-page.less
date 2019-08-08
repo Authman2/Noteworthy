@@ -1,0 +1,74 @@
+@import './index.less';
+
+work-page {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow-x: hidden;
+    color: rgb(82, 82, 82);
+    background-color: white;
+    
+    ion-icon[name='menu'] {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+        cursor: pointer;
+        font-size: 24px;
+        font-weight: bolder;
+        transition-duration: 0.2s;
+        color: rgb(109, 109, 109);
+
+        &:hover {
+            color: lighten(rgb(109, 109, 109), 30%);
+        }
+    }
+
+    #title-field {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        width: 85%;
+        .main-font();
+        padding: 30px;
+        outline: none;
+        font-size: 30px;
+        font-weight: bolder;
+        padding-bottom: 0px;
+        font-family: Helvetica;
+        background-color: white;
+    }
+
+    #content-field {
+        position: relative;
+        .main-font();
+        padding: 30px;
+        outline: none;
+        line-height: 1.5;
+        font-weight: 200;
+        letter-spacing: 1px;
+        padding-bottom: 80px;
+        font-family: Helvetica;
+        color: rgb(112, 112, 112);
+    }
+}
+
+
+@media not screen and (min-width: 768px) {
+    work-page {
+        ion-icon[name='menu'] {
+            &:hover {
+                color: rgb(109, 109, 109);
+            }
+            &:active {
+                color: lighten(rgb(109, 109, 109), 30%);
+            }
+        }
+
+        #title-field {
+            width: 70%;
+        }
+    }
+}

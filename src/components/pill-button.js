@@ -1,5 +1,17 @@
-import Mosaic from '@authman2/mosaic';
+import Mosaic from 'mosaic-framework';
 
 export default new Mosaic({
-    view: self => html`<button class='pill-button' onclick='${self.data.click}'>${ self.data.title }</button>`
-});
+    name: 'pill-button',
+    data: { click: () => {} },
+    created() {
+        this.addEventListener('click', this.touchDown);
+    },
+    willDestroy() {
+        this.removeEventListener('click', this.touchDown);
+    },
+    touchDown() {
+        const { click } = this.data;
+        if(click) click();
+    },
+    view: self => html`${self.descendants}`
+})
