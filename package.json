@@ -8,6 +8,7 @@
     "start": "parcel -p 3000 src/index.html",
     "package": "parcel build src/index.html --out-dir dist && cp netlify.toml dist/netlify.toml",
     "deploy": "git add . && git commit -m \"new version\" && git push",
+    "deploy-prod": "npm run deploy && git checkout mastetr && git merge dev master && git push && git checkout dev",
     "start-app": "deskgap ."
   },
   "repository": {
