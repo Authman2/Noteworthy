@@ -1,5 +1,4 @@
 const { app, BrowserWindow, Menu, MenuItem } = require('deskgap');
-const path = require('path');
 
 const fileMenu = new Menu();
 fileMenu.append(new MenuItem({
@@ -16,12 +15,14 @@ menu.append(new MenuItem({
     submenu: fileMenu
 }))
 
+// app.setMenu(menu);
+app.setName('Noteworthy');
 app.once('ready', () => {
     const window = new BrowserWindow({
         center: true,
         closable: true,
         frame: true,
-        icon: path.resolve('res', 'NoteworthyLogo.png'),
+        icon: './res/NoteworthyLogo.png',
         title: "Noteworthy",
         titleBarStyle: 'hiddenInset',
         menu: menu,

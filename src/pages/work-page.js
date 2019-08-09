@@ -14,7 +14,7 @@ export default new Mosaic({
     name: 'work-page',
     
     view: self => html`
-        <div id='top-bar'></div>
+        <div class='top-bar'></div>
         <ion-icon name="menu" onclick='${self.openDrawer}'></ion-icon>
 
         <div id='title-field' contenteditable='true' tabindex='-1'>Title</div>

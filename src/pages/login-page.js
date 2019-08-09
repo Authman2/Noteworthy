@@ -52,7 +52,7 @@ export default new Mosaic({
         const { mode } = this.data;
 
         return html`
-        <div id='top-bar'></div>
+        <div class='top-bar'></div>
         <h1>Noteworthy</h1>
         <br><br>
 
