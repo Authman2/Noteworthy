@@ -27,5 +27,5 @@ app.once('ready', () => {
         menu: menu,
         show: true
     });
-    window.loadURL('https://noteworthyapp.netlify.com/login');
+    window.loadURL('https://dev-noteworthyapp.netlify.com/login');
 });
