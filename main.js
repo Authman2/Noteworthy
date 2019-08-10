@@ -35,7 +35,7 @@ const createWindow = () => {
         minHeight: 300,
         title: 'Noteworthy',
         titleBarStyle: 'hiddenInset',
-        icon: path.join(__dirname, 'res/NoteworthyLogo2.png'),
+        icon: path.join(__dirname, 'res/NoteworthyLogo.png'),
         webPreferences: {
             nodeIntegration: true,
         },
@@ -58,13 +58,12 @@ let defaultOptions = {
     applicationVersion: '2.0.0',
     copyright: 'Adeola Uthman 2015-2019',
     credits: 'Adeola Uthman',
-    iconPath: path.join(__dirname, 'res/NoteworthyLogo2.png'),
+    iconPath: path.join(__dirname, 'res/NoteworthyLogo.png'),
     version: '2.0.0',
     website: 'https://adeolauthman.com/noteworthy'
 };
 app.setAboutPanelOptions(defaultOptions);
 app.setName('Noteworthy');
-app.dock.setIcon(path.join(__dirname, 'res/NoteworthyLogo.png'));
 
 app.on('ready', () => {
     fetchAppData(data => {
