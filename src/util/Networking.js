@@ -38,14 +38,18 @@ export async function getUserInfo() {
 }
 
 export async function refreshUser() {
-    // const token = currentUser.customToken;
-    // const res = await fetch(`${API_URL}/refresh-user?token=${token}`);
-    // if(res.ok === true) {
-    //     const user = await res.json();
-    //     currentUser = user;
-    //     localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
-    //     return { user: user, ok: true }
-    // } else return { error: await res.text(), code: res.status, ok: false }
+    const user = localStorage.getItem('noteworthy-current-user');
+    if(!user) return { err: 'No current user', ok: false };
+    currentUser = JSON.parse(user);
+    
+    const token = currentUser.customToken;
+    const res = await fetch(`${API_URL}/refresh-user?token=${token}`);
+    if(res.ok === true) {
+        const user = await res.json();
+        currentUser = user;
+        localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
+        return { user: user, ok: true }
+    } else return { error: await res.text(), code: res.status, ok: false }
 }
 
 export async function createAccount(email, password) {

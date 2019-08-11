@@ -25,6 +25,13 @@ router.addRoute('/login', Login);
 router.addRoute('/work', Work);
 router.paint();
 
+// Auto Login.
+async function autoLogin() {
+    const res = await Networking.refreshUser();
+    if(res.ok === true) router.send('/work');
+}
+autoLogin();
+
 // Service worker.
 if('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./serviceWorker.js').then(() => {
