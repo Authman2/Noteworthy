@@ -55,7 +55,7 @@ const createWindow = () => {
 
 let defaultOptions = {
     applicationName: 'Noteworthy',
-    applicationVersion: '2.0.0',
+    applicationVersion: '2.0.1',
     copyright: 'Adeola Uthman 2015-2019',
     credits: 'Adeola Uthman',
     iconPath: path.join(__dirname, 'res/NoteworthyLogo.png'),
