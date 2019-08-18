@@ -32,8 +32,7 @@ export default new Mosaic({
     },
     view() {
         return html`${this.data.notebooks.length > 0 ?
-            this.data.notebooks
-                .filter(notebook => {
+            this.data.notebooks.filter(notebook => {
                     const srh = portfolio.get('search');
                     if(srh && srh.length > 0) {
                         const reg = new RegExp(srh, 'gi');
@@ -41,8 +40,7 @@ export default new Mosaic({
                     } else {
                         return true;
                     }
-                })
-                .map(notebook => {
+                }).map(notebook => {
                     return html`<notebook-cell notebook='${notebook}'></notebook-cell>`
                 })
             :
