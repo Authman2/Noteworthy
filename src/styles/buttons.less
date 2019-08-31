@@ -30,9 +30,12 @@ round-button, dropdown-button {
         font-weight: bolder;
     }
 
-    // Making the button active should give feedback.
+    // Making the button hover/active should give feedback.
     &:active {
         background-color: darken(white, 5%);
+    }
+    &:hover {
+        box-shadow: 0px 4px 10px 0px rgba(128, 128, 128, 0.15);
     }
 }
 

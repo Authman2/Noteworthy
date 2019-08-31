@@ -9,8 +9,8 @@ export default new Mosaic({
     name: 'dropdown-button',
     mixins: [Button],
     data: {
-        /** Whether or not the dropdown view is opened. */
-        opened: false
+        opened: false,
+        popup: undefined
     },
     created() {
         this.addEventListener('click', this.toggleDropdown);
@@ -19,7 +19,24 @@ export default new Mosaic({
         this.removeEventListener('click', this.toggleDropdown);
     },
     toggleDropdown() {
+        let { popup } = this.data;
         this.data.opened = !this.data.opened;
+
+        // Either show or remove the popup.
+        if(this.data.opened === true) {
+            if(popup) {
+                const box = this.getBoundingClientRect();
+                const el = document.createElement(popup);
+                el.paint();
+                el.style.top = `${box.bottom + 15}px`;
+                el.style.left = `${box.x - box.width + 15}px`;
+            }
+        } else {
+            if(popup) {
+                let el = document.getElementsByTagName(popup)[0];
+                if(el) el.remove();
+            }
+        }
     },
     view() {
         return html`
