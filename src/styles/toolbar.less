@@ -1,0 +1,43 @@
+@import './index.less';
+
+tool-bar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    .common-font();
+    display: block;
+    border-bottom: 1px solid #9C9C9C;
+
+    // The app location title.
+    .app-location {
+        cursor: default;
+        font-size: 12px;
+        color: #9E9E9E;
+        user-select: none;
+        text-align: center;
+        font-style: italic;
+        font-weight: bolder;
+        -webkit-user-select: none;
+    }
+
+    // The section that contains the toolbar buttons.
+    .toolbar-buttons {
+        padding-top: 10px;
+        padding-left: 20px;
+        padding-bottom: 15px;
+
+        // Each button.
+        round-button, dropdown-button {
+            margin-top: 10px;
+            margin-right: 15px;
+            vertical-align: top;
+
+            // The first round-button is the sidebar; make sure
+            // it's not too tall.
+            &:nth-of-type(1) {
+                max-height: 16px;
+            }
+        }
+    }
+}

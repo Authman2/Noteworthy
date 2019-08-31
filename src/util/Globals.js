@@ -1,9 +1,5 @@
 import Networking from './Networking';
 
-import '../components/toast-alert';
-import '../alerts/delete-alert';
-import '../alerts/move-alert';
-
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {
     const holder = document.getElementById('toasts');
@@ -44,71 +40,9 @@ const ColorScheme = {
     gray: 'gray'
 }
 
-const showRefreshUserAlert = () => {
-    const button = document.createElement('button');
-    button.className = 'red-alert-button';
-    button.innerHTML = `Refresh!`;
-    button.addEventListener('click', async () => {
-        const res = await Networking.refreshUser();
-        if(res.ok === true) showActionAlert('Refreshed the current user!', ColorScheme.blue);
-        else showActionAlert(res.err, ColorScheme.red);
-    });
-    showActionAlert(`Could not verify the current user. Click to refresh session!<br><br><div id='insert-alert-button'></div>`, ColorScheme.red, 5000);
-    document.getElementById('insert-alert-button').appendChild(button);
-}
-
-/** Returns the date from an array. */
-const getDateFromArray = (array) => {
-    if(array && Array.isArray(array)) return new Date(...array);
-    else if(!Array.isArray(array) && typeof array === 'number')
-        return new Date(array);
-    else return new Date();
-}
-
-const showDeleteAlert = (title, subtitle, note, type) => {
-    const container = document.getElementById('alerts');
-    const alert = document.createElement('delete-alert');
-    container.appendChild(alert);
-    
-    alert.set({ title, subtitle, note, type });
-}
-const showMoveAlert = (title, subtitle, note) => {
-    const container = document.getElementById('alerts');
-    const alert = document.createElement('move-alert');
-    container.appendChild(alert);
-    
-    alert.set({ title, subtitle, note });
-}
-
-const slideOutCard = (selector, then) => {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach(ele => ele.classList.add('card-slide-out'));
-    setTimeout(() => {
-        elements.forEach(ele => ele.classList.remove('card-slide-out'));
-        then();
-    }, 700);
-}
-const slideBackCard = (selector, then) => {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach(ele => ele.classList.add('card-slide-back'));
-    setTimeout(() => {
-        elements.forEach(ele => ele.classList.remove('card-slide-back'));
-        then();
-    }, 700);
-}
-
-let typeCount = 20;
-
 export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
-    getDateFromArray,
-    showRefreshUserAlert,
-    showDeleteAlert,
-    showMoveAlert,
-    slideOutCard,
-    slideBackCard,
-    typeCount
 }

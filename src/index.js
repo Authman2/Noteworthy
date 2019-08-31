@@ -1,36 +1,12 @@
-import { Router } from 'mosaic-framework';
 import 'babel-polyfill';
 
-import Landing from './pages/landing-page';
-import Login from './pages/login-page';
-import Work from './pages/work-page';
-import AppDrawer from './components/app-drawer';
+import Work from './routes/work';
 
-import portfolio from './portfolio';
 import Globals from './util/Globals';
 import * as Networking from './util/Networking';
 
-import './styles/index.less';
 
-
-// Add a quick Array utility function.
-Array.prototype.last = function() {
-    if(this.length === 0) return null;
-    else return this[this.length - 1];
-}
-
-const router = new Router('root');
-router.addRoute('/', Landing);
-router.addRoute('/login', Login);
-router.addRoute('/work', Work);
-router.paint();
-
-// Auto Login.
-async function autoLogin() {
-    const res = await Networking.refreshUser();
-    if(res.ok === true) router.send('/work');
-}
-autoLogin();
+Work.paint('root');
 
 // Service worker.
 if('serviceWorker' in navigator) {
