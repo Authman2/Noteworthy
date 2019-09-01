@@ -27,9 +27,14 @@ export default new Mosaic({
             if(popup) {
                 const box = this.getBoundingClientRect();
                 const el = document.createElement(popup);
+                const toolbar = document.getElementsByTagName('tool-bar')[0];
                 el.paint();
-                el.style.top = `${box.bottom + 15}px`;
-                el.style.left = `${box.x - box.width + 15}px`;
+                if(toolbar) el.style.top = `${toolbar.getBoundingClientRect().bottom + 15}px`;
+                if(box.x + box.width + 60 >= window.innerWidth) {
+                    el.style.right = `15px`;
+                } else {
+                    el.style.left = `${box.x}px`;
+                }
             }
         } else {
             if(popup) {

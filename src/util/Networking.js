@@ -1,7 +1,5 @@
-import axios from 'axios';
-
 const DEV_API_URL = 'http://localhost:8000';
-const API_URL = 'https://noteworthy-backend.herokuapp.com';
+const API_URL = DEV_API_URL//'https://noteworthy-backend.herokuapp.com';
 export let currentUser = undefined;
 
 export async function login(email, password) {
@@ -14,60 +12,43 @@ export async function login(email, password) {
         body: JSON.stringify({ email, password })
     });
     if(res.ok === true) {
-        const user = await res.json();
-        currentUser = user;
-        localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
-        return { user, ok: true };
-    } else return { error: await res.text(), code: res.status, ok: false }
+        const data = await res.json();
+        return {
+            message: data.message,
+            token: data.token, 
+            ok: true
+        };
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function logout() {
-    const res = await fetch(`${API_URL}/logout`);
-    if(res.ok === true) {
-        currentUser = undefined;
-        localStorage.removeItem('noteworthy-current-user');
-        return { user: await res.json(), ok: true }
-    } else return { error: await res.text(), code: res.status, ok: false }
+    localStorage.removeItem('noteworthy-token');
 }
 
 export async function getUserInfo() {
-    const res = await fetch(`${API_URL}/get-user-info`);
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/get-user`, {
+        method: 'get',
+        headers: { 'Authorization': token }
+    });
     if(res.ok === true) {
         return { info: await res.json(), ok: true }
-    } else return { error: await res.text(), code: res.status, ok: false }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
-export async function refreshUser() {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-    
-    const token = currentUser.customToken;
-    const res = await fetch(`${API_URL}/refresh-user?token=${token}`);
-    if(res.ok === true) {
-        const user = await res.json();
-        currentUser = user;
-        localStorage.setItem('noteworthy-current-user', JSON.stringify(user));
-        return { user: user, ok: true }
-    } else return { error: await res.text(), code: res.status, ok: false }
-}
-
-export async function createAccount(email, password) {
-    const res = await fetch(`${API_URL}/create-account`, {
+export async function createAccount(email, firstName, lastName, password) {
+    const res = await fetch(`${API_URL}/create-user`, {
         method: 'POST',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, firstName, lastName, password })
     });
     if(res.ok === true) return { user: await res.json(), ok: true }
     else return { error: await res.text(), code: res.status, ok: false }
-}
-
-export async function forgotPassword(email) {
-    const res = await fetch(`${API_URL}/forgot-password`, {
-        method: 'PUT',
-        body: JSON.stringify({ email })
-    });
-    if(res.ok === true) return { user: await res.json(), ok: true }
-    else return { err: await res.text(), code: res.status, ok: false }
 }
 
 export async function loadNotebooks() {
