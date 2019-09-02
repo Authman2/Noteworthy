@@ -69,8 +69,8 @@ export async function getNote(id) {
 }
 
 /** Gets a list of all the notes in the db. */
-export async function getNotes() {
-    const nts = await localNotes.notes.toArray();
+export async function getNotes(notebookID) {
+    const nts = await localNotes.notes.where("notebookID").equals(notebookID).toArray();
     return nts;
 }
 
