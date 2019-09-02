@@ -1,12 +1,15 @@
 import 'babel-polyfill';
 
 import Work from './routes/work';
+import Sidebar from './components/sidebar';
 
 import Globals from './util/Globals';
 import * as Networking from './util/Networking';
 
 
+// Paint the components.
 Work.paint('root');
+Sidebar.paint();
 
 // Service worker.
 if('serviceWorker' in navigator) {
