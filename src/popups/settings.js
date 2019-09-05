@@ -4,6 +4,7 @@ import '../components/round-button';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
+import * as Local from '../util/LocalData';
 
 
 // Whether or not to show the login or create account view.
@@ -99,6 +100,69 @@ export default new Mosaic({
             Globals.showActionAlert(res.error, Globals.ColorScheme.red);
         }
     },
+    async handleBackup() {
+        Globals.showActionAlert('Creating Noteworthy backup...', Globals.ColorScheme.blue, 0);
+        let backup = {};
+
+        // Get the notebooks and notes.
+        let notebooks = await Local.getNotebooks();
+        let notes = await Local.getAllNotes();
+        notebooks.forEach(nb => backup[nb.id] = nb);
+        notes.forEach(nt => backup[nt.id] = nt);
+        
+        // Native sharing.
+        if('share' in window.navigator) {
+            window.navigator.share({
+                title: `Noteworthy_Backup_${Date.now()}`,
+                text: JSON.stringify(backup),
+                url: 'https://noteworthyapp.netlify.com'
+            })
+        } else {
+            const data = JSON.stringify(backup);
+            const uri = `data:application/octet-stream,${encodeURIComponent(data)}`;
+            window.open(uri);
+        }
+
+        Globals.showActionAlert('Finished creating Noteworthy backup file!', Globals.ColorScheme.green, 4000);
+    },
+    async handleRestore() {
+        const file = document.createElement('input');
+        file.type = 'file';
+        file.onchange = function(e) {
+            const file = e.target.files[0];
+            if(!file) {
+                return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const res = event.target.result;
+                if(!res) {
+                    return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+                }
+
+                const toJSON = JSON.parse(res);
+                const vals = Object.values(toJSON);
+                Local.restore(vals);
+            }
+            reader.readAsText(file);
+        }
+        file.click();
+    },
+    async handleSync() {
+        const everything = {};
+        const nbs = await Local.getNotebooks();
+        const nts = await Local.getAllNotes();
+        nbs.forEach(async nb => everything[nb.id] = nb);
+        nts.forEach(async nt => everything[nt.id] = nt);
+
+        const result = await Networking.restore(nbs, nts);
+        if(result.ok === true) {
+            Globals.showActionAlert('Saved all notes online!', Globals.ColorScheme.green);
+        } else {
+            Globals.showActionAlert(result.error, Globals.ColorScheme.red);
+        }
+    },
     view() {
         const token = localStorage.getItem('noteworthy-token');
         const { userInfo } = this.data;
@@ -122,11 +186,14 @@ export default new Mosaic({
 
         ${ token ?
             html`<section>
-                <round-button icon='sync' highlightColor='#707070'
-                    onclick="${() => {
-                        alert("Syncing notes!");
-                    }}">
-                    Sync
+                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleSync}">
+                    Save Online
+                </round-button>
+                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleBackup}">
+                    Backup
+                </round-button>
+                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleRestore}">
+                    Restore
                 </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070'
                     onclick='${async () => {

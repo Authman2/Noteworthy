@@ -1,6 +1,6 @@
 import Mosaic from 'mosaic-framework';
 
-import * as Local from '../util/LocalData';
+import * as Networking from '../util/Networking';
 
 import '../styles/sidebar.less';
 
@@ -20,24 +20,25 @@ export default new Mosaic({
             list.classList.toggle('active');
         }
     },
-    async created() {
-        // Load all of the notebooks and notes from the local indexed db.
+    async loadNotes() {
         let objs = [];
-        const notebooks = await Local.getNotebooks();
-        if(notebooks) {
-            notebooks.forEach(async notebook => {
-                const notes = await Local.getNotes(notebook.id);
-                objs.push({
-                    notes,
-                    id: notebook.id,
-                    title: notebook.title,
-                });
+        const nbResult = await Networking.loadNotebooks();
+        if(!nbResult.ok) return console.log(nbResult.error);
 
-                if(objs.length === notebooks.length) {
-                    this.data.notebooks = objs;
-                }
-            });
-        }
+        const notebooks = await nbResult.notebooks;
+        await Promise.all(notebooks.map(async notebook => {
+            const ntResult = await Networking.loadNotes(notebook.id);
+            if(!ntResult.ok) return console.log(ntResult.error);
+
+            const notes = await ntResult.notes;
+            objs.push({ notes, id: notebook.id, title: notebook.title });
+
+            if(objs.length === notebooks.length) this.data.notebooks = objs;
+        }));
+    },
+    created() {
+        // Load all of the notebooks and notes from the local indexed db.
+        this.loadNotes();
     },
     view() {
         return html`

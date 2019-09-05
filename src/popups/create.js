@@ -2,7 +2,7 @@ import Mosaic from 'mosaic-framework';
 
 import '../components/round-button';
 
-import * as Local from '../util/LocalData';
+import * as Networking from '../util/Networking';
 import Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
 
@@ -17,26 +17,23 @@ async function createNotebook() {
         return Globals.showActionAlert('Please enter a name before creating a notebook', Globals.ColorScheme.red);
     }
     
-    Local.createNotebook(nameField.value);
+    await Networking.createNotebook(nameField.value);
     Globals.showActionAlert(`Created a new notebook called ${nameField.value}!`, Globals.ColorScheme.blue);
     nameField.value = '';
 }
 
 // Handles creating a note.
 async function createNote() {
-    const nameField = document.getElementById('create-name-field');
-
-    const nb = Portfolio.get('currentNotebook');
-    if(!nb) {
-        return Globals.showActionAlert('Please open a notebook before creating a note', Globals.ColorScheme.red);
-    }
-    
+    const nameField = document.getElementById('create-name-field');    
     const regex = new RegExp(/^\s+$/);
     if(!nameField.value || regex.test(nameField.value)) {
         return Globals.showActionAlert('Please enter a name before creating a note', Globals.ColorScheme.red);
     }
     
-    Local.createNote(nameField.value, '', nb.id);
+    const titleField = document.getElementById('title-field');
+    const contentField = document.getElementById('note-field');
+    titleField.innerHTML = nameField.value;
+    contentField.innerHTML = 'Start typing here...';
     Globals.showActionAlert(`Created a new notebook called ${nameField.value}!`, Globals.ColorScheme.blue);
     nameField.value = '';
 }

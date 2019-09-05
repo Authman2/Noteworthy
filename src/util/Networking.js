@@ -52,25 +52,31 @@ export async function createAccount(email, firstName, lastName, password) {
 }
 
 export async function loadNotebooks() {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-    
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/notebooks?token=${token}`);
-    if(response.ok === true) return { notebooks: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/get-notebooks`, {
+        method: 'get',
+        headers: { 'Authorization': token }
+    });
+    if(res.ok === true) {
+        return { notebooks: await res.json(), ok: true }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function loadNotes(notebookID) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user)
-    
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/notes?token=${token}&notebookID=${notebookID}`);
-    if(response.ok === true) return { notes: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/get-notes?notebookID=${notebookID}`, {
+        method: 'get',
+        headers: { 'Authorization': token }
+    });
+    if(res.ok === true) {
+        return { notes: await res.json(), ok: true }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function createNotebook(title) {
@@ -115,18 +121,20 @@ export async function save(noteID, title, content) {
     else return { err: await response.text(), code: response.status, ok: false }
 }
 
-export async function restore(notebooksAndNotes) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/restore?token=${token}`, {
-        method: 'PUT',
-        body: JSON.stringify({ notebooksAndNotes })
+export async function restore(notebooks, notes) {
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/restore`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ notebooks, notes }),
     });
-    if(response.ok === true) return { message: await response.text(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        const _data = await res.json();
+        return { message: _data.message, ok: true }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function move(noteID, fromNotebook, toNotebook) {

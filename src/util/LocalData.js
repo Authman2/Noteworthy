@@ -15,6 +15,17 @@ localNotes.version(1).stores({
     notes: '++id,created,modified,notebookID,content,title'
 });
 
+
+/** Restores notebooks and notes from a backup file and sets (possibly
+* overriding) the data in indexed db. */
+export async function restore(array) {
+    const nbs = await array.filter(item => !item.hasOwnProperty('notebookID'));
+    const nts = await array.filter(item => item.hasOwnProperty('notebookID'));
+    await localNotebooks.notebooks.bulkAdd(nbs);
+    await localNotes.notes.bulkAdd(nts);
+}
+
+
 /** Uses indexed db to create a new notebook. */
 export async function createNotebook(title) {
     // You don't need the _id or userID properties because
@@ -68,9 +79,15 @@ export async function getNote(id) {
     return nt[0];
 }
 
-/** Gets a list of all the notes in the db. */
+/** Gets a list of all the notes in a notebook. */
 export async function getNotes(notebookID) {
     const nts = await localNotes.notes.where("notebookID").equals(notebookID).toArray();
+    return nts;
+}
+
+/** Gets a list of all the notes in the db. */
+export async function getAllNotes() {
+    const nts = await localNotes.notes.toArray();
     return nts;
 }
 
@@ -91,4 +108,10 @@ export async function move(id, toNotebook) {
 /** Deletes a note from indexed db. */
 export async function deleteNote(id) {
     await localNotes.notes.delete(id);
+}
+
+
+/** Saves the local data to the online database. */
+export async function saveOnline() {
+    
 }

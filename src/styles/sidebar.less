@@ -21,16 +21,22 @@
     -webkit-transform: rotate(0deg);
 }
 
+.open-sidebar {
+    z-index: 1;
+}
 side-bar {
     position: fixed;
-    top: 0px;
+    top: 102px;
     left: 0px;
     width: 25%;
-    height: 100%;
+    bottom: 0px;
+    z-index: -1;
     padding: 20px;
     .common-font();
     color: white;
     display: block;
+    overflow-y: scroll;
+    overflow-x: hidden;
     font-family: Avenir;
     background-color: rgb(87, 87, 87);
 
@@ -53,19 +59,24 @@ side-bar {
         // The list of all the users' notebooks.
         .notebooks-list {
             position: relative;
+            display: block;
             margin-left: -25px;
             list-style-type: none;
 
             // Each list item with the notebook title and
             // list of notes.
             li {
+                position: relative;
+                display: block;
                 margin-top: 15px;
                 margin-bottom: 15px;
 
                 // The first span here is the notebook title.
                 span:nth-of-type(1) {
+                    position: relative;
                     cursor: pointer;
                     font-weight: 500;
+                    display: inline-block;
 
                     &:hover {
                         text-decoration: underline;
@@ -81,7 +92,9 @@ side-bar {
 
                     // Each list item here is the title of a note.
                     li {
+                        position: relative;
                         padding: 10px;
+                        display: block;
                         font-size: 15px;
                         cursor: pointer;
                         font-weight: 100;

@@ -1,0 +1,28 @@
+@import './index.less';
+
+work-page {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: block;
+
+    // The main content view.
+    content-view {
+        position: absolute;
+        top: 102px;
+        left: 0px;
+        right: 0px;
+        z-index: 1;
+        bottom: 0px;
+        display: block;
+        transition-duration: 0.2s;
+        background-color: mediumseagreen;
+    }
+
+    // When the sidebar is open.
+    .open-content-view {
+        transform: translateX(25%);
+    }
+}

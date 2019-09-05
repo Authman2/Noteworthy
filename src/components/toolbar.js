@@ -13,12 +13,20 @@ import '../styles/toolbar.less';
 export default new Mosaic({
     name: 'tool-bar',
     portfolio: Portfolio,
+    toggleSidebar() {
+        const contentView = document.getElementsByTagName('content-view')[0];
+        const sidebar = document.getElementsByTagName('side-bar')[0];
+        if(contentView && sidebar) {
+            contentView.classList.toggle('open-content-view');
+            sidebar.classList.toggle('open-sidebar');
+        }
+    },
     view() {
         return html`
         <h1 class='app-location'>${Portfolio.get('windowTitle')}</h1>
         
         <section class='toolbar-buttons'>
-            <round-button>
+            <round-button onclick='${this.toggleSidebar}'>
                 &nbsp;
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#000000">
                     <path style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal" d="M 5 3 C 3.9069372 3 3 3.9069372 3 5 L 3 19 C 3 20.093063 3.9069372 21 5 21 L 19 21 C 20.093063 21 21 20.093063 21 19 L 21 5 C 21 3.9069372 20.093063 3 19 3 L 5 3 z M 6 5 C 6.552 5 7 5.448 7 6 C 7 6.552 6.552 7 6 7 C 5.448 7 5 6.552 5 6 C 5 5.448 5.448 5 6 5 z M 9 5 C 9.552 5 10 5.448 10 6 C 10 6.552 9.552 7 9 7 C 8.448 7 8 6.552 8 6 C 8 5.448 8.448 5 9 5 z M 12 5 L 19 5 L 19 19 L 12 19 L 12 5 z M 5 8 L 10 8 L 10 10 L 5 10 L 5 8 z" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"/>
