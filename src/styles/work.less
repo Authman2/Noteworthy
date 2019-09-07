@@ -16,9 +16,41 @@ work-page {
         right: 0px;
         z-index: 1;
         bottom: 0px;
+        padding: 50px;
         display: block;
+        .common-font();
+        padding-top: 80px;
+        overflow-y: scroll;
+        background-color: white;
         transition-duration: 0.2s;
-        background-color: mediumseagreen;
+
+        // The labels showing when the note was created and modified.
+        #created-field, #modified-field {
+            position: relative;
+            font-size: 12px;
+            font-weight: 100;
+            text-align: right;
+            font-style: italic;
+            color: rgb(150, 150, 150);
+        }
+
+        // The title view
+        #title-field {
+            outline: none;
+            color: @primary;
+            font-size: 22px;
+            overflow-y: scroll;
+            font-weight: bolder;
+            padding-bottom: 30px;
+        }
+
+        // The note view
+        #note-field {
+            outline: none;
+            color: @primary;
+            font-size: 16px;
+            font-weight: 500;
+        }
     }
 
     // When the sidebar is open.

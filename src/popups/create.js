@@ -24,6 +24,11 @@ async function createNotebook() {
 
 // Handles creating a note.
 async function createNote() {
+    const nb = this.data.selectedNB;
+    if(!nb) {
+        return Globals.showActionAlert('Please select the notebook that you would like to create this note in', Globals.ColorScheme.red);
+    }
+
     const nameField = document.getElementById('create-name-field');    
     const regex = new RegExp(/^\s+$/);
     if(!nameField.value || regex.test(nameField.value)) {
@@ -44,12 +49,41 @@ export default new Mosaic({
     name: 'create-popup',
     element: 'popups',
     portfolio: Portfolio,
+    data: {
+        notebooks: [],
+        selectedNB: null
+    },
+    async created() {
+        const res = await Networking.loadNotebooks();
+        if(!res.ok) return;
+
+        this.data.notebooks = res.notebooks;
+    },
     view() {
         return html`
         <h2>Create</h2>
+        <p>If creating a note, select which notebook you want to place it in:</p>
         <input id='create-name-field' type='text' placeholder="Name"/>
+        ${Mosaic.list(this.data.notebooks, nb => nb.id, nb => {
+            const cnb = this.data.selectedNB;
+            if(cnb && cnb.id === nb.id) {
+                return html`<button class='select-notebook-btn' onclick='${() => {
+                    this.data.selectedNB = nb;
+                    this.repaint();
+                }}' style='background-color: cornflowerblue'>
+                    ${nb.title}
+                </button>`
+            } else {
+                return html`<button class='select-notebook-btn' onclick='${() => {
+                    this.data.selectedNB = nb;
+                }}' style='background-color: rgb(181, 202, 241)'>
+                    ${nb.title}
+                </button>`
+            }
+        })}
+        <br><br>
 
-        <round-button icon='document' highlightColor='#707070' onclick='${createNote}'>
+        <round-button icon='document' highlightColor='#707070' onclick='${createNote.bind(this)}'>
             Create Note
         </round-button>
         <round-button icon='ios-book' highlightColor='#707070' onclick='${createNotebook}'>

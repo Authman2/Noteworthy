@@ -1,6 +1,7 @@
 import Mosaic from 'mosaic-framework';
 
 import * as Networking from '../util/Networking';
+import Portfolio from '../util/Portfolio';
 
 import '../styles/sidebar.less';
 
@@ -36,6 +37,17 @@ export default new Mosaic({
             if(objs.length === notebooks.length) this.data.notebooks = objs;
         }));
     },
+    openNote(note) {
+        Portfolio.dispatch('select-note', { currentNote: note });
+
+        const titleField = document.getElementById('title-field');
+        const contentField = document.getElementById('note-field');
+        titleField.innerHTML = note.title;
+        contentField.innerHTML = note.content;
+
+        const toolbar = document.getElementsByTagName('tool-bar')[0];
+        if(toolbar) toolbar.toggleSidebar();
+    },
     created() {
         // Load all of the notebooks and notes from the local indexed db.
         this.loadNotes();
@@ -58,7 +70,7 @@ export default new Mosaic({
                             </span>
                             <ul class="nested">
                                 ${Mosaic.list(nb.notes, n => n.id, n => {
-                                    return html`<li>${n.title}</li>`
+                                    return html`<li onclick="${this.openNote.bind(this, n)}">${n.title}</li>`
                                 })}
                             </ul>
                         </li>`
