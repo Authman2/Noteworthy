@@ -34,13 +34,21 @@ async function createNote() {
     if(!nameField.value || regex.test(nameField.value)) {
         return Globals.showActionAlert('Please enter a name before creating a note', Globals.ColorScheme.red);
     }
-    
-    const titleField = document.getElementById('title-field');
-    const contentField = document.getElementById('note-field');
-    titleField.innerHTML = nameField.value;
-    contentField.innerHTML = 'Start typing here...';
-    Globals.showActionAlert(`Created a new notebook called ${nameField.value}!`, Globals.ColorScheme.blue);
-    nameField.value = '';
+
+    const res = await Networking.createNote(nameField.value || "", '', nb.id);
+    if(res.ok === true) {
+        const titleField = document.getElementById('title-field');
+        const contentField = document.getElementById('note-field');
+        titleField.innerHTML = nameField.value;
+        contentField.innerHTML = 'Start typing here...';
+        Globals.showActionAlert(res.message, Globals.ColorScheme.blue);
+        nameField.value = '';
+
+        const sidebar = document.getElementsByTagName('side-bar')[0];
+        if(sidebar) await sidebar.loadNotes.call(sidebar);
+    } else {
+        return Globals.showActionAlert(res.error, Globals.ColorScheme.red);
+    }
 }
 
 

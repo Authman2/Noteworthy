@@ -186,15 +186,6 @@ export default new Mosaic({
 
         ${ token ?
             html`<section>
-                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleSync}">
-                    Save Online
-                </round-button>
-                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleBackup}">
-                    Backup
-                </round-button>
-                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleRestore}">
-                    Restore
-                </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070'
                     onclick='${async () => {
                         await Networking.logout();
@@ -231,3 +222,13 @@ export default new Mosaic({
         this.data.userInfo = userInfo;
     }
 });
+
+{/* <round-button icon='sync' highlightColor='#707070' onclick="${this.handleSync}">
+                    Save Online
+                </round-button>
+                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleBackup}">
+                    Backup
+                </round-button>
+                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleRestore}">
+                    Restore
+                </round-button> */}

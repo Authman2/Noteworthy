@@ -1,3 +1,5 @@
+import Globals from "./Globals";
+
 const DEV_API_URL = 'http://localhost:8000';
 const API_URL = 'https://noteworthy-backend.herokuapp.com';
 export let currentUser = undefined;
@@ -80,31 +82,35 @@ export async function loadNotes(notebookID) {
 }
 
 export async function createNotebook(title) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user)
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/create-notebook?token=${token}`, {
-        method: 'POST',
-        body: JSON.stringify({ title })
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/create-notebook`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ title, id: Globals.randomID() })
     });
-    if(response.ok === true) return { notes: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        let data = await res.json();
+        return { message: data.message, ok: true }
+    } else {
+        let data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function createNote(title, content, notebookID) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user)
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/create-note?token=${token}`, {
-        method: 'POST',
-        body: JSON.stringify({ title, content, notebookID })
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/create-note`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ title, content, notebookID, id: Globals.randomID() })
     });
-    if(response.ok === true) return { notes: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        let data = await res.json();
+        return { message: data.message, ok: true }
+    } else {
+        let data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function save(noteID, title, content) {
