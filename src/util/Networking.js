@@ -114,17 +114,19 @@ export async function createNote(title, content, notebookID) {
 }
 
 export async function save(noteID, title, content) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/save?token=${token}`, {
-        method: 'POST',
-        body: JSON.stringify({ noteID: noteID, title: title, content: content })
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/save-note`, {
+        method: 'put',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ id: noteID, title, content })
     });
-    if(response.ok === true) return { message: await response.text(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        let data = await res.json();
+        return { message: data.message, ok: true }
+    } else {
+        let data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function restore(notebooks, notes) {

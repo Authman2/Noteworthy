@@ -150,18 +150,18 @@ export default new Mosaic({
         file.click();
     },
     async handleSync() {
-        const everything = {};
-        const nbs = await Local.getNotebooks();
-        const nts = await Local.getAllNotes();
-        nbs.forEach(async nb => everything[nb.id] = nb);
-        nts.forEach(async nt => everything[nt.id] = nt);
+        // const everything = {};
+        // const nbs = await Local.getNotebooks();
+        // const nts = await Local.getAllNotes();
+        // nbs.forEach(async nb => everything[nb.id] = nb);
+        // nts.forEach(async nt => everything[nt.id] = nt);
 
-        const result = await Networking.restore(nbs, nts);
-        if(result.ok === true) {
-            Globals.showActionAlert('Saved all notes online!', Globals.ColorScheme.green);
-        } else {
-            Globals.showActionAlert(result.error, Globals.ColorScheme.red);
-        }
+        // const result = await Networking.restore(nbs, nts);
+        // if(result.ok === true) {
+        //     Globals.showActionAlert('Saved all notes online!', Globals.ColorScheme.green);
+        // } else {
+        //     Globals.showActionAlert(result.error, Globals.ColorScheme.red);
+        // }
     },
     view() {
         const token = localStorage.getItem('noteworthy-token');
@@ -186,6 +186,9 @@ export default new Mosaic({
 
         ${ token ?
             html`<section>
+                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
+                    Save Online
+                </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070'
                     onclick='${async () => {
                         await Networking.logout();

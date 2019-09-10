@@ -20,6 +20,17 @@ async function createNotebook() {
     await Networking.createNotebook(nameField.value);
     Globals.showActionAlert(`Created a new notebook called ${nameField.value}!`, Globals.ColorScheme.blue);
     nameField.value = '';
+
+    // Close the dropdown.
+    const newDropdown = document.getElementById('new-dropdown');
+    if(newDropdown) await newDropdown.toggleDropdown();
+
+    // Reload the sidebar so it has the new data.
+    const sidebar = document.getElementsByTagName('side-bar')[0];
+    if(sidebar) {
+        sidebar.data.notebooks = [];
+        await sidebar.loadNotes.call(sidebar);
+    }
 }
 
 // Handles creating a note.
@@ -35,17 +46,30 @@ async function createNote() {
         return Globals.showActionAlert('Please enter a name before creating a note', Globals.ColorScheme.red);
     }
 
+    // Create a new note in the database.
     const res = await Networking.createNote(nameField.value || "", '', nb.id);
     if(res.ok === true) {
+        // Set the current note to the one you just created.
         const titleField = document.getElementById('title-field');
         const contentField = document.getElementById('note-field');
         titleField.innerHTML = nameField.value;
         contentField.innerHTML = 'Start typing here...';
+
+        // Display results.
         Globals.showActionAlert(res.message, Globals.ColorScheme.blue);
         nameField.value = '';
+        this.data.selectedNB = null;
 
+        // Close the dropdown.
+        const newDropdown = document.getElementById('new-dropdown');
+        if(newDropdown) await newDropdown.toggleDropdown();
+
+        // Reload the sidebar.
         const sidebar = document.getElementsByTagName('side-bar')[0];
-        if(sidebar) await sidebar.loadNotes.call(sidebar);
+        if(sidebar) {
+            sidebar.data.notebooks = [];
+            await sidebar.loadNotes.call(sidebar);
+        }
     } else {
         return Globals.showActionAlert(res.error, Globals.ColorScheme.red);
     }

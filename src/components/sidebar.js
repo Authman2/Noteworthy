@@ -10,7 +10,8 @@ export default new Mosaic({
     element: 'sidebar',
     name: 'side-bar',
     data: {
-        notebooks: []
+        notebooks: [],
+        favorites: []
     },
     toggleNoteView(e) {
         const parent = e.currentTarget.parentElement;
@@ -55,6 +56,17 @@ export default new Mosaic({
     view() {
         return html`
         <ul>
+            <span onclick='${this.toggleNoteView}'>
+                <ion-icon class='caret' name="ios-arrow-down"></ion-icon>
+                <span>Favorites</span>
+            </span>
+
+            <li class="nested">
+                <ul class='favorites-list'>
+                    
+                </ul>
+            </li>
+
             <span onclick='${this.toggleNoteView}'>
                 <ion-icon class='caret' name="ios-arrow-down"></ion-icon>
                 <span>Notebooks</span>
