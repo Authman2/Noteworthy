@@ -57,7 +57,7 @@ side-bar {
     ul li {
         
         // The list of all the users' notebooks.
-        .notebooks-list {
+        .notebooks-list, .favorites-list {
             position: relative;
             display: block;
             margin-left: -25px;
@@ -112,6 +112,33 @@ side-bar {
                             background-color: darken(@primary, 25%);
                         }
                     }
+                }
+            }
+        }
+
+        // For the favorites list, you want the first item (the actual note)
+        // to be immediately selectable.
+        .favorites-list {
+            // Each list item here is the title of a note.
+            li {
+                position: relative;
+                padding: 10px;
+                display: block;
+                font-size: 15px;
+                cursor: pointer;
+                font-weight: 100;
+                font-style: italic;
+                padding-left: 10px;
+                border-radius: 4px;
+                margin-bottom: -5px;
+                transition-duration: 0.15s;
+
+                // Hovering over a note will highlight it.
+                &:hover {
+                    background-color: darken(@primary, 18%);
+                }
+                &:active {
+                    background-color: darken(@primary, 25%);
                 }
             }
         }

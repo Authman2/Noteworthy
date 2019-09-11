@@ -4,6 +4,7 @@ import * as Networking from '../util/Networking';
 import Portfolio from '../util/Portfolio';
 
 import '../styles/sidebar.less';
+import Globals from '../util/Globals';
 
 
 export default new Mosaic({
@@ -18,6 +19,15 @@ export default new Mosaic({
         if(parent) {
             const caret = parent.getElementsByTagName('ion-icon')[0];
             const list = parent.getElementsByClassName(`nested`)[0];
+            caret.classList.toggle('caret-down');
+            list.classList.toggle('active');
+        }
+    },
+    toggleFavoriteView(e) {
+        const parent = e.currentTarget.parentElement;
+        if(parent) {
+            const caret = parent.getElementsByClassName('favorite-caret')[0];
+            const list = parent.getElementsByClassName(`favorite-list`)[0];
             caret.classList.toggle('caret-down');
             list.classList.toggle('active');
         }
@@ -38,6 +48,14 @@ export default new Mosaic({
             if(objs.length === notebooks.length) this.data.notebooks = objs;
         }));
     },
+    async loadFavorites() {
+        const res = await Networking.getFavorites();
+        if(res.ok === true) {
+            this.data.favorites = res.favorites;
+        } else {
+            return Globals.showActionAlert(res.error, Globals.ColorScheme.red);
+        }
+    },
     openNote(note) {
         Portfolio.dispatch('select-note', { currentNote: note });
 
@@ -52,21 +70,11 @@ export default new Mosaic({
     created() {
         // Load all of the notebooks and notes from the local indexed db.
         this.loadNotes();
+        this.loadFavorites();
     },
     view() {
         return html`
         <ul>
-            <span onclick='${this.toggleNoteView}'>
-                <ion-icon class='caret' name="ios-arrow-down"></ion-icon>
-                <span>Favorites</span>
-            </span>
-
-            <li class="nested">
-                <ul class='favorites-list'>
-                    
-                </ul>
-            </li>
-
             <span onclick='${this.toggleNoteView}'>
                 <ion-icon class='caret' name="ios-arrow-down"></ion-icon>
                 <span>Notebooks</span>
@@ -85,6 +93,22 @@ export default new Mosaic({
                                     return html`<li onclick="${this.openNote.bind(this, n)}">${n.title}</li>`
                                 })}
                             </ul>
+                        </li>`
+                    })}
+                </ul>
+            </li>
+
+            <br><br>
+
+            <span onclick='${this.toggleFavoriteView}'>
+                <ion-icon class='caret favorite-caret' name="ios-arrow-down"></ion-icon>
+                <span>Favorites</span>
+            </span>
+            <li class="nested favorite-list">
+                <ul class='favorites-list'>
+                    ${Mosaic.list(this.data.favorites, nt => nt.id, nt => {
+                        return html`<li onclick="${this.openNote.bind(this, nt)}">
+                            ${nt.title}
                         </li>`
                     })}
                 </ul>

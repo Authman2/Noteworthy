@@ -113,6 +113,37 @@ export async function createNote(title, content, notebookID) {
     }
 }
 
+export async function toggleFavorite(id) {
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/favorite`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ id })
+    });
+    if(res.ok === true) {
+        let data = await res.json();
+        return { message: data.message, ok: true }
+    } else {
+        let data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
+}
+
+export async function getFavorites() {
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/get-favorites`, {
+        method: 'get',
+        headers: { 'Authorization': token },
+    });
+    if(res.ok === true) {
+        let data = await res.json();
+        return { favorites: data, ok: true }
+    } else {
+        let data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
+}
+
 export async function save(noteID, title, content) {
     const token = localStorage.getItem('noteworthy-token');
     const res = await fetch(`${API_URL}/save-note`, {
