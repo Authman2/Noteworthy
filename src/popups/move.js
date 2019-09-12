@@ -22,23 +22,23 @@ export default new Mosaic({
         this.data.notebooks = res.notebooks;
     },
     async handleMove() {
+        const note = Portfolio.get('currentNote');
+        if(!note)
+            return Globals.showActionAlert(`You must select a note before you can move it`, Globals.ColorScheme.red);
+        
+        const toNB = this.data.selectedNB;
+        if(!toNB)
+            return Globals.showActionAlert(`You must select a notebook to move the note into`, Globals.ColorScheme.red);
 
+        const res = await Networking.move(note._id, node.noteboookID, toNB._id);
+        Globals.showActionAlert(res.message, res.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red);
     },
     view() {
         const note = Portfolio.get('currentNote');
 
         return html`
-        ${
-            note ? 
-                this.hasNote.call(this, note) : 
-                html`<h2>Please select a note in order to move it to a different notebook.</h2>`
-        }
-        `
-    },
-    hasNote(note) {
-        return html`
         <h2>Move</h2>
-        <p>Where would you like to move ${note.title} to?</p>
+        <p>Where would you like to move ${note ? note.title : "----"} to?</p>
         ${Mosaic.list(this.data.notebooks, nb => nb.id, nb => {
             const cnb = this.data.selectedNB;
             if(cnb && cnb.id === nb.id) {

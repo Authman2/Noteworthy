@@ -40,9 +40,18 @@ const ColorScheme = {
     gray: 'gray'
 }
 
+function traverse($node, action) {
+    if(action) action($node);
+
+    let children = $node.childNodes;
+    for(var i = 0; i < children.length; i++)
+        traverse(children[i], action);
+}
+
 export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
+    traverse
 }

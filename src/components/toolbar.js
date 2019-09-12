@@ -85,11 +85,8 @@ export default new Mosaic({
             <dropdown-button icon='move' highlightColor='#0F9CF9' popup='move-popup'>
                 Move
             </dropdown-button>
-            <dropdown-button icon='search' highlightColor='#2abd56' popup='settings-popup'>
+            <dropdown-button icon='search' highlightColor='#2abd56' popup='find-popup'>
                 Find
-            </dropdown-button>
-            <dropdown-button icon='information' highlightColor='#ba2d2d' popup='settings-popup'>
-                Font
             </dropdown-button>
             <dropdown-button icon='settings' highlightColor='#A7A7A7' popup='settings-popup'>
                 Settings

@@ -177,17 +177,19 @@ export async function restore(notebooks, notes) {
 }
 
 export async function move(noteID, fromNotebook, toNotebook) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/move-note?token=${token}`, {
-        method: 'PUT',
-        body: JSON.stringify({ noteID, fromNotebook, toNotebook })
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/move-note`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ id: noteID, fromNotebook, toNotebook }),
     });
-    if(response.ok === true) return { response: await response.text(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        const _data = await res.json();
+        return { message: _data.message, ok: true }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }
 
 export async function deleteNote(noteID) {
