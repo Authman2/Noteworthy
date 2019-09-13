@@ -20,6 +20,15 @@ export default new Mosaic({
     name: 'find-popup',
     element: 'popups',
     portfolio: Portfolio,
+    willDestroy() {
+        // Remove all highlights on the content field.
+        const noteField = document.getElementById('note-field');
+        Globals.traverse(noteField, node => {            
+            if(node.style && node.style.backgroundColor === 'lightblue') {
+                node.style.backgroundColor = 'unset';
+            }
+        });
+    },
     view() {
         return html`
         <input type='text' id='find-field' placeholder="Find">

@@ -86,14 +86,14 @@ export async function createNotebook(title) {
     const res = await fetch(`${API_URL}/create-notebook`, {
         method: 'post',
         headers: { 'Authorization': token },
-        body: JSON.stringify({ title, id: Globals.randomID() })
+        body: JSON.stringify({ title })
     });
     if(res.ok === true) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
         let data = await res.json();
-        return { error: data.message, code: res.status, ok: false }
+        return { message: data.message, code: res.status, ok: false }
     }
 }
 
@@ -102,14 +102,14 @@ export async function createNote(title, content, notebookID) {
     const res = await fetch(`${API_URL}/create-note`, {
         method: 'post',
         headers: { 'Authorization': token },
-        body: JSON.stringify({ title, content, notebookID, id: Globals.randomID() })
+        body: JSON.stringify({ title, content, notebookID })
     });
     if(res.ok === true) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
         let data = await res.json();
-        return { error: data.message, code: res.status, ok: false }
+        return { message: data.message, code: res.status, ok: false }
     }
 }
 
@@ -179,9 +179,25 @@ export async function restore(notebooks, notes) {
 export async function move(noteID, fromNotebook, toNotebook) {
     const token = localStorage.getItem('noteworthy-token');
     const res = await fetch(`${API_URL}/move-note`, {
-        method: 'post',
+        method: 'put',
         headers: { 'Authorization': token },
         body: JSON.stringify({ id: noteID, fromNotebook, toNotebook }),
+    });
+    if(res.ok === true) {
+        const _data = await res.json();
+        return { message: _data.message, ok: true }
+    } else {
+        const data = await res.json();
+        return { message: data.message, code: res.status, ok: false }
+    }
+}
+
+export async function deleteNote(noteID) {
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/delete-note`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ id: noteID }),
     });
     if(res.ok === true) {
         const _data = await res.json();
@@ -192,30 +208,18 @@ export async function move(noteID, fromNotebook, toNotebook) {
     }
 }
 
-export async function deleteNote(noteID) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/delete-note?token=${token}`, {
-        method: 'DELETE',
-        body: JSON.stringify({ noteID })
-    });
-    if(response.ok === true) return { notes: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
-}
-
 export async function deleteNotebook(notebookID) {
-    const user = localStorage.getItem('noteworthy-current-user');
-    if(!user) return { err: 'No current user', ok: false };
-    currentUser = JSON.parse(user);
-
-    const token = currentUser.idToken;
-    const response = await fetch(`${API_URL}/delete-notebook?token=${token}`, {
-        method: 'DELETE',
-        body: JSON.stringify({ notebookID })
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/delete-notebook`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ id: notebookID }),
     });
-    if(response.ok === true) return { notes: await response.json(), ok: true }
-    else return { err: await response.text(), code: response.status, ok: false }
+    if(res.ok === true) {
+        const _data = await res.json();
+        return { message: _data.message, ok: true }
+    } else {
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
 }

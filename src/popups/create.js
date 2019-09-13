@@ -17,8 +17,8 @@ async function createNotebook() {
         return Globals.showActionAlert('Please enter a name before creating a notebook', Globals.ColorScheme.red);
     }
     
-    await Networking.createNotebook(nameField.value);
-    Globals.showActionAlert(`Created a new notebook called ${nameField.value}!`, Globals.ColorScheme.blue);
+    const res = await Networking.createNotebook(nameField.value);
+    Globals.showActionAlert(res.message, res.ok ? Globals.ColorScheme.blue : Globals.ColorScheme.red);
     nameField.value = '';
 
     // Close the dropdown.
@@ -47,7 +47,7 @@ async function createNote() {
     }
 
     // Create a new note in the database.
-    const res = await Networking.createNote(nameField.value || "", '', nb.id);
+    const res = await Networking.createNote(nameField.value || "", 'Start typing here', nb._id);
     if(res.ok === true) {
         // Set the current note to the one you just created.
         const titleField = document.getElementById('title-field');
@@ -71,7 +71,7 @@ async function createNote() {
             await sidebar.loadNotes.call(sidebar);
         }
     } else {
-        return Globals.showActionAlert(res.error, Globals.ColorScheme.red);
+        return Globals.showActionAlert(res.message, Globals.ColorScheme.red);
     }
 }
 
@@ -96,22 +96,14 @@ export default new Mosaic({
         <h2>Create</h2>
         <p>If creating a note, select which notebook you want to place it in:</p>
         <input id='create-name-field' type='text' placeholder="Name"/>
-        ${Mosaic.list(this.data.notebooks, nb => nb.id, nb => {
+        ${Mosaic.list(this.data.notebooks, nb => nb._id, nb => {
             const cnb = this.data.selectedNB;
-            if(cnb && cnb.id === nb.id) {
-                return html`<button class='select-notebook-btn' onclick='${() => {
-                    this.data.selectedNB = nb;
-                    this.repaint();
-                }}' style='background-color: cornflowerblue'>
-                    ${nb.title}
-                </button>`
-            } else {
-                return html`<button class='select-notebook-btn' onclick='${() => {
-                    this.data.selectedNB = nb;
-                }}' style='background-color: rgb(181, 202, 241)'>
-                    ${nb.title}
-                </button>`
-            }
+            return html`<button class='select-notebook-btn' onclick='${() => {
+                this.data.selectedNB = nb;
+                this.repaint();
+            }}' style='${cnb && cnb._id === nb._id ? 'background-color: rgb(181, 202, 241)' : 'background-color: cornflowerblue'}'>
+                ${nb.title}
+            </button>`
         })}
         <br><br>
 

@@ -79,6 +79,15 @@ export default new Mosaic({
             const token = localStorage.getItem('noteworthy-token');
             const userInfo = await getUserInfo(token);
             this.data.userInfo = userInfo;
+
+            // Load the notebooks.
+            const sidebar = document.getElementsByTagName('side-bar')[0];
+            if(sidebar) {
+                sidebar.data.notebooks = [];
+                sidebar.data.favorites = [];
+                await sidebar.loadNotes.call(sidebar);
+                await sidebar.loadFavorites.call(sidebar);
+            }
         } else {
             Globals.showActionAlert(res.error, Globals.ColorScheme.red);
         }
@@ -188,6 +197,9 @@ export default new Mosaic({
             html`<section>
                 <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
                     Save Online
+                </round-button>
+                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleBackup}'>
+                    Backup to File
                 </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070'
                     onclick='${async () => {

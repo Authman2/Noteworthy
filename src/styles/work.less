@@ -54,6 +54,25 @@ work-page {
             font-weight: 300;
             font-family: Helvetica;
         }
+
+        // The trash icon.
+        ion-icon[name="trash"] {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            opacity: 0.5;
+            cursor: pointer;
+            font-size: 24px;
+            transition-duration: 0.15s;
+            color: lighten(@primary, 10%);
+
+            &:hover {
+                opacity: 1;
+            }
+            &:active {
+                color: darken(@primary, 10%);
+            }
+        }
     }
 
     // When the sidebar is open.

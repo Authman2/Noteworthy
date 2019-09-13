@@ -1,0 +1,80 @@
+@import './index.less';
+
+.code-segment {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition-duration: 0.2s;
+    background-color: lightgray;
+
+    &:hover {
+        border: 1px solid gray;
+    }
+}
+
+@keyframes action-alert-fade-in {
+    0% {
+        opacity: 0;
+        bottom: -10px;
+    }
+    50% {
+        opacity: 1;
+        bottom: 30px;
+    }
+    100% {
+        opacity: 1;
+        bottom: 15px;
+    }
+}
+@keyframes action-alert-fade-out {
+    0% {
+        opacity: 1;
+        bottom: 15px;
+    }
+    50% {
+        opacity: 1;
+        bottom: 30px;
+    }
+    100% {
+        opacity: 0;
+        bottom: -10px;
+    }
+}
+toast-alert {
+    position: fixed;
+    left: 50%;
+    z-index: 102;
+    bottom: 15px;
+    color: white;
+    font-size: 16px;
+    font-weight: 200;
+    padding-top: 10px;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    font-family: 'Avenir';
+    background-color: gray;
+    transform: translateX(-50%);
+    animation: action-alert-fade-in 0.5s sin(360);
+
+
+    round-button {
+        border: none;
+        margin-left: 10px;
+        background-color: white;
+
+        &:hover {
+            background-color: darken(white, 10%);
+        }
+        &:active {
+            background-color: darken(white, 20%);
+        }
+    }
+}
+.toast-alert-fade-out {
+    opacity: 0;
+    animation: action-alert-fade-out 0.5s sin(360);
+}

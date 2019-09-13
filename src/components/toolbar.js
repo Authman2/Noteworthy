@@ -5,7 +5,6 @@ import './dropdown-button';
 import '../popups/create';
 import '../popups/settings';
 import '../popups/find';
-import '../popups/font';
 import '../popups/move';
 import '../popups/share';
 
@@ -48,7 +47,7 @@ export default new Mosaic({
     async handleFavorite() {
         const note = Portfolio.get('currentNote');
         if(!note)
-            return Globals.showActionAlert(`You must select a note before you can save!`, Globals.ColorScheme.red);
+            return Globals.showActionAlert(`You must select a note before you can favorite!`, Globals.ColorScheme.red);
 
         const res = await Networking.toggleFavorite(note._id);
         Globals.showActionAlert(res.message, res.ok === true ? Globals.ColorScheme.green : Globals.ColorScheme.red);

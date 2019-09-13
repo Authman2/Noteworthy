@@ -1,4 +1,4 @@
-import Networking from './Networking';
+import '../components/toast';
 
 /** Shows the action alert with some text. */
 const showActionAlert = (text, color, time = 2500) => {

@@ -30,7 +30,7 @@ export default new Mosaic({
         if(!toNB)
             return Globals.showActionAlert(`You must select a notebook to move the note into`, Globals.ColorScheme.red);
 
-        const res = await Networking.move(note._id, node.noteboookID, toNB._id);
+        const res = await Networking.move(note._id, note.noteboookID, toNB._id);
         Globals.showActionAlert(res.message, res.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red);
     },
     view() {
@@ -39,22 +39,14 @@ export default new Mosaic({
         return html`
         <h2>Move</h2>
         <p>Where would you like to move ${note ? note.title : "----"} to?</p>
-        ${Mosaic.list(this.data.notebooks, nb => nb.id, nb => {
+        ${Mosaic.list(this.data.notebooks, nb => nb._id, nb => {
             const cnb = this.data.selectedNB;
-            if(cnb && cnb.id === nb.id) {
-                return html`<button class='select-notebook-btn' onclick='${() => {
-                    this.data.selectedNB = nb;
-                    this.repaint();
-                }}' style='background-color: cornflowerblue'>
-                    ${nb.title}
-                </button>`
-            } else {
-                return html`<button class='select-notebook-btn' onclick='${() => {
-                    this.data.selectedNB = nb;
-                }}' style='background-color: rgb(181, 202, 241)'>
-                    ${nb.title}
-                </button>`
-            }
+            return html`<button class='select-notebook-btn' onclick='${() => {
+                this.data.selectedNB = nb;
+                this.repaint();
+            }}' style='${cnb && cnb._id === nb._id ? 'background-color: rgb(181, 202, 241)' : 'background-color: cornflowerblue'}'>
+                ${nb.title}
+            </button>`
         })}
         <br><br>
 

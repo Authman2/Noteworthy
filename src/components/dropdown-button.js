@@ -30,7 +30,7 @@ export default new Mosaic({
                 const toolbar = document.getElementsByTagName('tool-bar')[0];
                 el.paint();
                 if(toolbar) el.style.top = `${toolbar.getBoundingClientRect().bottom + 15}px`;
-                if(box.x + box.width + 60 >= window.innerWidth) {
+                if(box.x + box.width + 150 >= window.innerWidth) {
                     el.style.right = `15px`;
                 } else {
                     el.style.left = `${box.x}px`;

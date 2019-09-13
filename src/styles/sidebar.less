@@ -63,6 +63,25 @@ side-bar {
             margin-left: -25px;
             list-style-type: none;
 
+            // The trash icon.
+            ion-icon[name="trash"] {
+                position: relative;
+                top: 2px;
+                float: right;
+                opacity: 0.5;
+                color: white;
+                cursor: pointer;
+                font-size: 18px;
+                transition-duration: 0.15s;
+
+                &:hover {
+                    opacity: 1;
+                }
+                &:active {
+                    color: darken(white, 10%);
+                }
+            }
+
             // Each list item with the notebook title and
             // list of notes.
             li {
