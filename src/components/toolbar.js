@@ -76,7 +76,7 @@ export default new Mosaic({
                 Save
             </round-button>
             <round-button icon='heart' highlightColor='#FF729E' onclick="${this.handleFavorite}">
-                Favorite
+                Toggle Favorite
             </round-button>
             <dropdown-button id='share-dropdown' icon='ios-share' highlightColor='#c9700a' popup='share-popup'>
                 Share

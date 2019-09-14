@@ -1,7 +1,7 @@
 import Globals from "./Globals";
 
 const DEV_API_URL = 'http://localhost:8000';
-const API_URL = 'https://noteworthy-backend.herokuapp.com';
+const API_URL = DEV_API_URL//'https://noteworthy-backend.herokuapp.com';
 export let currentUser = undefined;
 
 export async function login(email, password) {
@@ -172,7 +172,7 @@ export async function restore(notebooks, notes) {
         return { message: _data.message, ok: true }
     } else {
         const data = await res.json();
-        return { error: data.message, code: res.status, ok: false }
+        return { message: data.message, code: res.status, ok: false }
     }
 }
 

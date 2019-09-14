@@ -150,25 +150,15 @@ export default new Mosaic({
 
                 const toJSON = JSON.parse(res);
                 const vals = Object.values(toJSON);
-                Local.restore(vals);
+                const notebooks = vals.filter(obj => !obj.notebookID);
+                const notes = vals.filter(obj => obj.notebookID);
+                const result = await Networking.restore(notebooks, notes);
+                Globals.showActionAlert(result.message, result.ok === true ? 
+                    Globals.ColorScheme.green : Globals.ColorScheme.red);
             }
             reader.readAsText(file);
         }
         file.click();
-    },
-    async handleSync() {
-        // const everything = {};
-        // const nbs = await Local.getNotebooks();
-        // const nts = await Local.getAllNotes();
-        // nbs.forEach(async nb => everything[nb.id] = nb);
-        // nts.forEach(async nt => everything[nt.id] = nt);
-
-        // const result = await Networking.restore(nbs, nts);
-        // if(result.ok === true) {
-        //     Globals.showActionAlert('Saved all notes online!', Globals.ColorScheme.green);
-        // } else {
-        //     Globals.showActionAlert(result.error, Globals.ColorScheme.red);
-        // }
     },
     view() {
         const token = localStorage.getItem('noteworthy-token');
@@ -198,6 +188,9 @@ export default new Mosaic({
                 </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleBackup}'>
                     Backup to File
+                </round-button>
+                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
+                    Restore
                 </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070'
                     onclick='${async () => {
