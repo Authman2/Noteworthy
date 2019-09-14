@@ -27,8 +27,8 @@ export default new Mosaic({
         confirmBtn.onclick = async () => {
             const note = Portfolio.get('currentNote');
             if(note) {
-                const res = await Networking.deleteNote(note.id);
-                Globals.showActionAlert(res.message, Globals.ColorScheme.green);
+                const res = await Networking.deleteNote(note._id);
+                Globals.showActionAlert(res.message, Globals.ColorScheme.green, 4000);
             }
 
             titleField.innerHTML = 'Title';
