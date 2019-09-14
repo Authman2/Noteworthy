@@ -20,22 +20,11 @@ if('serviceWorker' in navigator) {
 
 // Keyboard Shortcuts.
 window.addEventListener('keydown', async e => {
+    const toolbar = document.getElementsByTagName('tool-bar')[0];
+    
     // Save.
     if(e.keyCode === 83 && e.metaKey === true) {
-        const note = portfolio.get('currentNote');
-        if(!note)
-            return Globals.showActionAlert(`You must have a note open before you can save anything!`, Globals.ColorScheme.red, 3000);
-
-        Globals.showActionAlert('Saving...');
-        const title = document.getElementById('title-field').innerText;
-        const content = document.getElementById('content-field').innerHTML;
-
-        const result = await Networking.save(note.id, title, content);
-        if(result.ok) Globals.showActionAlert(`Saved!`, Globals.ColorScheme.green);
-        else {
-            if(resp.err.includes('No current user')) Globals.showRefreshUserAlert();
-            else Global.showActionAlert(result.err, Globals.ColorScheme.red);
-        }
+        if(toolbar) toolbar.handleSave();
     }
 
     // Underline.
@@ -68,33 +57,14 @@ window.addEventListener('keydown', async e => {
 
     // Toggle Menu.
     if(e.keyCode === 79 && e.metaKey === true) {
-        if(document.getElementById('drawer').innerHTML === '') {
-            AppDrawer.paint();
-            AppDrawer.router = router;
-            const overlay = document.getElementById('overlay');
-            if(overlay) {
-                overlay.style.opacity = 1;
-                overlay.style.zIndex = 99;
-            }
-        } else {
-            const overlay = document.getElementById('overlay');
-            if(overlay) {
-                overlay.style.opacity = 0;
-                overlay.style.zIndex = -1;
-            }
-            AppDrawer.classList.add('close-app-drawer');
-            setTimeout(() => {
-                AppDrawer.classList.remove('close-app-drawer');
-                AppDrawer.remove();
-            }, 200);
-        }
+        if(toolbar) toolbar.toggleSidebar();
     }
 
     // Print.
     if(e.keyCode === 80 && e.metaKey === true) {
         e.preventDefault();
-        document.getElementsByTagName('app-tools')[0].style.visibility = 'hidden';
+        if(toolbar) toolbar.style.visibility = 'hidden';
         window.print();
-        document.getElementsByTagName('app-tools')[0].style.visibility = 'visible';
+        if(toolbar) toolbar.style.visibility = 'visible';
     }
 });

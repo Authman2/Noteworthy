@@ -53,8 +53,8 @@ export async function getNotebooks() {
 /** Deletes a notebook from indexed db as well as its notes. */
 export async function deleteNotebook(id) {
     const nb = await localNotebooks.notebooks.where("id").equals(id).toArray();
-    const nts = await localNotes.notes.where("notebookID").equals(nb.id).toArray();
-    await Promise.all(nts.forEach(async note => await loadNotes.notes.delete(note.id)));
+    const nts = await localNotes.notes.where("notebookID").equals(nb._id).toArray();
+    await Promise.all(nts.forEach(async note => await loadNotes.notes.delete(note._id)));
     await localNotebooks.notebooks.delete(id);
 }
 

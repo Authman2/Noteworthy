@@ -114,8 +114,8 @@ export default new Mosaic({
         // Get the notebooks and notes.
         let notebooks = await Local.getNotebooks();
         let notes = await Local.getAllNotes();
-        notebooks.forEach(nb => backup[nb.id] = nb);
-        notes.forEach(nt => backup[nt.id] = nt);
+        notebooks.forEach(nb => backup[nb._id] = nb);
+        notes.forEach(nt => backup[nt._id] = nt);
         
         // Native sharing.
         if('share' in window.navigator) {

@@ -67,7 +67,7 @@ export default new Mosaic({
         const confirmBtn = document.getElementById('toast-yes-btn');
         const declineBtn = document.getElementById('toast-no-btn');
         confirmBtn.onclick = async () => {
-            const res = await Networking.deleteNotebook(notebook.id);
+            const res = await Networking.deleteNotebook(notebook._id);
             Globals.showActionAlert(res.message, Globals.ColorScheme.green);
             Globals.hideActionAlert();
         }
@@ -104,7 +104,7 @@ export default new Mosaic({
 
             <li class="nested">
                 <ul class='notebooks-list'>
-                    ${Mosaic.list(this.data.notebooks, nb => nb.id, nb => {
+                    ${Mosaic.list(this.data.notebooks, nb => nb._id, nb => {
                         return html`<li>
                             <span onclick='${this.toggleNoteView}'>
                                 <ion-icon class='caret' name="ios-arrow-down"></ion-icon>
@@ -112,7 +112,7 @@ export default new Mosaic({
                             </span>
                             <ion-icon name="trash" onclick="${this.handleDeleteNotebook.bind(this, nb)}"></ion-icon>
                             <ul class="nested">
-                                ${Mosaic.list(nb.notes, n => n.id, n => {
+                                ${Mosaic.list(nb.notes, n => n._id, n => {
                                     return html`<li onclick="${this.openNote.bind(this, n)}">
                                         ${n.title}
                                     </li>`
@@ -131,7 +131,7 @@ export default new Mosaic({
             </span>
             <li class="nested favorite-list">
                 <ul class='favorites-list'>
-                    ${Mosaic.list(this.data.favorites, nt => nt.id, nt => {
+                    ${Mosaic.list(this.data.favorites, nt => nt._id, nt => {
                         return html`<li onclick="${this.openNote.bind(this, nt)}">
                             ${nt.title}
                         </li>`
