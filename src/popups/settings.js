@@ -83,8 +83,6 @@ export default new Mosaic({
             // Load the notebooks.
             const sidebar = document.getElementsByTagName('side-bar')[0];
             if(sidebar) {
-                sidebar.data.notebooks = [];
-                sidebar.data.favorites = [];
                 await sidebar.loadNotes.call(sidebar);
                 await sidebar.loadFavorites.call(sidebar);
             }

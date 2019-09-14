@@ -30,8 +30,14 @@ export default new Mosaic({
         if(!toNB)
             return Globals.showActionAlert(`You must select a notebook to move the note into`, Globals.ColorScheme.red);
 
-        const res = await Networking.move(note._id, note.noteboookID, toNB._id);
+        const res = await Networking.move(note._id, note.notebookID, toNB._id);
         Globals.showActionAlert(res.message, res.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red);
+
+        const sidebar = document.getElementsByTagName('side-bar')[0];
+        if(sidebar) await sidebar.loadNotes();
+
+        const dropdown = document.getElementById('move-dropdown');
+        if(dropdown) dropdown.toggleDropdown();
     },
     view() {
         const note = Portfolio.get('currentNote');

@@ -195,7 +195,7 @@ export async function move(noteID, fromNotebook, toNotebook) {
 export async function deleteNote(noteID) {
     const token = localStorage.getItem('noteworthy-token');
     const res = await fetch(`${API_URL}/delete-note`, {
-        method: 'post',
+        method: 'delete',
         headers: { 'Authorization': token },
         body: JSON.stringify({ id: noteID }),
     });
@@ -211,7 +211,7 @@ export async function deleteNote(noteID) {
 export async function deleteNotebook(notebookID) {
     const token = localStorage.getItem('noteworthy-token');
     const res = await fetch(`${API_URL}/delete-notebook`, {
-        method: 'post',
+        method: 'delete',
         headers: { 'Authorization': token },
         body: JSON.stringify({ id: notebookID }),
     });

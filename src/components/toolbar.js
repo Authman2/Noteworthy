@@ -81,7 +81,7 @@ export default new Mosaic({
             <dropdown-button id='share-dropdown' icon='ios-share' highlightColor='#c9700a' popup='share-popup'>
                 Share
             </dropdown-button>
-            <dropdown-button icon='move' highlightColor='#0F9CF9' popup='move-popup'>
+            <dropdown-button id='move-dropdown' icon='move' highlightColor='#0F9CF9' popup='move-popup'>
                 Move
             </dropdown-button>
             <dropdown-button icon='search' highlightColor='#2abd56' popup='find-popup'>
