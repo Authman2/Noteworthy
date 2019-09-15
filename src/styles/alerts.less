@@ -1,17 +1,84 @@
 @import './index.less';
 
-.code-segment {
-    padding: 8px;
-    cursor: pointer;
-    border-radius: 8px;
-    padding-left: 20px;
-    padding-right: 20px;
-    transition-duration: 0.2s;
-    background-color: lightgray;
+code-segment {
+    position: relative;
+    z-index: 100;
+    display: block;
 
-    &:hover {
-        border: 1px solid gray;
+
+    // The language select button.
+    .code-segment-select-button {
+        border: none;
+        padding: 8px;
+        outline: none;
+        display: block;
+        z-index: 1000;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        -webkit-user-select: none;
+        transition-duration: 0.15s;
+
+        &:hover, &:focus {
+            background-color: lightgray;
+        }
     }
+    .dropdown {
+        position: relative;
+        display: block;
+    }
+    .dropdown-content {
+        position: absolute;
+        z-index: 10;
+        display: none;
+        overflow: auto;
+        background-color: #f1f1f1;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    }
+    .dropdown-content option {
+        color: black;
+        display: block;
+        cursor: pointer;
+        padding: 12px 16px;
+        text-decoration: none;
+    
+        &:hover {
+            background-color: #ddd;
+        }
+    }
+
+
+    // The text area.
+    .code-segment {
+        position: relative;
+        padding: 5px;
+        outline: none;
+        display: block;
+        cursor: pointer;
+        padding-left: 20px;
+        padding-right: 20px;
+        transition-duration: 0.2s;
+        background-color: lightgray;
+
+        &:nth-of-type(1) {
+            padding-top: 25px;
+            border-radius: 8px 8px 0px 0px;
+        }
+        &:nth-last-of-type(1) {
+            padding-bottom: 25px;
+            border-radius: 0px 0px 8px 8px;
+        }
+    
+        &:hover {
+            border: 1px solid gray;
+        }
+    }
+}
+
+.show {
+    display: block;
 }
 
 @keyframes action-alert-fade-in {

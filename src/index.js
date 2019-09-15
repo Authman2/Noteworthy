@@ -2,9 +2,7 @@ import 'babel-polyfill';
 
 import Work from './routes/work';
 import Sidebar from './components/sidebar';
-
-import Globals from './util/Globals';
-import * as Networking from './util/Networking';
+import './components/code-segment';
 
 
 // Paint the components.
@@ -50,8 +48,9 @@ window.addEventListener('keydown', async e => {
     }
 
     // Code Segment.
-    if(e.keyCode === 63 && e.metaKey === true && e.shiftKey === true) {
-        const code = `<pre class='code-segment' onclick='this.focus()'><code>var x = 5;</code><br><br></pre>`;
+    if(e.keyCode === 67 && e.metaKey === true && e.shiftKey === true) {
+        e.preventDefault();
+        const code = `<code-segment></code-segment>`;
         document.execCommand('insertHTML', false, `<br>${code}<br>`);
     }
 
