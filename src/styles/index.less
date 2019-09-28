@@ -1,9 +1,9 @@
-@primary: #707070;
+@primary: #2E31B2;
 
 .common-font {
-    font-family: Roboto;
     line-height: normal;
     letter-spacing: 0.8px;
+    font-family: Avenir Next;
 }
 
 .select-notebook-btn {
@@ -24,5 +24,32 @@
 
     &:hover {
         background-color: cornflowerblue;
+    }
+}
+
+// The text input fields.
+text-field {
+    .common-font();
+    display: block;
+    width: fit-content;
+
+    // The label.
+    label {
+        margin: 5px;
+        color: gray;
+        display: block;
+        font-size: 12px;
+        font-style: italic;
+    }
+
+    // The actual field.
+    input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        min-width: 200px;
+        border-radius: 8px;
+        padding: 10px 15px 10px 10px;
+        background-color: lightgray;
     }
 }

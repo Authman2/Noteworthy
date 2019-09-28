@@ -1,13 +1,19 @@
 import 'babel-polyfill';
+import { Router } from 'mosaic-framework';
 
-import Work from './routes/work';
-import Sidebar from './components/sidebar';
+import './components/text-field';
+import './components/round-button';
 import './components/code-segment';
+
+import Home from './routes/home';
+import Work from './routes/work';
 
 
 // Paint the components.
-Work.paint('root');
-Sidebar.paint();
+const router = new Router('root');
+router.addRoute('/', Home);
+router.addRoute('/work', Work);
+router.paint();
 
 // Service worker.
 if('serviceWorker' in navigator) {

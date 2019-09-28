@@ -48,10 +48,14 @@ function traverse($node, action) {
         traverse(children[i], action);
 }
 
+
+let currentUser = {};
+
 export default {
     showActionAlert,
     hideActionAlert,
     randomID,
     ColorScheme,
-    traverse
+    traverse,
+    currentUser
 }

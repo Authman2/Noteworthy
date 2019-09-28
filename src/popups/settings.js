@@ -4,7 +4,6 @@ import '../components/round-button';
 
 import Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
-import * as Local from '../util/LocalData';
 
 
 // Whether or not to show the login or create account view.

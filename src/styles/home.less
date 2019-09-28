@@ -1,0 +1,56 @@
+@import './index.less';
+
+home-page {
+    text-align: center;
+
+    // The image.
+    img {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: gray;
+    }
+
+    // The title of the app.
+    h1 {
+        .common-font();
+        color: #2E31B2;
+        margin-bottom: 10px;
+    }
+
+    // The app subtitle.
+    p {
+        color: gray;
+        .common-font();
+        font-size: 12px;
+        font-style: italic;
+        margin-bottom: 50px;
+    }
+    
+    // Center the fields.
+    text-field {
+        text-align: left;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+
+        // Increase the size of the fields.
+        input {
+            width: 300px;
+        }
+
+        // Add margin to the last one.
+        &:nth-last-of-type(1) {
+            margin-bottom: 40px;
+        }
+    }
+
+    // The buttons for logging in and signing up.
+    round-button {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+    }
+}
