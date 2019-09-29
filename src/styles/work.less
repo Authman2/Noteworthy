@@ -6,77 +6,30 @@ work-page {
     left: 0px;
     right: 0px;
     bottom: 0px;
+    padding: 50px;
     display: block;
+    .common-font();
+    overflow-y: scroll;
+    overflow-x: hidden;
 
-    // The main content view.
-    content-view {
-        position: absolute;
-        top: 102px;
-        left: 0px;
-        right: 0px;
-        z-index: 1;
-        bottom: 0px;
-        padding: 50px;
-        display: block;
-        .common-font();
-        padding-top: 30px;
+    // The title view
+    #title-field {
+        outline: none;
+        font-size: 22px;
+        color: #515151;
         overflow-y: scroll;
-        background-color: white;
-        transition-duration: 0.2s;
-
-        // The labels showing when the note was created and modified.
-        #created-field, #modified-field {
-            position: relative;
-            font-size: 12px;
-            font-weight: 100;
-            text-align: right;
-            font-style: italic;
-            color: rgb(185, 185, 185);
-        }
-
-        // The title view
-        #title-field {
-            outline: none;
-            color: @primary;
-            font-size: 22px;
-            overflow-y: scroll;
-            font-weight: bolder;
-            padding-bottom: 30px;
-            font-family: Helvetica;
-        }
-
-        // The note view
-        #note-field {
-            outline: none;
-            color: @primary;
-            font-size: 16px;
-            line-height: 1.5;
-            font-weight: 300;
-            font-family: Helvetica;
-        }
-
-        // The trash icon.
-        ion-icon[name="trash"] {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            opacity: 0.5;
-            cursor: pointer;
-            font-size: 24px;
-            transition-duration: 0.15s;
-            color: lighten(@primary, 10%);
-
-            &:hover {
-                opacity: 1;
-            }
-            &:active {
-                color: darken(@primary, 10%);
-            }
-        }
+        font-weight: bolder;
+        padding-bottom: 30px;
+        font-family: Helvetica;
     }
 
-    // When the sidebar is open.
-    .open-content-view {
-        transform: translateX(25%);
+    // The note view
+    #note-field {
+        outline: none;
+        font-size: 16px;
+        color: #9B9B9B;
+        line-height: 1.5;
+        font-weight: 300;
+        font-family: Helvetica;
     }
 }

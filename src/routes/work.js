@@ -1,7 +1,6 @@
 import Mosaic from 'mosaic-framework';
 
-import '../components/toolbar';
-import '../components/content-view';
+import ContextMenu from '../components/context-menu';
 
 import '../styles/popups.less';
 import '../styles/work.less';
@@ -9,10 +8,13 @@ import '../styles/work.less';
 
 export default new Mosaic({
     name: 'work-page',
-    view() {
+    created: function() {
+        ContextMenu.paint();
+    },
+    view: function() {
         return html`
-        <tool-bar></tool-bar>
-        <content-view></content-view>
+        <div id='title-field' contenteditable="true">Title</div>
+        <div id='note-field' contenteditable="true">Start typing here</div>
         `
     }
 });

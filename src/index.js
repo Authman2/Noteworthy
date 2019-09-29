@@ -3,6 +3,7 @@ import { Router } from 'mosaic-framework';
 
 import './components/text-field';
 import './components/round-button';
+import './components/popup-button';
 import './components/code-segment';
 
 import Home from './routes/home';
