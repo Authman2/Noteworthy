@@ -65,47 +65,6 @@ export default new Mosaic({
             lastLogin: '--------'
         }
     },
-    async handleLogin() {
-        const emailField = this.getElementsByTagName('input')[0];
-        const passwordField = this.getElementsByTagName('input')[1];
-        
-        const res = await Networking.login(emailField.value, passwordField.value);
-        if(res.ok === true) {
-            Globals.showActionAlert(res.message, Globals.ColorScheme.green);
-            localStorage.setItem('noteworthy-token', res.token);
-            
-            // Get the user data.
-            const token = localStorage.getItem('noteworthy-token');
-            const userInfo = await getUserInfo(token);
-            this.data.userInfo = userInfo;
-
-            // Load the notebooks.
-            const sidebar = document.getElementsByTagName('side-bar')[0];
-            if(sidebar) {
-                await sidebar.loadNotes.call(sidebar);
-                await sidebar.loadFavorites.call(sidebar);
-            }
-        } else {
-            Globals.showActionAlert(res.error, Globals.ColorScheme.red);
-        }
-    },
-    async handleCreateAccount() {
-        const firstNameField = this.getElementsByTagName('input')[0];
-        const lastNameField = this.getElementsByTagName('input')[1];
-        const emailField = this.getElementsByTagName('input')[2];
-        const passwordField = this.getElementsByTagName('input')[3];
-        
-        const res = await Networking.createAccount(
-            emailField.value, firstNameField.value, 
-            lastNameField.value, passwordField.value
-        );
-        if(res.ok === true) {
-            Globals.showActionAlert(`Created account!`, Globals.ColorScheme.green);
-            this.data.signUpMode = false;
-        } else {
-            Globals.showActionAlert(res.error, Globals.ColorScheme.red);
-        }
-    },
     async handleBackup() {
         Globals.showActionAlert('Creating Noteworthy backup...', Globals.ColorScheme.blue, 0);
         let backup = {};
@@ -200,31 +159,37 @@ export default new Mosaic({
                             lastLogin: '--------'
                         }
                         Globals.showActionAlert('Logged out!');
+                        window.location.href = '/';
                     }}'>
                     Logout
                 </round-button>
             </section>`
             :
-            html`<section>
-                <round-button highlightColor='#707070'
-                    onclick='${() => {
-                        if(this.data.signUpMode) this.handleCreateAccount();
-                        else this.handleLogin();
-                    }}'>
-                    ${this.data.signUpMode ? "Create Account" : "Login"}
-                </round-button>
-                <round-button highlightColor='#707070'
-                    onclick='${() => this.data.signUpMode = !this.data.signUpMode}'>
-                    ${this.data.signUpMode ? "Cancel" : "Sign Up"}
-                </round-button>
-            </section>`
+            ''
         }
         `
     },
     async created() {
+        const { ci } = this.data;
+        if(ci) {
+            const cib = document.getElementById(`ci-Settings`);
+            this.style.top = `${cib.getBoundingClientRect().top - 150}px`;
+        }
+
         const token = localStorage.getItem('noteworthy-token');
-        const userInfo = await getUserInfo(token);
-        this.data.userInfo = userInfo;
+        if(token) {
+            const userInfo = await getUserInfo(token);
+            this.data.userInfo = userInfo;
+        } else {
+            window.location.href = '/';
+        }
+    },
+    animateAway: function() {
+        this.classList.add('popup-out');
+        setTimeout(() => {
+            this.classList.remove('popup-out');
+            this.remove();
+        }, 400);
     }
 });
 

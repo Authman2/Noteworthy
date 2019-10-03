@@ -3,6 +3,9 @@ import Mosaic from 'mosaic-framework';
 import CreatePopup from '../popups/new-popup';
 import NotebooksPopup from '../popups/notebooks-popup';
 import NotesPopup from '../popups/notes-popup';
+import MovePopup from '../popups/move-popup';
+import FindPopup from '../popups/find-popup';
+import SettingsPopup from '../popups/settings-popups';
 
 import Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
@@ -64,6 +67,12 @@ export default new Mosaic({
                 else NotesPopup.paint({ ci: 'ci-Notes' });
             }
         },{
+            name: 'Save',
+            icon: html`<ion-icon name='ios-save'></ion-icon>`,
+            action: function() {
+                this.handleSave();
+            }
+        },{
             name: 'Favorite',
             icon: html`<ion-icon name='heart'></ion-icon>`,
             action: async function() {
@@ -94,28 +103,55 @@ export default new Mosaic({
         },{
             name: 'Move',
             icon: html`<ion-icon name='move'></ion-icon>`,
-            action: function() {
-                console.log("Moving the note");
+            action: async function() {
+                const currentNT = Portfolio.get('currentNote');
+                if(!currentNT)
+                    return Globals.showActionAlert(
+                        'Please select a note in order to move it',
+                        Globals.ColorScheme.red
+                    );
+
+                if(document.contains(MovePopup)) MovePopup.animateAway();
+                else MovePopup.paint({ ci: 'ci-Move' });
             }
         },{
             name: 'Find',
             icon: html`<ion-icon name='search'></ion-icon>`,
             action: function() {
-                console.log("Searching");
+                if(document.contains(FindPopup)) FindPopup.animateAway();
+                else FindPopup.paint({ ci: 'ci-Find' });
             }
         },{
             name: 'Settings',
             icon: html`<ion-icon name='settings'></ion-icon>`,
             action: function() {
-                console.log("Settings");
+                if(document.contains(SettingsPopup)) SettingsPopup.animateAway();
+                else SettingsPopup.paint({ ci: 'ci-Settings' });
             }
         }]
     },
     view: function() {
         return html`${Mosaic.list(this.data.items, item => item.name, item => {
-            return html`<context-item action='${item.action}' id='ci-${item.name}'>
+            return html`<context-item action='${item.action.bind(this)}' id='ci-${item.name}'>
                 ${item.icon}
             </context-item>`
         })}`
+    },
+    handleSave: async function() {
+        const note = Portfolio.get('currentNote');
+        if(!note)
+            return Globals.showActionAlert(
+                `You must select a note before you can save!`, 
+                Globals.ColorScheme.red
+            );
+
+        // Save to the database.
+        const title = document.getElementById('title-field').innerHTML;
+        const content = document.getElementById('note-field').innerHTML;
+        const res = await Networking.save(note._id, title, content);
+        Globals.showActionAlert(
+            res.message,
+            res.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red
+        );
     }
 })

@@ -9,6 +9,9 @@ import './components/code-segment';
 import Home from './routes/home';
 import Work from './routes/work';
 
+import './styles/index.less';
+import './styles/alerts.less';
+
 
 // Paint the components.
 const router = new Router('root');
@@ -25,11 +28,12 @@ if('serviceWorker' in navigator) {
 
 // Keyboard Shortcuts.
 window.addEventListener('keydown', async e => {
-    const toolbar = document.getElementsByTagName('tool-bar')[0];
+    const contextMenu = document.getElementsByTagName('context-menu')[0];
     
     // Save.
     if(e.keyCode === 83 && e.metaKey === true) {
-        if(toolbar) toolbar.handleSave();
+        e.preventDefault();
+        if(contextMenu) contextMenu.handleSave();
     }
 
     // Underline.
@@ -60,17 +64,12 @@ window.addEventListener('keydown', async e => {
         const code = `<code-segment></code-segment>`;
         document.execCommand('insertHTML', false, `<br>${code}<br>`);
     }
-
-    // Toggle Menu.
-    if(e.keyCode === 79 && e.metaKey === true) {
-        if(toolbar) toolbar.toggleSidebar();
-    }
-
+    
     // Print.
     if(e.keyCode === 80 && e.metaKey === true) {
         e.preventDefault();
-        if(toolbar) toolbar.style.visibility = 'hidden';
+        if(contextMenu) contextMenu.style.visibility = 'hidden';
         window.print();
-        if(toolbar) toolbar.style.visibility = 'visible';
+        if(contextMenu) contextMenu.style.visibility = 'visible';
     }
 });

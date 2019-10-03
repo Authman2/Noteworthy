@@ -24,7 +24,12 @@
 .popup-out {
     animation: slidePopupOut 0.4s ease-in;
 }
-new-popup, notebooks-popup, notes-popup {
+new-popup, 
+notebooks-popup, 
+notes-popup,
+move-popup,
+find-popup,
+settings-popup {
     position: fixed;
     right: 80px;
     padding: 10px;
@@ -113,7 +118,9 @@ notebooks-popup {
     }
 }
 
-notes-popup {
+notes-popup,
+move-popup,
+settings-popup {
     .common-font();
     max-height: 300px;
     overflow-y: scroll;
@@ -147,5 +154,36 @@ notes-popup {
             transition-duration: 0.15s;
             background-color: lighten(gray, 60%);
         }
+    }
+}
+
+move-popup {
+    max-width: 300px;
+}
+
+find-popup, settings-popup {
+    width: 300px;
+    text-align: center;
+
+    input {
+        position: relative;
+        width: 90%;
+        border: none;
+        margin: 10px;
+        padding: 5px;
+        outline: none;
+        display: block;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+}
+
+settings-popup {
+    width: 250px;
+    text-align: center;
+
+    h4 {
+        font-size: 12px;
+        font-weight: normal;
     }
 }

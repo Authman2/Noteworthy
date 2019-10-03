@@ -20,6 +20,13 @@ export default new Mosaic({
     name: 'find-popup',
     element: 'popups',
     portfolio: Portfolio,
+    created() {
+        const { ci } = this.data;
+        if(ci) {
+            const cib = document.getElementById(`ci-Find`);
+            this.style.top = `${cib.getBoundingClientRect().top}px`;
+        }
+    },
     willDestroy() {
         // Remove all highlights on the content field.
         const noteField = document.getElementById('note-field');
@@ -28,6 +35,13 @@ export default new Mosaic({
                 node.style.backgroundColor = 'unset';
             }
         });
+    },
+    animateAway: function() {
+        this.classList.add('popup-out');
+        setTimeout(() => {
+            this.classList.remove('popup-out');
+            this.remove();
+        }, 400);
     },
     view() {
         return html`
