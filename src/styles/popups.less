@@ -1,5 +1,29 @@
 @import './index.less';
 
+@keyframes slidePopupIn {
+    from {
+        opacity: 0;
+        right: -80px;
+    }
+    to {
+        opacity: 1;
+        right: 80px;
+    }
+}
+@keyframes slidePopupOut {
+    from {
+        opacity: 1;
+        right: 80px;
+    }
+    to {
+        opacity: 0;
+        right: -80px;
+    }
+}
+
+.new-popup-out {
+    animation: slidePopupOut 0.4s ease-in;
+}
 new-popup {
     position: fixed;
     right: 80px;
@@ -8,6 +32,7 @@ new-popup {
     border-radius: 5%;
     padding-bottom: 0px;
     background-color: #BEBEBE;
+    animation: slidePopupIn 0.4s ease-out;
 
     // The text field.
     text-field {

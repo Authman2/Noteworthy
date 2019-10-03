@@ -10,10 +10,15 @@ export default new Mosaic({
     data: {
         type: 0,
         notebooks: [],
-        selectedNotebook: null
+        selectedNotebook: null,
+        ci: null
     },
     created: function() {
-        
+        const { ci } = this.data;
+        if(ci) {
+            const cib = document.getElementById(`ci-New`);
+            this.style.top = `${cib.getBoundingClientRect().top}px`;
+        }
     },
     updated: async function() {
         if(this.data.type === 1 && this.data.notebooks.length === 0) {
@@ -55,6 +60,10 @@ export default new Mosaic({
         `
     },
     animateAway: function() {
-
+        this.classList.add('new-popup-out');
+        setTimeout(() => {
+            this.classList.remove('new-popup-out');
+            this.remove();
+        }, 400);
     }
 })

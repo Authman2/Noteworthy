@@ -33,12 +33,8 @@ export default new Mosaic({
             name: 'New',
             icon: html`<ion-icon name='add'></ion-icon>`,
             action: function() {
-                if(document.contains(CreatePopup)) CreatePopup.remove();
-                else {
-                    CreatePopup.paint();
-                    const ci = document.getElementById(`ci-New`);
-                    CreatePopup.style.top = `${ci.offsetTop}px`;
-                }
+                if(document.contains(CreatePopup)) CreatePopup.animateAway();
+                else CreatePopup.paint({ ci: 'ci-New' });
             }
         },{
             name: 'Notebooks',
