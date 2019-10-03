@@ -41,14 +41,34 @@ export default new Mosaic({
         const title = document.getElementById('title-field');
         const note = document.getElementById('note-field');
 
+        // Send to the portfolio.
+        Portfolio.dispatch('select-note', {
+            currentNote: nt
+        });
+
+        // Update the fields.
         title.innerHTML = nt.title;
         note.innerHTML = nt.content;
 
+        // Update whether or not this note is favorited.
+        const favoriteButton = document.getElementById('ci-Favorite');
+        if(nt.favorited === true) {
+            favoriteButton.style.color = '#FF6EA4';
+            favoriteButton.style.backgroundColor = '#E2E2E2';
+        } else {
+            favoriteButton.style.color = 'white';
+            favoriteButton.style.backgroundColor = '#AAAAAA'
+        }
+
+        // Alert the user.
         Globals.showActionAlert(
             `Opened the note ${nt.title}`,
             Globals.ColorScheme.blue
         );
         this.animateAway();
+
+        // Scroll to the top.
+        document.body.scrollTo({ top: 0, behavior: 'smooth' });
     },
     animateAway: function() {
         this.classList.add('popup-out');

@@ -4,9 +4,11 @@ import CreatePopup from '../popups/new-popup';
 import NotebooksPopup from '../popups/notebooks-popup';
 import NotesPopup from '../popups/notes-popup';
 
-import '../styles/context-menu.less';
 import Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
+import * as Networking from '../util/Networking';
+
+import '../styles/context-menu.less';
 
 
 // A single context item.
@@ -64,8 +66,30 @@ export default new Mosaic({
         },{
             name: 'Favorite',
             icon: html`<ion-icon name='heart'></ion-icon>`,
-            action: function() {
-                console.log("Favorite");
+            action: async function() {
+                const currentNT = Portfolio.get('currentNote');
+                if(!currentNT)
+                    return Globals.showActionAlert(
+                        'Please select a note in order to favorite it',
+                        Globals.ColorScheme.red
+                    );
+
+                const resp = await Networking.toggleFavorite(currentNT._id);
+                if(resp.ok) {
+                    // Update the favorite icon.
+                    const favoriteButton = document.getElementById('ci-Favorite');
+                    if(currentNT.favorited === false) {
+                        favoriteButton.style.color = '#FF6EA4';
+                        favoriteButton.style.backgroundColor = '#E2E2E2';
+                    } else {
+                        favoriteButton.style.color = 'white';
+                        favoriteButton.style.backgroundColor = '#AAAAAA'
+                    }
+                }
+                Globals.showActionAlert(
+                    resp.message,
+                    resp.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red
+                );
             }
         },{
             name: 'Move',

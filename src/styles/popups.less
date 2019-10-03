@@ -92,8 +92,10 @@ notebooks-popup {
     // The title that shows your current notebook.
     h1 {
         .common-font();
+        cursor: default;
         font-size: 16px;
         font-weight: 500;
+        user-select: none;
         text-align: center;
         padding-left: 20px;
         padding-right: 20px;
@@ -103,8 +105,12 @@ notebooks-popup {
     #notebooks-list-for-notebooks-popup {
         max-height: 200px;
         background-color: rgba(0, 0, 0, 0);
-    }
 
+        li:hover {
+            transition-duration: 0.15s;
+            background-color: lighten(gray, 60%);
+        }
+    }
 }
 
 notes-popup {
@@ -115,8 +121,10 @@ notes-popup {
     // The title for your notes.
     h1 {
         .common-font();
+        cursor: default;
         font-size: 16px;
         font-weight: 500;
+        user-select: none;
         text-align: center;
         padding-left: 20px;
         padding-right: 20px;
@@ -134,5 +142,10 @@ notes-popup {
         list-style-type: none;
         color: rgb(54, 54, 54);
         background-color: rgb(165, 165, 165);
+
+        &:hover {
+            transition-duration: 0.15s;
+            background-color: lighten(gray, 60%);
+        }
     }
 }
