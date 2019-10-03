@@ -1,6 +1,6 @@
 import Mosaic from 'mosaic-framework';
 
-import CreatePopup from '../popups/create';
+import CreatePopup from '../popups/new-popup';
 
 import '../styles/context-menu.less';
 
@@ -33,7 +33,12 @@ export default new Mosaic({
             name: 'New',
             icon: html`<ion-icon name='add'></ion-icon>`,
             action: function() {
-                CreatePopup.paint();
+                if(document.contains(CreatePopup)) CreatePopup.remove();
+                else {
+                    CreatePopup.paint();
+                    const ci = document.getElementById(`ci-New`);
+                    CreatePopup.style.top = `${ci.offsetTop}px`;
+                }
             }
         },{
             name: 'Notebooks',
@@ -75,7 +80,7 @@ export default new Mosaic({
     },
     view: function() {
         return html`${Mosaic.list(this.data.items, item => item.name, item => {
-            return html`<context-item action='${item.action}'>
+            return html`<context-item action='${item.action}' id='ci-${item.name}'>
                 ${item.icon}
             </context-item>`
         })}`

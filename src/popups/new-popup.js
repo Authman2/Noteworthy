@@ -1,19 +1,26 @@
 import Mosaic from 'mosaic-framework';
 
+import * as Networking from '../util/Networking';
+
 
 export default new Mosaic({
     name: 'new-popup',
     element: 'popups',
+    useShadow: false,
     data: {
         type: 0,
         notebooks: [],
         selectedNotebook: null
     },
     created: function() {
-
+        
     },
-    toggleType: function(to) {
-        this.data.type = to;
+    updated: async function() {
+        if(this.data.type === 1 && this.data.notebooks.length === 0) {
+            const res = await Networking.loadNotebooks();
+            if(res.ok) this.data.notebooks = res.notebooks;
+            console.log(this.data.notebooks);
+        }
     },
     view: function() {
         const { type, notebooks } = this.data;
@@ -21,13 +28,13 @@ export default new Mosaic({
         return html`
             <popup-button color='${type === 0 ? "#2E31B2" : "#E7E7E7"}'
                 style='color: ${type === 0 ? 'white' : '#979797'}'
-                onclick='${this.toggleType.bind(this, 0)}'>
+                onclick='${() => this.data.type = 0}'>
                 Notebook
             </popup-button>
             
             <popup-button color='${type === 1 ? "#2E31B2" : "#E7E7E7"}'
                 style='color: ${type === 1 ? 'white' : '#979797'}'
-                onclick='${this.toggleType.bind(this, 1)}'>
+                onclick='${() => this.data.type = 1}'>
                 Note
             </popup-button>
 
@@ -35,7 +42,7 @@ export default new Mosaic({
 
             ${
                 type === 1 ? 
-                    html`<div>
+                    html`<div id='notebooks-list-for-new-popup'>
                         ${Mosaic.list(notebooks, nb => nb._id, nb => {
                             return html`<li>${nb.title}</li>`
                         })}

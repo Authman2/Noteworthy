@@ -2,7 +2,6 @@
 
 new-popup {
     position: fixed;
-    top: 50%;
     right: 80px;
     padding: 10px;
     z-index: 10000;
@@ -12,12 +11,14 @@ new-popup {
 
     // The text field.
     text-field {
+        width: 90%;
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 40px;
         
         // The input.
         input {
+            width: 90%;
             background-color: rgb(219, 219, 219);
         }
     }
@@ -25,6 +26,20 @@ new-popup {
     // The popup buttons.
     popup-button {
         text-align: center;
+    }
+
+    // The list and each list item.
+    #notebooks-list-for-new-popup {
+        background-color: darken(gray, 10%);
+
+        // Each notebook title area.
+        li {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: lighten(gray, 10%);
+        }
     }
 
     // The create button.

@@ -58,8 +58,7 @@ export default new Mosaic({
 
             <!-- The navigation buttons. -->
             <round-button onclick='${
-                this.data.signUpMode === true ?
-                    this.actions.login : this.actions.createAccount
+                this.data.signUpMode === true ? this.actions.login : this.actions.createAccount
             }'>
                 ${this.data.signUpMode ? 'Login' : 'Create Account'}
             </round-button>

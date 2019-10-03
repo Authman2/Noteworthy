@@ -40,7 +40,7 @@
     "firebase": "^5.11.1",
     "highlight.js": "^9.15.6",
     "is-mobile": "^2.1.0",
-    "mosaic-framework": "^0.8.1",
+    "mosaic-framework": "^0.8.4",
     "tippy.js": "^4.2.1",
     "turndown": "^5.0.3",
     "underscore": "^1.9.1"
