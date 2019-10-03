@@ -1,7 +1,6 @@
 import { Portfolio } from "mosaic-framework";
 
 export default new Portfolio({
-    windowTitle: 'Home',
     currentNotebook: undefined,
     currentNote: undefined
 }, (event, data, other) => {

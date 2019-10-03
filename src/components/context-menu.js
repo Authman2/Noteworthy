@@ -1,8 +1,12 @@
 import Mosaic from 'mosaic-framework';
 
 import CreatePopup from '../popups/new-popup';
+import NotebooksPopup from '../popups/notebooks-popup';
+import NotesPopup from '../popups/notes-popup';
 
 import '../styles/context-menu.less';
+import Globals from '../util/Globals';
+import Portfolio from '../util/Portfolio';
 
 
 // A single context item.
@@ -40,13 +44,22 @@ export default new Mosaic({
             name: 'Notebooks',
             icon: html`<ion-icon name='ios-book'></ion-icon>`,
             action: function() {
-                console.log("Notebooks!");
+                if(document.contains(NotebooksPopup)) NotebooksPopup.animateAway();
+                else NotebooksPopup.paint({ ci: 'ci-Notebooks' });
             }
         },{
             name: 'Notes',
             icon: html`<ion-icon name='paper'></ion-icon>`,
             action: function() {
-                console.log("Notes");
+                const currentNB = Portfolio.get('currentNotebook');
+                if(!currentNB)
+                    return Globals.showActionAlert(
+                        'Please select a notebook in order to view notes',
+                        Globals.ColorScheme.red
+                    );
+
+                if(document.contains(NotesPopup)) NotesPopup.animateAway();
+                else NotesPopup.paint({ ci: 'ci-Notes' });
             }
         },{
             name: 'Favorite',
