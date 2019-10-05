@@ -15,7 +15,7 @@ import './styles/alerts.less';
 
 // Paint the components.
 const router = new Router('root');
-router.addRoute('/', Home);
+router.addRoute(['/', '/login'], Home);
 router.addRoute('/work', Work);
 router.paint();
 

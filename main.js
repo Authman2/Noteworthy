@@ -43,7 +43,7 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    wind.loadURL('https://noteworthyapp.netlify.com/login');
+    wind.loadURL('https://noteworthyapp.netlify.com/');
 }
 
 
@@ -55,11 +55,11 @@ const createWindow = () => {
 
 let defaultOptions = {
     applicationName: 'Noteworthy',
-    applicationVersion: '2.0.1',
+    applicationVersion: '2.0.2',
     copyright: 'Adeola Uthman 2015-2019',
     credits: 'Adeola Uthman',
     iconPath: path.join(__dirname, 'res/NoteworthyLogo.png'),
-    version: '2.0.0',
+    version: '2.0.2',
     website: 'https://adeolauthman.com/noteworthy'
 };
 app.setAboutPanelOptions(defaultOptions);
