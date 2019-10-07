@@ -108,12 +108,70 @@ notebooks-popup {
 
     // The list of notebooks.
     #notebooks-list-for-notebooks-popup {
+        width: 100%;
         max-height: 200px;
         background-color: rgba(0, 0, 0, 0);
 
-        li:hover {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        // The name of the notebook.
+        li {
+            width: 70%;
+            display: inline-block;
+            vertical-align: middle;
+
+            &:hover {
+                transition-duration: 0.15s;
+                background-color: lighten(gray, 60%);
+            }
+        }
+
+        // The close button.
+        ion-icon {
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 100%;
+            display: inline-block;
+            vertical-align: middle;
+            transition-duration: 0.2s;
+
+            &:hover {
+                background-color: darkgray;
+            }
+        }
+    }
+}
+
+notes-popup {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    // The name of the notebook.
+    li {
+        width: 82%;
+        display: inline-block;
+        vertical-align: middle;
+
+        &:hover {
             transition-duration: 0.15s;
             background-color: lighten(gray, 60%);
+        }
+    }
+
+    // The close button.
+    ion-icon {
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        transition-duration: 0.2s;
+
+        &:hover {
+            background-color: darkgray;
         }
     }
 }

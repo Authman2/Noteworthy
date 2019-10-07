@@ -1,4 +1,5 @@
 import Mosaic from 'mosaic-framework';
+import '@polymer/paper-spinner/paper-spinner.js';
 
 import * as Networking from '../util/Networking';
 import Globals from '../util/Globals';
@@ -30,12 +31,25 @@ export default new Mosaic({
 
         return html`
             <h1>Notes in ${currentNB ? currentNB.title : "None"}:</h1>
-            ${Mosaic.list(this.data.notes, nt => nt._id, nt => {
-                return html`<li onclick="${this.selectNote.bind(this, nt)}">
-                    ${nt.title}
-                </li>`
-            })}
-        `
+            
+            ${() => {
+                if(this.data.notes.length === 0) {
+                    return html`<paper-spinner active></paper-spinner>`;
+                } else {
+                    return html`<div>
+                        ${Mosaic.list(this.data.notes, nt => nt._id, nt => {
+                            return html`<div>
+                                <li onclick="${this.selectNote.bind(this, nt)}">
+                                    ${nt.title}
+                                </li>
+                                <ion-icon name='close' onclick='${this.handleDelete.bind(this, nt)}'>
+                                </ion-icon>    
+                            </div>`
+                        })}
+                    </div>`
+                }
+            }}
+            `
     },
     selectNote: function(nt) {
         const title = document.getElementById('title-field');
@@ -69,6 +83,29 @@ export default new Mosaic({
 
         // Scroll to the top.
         document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    handleDelete: function(note) {
+        Globals.showActionAlert(
+            `Are you sure you want to delete the note "${note.title}"?.
+            <br>
+            <round-button id='delete-alert-button-yes' color='crimson'>Yes, delete</round-button>
+            <round-button id='delete-alert-button-no' color='gray'>No, cancel</round-button>`,
+            Globals.ColorScheme.gray,
+            0
+        );
+
+        const yesBtn = document.getElementById('delete-alert-button-yes');
+        const noBtn = document.getElementById('delete-alert-button-no');
+        yesBtn.onclick = async () => {
+            const resp = await Networking.deleteNote(note._id);
+            Globals.showActionAlert(
+                resp.message,
+                resp.ok ? Globals.ColorScheme.green : Globals.ColorScheme.red
+            );
+        }
+        noBtn.onclick = () => {
+            Globals.hideActionAlert();
+        }
     },
     animateAway: function() {
         this.classList.add('popup-out');
