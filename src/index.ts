@@ -7,6 +7,7 @@ import './components/popup-button';
 import './components/code-segment';
 
 import Home from './routes/home';
+import SignUp from './routes/signup';
 import Work from './routes/work';
 
 import './styles/index.less';
@@ -16,6 +17,7 @@ import './styles/alerts.less';
 // Paint the components.
 const router = new Router('root');
 router.addRoute(['/', '/login'], Home);
+router.addRoute(['/signup', '/createaccount'], SignUp);
 router.addRoute('/work', Work);
 router.paint();
 
@@ -33,7 +35,7 @@ window.addEventListener('keydown', async e => {
     // Save.
     if(e.keyCode === 83 && e.metaKey === true) {
         e.preventDefault();
-        if(contextMenu) contextMenu.handleSave();
+        if(contextMenu) (contextMenu as any).handleSave();
     }
 
     // Underline.
@@ -68,8 +70,8 @@ window.addEventListener('keydown', async e => {
     // Print.
     if(e.keyCode === 80 && e.metaKey === true) {
         e.preventDefault();
-        if(contextMenu) contextMenu.style.visibility = 'hidden';
+        if(contextMenu) (contextMenu as any).style.visibility = 'hidden';
         window.print();
-        if(contextMenu) contextMenu.style.visibility = 'visible';
+        if(contextMenu) (contextMenu as any).style.visibility = 'visible';
     }
 });

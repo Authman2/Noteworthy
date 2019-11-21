@@ -1,8 +1,8 @@
-import Mosaic from 'mosaic-framework';
+import Mosaic, { html } from 'mosaic-framework';
 import hljs from 'highlight.js';
 import _ from 'underscore';
 
-export default new Mosaic({
+export default Mosaic({
     name: 'code-segment',
     created() {
         this.hl();
@@ -18,11 +18,11 @@ export default new Mosaic({
     },
     disableEdits() {
         const content = document.getElementById('note-field');
-        content.contentEditable = false;
+        content.contentEditable = 'false';
     },
     enableEdits() {
         const content = document.getElementById('note-field');
-        content.contentEditable = true;
+        content.contentEditable = 'true';
     },
     hl() {
         hljs.highlightBlock(this.firstChild);

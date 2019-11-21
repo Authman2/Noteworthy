@@ -1,9 +1,9 @@
-import Mosaic from 'mosaic-framework';
+import Mosaic, { html } from 'mosaic-framework';
 
 import '../styles/buttons.less';
 
 
-export default new Mosaic({
+export default Mosaic({
     name: 'popup-button',
     received({ color }) {
         if(color) this.style.backgroundColor = color;

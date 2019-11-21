@@ -6,10 +6,10 @@ export default new Portfolio({
 }, (event, data, other) => {
     switch(event) {
         case 'select-notebook':
-            data.currentNotebook = other.currentNotebook;
+            data['currentNotebook'] = other['currentNotebook'];
             break;
         case 'select-note':
-            data.currentNote = other.currentNote;
+            data['currentNote'] = other['currentNote'];
             break;
     }
 })

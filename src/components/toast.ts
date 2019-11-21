@@ -1,6 +1,6 @@
-import Mosaic from 'mosaic-framework';
+import Mosaic, { html } from 'mosaic-framework';
 
-export default new Mosaic({
+export default Mosaic({
     name: 'toast-alert',
     element: 'toasts',
     received(info) {

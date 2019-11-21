@@ -1,5 +1,3 @@
-import Globals from "./Globals";
-
 const DEV_API_URL = 'http://localhost:8000';
 const API_URL = 'https://noteworthy-backend.herokuapp.com';
 export let currentUser = undefined;
