@@ -35,10 +35,6 @@ export function hideAlert() {
     const toasts = document.getElementById('toasts');
     const alert = toasts.firstChild;
     (alert as any).closeToast();
-    // alert.classList.add('toast-alert-fade-out');
-    // setTimeout(() => {
-    //     alert.remove();
-    // }, 500);
 }
 
 

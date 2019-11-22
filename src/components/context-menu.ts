@@ -2,7 +2,7 @@ import Mosaic, { html } from 'mosaic-framework';
 
 import '../fullscreens/new-view';
 import '../fullscreens/notebooks-view';
-import NotesPopup from '../fullscreens/notes-popup';
+import '../fullscreens/notes-view';
 import MovePopup from '../fullscreens/move-popup';
 import FindPopup from '../fullscreens/find-popup';
 import SettingsPopup from '../fullscreens/settings-popups';
@@ -38,6 +38,10 @@ export default Mosaic({
 
             <context-item onclick='${this.openNotes}' id='ci-Notes'>
                 <ion-icon name='paper'></ion-icon>
+            </context-item>
+
+            <context-item onclick='${this.openStarred}' id='ci-Starred'>
+                <ion-icon name='star'></ion-icon>
             </context-item>
 
             <context-item onclick='${this.handleSave}' id='ci-Save'>
@@ -81,8 +85,12 @@ export default Mosaic({
                 Globals.red
             );
 
-        if(document.contains(NotesPopup)) NotesPopup.animateAway();
-        else NotesPopup.paint({ ci: 'ci-Notes' });
+        const fsView = document.createElement('notes-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
+    },
+    openStarred() {
+        
     },
     handleSave: async function() {
         const note = Portfolio.get('currentNote');
@@ -96,10 +104,7 @@ export default Mosaic({
         const title = document.getElementById('title-field').innerHTML;
         const content = document.getElementById('note-field').innerHTML;
         const res = await Networking.save(note._id, title, content);
-        Globals.displayTextAlert(
-            res.message,
-            res.ok ? Globals.green : Globals.red
-        );
+        Globals.displayTextAlert(res.message, res.ok ? Globals.green : Globals.red);
     },
     async handleFavorite() {
         const currentNT = Portfolio.get('currentNote');
@@ -121,10 +126,7 @@ export default Mosaic({
                 favoriteButton.style.backgroundColor = '#AAAAAA'
             }
         }
-        Globals.displayTextAlert(
-            resp.message,
-            resp.ok ? Globals.green : Globals.red
-        );
+        Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
     },
     handleMove() {
         const currentNT = Portfolio.get('currentNote');
