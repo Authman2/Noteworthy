@@ -85,7 +85,7 @@
     // Any list of items (typically just notebooks and notes).
     .n-list {
         width: 100%;
-        max-height: 40%;
+        // max-height: 40%;
         overflow-y: auto;
         overflow-x: hidden;
 
@@ -124,6 +124,38 @@
         width: 40%;
     }
 }
+
+
+// Specific views.
+new-view {
+    & .n-list {
+        height: 40%;
+    }
+}
+notebooks-view {
+    & p:nth-of-type(1) {
+        margin-bottom: 30px;
+    }
+
+    & .n-list {
+        height: 60%;
+    }
+
+    round-button {
+        position: absolute;
+        width: 40%;
+        
+        
+        &:nth-of-type(1) {
+            bottom: 70px;
+        }
+        &:nth-of-type(2) {
+            bottom: 15px;
+        }
+    }
+}
+
+
 .fs-out {
     animation: FSout 0.5s ease-in;
 }

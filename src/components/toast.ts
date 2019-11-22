@@ -6,9 +6,9 @@ export default Mosaic({
     received(info) {
         if(info.color) this.style.backgroundColor = info.color;
     },
-    closeToast() {
-        this.classList.add('toast-alert-out');
-        setTimeout(() => this.remove(), 500);
+    closeToast(time = 500) {
+        this.classList.add('toast-alert-fade-out');
+        setTimeout(() => this.remove(), time);
     },
     created() {
         this.setAttribute('aria-live', 'assertive');

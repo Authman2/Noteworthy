@@ -1,4 +1,5 @@
 import '../components/toast';
+import '../components/delete-toast';
 
 
 /** Generates a random string id. */
@@ -8,34 +9,36 @@ export function randomID() {
 
 /** Displays a simple text alert on the screen. */
 export function displayTextAlert(text: string, color: string, time: number = 2500) {
-    const container = document.getElementById('toasts');
     const element = document.createElement('toast-alert');
     element.setAttribute('color', color);
     element.innerHTML = `${text}`;
+    (element as any).paint();
 
     if(time !== 0) {
-        const alert = document.getElementsByTagName('toast-alert')[0];
-        if(!alert) return;
-
         setTimeout(() => {
-            alert.classList.add('toast-alert-fade-out');
-            setTimeout(() => {
-                alert.classList.remove('toast-alert-fade-out');
-                alert.remove();
-            }, 500);
+            (element as any).closeToast(time);
         }, time);
     }
 }
 
+/** Displays a confirmation alert. */
+export function displayConfirmationAlert(label: string, color: string, confirm) {
+    const element = document.createElement('delete-toast');
+    element.setAttribute('color', color);
+    (element as any).paint();
+    (element as any).data.label = `${label}`;
+    (element as any).data.confirm = confirm;
+}
+
 /** Hides any kind of toast alert. */
 export function hideAlert() {
-    const alert = document.getElementsByTagName('toast-alert')[0];
-    if(!alert) return;
-
-    alert.classList.add('toast-alert-fade-out');
-    setTimeout(() => {
-        alert.remove();
-    }, 500);
+    const toasts = document.getElementById('toasts');
+    const alert = toasts.firstChild;
+    (alert as any).closeToast();
+    // alert.classList.add('toast-alert-fade-out');
+    // setTimeout(() => {
+    //     alert.remove();
+    // }, 500);
 }
 
 

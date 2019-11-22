@@ -2,7 +2,6 @@ import Mosaic, { html } from 'mosaic-framework';
 
 import * as Networking from '../util/Networking';
 import * as Globals from '../util/Globals';
-import { FSView } from '../util/Mixins';
 
 
 export default Mosaic({
@@ -14,7 +13,6 @@ export default Mosaic({
         notebooks: [],
         selectedNotebook: undefined
     },
-    mixins: [FSView],
     created: async function() {
         // Load the notebooks for the first time.
         const res = await Networking.loadNotebooks()
@@ -38,8 +36,8 @@ export default Mosaic({
             <button class='close-button' onclick='${this.animateAway.bind(this)}'>
                 <ion-icon name='close'></ion-icon>
             </button>
-            <h1>${title}</h1>
-            <p>${subtitle}</p>
+            <h1>Create</h1>
+            <p>What are you creating today?</p>
             <text-field id='create-title-field' title='Title'></text-field>
         
             <popup-button color='${isNotebook ? "#2E31B2" : "#E7E7E7"}'

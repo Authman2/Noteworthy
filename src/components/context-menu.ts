@@ -1,7 +1,7 @@
 import Mosaic, { html } from 'mosaic-framework';
 
 import '../fullscreens/new-view';
-import NotebooksPopup from '../fullscreens/notebooks-popup';
+import '../fullscreens/notebooks-view';
 import NotesPopup from '../fullscreens/notes-popup';
 import MovePopup from '../fullscreens/move-popup';
 import FindPopup from '../fullscreens/find-popup';
@@ -69,8 +69,9 @@ export default Mosaic({
         (fsView as any).paint();
     },
     openNotebooks() {
-        if(document.contains(NotebooksPopup)) NotebooksPopup.animateAway();
-        else NotebooksPopup.paint({ ci: 'ci-Notebooks' });
+        const fsView = document.createElement('notebooks-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
     },
     openNotes() {
         const currentNB = Portfolio.get('currentNotebook');
