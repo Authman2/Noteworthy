@@ -1,11 +1,11 @@
 import Mosaic, { html } from 'mosaic-framework';
 
-import CreatePopup from '../popups/new-popup';
-import NotebooksPopup from '../popups/notebooks-popup';
-import NotesPopup from '../popups/notes-popup';
-import MovePopup from '../popups/move-popup';
-import FindPopup from '../popups/find-popup';
-import SettingsPopup from '../popups/settings-popups';
+import '../fullscreens/new-view';
+import NotebooksPopup from '../fullscreens/notebooks-popup';
+import NotesPopup from '../fullscreens/notes-popup';
+import MovePopup from '../fullscreens/move-popup';
+import FindPopup from '../fullscreens/find-popup';
+import SettingsPopup from '../fullscreens/settings-popups';
 
 import * as Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
@@ -17,17 +17,6 @@ import '../styles/context-menu.less';
 // A single context item.
 Mosaic({
     name: 'context-item',
-    data: {
-        action: ()=>{}
-    },
-    created() {
-        const { action } = this.data;
-        this.addEventListener('click', action);
-    },
-    willDestroy() {
-        const { action } = this.data;
-        this.removeEventListener('click', action);
-    },
     view: function() {
         return html`${this.descendants}`
     }
@@ -39,35 +28,35 @@ export default Mosaic({
     element: 'context-menu',
     view: function() {
         return html`
-            <context-item action='${this.createNew}' id='ci-New'>
+            <context-item onclick='${this.createNew}' id='ci-New'>
                 <ion-icon name='add'></ion-icon>
             </context-item>
 
-            <context-item action='${this.openNotebooks}' id='ci-Notebooks'>
+            <context-item onclick='${this.openNotebooks}' id='ci-Notebooks'>
                 <ion-icon name='ios-book'></ion-icon>
             </context-item>
 
-            <context-item action='${this.openNotes}' id='ci-Notes'>
+            <context-item onclick='${this.openNotes}' id='ci-Notes'>
                 <ion-icon name='paper'></ion-icon>
             </context-item>
 
-            <context-item action='${this.handleSave}' id='ci-Save'>
+            <context-item onclick='${this.handleSave}' id='ci-Save'>
                 <ion-icon name='save'></ion-icon>
             </context-item>
 
-            <context-item action='${this.handleFavorite}' id='ci-Favorite'>
+            <context-item onclick='${this.handleFavorite}' id='ci-Favorite'>
                 <ion-icon name='heart'></ion-icon>
             </context-item>
 
-            <context-item action='${this.handleMove}' id='ci-Move'>
+            <context-item onclick='${this.handleMove}' id='ci-Move'>
                 <ion-icon name='move'></ion-icon>
             </context-item>
 
-            <context-item action='${this.handleSearch}' id='ci-Search'>
+            <context-item onclick='${this.handleSearch}' id='ci-Search'>
                 <ion-icon name='search'></ion-icon>
             </context-item>
 
-            <context-item action='${this.handleSettings}' id='ci-Settings'>
+            <context-item onclick='${this.handleSettings}' id='ci-Settings'>
                 <ion-icon name='settings'></ion-icon>
             </context-item>
         `
@@ -75,8 +64,9 @@ export default Mosaic({
 
 
     createNew() {
-        if(document.contains(CreatePopup)) CreatePopup.animateAway();
-        else CreatePopup.paint({ ci: 'ci-New' });
+        const fsView = document.createElement('new-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
     },
     openNotebooks() {
         if(document.contains(NotebooksPopup)) NotebooksPopup.animateAway();

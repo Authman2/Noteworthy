@@ -1,247 +1,129 @@
 @import './index.less';
 
-@keyframes slidePopupIn {
+@keyframes FSin {
     from {
         opacity: 0;
-        right: -80px;
+        top: 100%;
     }
     to {
         opacity: 1;
-        right: 80px;
+        top: 0px;
     }
 }
-@keyframes slidePopupOut {
+@keyframes FSout {
     from {
         opacity: 1;
-        right: 80px;
+        top: 0px;
     }
     to {
         opacity: 0;
-        right: -80px;
+        top: 100vh;
     }
 }
 
-.popup-out {
-    animation: slidePopupOut 0.4s ease-in;
-}
-new-popup, 
-notebooks-popup, 
-notes-popup,
-move-popup,
-find-popup,
-settings-popup {
+.fs {
     position: fixed;
-    right: 80px;
-    padding: 10px;
-    z-index: 10000;
-    border-radius: 5%;
-    padding-bottom: 0px;
-    background-color: #BEBEBE;
-    animation: slidePopupIn 0.4s ease-out;
-
-    // The text field.
-    text-field {
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 40px;
-        
-        // The input.
-        input {
-            width: 90%;
-            background-color: rgb(219, 219, 219);
-        }
-    }
-
-    // The popup buttons.
-    popup-button {
-        text-align: center;
-    }
-
-    // The list and each list item.
-    #notebooks-list-for-new-popup,
-    #notebooks-list-for-notebooks-popup {
-        margin: 0px;
-        padding: 8px;
-        .common-font();
-        max-height: 150px;
-        overflow-y: scroll;
-        border-radius: 10px;
-        background-color: darken(gray, 10%);
-
-        // Each notebook title area.
-        li {
-            margin: 10px;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 10px;
-            list-style-type: none;
-            color: rgb(54, 54, 54);
-            background-color: rgb(165, 165, 165);
-        }
-    }
-
-    // The create button.
-    round-button {
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-    }
-}
-
-notebooks-popup {
-
-    // The title that shows your current notebook.
-    h1 {
-        .common-font();
-        cursor: default;
-        font-size: 16px;
-        font-weight: 500;
-        user-select: none;
-        text-align: center;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    // The list of notebooks.
-    #notebooks-list-for-notebooks-popup {
-        width: 100%;
-        max-height: 200px;
-        background-color: rgba(0, 0, 0, 0);
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        // The name of the notebook.
-        li {
-            width: 70%;
-            display: inline-block;
-            vertical-align: middle;
-
-            &:hover {
-                transition-duration: 0.15s;
-                background-color: lighten(gray, 60%);
-            }
-        }
-
-        // The close button.
-        ion-icon {
-            padding: 5px;
-            cursor: pointer;
-            border-radius: 100%;
-            display: inline-block;
-            vertical-align: middle;
-            transition-duration: 0.2s;
-
-            &:hover {
-                background-color: darkgray;
-            }
-        }
-    }
-}
-
-notes-popup {
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    // The name of the notebook.
-    li {
-        width: 82%;
-        display: inline-block;
-        vertical-align: middle;
-
-        &:hover {
-            transition-duration: 0.15s;
-            background-color: lighten(gray, 60%);
-        }
-    }
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    .common-font();
+    z-index: 100001;
+    overflow: hidden;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    animation: FSin 0.5s ease-out;
 
     // The close button.
-    ion-icon {
-        padding: 5px;
+    .close-button {
+        position: fixed;
+        top: 20px;
+        right: 10px;
+        border: none;
+        outline: none;
         cursor: pointer;
-        border-radius: 100%;
-        display: inline-block;
-        vertical-align: middle;
-        transition-duration: 0.2s;
-
-        &:hover {
-            background-color: darkgray;
-        }
+        font-size: 24px;
+        background: none;
+        text-decoration: none;
     }
-}
 
-notes-popup,
-move-popup,
-settings-popup {
-    .common-font();
-    max-height: 300px;
-    overflow-y: scroll;
-
-    // The title for your notes.
+    // The title of the fullscreen alert.
     h1 {
-        .common-font();
-        cursor: default;
-        font-size: 16px;
-        font-weight: 500;
-        user-select: none;
-        text-align: center;
-        padding-left: 20px;
-        padding-right: 20px;
+        font-size: 35px;
+        margin-bottom: 0px;
     }
 
-    // Every note in the notes popup.
-    li {
-        margin: 10px;
-        padding: 10px;
-        cursor: pointer;
-        font-size: 14px;
+    // The subtitle.
+    p:nth-of-type(1) {
+        color: gray;
+        font-size: 15px;
+    }
+
+    // The input field should be centered.
+    text-field {
+        width: 70%;
+        text-align: left;
         margin-left: auto;
         margin-right: auto;
-        border-radius: 10px;
-        list-style-type: none;
-        color: rgb(54, 54, 54);
-        background-color: rgb(165, 165, 165);
+        margin-bottom: 30px;
 
-        &:hover {
-            transition-duration: 0.15s;
-            background-color: lighten(gray, 60%);
+        // The actual field.
+        input {
+            width: 90%;
         }
     }
-}
 
-move-popup {
-    max-width: 300px;
-}
+    // Popup buttons should be stacked on top of each other.
+    popup-button {
+        width: 60%;
+        text-align: center;
+    }
 
-find-popup, settings-popup {
-    width: 300px;
-    text-align: center;
+    // Any list of items (typically just notebooks and notes).
+    .n-list {
+        width: 100%;
+        max-height: 40%;
+        overflow-y: auto;
+        overflow-x: hidden;
 
-    input {
-        position: relative;
-        width: 90%;
-        border: none;
-        margin: 10px;
-        padding: 5px;
-        outline: none;
-        display: block;
-        font-size: 14px;
-        border-radius: 5px;
+        // The little list title.
+        h5 {
+            position: relative;
+            color: gray;
+            font-weight: 400;
+        }
+        
+        // Each notebook/note item.
+        li {
+            width: 80%;
+            color: @blue;
+            cursor: pointer;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            list-style-type: none;
+            border: 1px solid @blue;
+            transition-duration: 0.1s;
+            background-color: rgba(0, 0, 0, 0);
+
+            &:hover {
+                box-shadow: 0px 1px 10px 0px rgba(96, 163, 235, 0.37);
+            }
+        }
+    }
+
+    // The buttons at the bottom of the page.
+    round-button {
+        position: absolute;
+        bottom: 15px;
+        width: 40%;
     }
 }
-
-settings-popup {
-    width: 250px;
-    text-align: center;
-
-    h4 {
-        font-size: 12px;
-        font-weight: normal;
-    }
+.fs-out {
+    animation: FSout 0.5s ease-in;
 }
