@@ -1,9 +1,9 @@
-import Mosaic from 'mosaic-framework';
+import Mosaic, { html } from 'mosaic-framework';
 
-import '../components/round-button';
+import './round-button';
 
 import * as Networking from '../util/Networking';
-import Globals from '../util/Globals';
+import * as Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
 
 
@@ -16,17 +16,10 @@ function selectElementContents(el) {
 }
 
 // Export the main component.
-export default new Mosaic({
-    name: 'find-popup',
-    element: 'popups',
+export default Mosaic({
+    name: 'find-toast',
+    element: 'toasts',
     portfolio: Portfolio,
-    created() {
-        const { ci } = this.data;
-        if(ci) {
-            const cib = document.getElementById(`ci-Find`);
-            this.style.top = `${cib.getBoundingClientRect().top}px`;
-        }
-    },
     willDestroy() {
         // Remove all highlights on the content field.
         const noteField = document.getElementById('note-field');
@@ -36,15 +29,17 @@ export default new Mosaic({
             }
         });
     },
-    animateAway: function() {
-        this.classList.add('popup-out');
-        setTimeout(() => {
-            this.classList.remove('popup-out');
-            this.remove();
-        }, 400);
+    closeToast(time = 500) {
+        this.classList.add('toast-alert-fade-out');
+        setTimeout(() => this.remove(), time);
     },
     view() {
         return html`
+        <button class='close-button' onclick='${() => {
+            Globals.hideAlert();
+        }}'>
+            <ion-icon name='close'></ion-icon>
+        </button>
         <input type='text' id='find-field' placeholder="Find">
         <input type='text' id='replace-field' placeholder="Replace">
 
@@ -61,7 +56,7 @@ export default new Mosaic({
     },
     actions: {
         highlightFind() {
-            const lookingFor = document.getElementById('find-field').value;
+            const lookingFor = (document.getElementById('find-field') as any).value;
             const noteField = document.getElementById('note-field');
             
             // Remove anything that has a blue background.
@@ -89,7 +84,7 @@ export default new Mosaic({
             });
         },
         replaceCurrent() {
-            const replacingWith = document.getElementById('replace-field').value;
+            const replacingWith = (document.getElementById('replace-field') as any).value;
             const noteField = document.getElementById('note-field');
             
             // Find the first instance of a highlighted element.
@@ -104,7 +99,7 @@ export default new Mosaic({
             });
         },
         replaceAll() {
-            const replacingWith = document.getElementById('replace-field').value;
+            const replacingWith = (document.getElementById('replace-field') as any).value;
             const noteField = document.getElementById('note-field');
             
             // Find the first instance of a highlighted element.

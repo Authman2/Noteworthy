@@ -2,7 +2,7 @@ import Mosaic, { html } from 'mosaic-framework';
 
 import ContextMenu from '../components/context-menu';
 
-import '../styles/popups.less';
+import '../styles/fullscreens.less';
 import '../styles/work.less';
 
 

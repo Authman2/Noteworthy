@@ -5,7 +5,7 @@ import * as Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
 
 export default Mosaic({
-    name: 'notebooks-view',
+    name: 'move-view',
     element: 'fullscreens',
     useShadow: false,
     data: {
@@ -28,20 +28,27 @@ export default Mosaic({
             selectedNotebook,
         } = this.data;
 
+        const note = Portfolio.get('currentNote');
+        const created = new Date(note.created || 0).toDateString();
+        const edited = new Date(note.modified || 0).toDateString();
+
         return html`
             <button class='close-button' onclick='${this.animateAway.bind(this)}'>
                 <ion-icon name='close'></ion-icon>
             </button>
-            <h1>Notebooks</h1>
-            <p>Select a notebook to open:</p>
+            <h1>Move</h1>
+            <p>Where would you like to move this note too?</p>
+
+            <div class='move-note-info'>
+                <i><b>Title:</b> ${note.title}</i>
+                <i><b>Created:</b> ${created}</i>
+                <i><b>Edited:</b> ${edited}</i>
+            </div>
 
             ${this.showNotebooksList.bind(this)}
             
-            <round-button onclick='${this.handleOpen}'>
-                Open ${selectedNotebook ? selectedNotebook.title : "------"}
-            </round-button>
-            <round-button onclick='${this.handleDelete}'>
-                Delete ${selectedNotebook ? selectedNotebook.title : "------"}
+            <round-button onclick='${this.handleMove}'>
+                Move ${note.title} into ${selectedNotebook ? selectedNotebook.title : "------"}
             </round-button>
         `
     },
@@ -66,32 +73,20 @@ export default Mosaic({
             this.remove();
         }, 500);
     },
-    handleOpen: async function() {
-        const { selectedNotebook } = this.data;
-        
-        if(!selectedNotebook)
-            return Globals.displayTextAlert('Please select a notebook to open', Globals.red);
-        else {
-            Portfolio.dispatch('select-notebook', {
-                currentNotebook: selectedNotebook
-            });
-            Globals.displayTextAlert(`Opened the notebook ${selectedNotebook.title}`, Globals.blue);
-            this.animateAway();
-        }
+    handleMove: async function() {
+        // Get the current note and the notebook you are trying to move it into.
+        const note = Portfolio.get('currentNote');
+        const toNotebook = this.data.selectedNotebook;
+
+        if(!toNotebook)
+            return Globals.displayTextAlert(
+                `You must select a notebook to move the note into`, 
+                Globals.red
+            );
+
+        // Make the API call and alert the user.
+        const res = await Networking.move(note._id, note.notebookID, toNotebook._id);
+        Globals.displayTextAlert(res.message, res.ok ? Globals.green : Globals.red);
+        this.animateAway();
     },
-    handleDelete: async function() {
-        const { selectedNotebook: nb } = this.data;
-
-        if(!nb)
-            return Globals.displayTextAlert('Please select a notebook to delete', Globals.red);
-
-        Globals.displayConfirmationAlert(
-            `Are you sure you want to delete "${nb.title}"? This will delete all notes inside of it as well.`,
-            Globals.gray,
-            async () => {
-                const resp = await Networking.deleteNotebook(nb._id);
-                Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
-            }
-        )
-    }
 });

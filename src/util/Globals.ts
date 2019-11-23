@@ -1,5 +1,6 @@
 import '../components/toast';
 import '../components/delete-toast';
+import '../components/find-toast';
 
 
 /** Generates a random string id. */
@@ -30,10 +31,18 @@ export function displayConfirmationAlert(label: string, color: string, confirm) 
     (element as any).data.confirm = confirm;
 }
 
+/** Displays the alert for finding and replacing content in a note. */
+export function displayFindReplaceAlert(color: string) {
+    const element = document.createElement('find-toast');
+    element.setAttribute('color', color);
+    (element as any).paint();
+}
+
 /** Hides any kind of toast alert. */
 export function hideAlert() {
     const toasts = document.getElementById('toasts');
     const alert = toasts.firstChild;
+    if(!alert) return;
     (alert as any).closeToast();
 }
 

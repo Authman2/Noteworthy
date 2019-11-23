@@ -3,9 +3,9 @@ import Mosaic, { html } from 'mosaic-framework';
 import '../fullscreens/new-view';
 import '../fullscreens/notebooks-view';
 import '../fullscreens/notes-view';
-import MovePopup from '../fullscreens/move-popup';
-import FindPopup from '../fullscreens/find-popup';
-import SettingsPopup from '../fullscreens/settings-popups';
+import '../fullscreens/favorites-view';
+import '../fullscreens/move-view';
+import '../fullscreens/settings-view';
 
 import * as Globals from '../util/Globals';
 import Portfolio from '../util/Portfolio';
@@ -90,7 +90,9 @@ export default Mosaic({
         (fsView as any).paint();
     },
     openStarred() {
-        
+        const fsView = document.createElement('favorites-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
     },
     handleSave: async function() {
         const note = Portfolio.get('currentNote');
@@ -136,15 +138,19 @@ export default Mosaic({
                 Globals.red
             );
 
-        if(document.contains(MovePopup)) MovePopup.animateAway();
-        else MovePopup.paint({ ci: 'ci-Move' });
+        const fsView = document.createElement('move-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
     },
     handleSearch() {
-        if(document.contains(FindPopup)) FindPopup.animateAway();
-        else FindPopup.paint({ ci: 'ci-Find' });
+        Globals.hideAlert();
+        Globals.displayFindReplaceAlert(Globals.gray);
     },
     handleSettings() {
-        if(document.contains(SettingsPopup)) SettingsPopup.animateAway();
-        else SettingsPopup.paint({ ci: 'ci-Settings' });
+        const fsView = document.createElement('settings-view');
+        fsView.classList.add('fs');
+        (fsView as any).paint();
+        // if(document.contains(SettingsPopup)) SettingsPopup.animateAway();
+        // else SettingsPopup.paint({ ci: 'ci-Settings' });
     }
 })

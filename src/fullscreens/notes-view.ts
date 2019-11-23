@@ -19,7 +19,7 @@ export default Mosaic({
         if(res.ok) this.data.notes = res.notes;
     },
     updated: async function() {
-        if(this.data.type === 1 && this.data.notes.length === 0) {
+        if(this.data.notes.length === 0) {
             const nb = Portfolio.get('currentNotebook');
             const res = await Networking.loadNotes(nb._id);
             if(res.ok) this.data.notes = res.notes;
@@ -33,7 +33,7 @@ export default Mosaic({
             <button class='close-button' onclick='${this.animateAway.bind(this)}'>
                 <ion-icon name='close'></ion-icon>
             </button>
-            <h1>Notes in "${nb.title}"</h1>
+            <h1>Notes in ${nb.title}</h1>
             <p>Select a note to open:</p>
 
             ${this.showNoteList.bind(this)}
@@ -97,13 +97,13 @@ export default Mosaic({
         }
     },
     handleDelete: async function() {
-        const { selectedNotebook: nb } = this.data;
+        const { selectedNote: nb } = this.data;
 
         if(!nb)
             return Globals.displayTextAlert('Please select a notebook to delete', Globals.red);
 
         Globals.displayConfirmationAlert(
-            `Are you sure you want to delete "${nb.title}"? This will delete all notes inside of it as well.`,
+            `Are you sure you want to delete "${nb.title}"? This action cannot be undone.`,
             Globals.gray,
             async () => {
                 const resp = await Networking.deleteNotebook(nb._id);

@@ -108,7 +108,7 @@ code-segment {
         bottom: -10px;
     }
 }
-toast-alert, delete-toast {
+toast-alert, delete-toast, find-toast {
     position: fixed;
     left: 50%;
     bottom: 15px;
@@ -118,12 +118,14 @@ toast-alert, delete-toast {
     z-index: 1000000;
     padding-top: 10px;
     text-align: center;
+    border-radius: 8px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 10px;
     font-family: 'Avenir';
     background-color: gray;
     transform: translateX(-50%);
+    box-shadow: 0px 2px 20px 4px rgba(0,0,0,0.15);
     animation: action-alert-fade-in 0.5s sin(360);
 
 
@@ -141,8 +143,67 @@ toast-alert, delete-toast {
             background-color: darken(white, 20%);
         }
     }
+
+    input {
+        border: none;
+        outline: none;
+        display: block;
+        font-size: 14px;
+        background: none;
+        margin-bottom: 8px;
+        border-radius: 5px;
+        text-decoration: none;
+        padding: 8px 8px 8px 8px;
+        background-color: white;
+    }
+}
+find-toast {
+    width: 40%;
+
+    .close-button {
+        position: relative;
+        float: right;
+        right: -10px;
+        border: none;
+        outline: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        background: none;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    input {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+
+    round-button {
+        position: relative;
+        width: 10px;
+        margin-left: 2px;
+        margin-right: 2px;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
 }
 .toast-alert-fade-out {
     opacity: 0;
     animation: action-alert-fade-out 0.5s sin(360);
+}
+
+
+
+
+
+@media not screen and (min-width: 768px) {
+    toast-alert {
+        width: 50%;
+    }
+    find-toast {
+        width: 70%;
+    }
 }

@@ -64,16 +64,10 @@
 
     // The input field should be centered.
     text-field {
-        width: 70%;
+        position: relative;
+        width: 50%;
         text-align: left;
-        margin-left: auto;
-        margin-right: auto;
         margin-bottom: 30px;
-
-        // The actual field.
-        input {
-            width: 90%;
-        }
     }
 
     // Popup buttons should be stacked on top of each other.
@@ -132,7 +126,7 @@ new-view {
         height: 40%;
     }
 }
-notebooks-view, notes-view {
+notebooks-view, notes-view, favorites-view, move-view, settings-view {
     & p:nth-of-type(1) {
         margin-bottom: 30px;
     }
@@ -154,8 +148,72 @@ notebooks-view, notes-view {
         }
     }
 }
+move-view {
+    & p:nth-of-type(1) {
+        margin-bottom: 15px;
+    }
 
+    .move-note-info {
+        display: flex;
+        font-size: 14px;
+        font-style: italic;
+        margin-bottom: 20px;
+        flex-direction: column;
+        color: rgb(194, 194, 194);
+        
+        i {
+            margin-bottom: 5px;
+        }
+    }
+
+    round-button {
+        &:nth-of-type(1) {
+            bottom: 15px;
+        }
+    }
+}
+settings-view {
+    .settings-info {
+        margin-top: 20px;
+        color: rgb(168, 168, 168);
+        
+        h4 {
+            font-weight: 300;
+            font-style: italic;
+        }
+    }
+
+    round-button {
+        position: absolute;
+        width: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+        
+        &:nth-of-type(1) {
+            bottom: 128px;
+        }
+        &:nth-of-type(2) {
+            bottom: 70px;
+        }
+        &:nth-of-type(3) {
+            bottom: 15px;
+        }
+    }
+}
 
 .fs-out {
     animation: FSout 0.5s ease-in;
+}
+
+
+
+@media not screen and (min-width: 768px) {
+    new-view {
+        text-field {
+            position: relative;
+            left: -10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
 }

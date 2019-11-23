@@ -1,29 +1,10 @@
-import Mosaic from 'mosaic-framework';
+import Mosaic, { html } from 'mosaic-framework';
 
 import '../components/round-button';
 
-import Globals from '../util/Globals';
+import * as Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
 
-
-// Whether or not to show the login or create account view.
-function renderLoginView(mode = false) {
-    if(mode === false) {
-        return html`<div>
-            <h2>Login</h2>
-            <input type='email' placeholder="Email"/>
-            <input type='password' placeholder="Password"/>
-        </div>`
-    } else {
-        return html`<div>
-            <h2>Create Account</h2>
-            <input type='text' placeholder="First Name"/>
-            <input type='text' placeholder="Last Name"/>
-            <input type='email' placeholder="Email"/>
-            <input type='password' placeholder="Password"/>
-        </div>`
-    }
-}
 
 // Returns user information from the database if logged in.
 async function getUserInfo(token) {
@@ -54,9 +35,9 @@ async function getUserInfo(token) {
 
 
 // Export the final component.
-export default new Mosaic({
-    name: 'settings-popup',
-    element: 'popups',
+export default Mosaic({
+    name: 'settings-view',
+    element: 'fullscreens',
     data: {
         signUpMode: false,
         userInfo: {
@@ -66,18 +47,26 @@ export default new Mosaic({
         }
     },
     async handleBackup() {
-        Globals.showActionAlert('Creating Noteworthy backup...', Globals.ColorScheme.blue, 0);
+        Globals.displayTextAlert('Creating Noteworthy backup...', Globals.blue, 0);
         let backup = {};
 
         // Get the notebooks and notes.
-        let notebooks = await Local.getNotebooks();
-        let notes = await Local.getAllNotes();
-        notebooks.forEach(nb => backup[nb._id] = nb);
-        notes.forEach(nt => backup[nt._id] = nt);
+        let res1 = await Networking.loadNotebooks();
+        if(res1.error)
+            return Globals.displayTextAlert('Could not load notebooks', Globals.red);
+        for(let i = 0; i < res1.notebooks.length; i++) {
+            let nb = res1.notebooks[i];
+            let res2 = await Networking.loadNotes(nb._id);
+            
+            backup[nb._id] = nb;
+            res2.notes.forEach(nt => {
+                backup[nt._id] = nt;
+            });
+        }
         
         // Native sharing.
         if('share' in window.navigator) {
-            window.navigator.share({
+            (window.navigator as any).share({
                 title: `Noteworthy_Backup_${Date.now()}`,
                 text: JSON.stringify(backup),
                 url: 'https://noteworthyapp.netlify.com'
@@ -88,43 +77,57 @@ export default new Mosaic({
             window.open(uri);
         }
 
-        Globals.showActionAlert('Finished creating Noteworthy backup file!', Globals.ColorScheme.green, 4000);
+        Globals.hideAlert();
+        Globals.displayTextAlert('Finished creating Noteworthy backup file!', Globals.green, 4000);
     },
     async handleRestore() {
+        Globals.displayTextAlert('Restoring backup...', Globals.blue, 0);
+
         const file = document.createElement('input');
         file.type = 'file';
         file.onchange = function(e) {
-            const file = e.target.files[0];
+            const file = (e.target as any).files[0];
             if(!file) {
-                return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+                Globals.hideAlert();
+                return Globals.displayTextAlert('Could not load the backup file', Globals.red, 4000);
             }
 
             const reader = new FileReader();
             reader.onload = async function(event) {
-                const res = event.target.result;
+                const res: string = event.target.result as string;
                 if(!res) {
-                    return Globals.showActionAlert('Could not load the backup file', Globals.ColorScheme.red, 4000);
+                    Globals.hideAlert();
+                    return Globals.displayTextAlert('Could not load the backup file', Globals.red, 4000);
                 }
 
                 const toJSON = JSON.parse(res);
                 const vals = Object.values(toJSON);
-                const notebooks = vals.filter(obj => !obj.notebookID);
-                const notes = vals.filter(obj => obj.notebookID);
+                const notebooks = vals.filter((obj: any) => !obj.notebookID);
+                const notes = vals.filter((obj: any) => obj.notebookID);
                 const result = await Networking.restore(notebooks, notes);
-                Globals.showActionAlert(result.message, result.ok === true ? 
-                    Globals.ColorScheme.green : Globals.ColorScheme.red);
+
+                Globals.hideAlert();
+                Globals.displayTextAlert(
+                    result.message,
+                    result.ok === true ? Globals.green : Globals.red,
+                    4000
+                );
             }
             reader.readAsText(file);
         }
         file.click();
     },
     view() {
-        const token = localStorage.getItem('noteworthy-token');
         const { userInfo } = this.data;
 
         return html`
-        ${ token ?
-            html`<div>
+        <button class='close-button' onclick='${this.animateAway.bind(this)}'>
+            <ion-icon name='close'></ion-icon>
+        </button>
+        <h1>Settings</h1>
+
+        ${
+            html`<div class='settings-info'>
                 <h4>
                     <b>Email</b>: ${userInfo.email}
                 </h4>
@@ -135,47 +138,33 @@ export default new Mosaic({
                     <b>Last Login</b>: ${userInfo.lastLogin}
                 </h4>
             </div>`
-            :
-            renderLoginView.bind(this, this.data.signUpMode)
         }
 
-        ${ token ?
+        ${ 
             html`<section>
-                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
-                    Save Online
-                </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleBackup}'>
                     Backup to File
                 </round-button>
                 <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
-                    Restore
+                    Restore from Backup
                 </round-button>
-                <round-button icon='ios-log-out' highlightColor='#707070'
-                    onclick='${async () => {
-                        await Networking.logout();
-                        this.data.userInfo = {
-                            email: '------',
-                            created: '-------',
-                            lastLogin: '--------'
-                        }
-                        Globals.showActionAlert('Logged out!');
-                        window.location.href = '/';
-                    }}'>
+                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${async () => {
+                    await Networking.logout();
+                    this.data.userInfo = {
+                        email: '------',
+                        created: '-------',
+                        lastLogin: '--------'
+                    }
+                    Globals.displayTextAlert('Logged out!', Globals.blue);
+                    window.location.href = '/';
+                }}'>
                     Logout
                 </round-button>
             </section>`
-            :
-            ''
         }
         `
     },
     async created() {
-        const { ci } = this.data;
-        if(ci) {
-            const cib = document.getElementById(`ci-Settings`);
-            this.style.top = `${cib.getBoundingClientRect().top - 150}px`;
-        }
-
         const token = localStorage.getItem('noteworthy-token');
         if(token) {
             const userInfo = await getUserInfo(token);
@@ -185,11 +174,11 @@ export default new Mosaic({
         }
     },
     animateAway: function() {
-        this.classList.add('popup-out');
+        this.classList.add('fs-out');
         setTimeout(() => {
-            this.classList.remove('popup-out');
+            this.classList.remove('fs-out');
             this.remove();
-        }, 400);
+        }, 500);
     }
 });
 
