@@ -127,24 +127,37 @@ new-view {
     }
 }
 notebooks-view, notes-view, favorites-view, move-view, settings-view {
+    h1:nth-of-type(1) {
+        position: relative;
+        max-lines: 1;
+        max-width: 80%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     & p:nth-of-type(1) {
         margin-bottom: 30px;
     }
 
     & .n-list {
-        height: 60%;
+        height: 50%;
     }
 
     round-button {
         position: absolute;
         width: 40%;
+        max-lines: 1;
+        max-width: 40%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         
         
         &:nth-of-type(1) {
-            bottom: 70px;
+            bottom: 80px;
         }
         &:nth-of-type(2) {
-            bottom: 15px;
+            bottom: 25px;
         }
     }
 }
@@ -168,7 +181,7 @@ move-view {
 
     round-button {
         &:nth-of-type(1) {
-            bottom: 15px;
+            bottom: 25px;
         }
     }
 }
@@ -178,7 +191,7 @@ settings-view {
         color: rgb(168, 168, 168);
         
         h4 {
-            font-weight: 300;
+            font-weight: 400;
             font-style: italic;
         }
     }
@@ -190,13 +203,13 @@ settings-view {
         transform: translateX(-50%);
         
         &:nth-of-type(1) {
-            bottom: 128px;
+            bottom: 138px;
         }
         &:nth-of-type(2) {
-            bottom: 70px;
+            bottom: 80px;
         }
         &:nth-of-type(3) {
-            bottom: 15px;
+            bottom: 25px;
         }
     }
 }
@@ -214,6 +227,14 @@ settings-view {
             left: -10px;
             margin-left: auto;
             margin-right: auto;
+        }
+    }
+
+    // TODO: This is not working for some reason.
+    notebooks-view, notes-view, favorites-view, move-view, settings-view {
+        round-button {
+            width: 80%;
+            max-width: 80%;
         }
     }
 }

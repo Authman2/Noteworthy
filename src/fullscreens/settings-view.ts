@@ -64,7 +64,7 @@ export default Mosaic({
             });
         }
         
-        // Native sharing.
+        // TODO: Find a way to open the native save to Files thing in iOS.
         if('share' in window.navigator) {
             (window.navigator as any).share({
                 title: `Noteworthy_Backup_${Date.now()}`,
@@ -181,13 +181,3 @@ export default Mosaic({
         }, 500);
     }
 });
-
-{/* <round-button icon='sync' highlightColor='#707070' onclick="${this.handleSync}">
-                    Save Online
-                </round-button>
-                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleBackup}">
-                    Backup
-                </round-button>
-                <round-button icon='sync' highlightColor='#707070' onclick="${this.handleRestore}">
-                    Restore
-                </round-button> */}

@@ -8,8 +8,8 @@ import '../styles/home.less';
 export default Mosaic({
     name: 'home-page',
     created: function() {
-        // const token = localStorage.getItem('noteworthy-token');
-        // if(token) this.router.send('/work');
+        const token = localStorage.getItem('noteworthy-token');
+        if(token) this.router.send('/work');
     },
     view: function() {
         return html`
@@ -17,7 +17,7 @@ export default Mosaic({
         <h1>Noteworthy</h1>
         <p>A free, cross-platform, cloud-based note taking app!</p>
 
-        <text-field id='email-field' title="Email"></text-field>
+        <text-field id='email-field' title="Email" type='email'></text-field>
         <text-field id='password-field' title="Password" type='password'></text-field>
 
         <round-button onclick='${this.actions.login}'
