@@ -83,35 +83,35 @@ code-segment {
 @keyframes action-alert-fade-in {
     0% {
         opacity: 0;
-        bottom: -10px;
+        bottom: -15px;
     }
     50% {
         opacity: 1;
-        bottom: 40px;
+        bottom: 35px;
     }
     100% {
         opacity: 1;
-        bottom: 25px;
+        bottom: 20px;
     }
 }
 @keyframes action-alert-fade-out {
     0% {
         opacity: 1;
-        bottom: 25px;
+        bottom: 20px;
     }
     50% {
         opacity: 1;
-        bottom: 40px;
+        bottom: 35px;
     }
     100% {
         opacity: 0;
-        bottom: -10px;
+        bottom: -15px;
     }
 }
 toast-alert, delete-toast, find-toast {
     position: fixed;
     left: 50%;
-    bottom: 25px;
+    bottom: 20px;
     color: white;
     font-size: 16px;
     font-weight: 200;
@@ -132,8 +132,11 @@ toast-alert, delete-toast, find-toast {
     round-button {
         border: none;
         color: black;
-        margin-left: auto;
-        margin-right: auto;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 10px;
+        display: inline-block;
         background-color: white;
 
         &:hover {

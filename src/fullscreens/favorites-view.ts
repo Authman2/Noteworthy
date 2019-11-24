@@ -35,10 +35,10 @@ export default Mosaic({
 
             ${this.showNoteList.bind(this)}
             
-            <round-button onclick='${this.handleOpen}'>
+            <round-button onclick='${this.handleOpen}' color='black'>
                 Open ${selectedNote ? selectedNote.title : "------"}
             </round-button>
-            <round-button onclick='${this.handleDelete}'>
+            <round-button onclick='${this.handleDelete}' color='black'>
                 Delete ${selectedNote ? selectedNote.title : "------"}
             </round-button>
         `
@@ -89,6 +89,14 @@ export default Mosaic({
                 favoriteButton.style.color = 'white';
                 favoriteButton.style.backgroundColor = '#AAAAAA'
             }
+
+            const page = document.getElementsByTagName('work-page')[0];
+            if(page) {
+                page.scrollTo({
+                    top: 0,
+                    behavior: 'auto'
+                });
+            }
             this.animateAway();
         }
     },
@@ -99,10 +107,10 @@ export default Mosaic({
             return Globals.displayTextAlert('Please select a notebook to delete', Globals.red);
 
         Globals.displayConfirmationAlert(
-            `Are you sure you want to delete "${nt.title}"? This will delete all notes inside of it as well.`,
+            `Are you sure you want to delete "${nt.title}"? This action cannot be undone.`,
             Globals.gray,
             async () => {
-                const resp = await Networking.deleteNotebook(nt._id);
+                const resp = await Networking.deleteNote(nt._id);
                 Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
             }
         )

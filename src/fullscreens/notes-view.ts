@@ -93,6 +93,13 @@ export default Mosaic({
                 favoriteButton.style.backgroundColor = '#AAAAAA'
             }
 
+            const page = document.getElementsByTagName('work-page')[0];
+            if(page) {
+                page.scrollTo({
+                    top: 0,
+                    behavior: 'auto'
+                });
+            }
             this.animateAway();
         }
     },
@@ -106,7 +113,7 @@ export default Mosaic({
             `Are you sure you want to delete "${nb.title}"? This action cannot be undone.`,
             Globals.gray,
             async () => {
-                const resp = await Networking.deleteNotebook(nb._id);
+                const resp = await Networking.deleteNote(nb._id);
                 Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
             }
         )

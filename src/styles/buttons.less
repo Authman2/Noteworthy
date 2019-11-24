@@ -1,13 +1,14 @@
 @import './index.less';
 
 round-button {
-    margin: 10px;
+    // margin: 10px;
     color: white;
     .common-font();
     display: block;
     cursor: pointer;
     font-size: 12px;
     min-width: 80px;
+    font-weight: 300;
     user-select: none;
     width: fit-content;
     padding-left: 10px;
@@ -16,11 +17,12 @@ round-button {
     -webkit-user-select: none;
     transition-duration: 0.15s;
     background-color: @primary;
-    padding: 10px 15px 10px 15px;
+    padding: 15px 15px 15px 15px;
 
     // Making the button hover/active should give feedback.
     &:hover {
-        background-color: darken(@primary, 10%);
+        
+        background-color: lighten(@primary, 15%);
     }
     &:active {
         background-color: darken(@primary, 20%);

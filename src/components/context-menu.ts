@@ -119,8 +119,9 @@ export default Mosaic({
         const resp = await Networking.toggleFavorite(currentNT._id);
         if(resp.ok) {
             // Update the favorite icon.
+            currentNT.favorited = !currentNT.favorited;
             const favoriteButton = document.getElementById('ci-Favorite');
-            if(currentNT.favorited === false) {
+            if(currentNT.favorited === true) {
                 favoriteButton.style.color = '#FF6EA4';
                 favoriteButton.style.backgroundColor = '#E2E2E2';
             } else {
@@ -128,7 +129,11 @@ export default Mosaic({
                 favoriteButton.style.backgroundColor = '#AAAAAA'
             }
         }
-        Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
+        Globals.displayTextAlert(
+            resp.message,
+            resp.ok && currentNT.favorited === true ? Globals.green : Globals.gray
+        );
+
     },
     handleMove() {
         const currentNT = Portfolio.get('currentNote');

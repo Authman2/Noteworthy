@@ -28,8 +28,6 @@ export default Mosaic({
     view: function() {
         const {
             isNotebook,
-            title,
-            subtitle
         } = this.data;
 
         return html`
@@ -86,7 +84,7 @@ export default Mosaic({
         const titleField = document.getElementById('create-title-field');
         const title = (titleField as any).getValue();
         if(!title)
-            return Globals.displayTextAlert('Please enter a title first.', Globals.red);
+            return Globals.displayTextAlert('Please enter a title first', Globals.red);
         
         // Notebook.
         if(this.data.type === 0) {
@@ -98,7 +96,7 @@ export default Mosaic({
             const selNB = this.data.selectedNotebook;
             if(!selNB)
                 return Globals.displayTextAlert(
-                    'Please select a notebook to add this note to.', 
+                    'Please select a notebook to add this note to', 
                     Globals.red
                 );
 

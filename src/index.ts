@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import { Router } from 'mosaic-framework';
+import '@polymer/paper-spinner/paper-spinner';
 
 import './components/text-field';
 import './components/round-button';

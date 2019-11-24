@@ -75,7 +75,7 @@ export default Mosaic({
             Portfolio.dispatch('select-notebook', {
                 currentNotebook: selectedNotebook
             });
-            Globals.displayTextAlert(`Opened the notebook ${selectedNotebook.title}`, Globals.blue);
+            Globals.displayTextAlert(`Opened the notebook "${selectedNotebook.title}"`, Globals.blue);
             this.animateAway();
         }
     },

@@ -10,6 +10,8 @@ export function randomID() {
 
 /** Displays a simple text alert on the screen. */
 export function displayTextAlert(text: string, color: string, time: number = 2500) {
+    hideAlert();
+    
     const element = document.createElement('toast-alert');
     element.setAttribute('color', color);
     element.innerHTML = `${text}`;
@@ -24,6 +26,8 @@ export function displayTextAlert(text: string, color: string, time: number = 250
 
 /** Displays a confirmation alert. */
 export function displayConfirmationAlert(label: string, color: string, confirm) {
+    hideAlert();
+
     const element = document.createElement('delete-toast');
     element.setAttribute('color', color);
     (element as any).paint();
@@ -33,6 +37,8 @@ export function displayConfirmationAlert(label: string, color: string, confirm) 
 
 /** Displays the alert for finding and replacing content in a note. */
 export function displayFindReplaceAlert(color: string) {
+    hideAlert();
+
     const element = document.createElement('find-toast');
     element.setAttribute('color', color);
     (element as any).paint();

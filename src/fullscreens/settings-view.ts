@@ -47,7 +47,7 @@ export default Mosaic({
         }
     },
     async handleBackup() {
-        Globals.displayTextAlert('Creating Noteworthy backup...', Globals.blue, 0);
+        Globals.displayTextAlert('Creating Noteworthy backup...', Globals.blue, 5000);
         let backup = {};
 
         // Get the notebooks and notes.
@@ -64,31 +64,28 @@ export default Mosaic({
             });
         }
         
-        // TODO: Find a way to open the native save to Files thing in iOS.
-        if('share' in window.navigator) {
-            (window.navigator as any).share({
+        if((navigator as any).share) {
+            (navigator as any).share({
                 title: `Noteworthy_Backup_${Date.now()}`,
                 text: JSON.stringify(backup),
                 url: 'https://noteworthyapp.netlify.com'
-            })
+            });
         } else {
             const data = JSON.stringify(backup);
             const uri = `data:application/octet-stream,${encodeURIComponent(data)}`;
             window.open(uri);
         }
 
-        Globals.hideAlert();
         Globals.displayTextAlert('Finished creating Noteworthy backup file!', Globals.green, 4000);
     },
     async handleRestore() {
-        Globals.displayTextAlert('Restoring backup...', Globals.blue, 0);
+        Globals.displayTextAlert('Restoring backup...', Globals.blue, 5000);
 
         const file = document.createElement('input');
         file.type = 'file';
         file.onchange = function(e) {
             const file = (e.target as any).files[0];
             if(!file) {
-                Globals.hideAlert();
                 return Globals.displayTextAlert('Could not load the backup file', Globals.red, 4000);
             }
 
@@ -96,7 +93,6 @@ export default Mosaic({
             reader.onload = async function(event) {
                 const res: string = event.target.result as string;
                 if(!res) {
-                    Globals.hideAlert();
                     return Globals.displayTextAlert('Could not load the backup file', Globals.red, 4000);
                 }
 
@@ -106,7 +102,6 @@ export default Mosaic({
                 const notes = vals.filter((obj: any) => obj.notebookID);
                 const result = await Networking.restore(notebooks, notes);
 
-                Globals.hideAlert();
                 Globals.displayTextAlert(
                     result.message,
                     result.ok === true ? Globals.green : Globals.red,
