@@ -3,13 +3,16 @@ import Mosaic, { html } from 'mosaic-framework';
 import * as Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
 
+import imgSrc from '../images/LandingImage.png';
 import '../styles/home.less';
+
+
 
 export default Mosaic({
     name: 'signup-page',
     view: function() {
         return html`
-        <img src='' alt='People using Noteworthy!'>
+        <img src='${imgSrc}' alt='People using Noteworthy!'>
         <h1>Noteworthy</h1>
         <p>A free, cross-platform, cloud-based note taking app!</p>
 

@@ -1,23 +1,38 @@
 @import './index.less';
 
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 home-page, signup-page {
     display: flex;
     text-align: center;
     margin-bottom: 100px;
     flex-direction: column;
+    animation: fadeIn 1s ease-out;
 
     // The image.
     img {
         position: relative;
-        width: 150px;
-        height: 150px;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        user-select: none;
         align-self: center;
         background-color: gray;
+        -webkit-user-select: none;
     }
 
     // The title of the app.
     h1 {
         .common-font();
+        cursor: default;
         color: #2E31B2;
         margin-bottom: 10px;
     }
