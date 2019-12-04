@@ -87,7 +87,7 @@ export default Mosaic({
             return Globals.displayTextAlert('Please enter a title first', Globals.red);
         
         // Notebook.
-        if(this.data.type === 0) {
+        if(this.data.isNotebook === true) {
             const resp = await Networking.createNotebook(title);
             Globals.displayTextAlert(resp.message, resp.ok ? Globals.green : Globals.red);
         } 
