@@ -1,6 +1,18 @@
+import * as Globals from './Globals';
+
 const DEV_API_URL = 'http://localhost:8000';
 const API_URL = 'https://noteworthy-backend.herokuapp.com';
 export let currentUser = undefined;
+
+function failOnUnauthorized(res) {
+    if(res.status === 401) {
+        window.location.href = '/'
+        return Globals.displayTextAlert(
+            "Couldn't verify user, try logging in a gain",
+            Globals.gray
+        );
+    }
+}
 
 export async function login(email, password) {
     const res = await fetch(`${API_URL}/login`, {
@@ -37,6 +49,7 @@ export async function getUserInfo() {
     if(res.ok === true) {
         return { info: await res.json(), ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -60,6 +73,7 @@ export async function loadNotebooks() {
     if(res.ok === true) {
         return { notebooks: await res.json(), ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -74,6 +88,7 @@ export async function loadNotes(notebookID) {
     if(res.ok === true) {
         return { notes: await res.json(), ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -90,6 +105,7 @@ export async function createNotebook(title) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         let data = await res.json();
         return { message: data.message, code: res.status, ok: false }
     }
@@ -106,6 +122,7 @@ export async function createNote(title, content, notebookID) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         let data = await res.json();
         return { message: data.message, code: res.status, ok: false }
     }
@@ -122,6 +139,7 @@ export async function toggleFavorite(id) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         let data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -137,6 +155,7 @@ export async function getFavorites() {
         let data = await res.json();
         return { favorites: data, ok: true }
     } else {
+        failOnUnauthorized(res);
         let data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -153,6 +172,7 @@ export async function save(noteID, title, content) {
         let data = await res.json();
         return { message: data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         let data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -169,6 +189,7 @@ export async function restore(notebooks, notes) {
         const _data = await res.json();
         return { message: _data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { message: data.message, code: res.status, ok: false }
     }
@@ -185,6 +206,7 @@ export async function move(noteID, fromNotebook, toNotebook) {
         const _data = await res.json();
         return { message: _data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { message: data.message, code: res.status, ok: false }
     }
@@ -201,6 +223,7 @@ export async function deleteNote(noteID) {
         const _data = await res.json();
         return { message: _data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }
@@ -217,6 +240,7 @@ export async function deleteNotebook(notebookID) {
         const _data = await res.json();
         return { message: _data.message, ok: true }
     } else {
+        failOnUnauthorized(res);
         const data = await res.json();
         return { error: data.message, code: res.status, ok: false }
     }

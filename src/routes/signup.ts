@@ -35,8 +35,7 @@ export default Mosaic({
             const eVal = (emailField as any).getValue().toLowerCase();
             const pVal = (passwordField as any).getValue();
             const fVal = (firstNameField as any).getValue();
-            const lVal = (lastNameField as any).getValue();
-            
+            const lVal = (lastNameField as any).getValue();            
 
             Globals.displayTextAlert('Creating account...', Globals.green);
 

@@ -30,6 +30,8 @@ export default Mosaic({
     },
     actions: {
         async login() {
+            Globals.displayTextAlert('Logging in...', Globals.gray);
+
             const emailField = document.getElementById('email-field');
             const passwordField = document.getElementById('password-field');
 
