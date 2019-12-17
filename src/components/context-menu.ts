@@ -20,7 +20,47 @@ Mosaic({
     view: function() {
         return html`${this.descendants}`
     }
-})
+});
+
+// An extended side menu of context items.
+Mosaic({
+    name: 'insert-context-menu',
+    animateAway: function() {
+        this.classList.add('hide-cm');
+        setTimeout(() => this.remove(), 350);
+    },
+    view: function() {
+        return html`
+            <context-item onclick='${this.insertCode}'>
+                <ion-icon name='code'></ion-icon>
+            </context-item>
+
+            <context-item onclick='${this.insertUL}'>
+                <ion-icon name='list'></ion-icon>
+            </context-item>
+
+            <context-item onclick='${this.insertOL}'>
+                <ion-icon name='options'></ion-icon>
+            </context-item>
+
+            <context-item onclick='${this.insertDraw}' id='ci-Starred'>
+                <ion-icon name='brush'></ion-icon>
+            </context-item>
+        `
+    },
+    insertCode: function() {
+        console.log('Inserting code!');
+    },
+    insertOL: function() {
+        document.execCommand('insertOrderedList', false);
+    },
+    insertUL: function() {
+        document.execCommand('insertUnorderedList', false);
+    },
+    insertDraw: function() {
+        console.log('Inserting drawing area!');
+    },
+});
 
 // The full context menu.
 export default Mosaic({
@@ -50,6 +90,10 @@ export default Mosaic({
 
             <context-item onclick='${this.handleFavorite}' id='ci-Favorite'>
                 <ion-icon name='heart'></ion-icon>
+            </context-item>
+
+            <context-item onclick='${this.handleInsert}' id='ci-Insert'>
+                <ion-icon name='attach'></ion-icon>
             </context-item>
 
             <context-item onclick='${this.handleMove}' id='ci-Move'>
@@ -134,6 +178,17 @@ export default Mosaic({
             resp.ok && currentNT.favorited === true ? Globals.green : Globals.gray
         );
 
+    },
+    handleInsert() {
+        const found = document.getElementsByTagName('insert-context-menu')[0];
+        if(found) return (found as any).animateAway();
+
+        const insertMenu = document.createElement('insert-context-menu');
+        document.body.appendChild(insertMenu);
+        
+        const insertIcon = document.getElementById('ci-Insert');
+        const bounds = insertIcon?.getBoundingClientRect();
+        insertMenu.style.top = `${bounds.top + 20}px`;
     },
     handleMove() {
         const currentNT = Portfolio.get('currentNote');

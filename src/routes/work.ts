@@ -17,7 +17,13 @@ export default Mosaic({
     view: function() {
         return html`
         <div id='title-field' contenteditable="true">Title</div>
-        <div id='note-field' contenteditable="true">Start typing here</div>
+        <div id='note-field' contenteditable="true"
+            onkeydown="${this.updateSelectionPoint}"
+            onmousedown="${this.updateSelectionPoint}">Start typing here</div>
         `
+    },
+    updateSelectionPoint: function(e) {
+        const sel = window.getSelection();
+        console.log(sel);
     }
 });

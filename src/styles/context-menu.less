@@ -11,6 +11,31 @@
     }
 }
 
+@keyframes slideInInsertCM {
+    from {
+        opacity: 0;
+        right: -50px;
+    }
+    to {
+        opacity: 1;
+        right: 60px;
+    }
+}
+@keyframes slideOutInsertCM {
+    from {
+        opacity: 1;
+        right: 60px;
+    }
+    to {
+        opacity: 0;
+        right: -50px;
+    }
+}
+
+.hide-cm {
+    animation: slideOutInsertCM 0.35s ease-out;
+}
+
 context-menu {
     position: fixed;
     top: 50%;
@@ -31,6 +56,44 @@ context-menu {
         border-radius: 25%;
         margin-bottom: 10px;
         padding-bottom: 5px;
+        transition-duration: 0.2s;
+        background-color: #AAAAAA;
+
+        // The icon.
+        ion-icon {
+            font-size: 20px;
+        }
+
+        // Responsive effects.
+        &:hover {
+            opacity: 0.8;
+        }
+        &:active {
+            opacity: 1;
+        }
+    }
+}
+
+insert-context-menu {
+    position: fixed;
+    right: 65px;
+    display: block;
+    z-index: 100000;
+    transform: translateY(-50%);
+    animation: slideInInsertCM 0.35s ease-out;
+
+    // Each context item.
+    context-item {
+        opacity: 0.5;
+        padding: 10px;
+        color: white;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-right: 8px;
+        border-radius: 25%;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        display: inline-block;
         transition-duration: 0.2s;
         background-color: #AAAAAA;
 

@@ -71,3 +71,8 @@ export function traverse($node, action) {
 
 /** A reference to the currently logged in user. */
 export let currentUser = {};
+
+
+/** A reference to the last insertion/selection point 
+* in the typing area. */
+export let lastSelectionPoint = null;
