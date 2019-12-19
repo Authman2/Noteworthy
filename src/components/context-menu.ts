@@ -52,10 +52,10 @@ Mosaic({
         console.log('Inserting code!');
     },
     insertOL: function() {
-        document.execCommand('insertOrderedList', false);
+        document.execCommand('insertOrderedList', true);
     },
     insertUL: function() {
-        document.execCommand('insertUnorderedList', false);
+        document.execCommand('insertUnorderedList', true);
     },
     insertDraw: function() {
         console.log('Inserting drawing area!');
@@ -68,48 +68,88 @@ export default Mosaic({
     element: 'context-menu',
     view: function() {
         return html`
-            <context-item onclick='${this.createNew}' id='ci-New'>
+            <span class='tooltip' id='create-tt'>Create</span>
+            <context-item onclick='${this.createNew}' id='ci-New'
+                onmouseover="${this.showToolTip.bind(this, 'create-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'create-tt')}">
                 <ion-icon name='add'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.openNotebooks}' id='ci-Notebooks'>
+            <span class='tooltip' id='notebooks-tt'>Notebooks</span>
+            <context-item onclick='${this.openNotebooks}' id='ci-Notebooks'
+                onmouseover="${this.showToolTip.bind(this, 'notebooks-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'notebooks-tt')}">
                 <ion-icon name='ios-book'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.openNotes}' id='ci-Notes'>
+            <span class='tooltip' id='notes-tt'>Notes</span>
+            <context-item onclick='${this.openNotes}' id='ci-Notes'
+                onmouseover="${this.showToolTip.bind(this, 'notes-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'notes-tt')}">
                 <ion-icon name='paper'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.openStarred}' id='ci-Starred'>
+            <span class='tooltip' id='starred-tt'>Starred</span>
+            <context-item onclick='${this.openStarred}' id='ci-Starred'
+                onmouseover="${this.showToolTip.bind(this, 'starred-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'starred-tt')}">
                 <ion-icon name='star'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleSave}' id='ci-Save'>
+            <span class='tooltip' id='save-tt'>Save</span>
+            <context-item onclick='${this.handleSave}' id='ci-Save'
+                onmouseover="${this.showToolTip.bind(this, 'save-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'save-tt')}">
                 <ion-icon name='save'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleFavorite}' id='ci-Favorite'>
+            <span class='tooltip' id='favorite-tt'>Favorite</span>
+            <context-item onclick='${this.handleFavorite}' id='ci-Favorite'
+                onmouseover="${this.showToolTip.bind(this, 'favorite-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'favorite-tt')}">
                 <ion-icon name='heart'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleInsert}' id='ci-Insert'>
+            <span class='tooltip' id='insert-tt'>Insert</span>
+            <context-item onclick='${this.handleInsert}' id='ci-Insert'
+                onmouseover="${this.showToolTip.bind(this, 'insert-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'insert-tt')}">
                 <ion-icon name='attach'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleMove}' id='ci-Move'>
+            <span class='tooltip' id='move-tt'>Move</span>
+            <context-item onclick='${this.handleMove}' id='ci-Move'
+                onmouseover="${this.showToolTip.bind(this, 'move-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'move-tt')}">
                 <ion-icon name='move'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleSearch}' id='ci-Search'>
+            <span class='tooltip' id='find-tt'>Find/Replace</span>
+            <context-item onclick='${this.handleSearch}' id='ci-Search'
+                onmouseover="${this.showToolTip.bind(this, 'find-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'find-tt')}">
                 <ion-icon name='search'></ion-icon>
             </context-item>
 
-            <context-item onclick='${this.handleSettings}' id='ci-Settings'>
+            <span class='tooltip' id='settings-tt'>Settings</span>
+            <context-item onclick='${this.handleSettings}' id='ci-Settings'
+                onmouseover="${this.showToolTip.bind(this, 'settings-tt')}"
+                onmouseout="${this.hideToolTip.bind(this, 'settings-tt')}">
                 <ion-icon name='settings'></ion-icon>
             </context-item>
         `
     },
 
+    /** Shows a tooltip for a given context item. */
+    showToolTip(id: string) {
+        const tt = document.getElementById(id);
+        tt.style.visibility = 'visible';
+    },
+    /** Hides a tooltip for a given context item. */
+    hideToolTip(id: string) {
+        const tt = document.getElementById(id);
+        tt.style.visibility = 'hidden';
+    },
 
     createNew() {
         const fsView = document.createElement('new-view');

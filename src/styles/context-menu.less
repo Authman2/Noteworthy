@@ -10,7 +10,6 @@
         right: 20px;
     }
 }
-
 @keyframes slideInInsertCM {
     from {
         opacity: 0;
@@ -71,6 +70,23 @@ context-menu {
         &:active {
             opacity: 1;
         }
+    }
+
+    // The tooltips.
+    .tooltip {
+        position: absolute;
+        z-index: 1;
+        right: 55px;
+        color: #fff;
+        .common-font();
+        font-size: 12px;
+        margin-top: 8px;
+        width: fit-content;
+        text-align: center;
+        border-radius: 6px;
+        visibility: hidden;
+        padding: 5px 8px 5px 8px;
+        background-color: black;
     }
 }
 

@@ -1,6 +1,7 @@
 import Mosaic, { html } from 'mosaic-framework';
 
 import '../components/round-button';
+import '../components/switch-button';
 
 import * as Globals from '../util/Globals';
 import * as Networking from '../util/Networking';
@@ -45,6 +46,9 @@ export default Mosaic({
             created: '-------',
             lastLogin: '--------'
         }
+    },
+    async toggleToolTips(value) {
+        console.log('Toggled: ', value);
     },
     async handleBackup() {
         Globals.displayTextAlert('Creating Noteworthy backup...', Globals.blue, 5000);
@@ -134,6 +138,10 @@ export default Mosaic({
                 </h4>
             </div>`
         }
+
+        <h4>Show Tooltips?:</h4>
+        <switch-button backgroundColorOn='#60A4EB' on='true' onToggle='${this.toggleToolTips}'>
+        </switch-button>
 
         ${ 
             html`<section>
