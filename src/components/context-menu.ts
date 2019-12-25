@@ -49,16 +49,32 @@ Mosaic({
         `
     },
     insertCode: function() {
-        console.log('Inserting code!');
+        const content = document.getElementById('note-field');
+        content.focus();
+
+        const node = document.createElement('code-segment');
+        Globals.insertHTMLAtCaret(node);
     },
     insertOL: function() {
-        document.execCommand('insertOrderedList', true);
+        const content = document.getElementById('note-field');
+        content.focus();
+
+        const node = document.createElement('ol');
+        const itm = document.createElement('li');
+        node.appendChild(itm);
+        Globals.insertHTMLAtCaret(node);
     },
     insertUL: function() {
-        document.execCommand('insertUnorderedList', true);
+        const content = document.getElementById('note-field');
+        content.focus();
+
+        const node = document.createElement('ul');
+        const itm = document.createElement('li');
+        node.appendChild(itm);
+        Globals.insertHTMLAtCaret(node);
     },
     insertDraw: function() {
-        console.log('Inserting drawing area!');
+        Globals.displayTextAlert('Drawing Pad: Coming Soon!', Globals.gray);
     },
 });
 

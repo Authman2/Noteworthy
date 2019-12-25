@@ -245,3 +245,20 @@ export async function deleteNotebook(notebookID) {
         return { error: data.message, code: res.status, ok: false }
     }
 }
+
+export async function updateSettings(settings: string) {
+    const token = localStorage.getItem('noteworthy-token');
+    const res = await fetch(`${API_URL}/update-settings`, {
+        method: 'post',
+        headers: { 'Authorization': token },
+        body: JSON.stringify({ settings }),
+    });
+    if(res.ok === true) {
+        const _data = await res.json();
+        return { message: _data.message, ok: true }
+    } else {
+        failOnUnauthorized(res);
+        const data = await res.json();
+        return { error: data.message, code: res.status, ok: false }
+    }
+}

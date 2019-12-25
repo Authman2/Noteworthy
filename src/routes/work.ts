@@ -2,6 +2,8 @@ import Mosaic, { html } from 'mosaic-framework';
 
 import ContextMenu from '../components/context-menu';
 
+import * as Globals from '../util/Globals';
+
 import '../styles/fullscreens.less';
 import '../styles/work.less';
 
@@ -23,7 +25,8 @@ export default Mosaic({
         `
     },
     updateSelectionPoint: function(e) {
-        const sel = window.getSelection();
-        console.log(sel);
+        Globals.updateLastRange();
+        // const sel = window.getSelection();
+        // console.log(sel);
     }
 });

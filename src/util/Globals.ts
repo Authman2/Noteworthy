@@ -76,3 +76,51 @@ export let currentUser = {};
 /** A reference to the last insertion/selection point 
 * in the typing area. */
 export let lastSelectionPoint = null;
+
+
+/** Updates the last selected range so you can use it for inserting. */
+export function updateLastRange() {
+    var range;
+    if(window.getSelection && window.getSelection().getRangeAt) {
+        range = window.getSelection().getRangeAt(0);
+        lastSelectionPoint = range;
+    } else if((document as any).selection && (document as any).selection.createRange) {
+        range = (document as any).selection.createRange();
+        lastSelectionPoint = range;
+    }
+}
+
+/** Inserts html content at a particular location. */
+export function insertHTMLAtCaret(node) {
+    if(!lastSelectionPoint)
+        return displayTextAlert('Select part of the text to insert something', red);
+
+    var html;
+    if(window.getSelection && window.getSelection().getRangeAt) {
+        lastSelectionPoint.deleteContents();
+        lastSelectionPoint.insertNode(node);
+    } else if((document as any).selection && (document as any).selection.createRange) {
+        html = (node.nodeType == 3) ? node.data : node.outerHTML;
+        lastSelectionPoint.pasteHTML(html);
+    }
+}
+
+/** Returns the html that is currently selected. */
+export function getSelectionHtml() {
+    var html = "";
+    if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var container = document.createElement("div");
+            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                container.appendChild(sel.getRangeAt(i).cloneContents());
+            }
+            html = container.innerHTML;
+        }
+    } else if (typeof (document as any).selection != "undefined") {
+        if ((document as any).selection.type == "Text") {
+            html = (document as any).selection.createRange().htmlText;
+        }
+    }
+    return html;
+}

@@ -75,6 +75,9 @@ export default Mosaic({
                     transition-duration: 0.2s;
                     border: 1px solid darkgray;
                 }
+                :host:focus {
+                    outline: none;
+                }
 
                 div {
                     position: relative;

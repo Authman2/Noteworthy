@@ -14,22 +14,22 @@ async function getUserInfo(token) {
         if(res.ok === true) {
             // console.log(res.info);
             return {
-                email: res.info.email,
-                created: new Date(res.info.created).toDateString(),
-                lastLogin: new Date(res.info.lastLogin).toDateString(),
+                email: res.info?.email,
+                created: new Date(res.info?.created).toDateString(),
+                lastLogin: new Date(res.info?.lastLogin).toDateString(),
             };
         } else {
             return {
                 email: '------',
                 created: '-------',
-                lastLogin: '------'
+                lastLogin: '------',
             }
         }
     } else {
         return {
             email: '------',
             created: new Date().toDateString(),
-            lastLogin: new Date().toDateString()
+            lastLogin: new Date().toDateString(),
         }
     }
 }
@@ -44,11 +44,8 @@ export default Mosaic({
         userInfo: {
             email: '------',
             created: '-------',
-            lastLogin: '--------'
-        }
-    },
-    async toggleToolTips(value) {
-        console.log('Toggled: ', value);
+            lastLogin: '--------',
+        },
     },
     async handleBackup() {
         Globals.displayTextAlert('Creating Noteworthy backup...', Globals.blue, 5000);
@@ -116,57 +113,6 @@ export default Mosaic({
         }
         file.click();
     },
-    view() {
-        const { userInfo } = this.data;
-
-        return html`
-        <button class='close-button' onclick='${this.animateAway.bind(this)}'>
-            <ion-icon name='close'></ion-icon>
-        </button>
-        <h1>Settings</h1>
-
-        ${
-            html`<div class='settings-info'>
-                <h4>
-                    <b>Email</b>: ${userInfo.email}
-                </h4>
-                <h4>
-                    <b>Created</b>: ${userInfo.created}
-                </h4>
-                <h4>
-                    <b>Last Login</b>: ${userInfo.lastLogin}
-                </h4>
-            </div>`
-        }
-
-        <h4>Show Tooltips?:</h4>
-        <switch-button backgroundColorOn='#60A4EB' on='true' onToggle='${this.toggleToolTips}'>
-        </switch-button>
-
-        ${ 
-            html`<section>
-                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleBackup}'>
-                    Backup to File
-                </round-button>
-                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
-                    Restore from Backup
-                </round-button>
-                <round-button icon='ios-log-out' highlightColor='#707070' onclick='${async () => {
-                    await Networking.logout();
-                    this.data.userInfo = {
-                        email: '------',
-                        created: '-------',
-                        lastLogin: '--------'
-                    }
-                    Globals.displayTextAlert('Logged out!', Globals.blue);
-                    window.location.href = '/';
-                }}'>
-                    Logout
-                </round-button>
-            </section>`
-        }
-        `
-    },
     async created() {
         const token = localStorage.getItem('noteworthy-token');
         if(token) {
@@ -182,5 +128,49 @@ export default Mosaic({
             this.classList.remove('fs-out');
             this.remove();
         }, 500);
-    }
+    },
+    view() {
+        const { userInfo } = this.data;
+
+        return html`
+        <button class='close-button' onclick='${this.animateAway.bind(this)}'>
+            <ion-icon name='close'></ion-icon>
+        </button>
+        <h1>Settings</h1>
+
+        <div class='settings-info'>
+            <h4>
+                <b>Email</b>: ${userInfo.email}
+            </h4>
+            <h4>
+                <b>Created Account</b>: ${userInfo.created}
+            </h4>
+            <h4>
+                <b>Last Login</b>: ${userInfo.lastLogin}
+            </h4>
+        </div>
+
+        <section>
+            <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleBackup}'>
+                Backup to File
+            </round-button>
+            <round-button icon='ios-log-out' highlightColor='#707070' onclick='${this.handleRestore}'>
+                Restore from Backup
+            </round-button>
+            <round-button icon='ios-log-out' highlightColor='#707070' onclick='${async () => {
+                await Networking.logout();
+                this.data.userInfo = {
+                    email: '------',
+                    created: '-------',
+                    lastLogin: '--------',
+                    showTooltips: true
+                }
+                Globals.displayTextAlert('Logged out!', Globals.blue);
+                window.location.href = '/';
+            }}'>
+                Logout
+            </round-button>
+        </section>
+        `
+    },
 });
