@@ -43,7 +43,7 @@ const createWindow = () => {
     });
 
     // Load the index.html file into the window.
-    wind.loadURL('https://noteworthyapp.netlify.com/');
+    wind.loadURL('https://noteworthyapp.netlify.app/');
 }
 
 
