@@ -30,7 +30,7 @@ const createWindow = () => {
     // Create a window object.
     let wind = new BrowserWindow({
         width: 775,
-        height: 600,
+        height: 750,
         minWidth: 300,
         minHeight: 300,
         title: 'Noteworthy',
